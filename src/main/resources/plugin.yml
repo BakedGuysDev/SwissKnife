@@ -1,0 +1,24 @@
+name: EgirlsNationSwissKnife
+main: com.egirlsnation.swissknife.swissKnife
+version: 0.0.1-SNAPSHOT
+authors:
+  - Lerbiq
+  - Killmlana
+  - StoneTrech
+description: Multi purpose utility plugin for Egirls Nation anarchy server
+api-version: 1.16
+website: www.egirlsnation.com
+prefix: SwissKnife
+commands:
+  shrug:
+    description: When you dont know
+    usage: /shrug <message> or just /shrug
+  playtime:
+    description: Shows you your playtime
+    usage: /playtime
+  kill:
+    description: Kills you
+    usage: /kill
+  swissknife:
+    description: Main command
+    usage: /egirlsnation <arg>

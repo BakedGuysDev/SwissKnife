@@ -1,0 +1,19 @@
+reload-message: "&bConfig was successfully reloaded"
+
+Heads:
+  ancientWeaponsOnly: true
+
+Jihads:
+  Enabled: true
+
+Kill:
+  kill-cooldown: 120
+  cooldown-message: '&cYou have to wait before doing that again m8.'
+
+#    Patches
+#    If set to true it enables the patch
+#    If set to false the patch is disabled
+
+Patches:
+  DragonSpawnGlitchEnabled: true
+  32kEnabled: true
