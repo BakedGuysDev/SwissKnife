@@ -24,7 +24,7 @@ public class configService {
         try{
             enabled = swissknife.getConfig().getBoolean(path);
         }catch(Exception e){
-            Bukkit.getLogger().severe("Something went wrong while fetching a message from swissKnife config.");
+            Bukkit.getLogger().severe("Something went wrong while fetching a boolean from swissKnife config.");
             e.printStackTrace();
         }
         return enabled;

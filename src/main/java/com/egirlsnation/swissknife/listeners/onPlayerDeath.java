@@ -35,10 +35,8 @@ public class onPlayerDeath implements Listener {
                 Bukkit.getLogger().info("Something fucked up. Maybe check logs.");
             } else {
                 if(swissknife.getConfig().getBoolean("Heads.ancientWeaponsOnly")){
-                    if(player.getKiller().getInventory().getItemInMainHand().getItemMeta().getLore() != null){
-
+                    if(player.getKiller().getInventory().getItemInMainHand() != null && player.getKiller().getInventory().getItemInMainHand().hasItemMeta()){
                         if(player.getKiller().getInventory().getItemInMainHand().getItemMeta().getLore().contains("§6Ancient weapon")){
-
                             if (player.isOp()) {
                                 e.getEntity().getKiller().sendMessage(ChatColor.RED + "This player can't drop a head.");
                             } else {
@@ -100,10 +98,13 @@ public class onPlayerDeath implements Listener {
                             }
 
                         }
-                    }else if(player.getKiller().getInventory().getItemInMainHand().getItemMeta().getLore() == null){
-                        Bukkit.getLogger().info("Item lore equals to null.");
-                    }else{
-                        Bukkit.getLogger().severe("Something went massively wrong. Check the logs for more info.");
+                        if(player.getKiller().getInventory().getItemInMainHand().getItemMeta().getLore() != null){
+
+                        }else if(player.getKiller().getInventory().getItemInMainHand().getItemMeta().getLore() == null){
+                            return;
+                        }else{
+                            Bukkit.getLogger().severe("Something went massively wrong. Check the logs for more info.");
+                        }
                     }
                 }else if(!swissknife.getConfig().getBoolean("Heads.ancientWeaponsOnly")){
                     if (player.isOp()) {

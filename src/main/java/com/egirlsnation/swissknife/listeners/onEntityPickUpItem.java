@@ -1,6 +1,7 @@
 package com.egirlsnation.swissknife.listeners;
 
 import com.egirlsnation.swissknife.swissKnife;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -29,14 +30,30 @@ public class onEntityPickUpItem implements Listener {
             }
             ItemStack  itemStack = e.getItem().getItemStack();
             ItemStack i = new ItemStack(Material.NETHERITE_SWORD);
+            ItemStack i2 = new ItemStack(Material.DIAMOND_SWORD);
             if(itemStack != null){
-                if(itemStack.getType().equals(i.getType())){
+                if(itemStack.getType().equals(i.getType()) || itemStack.getType().equals(i2.getType())){
                     if(itemStack.getEnchantments().containsKey(Enchantment.DAMAGE_ALL)){
                         if(itemStack.getEnchantmentLevel(Enchantment.DAMAGE_ALL) >= 20){
                             player.getPlayer().sendMessage(ChatColor.RED + "No 32ks for you m8.");
                             e.getItem().remove();
                             e.setCancelled(true);
                         }
+                    }
+                    if(itemStack.getItemMeta() != null){
+                        if(itemStack.getItemMeta().hasLore()){
+                            if(itemStack.getItemMeta().getLore().contains("§9§lBig Dick Energy X")){
+                                player.getPlayer().sendMessage(ChatColor.RED + "No illegal effect item for you m8.");
+                                e.getItem().remove();
+                                e.setCancelled(true);
+                            }
+                        }
+                    }
+                }
+                if(itemStack.getType() == Material.TOTEM_OF_UNDYING){
+                    if(itemStack.getAmount() > 2){
+                        itemStack.setAmount(2);
+                        e.getItem().setItemStack(itemStack);
                     }
                 }
             }

@@ -21,4 +21,7 @@ commands:
     usage: /kill
   swissknife:
     description: Main command
-    usage: /egirlsnation <arg>
+    usage: /swissknife <togglepickup | shitlist | toggleswim | reload>
+  ping:
+    description: Shows your ping or ping of other people
+    usage: /ping
