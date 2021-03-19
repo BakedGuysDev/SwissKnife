@@ -1,23 +1,18 @@
 package com.egirlsnation.swissknife.listeners;
 
-import net.minecraft.server.v1_16_R3.EnderDragonBattle;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import com.egirlsnation.swissknife.service.radiusManager;
+import org.bukkit.Chunk;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import com.egirlsnation.swissknife.service.WitherManager;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class onEntitySpawn implements Listener {
 
-    WitherManager witherManager = new WitherManager();
+    radiusManager radiusManager = new radiusManager();
 
     @EventHandler
     public void EntitySpawn (CreatureSpawnEvent e) {
@@ -39,7 +34,7 @@ public class onEntitySpawn implements Listener {
             //e.setCancelled(true);
         }
         if (e.getEntity().getType() == EntityType.WITHER) {
-            if (!witherManager.witherSpawningAllowed(e.getLocation().getX(), e.getLocation().getZ())) {
+            if (!radiusManager.isInRadius(e.getLocation().getX(), e.getLocation().getZ(), 500)) {
                 e.setCancelled(true);
             }
         }

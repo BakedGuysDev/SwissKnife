@@ -12,17 +12,16 @@ public class onShulkerClose implements Listener {
     @EventHandler
     public void onInventoryCloseEvent (InventoryCloseEvent e){
         Inventory inv = e.getInventory();
-        if(inv.getType() != null){
-            if(inv.getType() == InventoryType.SHULKER_BOX){
-                for(ItemStack item :inv.getContents()){
-                    if(item != null){
-                        if(item.getAmount() > item.getMaxStackSize()){
-                            item.setAmount(item.getMaxStackSize());
-                        }
+        inv.getType();
+        if(inv.getType() == InventoryType.SHULKER_BOX){
+            for(ItemStack item :inv.getContents()){
+                if(item != null){
+                    if(item.getAmount() > item.getMaxStackSize()){
+                        item.setAmount(item.getMaxStackSize());
                     }
                 }
             }
-
         }
+
     }
 }

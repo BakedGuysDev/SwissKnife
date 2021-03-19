@@ -2,7 +2,6 @@ package com.egirlsnation.swissknife.service;
 
 
 import com.egirlsnation.swissknife.swissKnife;
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
