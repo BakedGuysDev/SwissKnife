@@ -57,13 +57,9 @@ public class swissKnife extends JavaPlugin{
             restoreShitList();
         }
 
-
-
         users = new ConcurrentHashMap<UUID, Long>();
         itemPickUpUsers = new ConcurrentHashMap<UUID, Boolean>();
         swimmingList = new ConcurrentHashMap<UUID, Boolean>();
-
-
 
         reloadMessage = configService.getMessages("reload-message");
         headsAncientOnly = configService.getEnabled("Heads.ancientWeaponsOnly");
@@ -143,7 +139,7 @@ public class swissKnife extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new onPlayerChat(), this);
         getServer().getPluginManager().registerEvents(new onCommand(), this);
         getServer().getPluginManager().registerEvents(new onVehicleCreate(), this);
-        getServer().getPluginManager().registerEvents(new onEntityDeath(), this);
+        getServer().getPluginManager().registerEvents(new onEntityDamage(), this);
         //getServer().getPluginManager().registerEvents(new onPistonMove(), this);
     }
 
