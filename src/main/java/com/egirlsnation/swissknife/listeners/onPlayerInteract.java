@@ -12,12 +12,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class onPlayerInteract implements Listener {
-
-    List<Material> bannedEggList = new ArrayList<>();
-    List<Material> limitedEggList = new ArrayList<>();
 
     @EventHandler
     public void onPlayerInteractEvent (PlayerInteractEvent e){
@@ -25,9 +21,6 @@ public class onPlayerInteract implements Listener {
         ItemStack offHand = e.getPlayer().getInventory().getItemInOffHand();
         World world = e.getPlayer().getWorld();
 
-        bannedEggList.add(Material.BLAZE_SPAWN_EGG);
-        bannedEggList.add(Material.WITHER_SKELETON_SPAWN_EGG);
-        limitedEggList.add(Material.VILLAGER_SPAWN_EGG);
 
         if(hand.getType().equals(Material.EXPERIENCE_BOTTLE) || offHand.getType().equals(Material.EXPERIENCE_BOTTLE)){
             ArrayList<Entity> entitiesArray = new ArrayList<>();
@@ -69,35 +62,33 @@ public class onPlayerInteract implements Listener {
             }
         }*/
 
-        for(Material material:bannedEggList){
-            if(hand != null){
-                if(hand.getType().equals(material)){
-                    if(e.getClickedBlock() != null){
-                        double locX = e.getClickedBlock().getX();
-                        double locY = e.getClickedBlock().getY() + 1;
-                        double locZ = e.getClickedBlock().getZ();
-                        Location noCodSpawn = new Location(world, locX, locY, locZ);
-                        Entity noCod = world.spawnEntity(noCodSpawn, EntityType.COD);
-                        noCod.setCustomName("No");
-                        noCod.setCustomNameVisible(true);
-                    }
-                    e.getPlayer().getInventory().getItemInMainHand().setAmount(0);
-                    e.setCancelled(true);
+        if(hand != null){
+            if(hand.getType().toString().matches("[A-Z]*_SPAWN_EGG")){
+                if(e.getClickedBlock() != null){
+                    double locX = e.getClickedBlock().getX();
+                    double locY = e.getClickedBlock().getY() + 1;
+                    double locZ = e.getClickedBlock().getZ();
+                    Location noCodSpawn = new Location(world, locX, locY, locZ);
+                    Entity noCod = world.spawnEntity(noCodSpawn, EntityType.COD);
+                    noCod.setCustomName("No");
+                    noCod.setCustomNameVisible(true);
                 }
-            }else if(offHand != null){
-                if(hand.getType().equals(material)){
-                    if(e.getClickedBlock() != null){
-                        double locX = e.getClickedBlock().getX();
-                        double locY = e.getClickedBlock().getY() + 1;
-                        double locZ = e.getClickedBlock().getZ();
-                        Location noCodSpawn = new Location(world, locX, locY, locZ);
-                        Entity noCod = world.spawnEntity(noCodSpawn, EntityType.COD);
-                        noCod.setCustomName("No");
-                        noCod.setCustomNameVisible(true);
-                    }
-                    e.getPlayer().getInventory().getItemInOffHand().setAmount(0);
-                    e.setCancelled(true);
+                e.getPlayer().getInventory().getItemInMainHand().setAmount(0);
+                e.setCancelled(true);
+            }
+        }else if(offHand != null){
+            if(hand.getType().toString().matches("[A-Z]*_SPAWN_EGG")){
+                if(e.getClickedBlock() != null){
+                    double locX = e.getClickedBlock().getX();
+                    double locY = e.getClickedBlock().getY() + 1;
+                    double locZ = e.getClickedBlock().getZ();
+                    Location noCodSpawn = new Location(world, locX, locY, locZ);
+                    Entity noCod = world.spawnEntity(noCodSpawn, EntityType.COD);
+                    noCod.setCustomName("No");
+                    noCod.setCustomNameVisible(true);
                 }
+                e.getPlayer().getInventory().getItemInOffHand().setAmount(0);
+                e.setCancelled(true);
             }
         }
     }

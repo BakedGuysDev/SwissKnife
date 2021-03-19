@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class onEntityDeath implements Listener {
+public class onEntityDamage implements Listener {
     @EventHandler
     public void onEntityDeath(EntityDamageEvent e) {
         LivingEntity pet = (LivingEntity) e.getEntity();
