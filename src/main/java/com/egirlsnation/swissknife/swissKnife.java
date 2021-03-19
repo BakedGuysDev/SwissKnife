@@ -95,6 +95,7 @@ public class swissKnife extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new onRespawn(), this);
         getServer().getPluginManager().registerEvents(new onBookClose(), this);
         getServer().getPluginManager().registerEvents(new onGamemodeSwitch(), this);
+        getServer().getPluginManager().registerEvents(new onEntityDeath(), this);
     }
 
     public void registerCommands(){
