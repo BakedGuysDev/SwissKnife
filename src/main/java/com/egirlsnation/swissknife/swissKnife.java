@@ -143,6 +143,7 @@ public class swissKnife extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new onPlayerChat(), this);
         getServer().getPluginManager().registerEvents(new onCommand(), this);
         getServer().getPluginManager().registerEvents(new onVehicleCreate(), this);
+        getServer().getPluginManager().registerEvents(new onEntityDeath(), this);
         //getServer().getPluginManager().registerEvents(new onPistonMove(), this);
     }
 
