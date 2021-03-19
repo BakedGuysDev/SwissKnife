@@ -15,5 +15,6 @@ Kill:
 #    If set to false the patch is disabled
 
 Patches:
+  allDisabled: false
   DragonSpawnGlitchEnabled: true
   32kEnabled: true

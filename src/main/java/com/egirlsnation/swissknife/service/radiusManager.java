@@ -1,13 +1,10 @@
 package com.egirlsnation.swissknife.service;
 
-import org.bukkit.Bukkit;
-
-public class WitherManager {
+public class radiusManager {
 
     //private swissKnife swissknife = swissKnife.getInstance();
 
-    public boolean witherSpawningAllowed(double LocX, double LocZ) {
-        int radius = 500;
+    public boolean isInRadius(double LocX, double LocZ, int radius) {
 
         if (LocX < 0){
             //Negative x

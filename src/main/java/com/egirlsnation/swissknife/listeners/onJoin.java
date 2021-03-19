@@ -1,29 +1,50 @@
 package com.egirlsnation.swissknife.listeners;
 
+import com.egirlsnation.swissknife.swissKnife;
 import com.google.common.base.CharMatcher;
 import org.bukkit.*;
-import org.bukkit.block.ShulkerBox;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
+import java.util.UUID;
 
+import static com.egirlsnation.swissknife.service.illegalsPatchService.*;
 import static com.egirlsnation.swissknife.service.respawnLocationService.randomLocation;
+import static com.egirlsnation.swissknife.swissKnife.allDisabled;
 
 
 public class onJoin implements Listener {
 
+    public swissKnife plugin;
+    public onJoin(swissKnife instance){
+        plugin = instance;
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoinEvent(PlayerJoinEvent e){
-        Player player = e.getPlayer();
+       Player player = e.getPlayer();
+       UUID playerUUID = player.getUniqueId();
+
+       if(plugin.SQL.isConnected()){
+           plugin.sqlService.createPlayer(player);
+       }
+
+
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        String playerName = player.getName();
+        if(player.getGameMode().equals(GameMode.CREATIVE)){
+            String commandFly = "fly " + playerName + " disable";
+            Bukkit.dispatchCommand(console, commandFly);
+        }
+
         long pt = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
         if(!offlinePlayer.hasPlayedBefore()){
@@ -32,16 +53,12 @@ public class onJoin implements Listener {
         }
 
         if((pt >= 2160000) && !(player.hasPermission("egirls.rank.vet"))){
-            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-            String playerName = player.getName();
             String command = "lp user " + playerName + " parent add veteran";
             Bukkit.dispatchCommand(console, command);
             String broadcast = playerName + " reached MidFag!";
             Bukkit.dispatchCommand(console, broadcast);
         }
         if((pt >= 17280000) && !(player.hasPermission("egirls.rank.oldfag"))){
-            String playerName = player.getName();
-            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
             String command = "lp user " + playerName + " parent add oldfag";
             Bukkit.dispatchCommand(console, command);
             String broadcast = playerName + " reached OldFag!";
@@ -51,13 +68,28 @@ public class onJoin implements Listener {
         ItemStack[] inv = player.getInventory().getContents();
         ItemStack i = new ItemStack(Material.NETHERITE_SWORD);
         ItemStack i2 = new ItemStack(Material.DIAMOND_SWORD);
-        ItemStack[] echest = player.getEnderChest().getContents();
         for(ItemStack item:inv){
             if(item != null){
-                if(item.getType() == Material.TOTEM_OF_UNDYING){
-                    if(item.getAmount() > 2){
-                        item.setAmount(2);
+                if(!allDisabled){
+                    if(item.getType() == Material.TOTEM_OF_UNDYING){
+                        if(item.getAmount() > 2){
+                            item.setAmount(2);
+                        }
                     }
+                }
+
+                if(echantLevelCheck(item)){
+                    item.setAmount(0);
+                    e.getPlayer().sendMessage(ChatColor.RED + "No overenchanted items for you m8.");
+                }
+                if(illegalItemLoreCheck(item)){
+                    item.setAmount(0);
+                    e.getPlayer().sendMessage(ChatColor.RED + "Next time .peek first m8.");
+                }
+
+                ItemMeta newMeta = ancientWeaponReduce(item);
+                if(newMeta != null){
+                    item.setItemMeta(newMeta);
                 }
 
                 if(item.getType() == Material.WRITTEN_BOOK || item.getType() == Material.WRITABLE_BOOK){
@@ -71,25 +103,6 @@ public class onJoin implements Listener {
                                 item.setAmount(0);
                                 Bukkit.getLogger().warning("User " + player.getName() + " joined with a book with non-ascii characters at coords: "
                                         + player.getLocation());
-                            }
-                        }
-                    }
-                }
-
-                if(item.getType().equals(i.getType()) || item.getType().equals(i2.getType())){
-                    if(item.getEnchantments().containsKey(Enchantment.DAMAGE_ALL)){
-                        if(item.getEnchantmentLevel(Enchantment.DAMAGE_ALL) >= 20){
-                            item.setAmount(0);
-                            e.getPlayer().sendMessage(ChatColor.RED + "No 32ks for you m8.");
-                        }
-                    }
-                    if(item.getItemMeta() != null){
-                        if(item.getItemMeta().hasLore()){
-                            if(item.getItemMeta().getLore() != null){
-                                if(item.getItemMeta().getLore().contains("§9§lBig Dick Energy X")){
-                                    e.getPlayer().sendMessage(ChatColor.RED + "No illegal effect item for you m8.");
-                                    item.setAmount(0);
-                                }
                             }
                         }
                     }
