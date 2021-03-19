@@ -5,17 +5,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.ShulkerBox;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
+
+import static com.egirlsnation.swissknife.service.illegalsPatchService.*;
+import static com.egirlsnation.swissknife.swissKnife.allDisabled;
 
 public class onInventoryClick implements Listener {
 
@@ -23,9 +24,6 @@ public class onInventoryClick implements Listener {
     public void onHopper(InventoryClickEvent e){
         if(e.getClickedInventory() != null){
             ItemStack[] inv = e.getClickedInventory().getContents();
-            ItemStack i = new ItemStack(Material.NETHERITE_SWORD);
-            ItemStack i2 = new ItemStack(Material.DIAMOND_SWORD);
-            ItemStack i3 = new ItemStack(Material.TOTEM_OF_UNDYING);
             ItemStack bedrock = new ItemStack(Material.BEDROCK);
             for(ItemStack item:inv){
                 if(item != null){
@@ -63,34 +61,44 @@ public class onInventoryClick implements Listener {
                         }
                     }
 
-                    if(item.getType().equals(bedrock.getType())){
+                    if(!allDisabled){
+                        if(item.getType().equals(bedrock.getType())){
+                            item.setAmount(0);
+                        }
+                    }
+
+                    if(!allDisabled){
+                        if(item.getType().equals(Material.END_PORTAL_FRAME)){
+                            item.setAmount(0);
+                        }
+                    }
+
+
+                    if(echantLevelCheck(item)){
                         item.setAmount(0);
-                    }else if(item.getType().equals(i.getType()) || item.getType().equals(i2.getType())){
-                        if(item.getEnchantments().containsKey(Enchantment.DAMAGE_ALL)){
-                            if(item.getEnchantmentLevel(Enchantment.DAMAGE_ALL) >= 20){
-                                item.setAmount(0);
+                        e.getWhoClicked().sendMessage(ChatColor.RED + "No overenchanted items for you m8.");
+                        e.setCancelled(true);
+                    }
+                    if(illegalItemLoreCheck(item)){
+                        item.setAmount(0);
+                        e.getWhoClicked().sendMessage(ChatColor.RED + "Next time .peek first m8.");
+                        e.setCancelled(true);
+                    }
+
+                    if(!allDisabled){
+                        if(item.getType() == Material.TOTEM_OF_UNDYING){
+                            if(item.getAmount() > 2){
+                                item.setAmount(2);
                                 e.setCancelled(true);
                             }
                         }
                     }
-                    if(item.getItemMeta() != null){
-                        if(item.hasItemMeta()){
-                            if(item.getItemMeta().hasLore()){
-                                if(item.getItemMeta().getLore().contains("§9§lBig Dick Energy X")){
-                                    item.setAmount(0);
-                                    Bukkit.getLogger().warning("User " + e.getWhoClicked().getName() + " clicked a book with non-ascii characters at coords: "
-                                            + e.getWhoClicked().getLocation());
-                                    e.setCancelled(true);
-                                }
-                            }
-                        }
+
+                    ItemMeta newMeta = ancientWeaponReduce(item);
+                    if(newMeta != null){
+                        item.setItemMeta(newMeta);
                     }
-                    if(item.getType() == Material.TOTEM_OF_UNDYING){
-                        if(item.getAmount() > 2){
-                            item.setAmount(2);
-                            e.setCancelled(true);
-                        }
-                    }
+
                     if(item.getType() == Material.WRITTEN_BOOK || item.getType() == Material.WRITABLE_BOOK){
                         BookMeta meta = (BookMeta) item.getItemMeta();
 

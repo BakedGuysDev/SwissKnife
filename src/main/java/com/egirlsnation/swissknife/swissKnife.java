@@ -2,12 +2,16 @@ package com.egirlsnation.swissknife;
 
 import com.egirlsnation.swissknife.commands.*;
 import com.egirlsnation.swissknife.listeners.*;
-import com.egirlsnation.swissknife.service.*;
+import com.egirlsnation.swissknife.service.configService;
+import com.egirlsnation.swissknife.service.shitListManager;
+import com.egirlsnation.swissknife.service.swissknifeTabComplete;
+import com.egirlsnation.swissknife.sql.mysqlService;
+import com.egirlsnation.swissknife.sql.sqlQueryService;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
+import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,6 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class swissKnife extends JavaPlugin{
 
     public com.egirlsnation.swissknife.service.shitListManager shitListManager;
+
+    public final onJoin onJoinListener = new onJoin(this);
+    public final onQuit onQuitListener = new onQuit(this);
 
     public static Map<UUID, Long> users;
     public static Map<UUID, Boolean> itemPickUpUsers;
@@ -30,10 +37,16 @@ public class swissKnife extends JavaPlugin{
     public static Boolean jihadsEnabled;
     public static Boolean patch32kEnabled;
     public static Boolean DragonPatchEnabled;
+    public static Boolean allDisabled;
 
     public static  Map<String, String> shitlist = new HashMap<String, String>();
 
     public shitListManager slManager;
+
+    public mysqlService SQL;
+    public sqlQueryService sqlService;
+
+
 
     @Override
     public void onEnable(){
@@ -57,9 +70,36 @@ public class swissKnife extends JavaPlugin{
         jihadsEnabled = configService.getEnabled("Jihads.Enabled");
         DragonPatchEnabled = configService.getEnabled("Patches.DragonSpawnGlitchEnabled");
         patch32kEnabled = configService.getEnabled("Patches.32kEnabled");
+        allDisabled = configService.getEnabled("Patches.allDisabled");
 
         registerCommands();
         registerEvents();
+
+        this.SQL = new mysqlService();
+        this.sqlService = new sqlQueryService(this);
+
+
+
+        try {
+            SQL.connect();
+        } catch (ClassNotFoundException e) {
+            getLogger().severe("Something went massively wrong while connecting to the database.");
+            getLogger().severe("Something went massively wrong while connecting to the database.");
+            getLogger().severe("Something went massively wrong while connecting to the database.");
+            getLogger().severe("Massive stacktrace may follow.");
+            e.printStackTrace();
+        } catch (SQLException throwables) {
+            getLogger().severe("Something went massively wrong while connecting to the database.");
+            getLogger().severe("Something went massively wrong while connecting to the database.");
+            getLogger().severe("Something went massively wrong while connecting to the database.");
+            getLogger().severe("Massive stacktrace may follow.");
+            throwables.printStackTrace();
+        }
+
+        if(SQL.isConnected()){
+            getLogger().info(ChatColor.GREEN + "Successfully connected to the database!");
+            sqlService.createTable();
+        }
 
         getLogger().info("Swiss Knife plugin by Lerbiq, Killmlana and StoneTrench enabled.");
     }
@@ -69,15 +109,18 @@ public class swissKnife extends JavaPlugin{
         if(!shitlist.isEmpty()){
             saveShitList();
         }
+        SQL.disconnect();
         getLogger().info("Swiss Knife plugin disabled.");
     }
 
 
     public void registerEvents(){
-        getServer().getPluginManager().registerEvents(new onJoin(), this);
-        if(getConfig().getBoolean("Jihads.Enabled")){
+        getServer().getPluginManager().registerEvents(onJoinListener, this);
+        getServer().getPluginManager().registerEvents(onQuitListener, this);
+        /*if(getConfig().getBoolean("Jihads.Enabled")){
             getServer().getPluginManager().registerEvents(new onSnowballHit(), this);
-        }
+        }*/
+        getServer().getPluginManager().registerEvents(new onSnowballHit(), this);
         getServer().getPluginManager().registerEvents(new onPlayerDeath(), this);
         if(getConfig().getBoolean("Patches.DragonSpawnGlitchEnabled")){
             getServer().getPluginManager().registerEvents(new onPlaceBlock(), this);
@@ -87,15 +130,21 @@ public class swissKnife extends JavaPlugin{
             getServer().getPluginManager().registerEvents(new onInventoryOpen(), this);
             getServer().getPluginManager().registerEvents(new onInventoryClick(), this);
         }
-        getServer().getPluginManager().registerEvents(new onEntityPortalExit(), this);
+        getServer().getPluginManager().registerEvents(new entityPortalTeleportEvent(), this);
         getServer().getPluginManager().registerEvents(new onEntitySpawn(), this);
-        getServer().getPluginManager().registerEvents(new onSwitchItem(), this);
         getServer().getPluginManager().registerEvents(new onShulkerClose(), this);
         getServer().getPluginManager().registerEvents(new onSwapHandsItem(), this);
         getServer().getPluginManager().registerEvents(new onRespawn(), this);
         getServer().getPluginManager().registerEvents(new onBookClose(), this);
         getServer().getPluginManager().registerEvents(new onGamemodeSwitch(), this);
+        getServer().getPluginManager().registerEvents(new onPlayerTeleport(), this);
+        getServer().getPluginManager().registerEvents(new onPlayerInteract(), this);
+        getServer().getPluginManager().registerEvents(new onBlockDispense(), this);
+        getServer().getPluginManager().registerEvents(new onPlayerChat(), this);
+        getServer().getPluginManager().registerEvents(new onCommand(), this);
+        getServer().getPluginManager().registerEvents(new onVehicleCreate(), this);
         getServer().getPluginManager().registerEvents(new onEntityDeath(), this);
+        //getServer().getPluginManager().registerEvents(new onPistonMove(), this);
     }
 
     public void registerCommands(){

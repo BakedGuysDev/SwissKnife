@@ -9,6 +9,8 @@ description: Multi purpose utility plugin for Egirls Nation anarchy server
 api-version: 1.16
 website: www.egirlsnation.com
 prefix: SwissKnife
+softdepend:
+  - AdvancedTeleport
 commands:
   shrug:
     description: When you dont know

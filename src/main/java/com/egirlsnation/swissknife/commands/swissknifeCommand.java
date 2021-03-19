@@ -1,14 +1,13 @@
 package com.egirlsnation.swissknife.commands;
 
 import com.egirlsnation.swissknife.swissKnife;
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
+
 import java.util.UUID;
 
 import static com.egirlsnation.swissknife.service.shitListService.addToShitList;
@@ -114,13 +113,13 @@ public class swissknifeCommand implements CommandExecutor {
                             Player player = Bukkit.getServer().getPlayer(args[2]);
                             if(player != null){
                                 if(args[3].equalsIgnoreCase("tpa")){
-                                    sender.sendMessage(ChatColor.GREEN + "Player " + player.getDisplayName() + ChatColor.GREEN + " was removed from shitlist with tpa");
+                                    //sender.sendMessage(ChatColor.GREEN + "Player " + player.getDisplayName() + ChatColor.GREEN + " was removed from shitlist with tpa");
                                     sender.sendMessage(removeFromShitList(player, "tpa"));
                                 }else if(args[3].equalsIgnoreCase("coords")){
-                                    sender.sendMessage(ChatColor.GREEN + "Player " + player.getDisplayName() + ChatColor.GREEN + " was removed from shitlist with coords");
+                                    //sender.sendMessage(ChatColor.GREEN + "Player " + player.getDisplayName() + ChatColor.GREEN + " was removed from shitlist with coords");
                                     sender.sendMessage(removeFromShitList(player, "coords"));
                                 }else if(args[3].equalsIgnoreCase("both")){
-                                    sender.sendMessage(ChatColor.GREEN + "Player " + player.getDisplayName() + ChatColor.GREEN + " was removed from shitlist with coords and tpa");
+                                    //sender.sendMessage(ChatColor.GREEN + "Player " + player.getDisplayName() + ChatColor.GREEN + " was removed from shitlist with coords and tpa");
                                     sender.sendMessage(removeFromShitList(player, "both"));
                                 }else{
                                     sender.sendMessage(ChatColor.RED + "Only valid arguments are tpa/coords/both");

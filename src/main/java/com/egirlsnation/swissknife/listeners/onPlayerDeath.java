@@ -1,13 +1,10 @@
 package com.egirlsnation.swissknife.listeners;
 
 import com.egirlsnation.swissknife.swissKnife;
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,7 +12,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -27,7 +23,7 @@ public class onPlayerDeath implements Listener {
 
     @EventHandler
     public void onPlayerDeathEvent(PlayerDeathEvent e){
-        Player player = e.getEntity();
+        Player player = e.getEntity().getPlayer();
         if(e.getEntity().getKiller() instanceof Player){
             String playerName = player.getName();
 

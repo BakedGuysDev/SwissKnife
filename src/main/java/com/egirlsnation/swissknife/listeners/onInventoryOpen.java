@@ -1,23 +1,20 @@
 package com.egirlsnation.swissknife.listeners;
 
 import com.google.common.base.CharMatcher;
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.block.ShulkerBox;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
+
+import static com.egirlsnation.swissknife.service.illegalsPatchService.*;
+import static com.egirlsnation.swissknife.swissKnife.allDisabled;
 
 public class onInventoryOpen implements Listener {
 
@@ -31,27 +28,35 @@ public class onInventoryOpen implements Listener {
         ItemStack i2 = new ItemStack(Material.DIAMOND_SWORD);
         for(ItemStack item:inv){
             if(item != null){
-                if(item.getType().equals(i.getType()) || item.getType().equals(i2.getType())){
-                    if(item.getEnchantments().containsKey(Enchantment.DAMAGE_ALL)){
-                        if(item.getEnchantmentLevel(Enchantment.DAMAGE_ALL) >= 20){
-                            item.setAmount(0);
-                            e.getPlayer().sendMessage(ChatColor.RED + "No 32ks for you m8.");
-                        }
-                    }
-                    if (item.getItemMeta() != null){
-                        if(item.getItemMeta().hasLore()){
-                            if(item.getItemMeta().getLore().contains("§9§lBig Dick Energy X")){
-                                e.getPlayer().sendMessage(ChatColor.RED + "No illegal effect item for you m8.");
-                                item.setAmount(0);
-                            }
+                if(echantLevelCheck(item)){
+                    item.setAmount(0);
+                    e.getPlayer().sendMessage(ChatColor.RED + "No overenchanted items for you m8.");
+                }
+                if(illegalItemLoreCheck(item)){
+                    item.setAmount(0);
+                    e.getPlayer().sendMessage(ChatColor.RED + "Next time .peek first m8.");
+                }
+
+
+                if(!allDisabled){
+                    if(item.getType() == Material.TOTEM_OF_UNDYING){
+                        if(item.getAmount() > 2){
+                            item.setAmount(2);
                         }
                     }
                 }
-                if(item.getType() == Material.TOTEM_OF_UNDYING){
-                    if(item.getAmount() > 2){
-                        item.setAmount(2);
+
+                if(!allDisabled){
+                    if(item.getType().equals(Material.END_PORTAL_FRAME)){
+                        item.setAmount(0);
                     }
                 }
+
+                ItemMeta newMeta = ancientWeaponReduce(item);
+                if(newMeta != null){
+                    item.setItemMeta(newMeta);
+                }
+
                 if(item.getType() == Material.WRITTEN_BOOK || item.getType() == Material.WRITABLE_BOOK){
                     BookMeta meta = (BookMeta) item.getItemMeta();
 
