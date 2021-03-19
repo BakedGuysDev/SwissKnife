@@ -17,9 +17,9 @@ public class onEntityDeath implements Listener {
     @EventHandler
     public void onEntityDeath(EntityDamageEvent e) {
         LivingEntity pet = (LivingEntity) e.getEntity();
-        if ((pet instanceof Tameable) && (pet instanceof Sittable)) { //Bukkit.broadcastMessage("pet has died");
-            if ((((Tameable) pet).isTamed())) { //Bukkit.broadcastMessage("pet is sittable");
-                if (pet.getHealth() - e.getDamage() <= 0) { //Bukkit.broadcastMessage("pet's is tamed");
+        if (pet.getHealth() - e.getDamage() <= 0) { //Bukkit.broadcastMessage("pet has died");
+            if ((pet instanceof Tameable) && (pet instanceof Sittable)) { //Bukkit.broadcastMessage("pet is sittable");
+                if ((((Tameable) pet).isTamed())) { //Bukkit.broadcastMessage("pet's is tamed");
                     if (((Tameable) pet).getOwner() instanceof Player) {
                         Player p = (Player) ((Tameable) pet).getOwner();
                         if (p != null) {
