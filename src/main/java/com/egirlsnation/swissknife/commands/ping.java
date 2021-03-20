@@ -7,9 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import static com.egirlsnation.swissknife.service.pingService.getPing;
 
 public class ping implements CommandExecutor {
@@ -17,7 +14,7 @@ public class ping implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(!(sender instanceof Player)){
-            sender.sendMessage(ChatColor.RED+"You must be a player to execute this command.");
+            sender.sendMessage("[Pong] Choochoo motherfucker");
         }else{
             if(args.length == 0){
                 Player player = (Player) sender;
