@@ -63,7 +63,7 @@ public class onPlayerInteract implements Listener {
         }*/
 
         if(hand != null){
-            if(hand.getType().toString().matches("[A-Z]*_SPAWN_EGG")){
+            if(hand.getType().toString().matches("[A-Z]*?_?[A-Z]*_SPAWN_EGG")){
                 if(e.getClickedBlock() != null){
                     double locX = e.getClickedBlock().getX();
                     double locY = e.getClickedBlock().getY() + 1;
