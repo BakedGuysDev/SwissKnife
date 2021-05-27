@@ -1,0 +1,34 @@
+name: SwissKnife
+version: 0.1.0
+main: com.egirlsnation.swissknife.SwissKnife
+authors:
+  - Lerbiq
+  - Killmlana
+api-version: 1.16
+softdepend:
+  - Vault
+  - LuckPerms
+
+commands:
+  kill:
+    description: Allows you to kill yourself or other players if you have perms
+    usage: /kill
+  tpa:
+    description: Allows you to tpa idfk
+    usage: /tpa <playername>
+
+permissions:
+  swissknife.kill.others:
+    description: Allows user to kill other players
+    default: op
+  swissknife.bypass.cooldown:
+    description: Allows user to bypass cooldowns
+    default: op
+  swissknife.bypass.radius:
+    description: Allows user to bypass radius checks
+    default: op
+  swissknife.bypass.combat:
+    description: Allows user to bypass combat check
+    default: op
+  swissknife.bypass.fly:
+    description: Allows user to bypass fly checks of this plugin
