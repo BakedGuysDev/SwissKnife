@@ -1,11 +1,15 @@
 package com.egirlsnation.swissknife;
 
-import com.egirlsnation.swissknife.command.KillCommand;
-import com.egirlsnation.swissknife.event.entity.onEntityDamageByBlock;
-import com.egirlsnation.swissknife.event.entity.onEntityDamageByEntity;
-import com.egirlsnation.swissknife.event.player.onLeave;
-import com.egirlsnation.swissknife.event.player.onJoin;
-import com.egirlsnation.swissknife.hooks.PluginManagerEvents;
+import com.egirlsnation.swissknife.command.*;
+import com.egirlsnation.swissknife.listener.block.onBlockDispense;
+import com.egirlsnation.swissknife.listener.block.onBlockPlace;
+import com.egirlsnation.swissknife.listener.entity.*;
+import com.egirlsnation.swissknife.listener.inventory.onInventoryClick;
+import com.egirlsnation.swissknife.listener.inventory.onInventoryClose;
+import com.egirlsnation.swissknife.listener.inventory.onInventoryOpen;
+import com.egirlsnation.swissknife.listener.player.*;
+import com.egirlsnation.swissknife.sql.MySQL;
+import com.egirlsnation.swissknife.sql.SqlQuery;
 import me.affanhaq.keeper.Keeper;
 import me.affanhaq.keeper.data.ConfigFile;
 import me.affanhaq.keeper.data.ConfigValue;
@@ -14,6 +18,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -21,7 +26,10 @@ import java.util.logging.Logger;
 public class SwissKnife extends JavaPlugin {
 
     private final PluginManager pluginManager = Bukkit.getPluginManager();
-    public final Logger LOGGER = Bukkit.getLogger();
+    public static final Logger LOGGER = Bukkit.getLogger();
+
+    public MySQL SQL;
+    public SqlQuery sqlQuery;
 
     @Override
     public void onEnable(){
@@ -31,25 +39,87 @@ public class SwissKnife extends JavaPlugin {
         registerEvents();
         registerCommands();
 
+        initSQL();
+
+
     }
 
     @Override
     public void onDisable(){
-
+        SQL.disconnect();
+        getLogger().info(ChatColor.GREEN + "Swiss Knife plugin disabled.");
     }
 
     private void registerEvents(){
-        LOGGER.info(ChatColor.AQUA + "Registering events");
-        pluginManager.registerEvents(new onJoin(), this);
-        pluginManager.registerEvents(new PluginManagerEvents(this), this);
-        pluginManager.registerEvents(new onEntityDamageByEntity(), this);
+        pluginManager.registerEvents(new CommandPreProcessor(this), this);
+        LOGGER.info(ChatColor.AQUA + "Registering block events");
+        pluginManager.registerEvents(new onBlockDispense(), this);
+        pluginManager.registerEvents(new onBlockPlace(), this);
+
+        LOGGER.info(ChatColor.AQUA + "Registering entity events");
+        pluginManager.registerEvents(new onEntityChangeBlock(), this);
+        pluginManager.registerEvents(new onEntityChangeBlock(), this);
+        pluginManager.registerEvents(new onEntityDamage(), this );
         pluginManager.registerEvents(new onEntityDamageByBlock(), this);
-        pluginManager.registerEvents(new onLeave(), this);
+        pluginManager.registerEvents(new onEntityDamageByEntity(), this);
+        pluginManager.registerEvents(new onEntityDeath(), this);
+        pluginManager.registerEvents(new onEntityPickupItem(), this);
+        pluginManager.registerEvents(new onEntityPortalTeleport(), this);
+        pluginManager.registerEvents(new onEntitySpawn(), this);
+        pluginManager.registerEvents(new onProjectileHit(), this);
+
+        LOGGER.info(ChatColor.AQUA + "Registering inventory events");
+        pluginManager.registerEvents(new onInventoryClick(), this);
+        pluginManager.registerEvents(new onInventoryClose(), this);
+        pluginManager.registerEvents(new onInventoryOpen(), this);
+
+        LOGGER.info(ChatColor.AQUA + "Registering player events");
+        pluginManager.registerEvents(new onGamemodeSwitch(this), this);
+        pluginManager.registerEvents(new onJoin(this), this);
+        pluginManager.registerEvents(new onLeave(this), this);
+        pluginManager.registerEvents(new onPlayerDeath(), this);
+        pluginManager.registerEvents(new onPlayerInteract(this), this);
+        pluginManager.registerEvents(new onPlayerInteractEntity(), this);
+        pluginManager.registerEvents(new onRespawn(), this);
+        pluginManager.registerEvents(new onPlayerPlaceCrystal(), this);
+        pluginManager.registerEvents(new onSwapHandItems(), this);
+        pluginManager.registerEvents(new EnderCrystalListeners(), this);
     }
 
     private void registerCommands(){
         LOGGER.info("Registering commands.");
         this.getCommand("kill").setExecutor(new KillCommand(this));
+        this.getCommand("ping").setExecutor(new PingCommand());
+        this.getCommand("playtime").setExecutor(new PlaytimeCommand(this));
+        this.getCommand("shitlist").setExecutor(new shitListCommand(this));
+        this.getCommand("shrug").setExecutor(new ShrugCommand());
+    }
+
+    private void initSQL(){
+        LOGGER.info(ChatColor.AQUA + "Starting up SQL driver.");
+
+        this.SQL = new MySQL();
+        this.sqlQuery = new SqlQuery(this);
+
+        if(Config.databaseName.equals("name") && Config.databaseUsername.equals("username") && Config.databasePassword.equals("password")){
+            LOGGER.warning("Default SQL config values detected. SQL driver won't be initiated.");
+            return;
+        }
+
+        try{
+            SQL.connect();
+        } catch (SQLException | ClassNotFoundException throwables) {
+            LOGGER.severe("Something went wrong while initiating SQL\nStack trace will follow.");
+            throwables.printStackTrace();
+        }
+
+        if(SQL.isConnected()){
+            LOGGER.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
+            sqlQuery.createStatsTable();
+        }
+
+        LOGGER.info(ChatColor.GREEN + "Finished SQL initialization.");
+
     }
 
     public PluginManager getPluginManager() {
@@ -86,8 +156,38 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("illegals.illegalBlockList")
         public static List<String> illegalBlockList = Arrays.asList("BEDROCK", "END_PORTAL_FRAME", "BARRIER", "STRUCTURE_BLOCK", "STRUCTURE_VOID");
 
+        @ConfigValue("illegals.enable1kPicks")
+        public static boolean enable1kPicks = true;
+
         @ConfigValue("radius.spawnTeleport")
         public static int spawnRadius = 2000;
+
+        @ConfigValue("ranks.midfagHours")
+        public static int midfagHours = 48;
+
+        @ConfigValue("ranks.oldfagHours")
+        public static int oldfagHours = 408;
+
+        @ConfigValue("ranks.elderfagHours")
+        public static int elderfagHours = 2400;
+
+        @ConfigValue("rank.elderfagVotes")
+        public static int elderfagVotes = 300;
+
+        @ConfigValue("sql.host")
+        public static String databaseHost = "172.18.0.1";
+
+        @ConfigValue("sql.port")
+        public static String databasePort = "3306";
+
+        @ConfigValue("sql.dbName")
+        public static String databaseName = "name";
+
+        @ConfigValue("sql.dbUserName")
+        public static String databaseUsername = "username";
+
+        @ConfigValue("sql.dbPassword")
+        public static String databasePassword = "password";
 
         @ConfigValue("misc.mainWorldName")
         public static String mainWorldName = "world";
@@ -97,5 +197,8 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("misc.endWorldName")
         public static String endWorldName = "world_the_end";
+
+        @ConfigValue("misc.enableAnniversaryItems")
+        public static boolean anniversaryItems = true;
     }
 }

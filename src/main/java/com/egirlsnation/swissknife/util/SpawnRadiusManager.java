@@ -2,7 +2,7 @@ package com.egirlsnation.swissknife.util;
 
 public class SpawnRadiusManager {
 
-    public boolean isInRadius(double LocX, double LocZ, int radius){
+    public boolean isOutsideRadius(double LocX, double LocZ, int radius){
         if (LocX < 0){
             //Negative x
             if (LocZ < 0) {
@@ -18,6 +18,41 @@ public class SpawnRadiusManager {
             return !(LocX < radius) || !(LocZ < radius);
         } else {
             return true;
+        }
+    }
+
+    public boolean isInRadius(double LocX, double LocZ, int radius){
+        if (LocX < 0){
+            //Negative x
+            if (LocZ < 0) {
+                if (LocX > -radius && LocZ > -radius) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                if (LocX > -radius && LocZ < radius) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } else if (LocZ < 0) {
+            //Negative z
+            if (LocX < radius && LocZ > -radius) {
+                return true;
+            } else{
+                return false;
+            }
+        } else if (LocX > -1 && LocZ > -1) {
+            //Both positive
+            if (LocX < radius && LocZ < radius) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 }

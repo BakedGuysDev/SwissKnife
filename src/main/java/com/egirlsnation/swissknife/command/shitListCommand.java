@@ -1,0 +1,58 @@
+package com.egirlsnation.swissknife.command;
+
+import com.egirlsnation.swissknife.SwissKnife;
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+
+public class shitListCommand implements CommandExecutor {
+
+    private final SwissKnife plugin;
+    public shitListCommand(SwissKnife plugin){ this.plugin = plugin; }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+        if(!sender.isOp()){
+            sender.sendMessage(ChatColor.RED + "Go fuck yourself. You don't have enough permissions");
+            return true;
+        }
+
+        if(!plugin.SQL.isConnected()){
+            sender.sendMessage(ChatColor.RED + "Not connected to the database. This command won't work.");
+            return true;
+        }
+
+        if(args.length == 0){
+            sender.sendMessage(ChatColor.RED + "You need to provide some arguments. (add|remove)");
+            return true;
+        }
+
+        if(args.length == 1){
+            sender.sendMessage(ChatColor.RED + "You need to provide a playername.");
+            return true;
+        }
+
+        if(args[0].equalsIgnoreCase("add")){
+            if(plugin.sqlQuery.exists(args[1])){
+                plugin.sqlQuery.addToShitlist(args[1]);
+                sender.sendMessage(ChatColor.GREEN + "Successfully added " + args[1] + " to the shitlist.");
+            }else{
+                sender.sendMessage(ChatColor.RED + args[1] + " couldn't be shitlisted.");
+            }
+            return true;
+        }
+
+        if(args[0].equalsIgnoreCase("remove")){
+            if(plugin.sqlQuery.exists(args[1])){
+                plugin.sqlQuery.removeFromShitlist(args[1]);
+                sender.sendMessage(ChatColor.GREEN + "Successfully removed " + args[1] + " from the shitlist.");
+            }else{
+                sender.sendMessage(ChatColor.RED + args[1] + " couldn't be removed from the shitlist.");
+            }
+        }
+
+        return true;
+    }
+}

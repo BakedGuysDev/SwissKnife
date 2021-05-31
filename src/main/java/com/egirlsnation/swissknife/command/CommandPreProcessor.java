@@ -1,5 +1,6 @@
 package com.egirlsnation.swissknife.command;
 
+import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.util.SpawnRadiusManager;
 import com.egirlsnation.swissknife.util.cooldownManager.CommandType;
 import com.egirlsnation.swissknife.util.cooldownManager.CooldownManager;
@@ -15,10 +16,13 @@ import static com.egirlsnation.swissknife.SwissKnife.Config.spawnRadius;
 
 public class CommandPreProcessor  implements Listener {
 
+    private final SwissKnife plugin;
+    public CommandPreProcessor(SwissKnife plugin){ this.plugin = plugin; }
+
     private final CooldownManager cooldownManager = new CooldownManager();
     private final SpawnRadiusManager radiusManager = new SpawnRadiusManager();
 
-    private String[] commands = {"tpa", "tpahere", "tpayes", "tpaccept", "tpaaccept", "tpno", "tpano", "tpdeny", "tpadeny", "tpyes"};
+    private final String[] commands = {"tpa", "tpahere", "tpayes", "tpaccept", "tpaaccept", "tpno", "tpano", "tpdeny", "tpadeny", "tpyes"};
 
     @EventHandler
     public void CommandPreProcessorEvent(PlayerCommandPreprocessEvent e){
@@ -59,7 +63,7 @@ public class CommandPreProcessor  implements Listener {
             return;
         }
 
-        if(!radiusManager.isInRadius(e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getZ(), spawnRadius)){
+        if(radiusManager.isInRadius(e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getZ(), spawnRadius)){
             for(String command : commands){
                 if(e.getMessage().toLowerCase().startsWith("/" + command.toLowerCase())){
                     e.setCancelled(true);
@@ -68,5 +72,17 @@ public class CommandPreProcessor  implements Listener {
             }
         }
 
+        if(!plugin.SQL.isConnected()){
+            return;
+        }
+
+        if(plugin.sqlQuery.isShitlisted(e.getPlayer())){
+            for(String command : commands){
+                if(e.getMessage().toLowerCase().startsWith("/" + command.toLowerCase())){
+                    e.setCancelled(true);
+                    e.getPlayer().sendMessage(ChatColor.RED + "You are shitlisted and can't do this command.");
+                }
+            }
+        }
     }
 }

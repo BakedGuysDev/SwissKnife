@@ -23,6 +23,14 @@ public class IllegalItemHandler {
         if(meta == null) return false;
         if(!meta.hasEnchants()) return false;
 
+        if(item.getType().equals(Material.NETHERITE_PICKAXE) && enable1kPicks){
+            Map<Enchantment, Integer> enchantMap = meta.getEnchants();
+            for(Map.Entry<Enchantment, Integer> enchant: enchantMap.entrySet()){
+                if(enchant.getValue() > 1100) return true;
+            }
+            return false;
+        }
+
         Map<Enchantment, Integer> enchantMap = meta.getEnchants();
         for(Map.Entry<Enchantment, Integer> enchant: enchantMap.entrySet()){
             if(enchant.getValue() > maxEnchantLevel) return true;
@@ -51,9 +59,14 @@ public class IllegalItemHandler {
         // In case something weird happens and the ancient weapon has just lore and no modifiers
         if(modifierMap == null) return null;
         //Removing the Attack speed attribute from the meta
-        if(modifierMap.containsKey(Attribute.GENERIC_ATTACK_SPEED)){
-            meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED);
+        if(modifierMap.containsKey(Attribute.GENERIC_ATTACK_DAMAGE)){
+            if(modifierMap.get(Attribute.GENERIC_ATTACK_DAMAGE).contains(new AttributeModifier("attack_damage",10, AttributeModifier.Operation.ADD_NUMBER))){
+                return null;
+            }
         }
+        meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
+        meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED);
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("attack_damage",10, AttributeModifier.Operation.ADD_NUMBER));
         //Return the new meta
         return meta;
     }
@@ -63,6 +76,11 @@ public class IllegalItemHandler {
         if(item.getType().toString().matches("[A-Z]*?_?[A-Z]*_SPAWN_EGG")) return false;
         item.setAmount(0);
         return true;
+    }
+
+    public boolean isSpawnEgg(ItemStack item){
+        if(item == null) return false;
+        return item.getType().toString().matches("[A-Z]*?_?[A-Z]*_SPAWN_EGG");
     }
 
     public boolean handleIllegals(Item item, Player player){

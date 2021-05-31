@@ -6,16 +6,25 @@ authors:
   - Killmlana
 api-version: 1.16
 softdepend:
-  - Vault
+  - VotingPlugin
   - LuckPerms
 
 commands:
   kill:
     description: Allows you to kill yourself or other players if you have perms
     usage: /kill
-  tpa:
-    description: Allows you to tpa idfk
-    usage: /tpa <playername>
+  playtime:
+    description: Allows you to check the playtime of a player
+    usage: /playtime
+  shrug:
+    description: /shrug
+    usage: /shrug (args)
+  ping:
+    description: Pong
+    usage: /ping (playername)
+  shitlist:
+    description: Allows you to shitlist someone if you have the permissions
+    usage: /shitlist <add|remove> (playerName)
 
 permissions:
   swissknife.kill.others:

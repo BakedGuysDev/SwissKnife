@@ -10,7 +10,7 @@ public class CooldownManager {
 
     private static final Map<UUID,CommandInfo> cooldowns = new HashMap<>();
 
-    public static final int DEFAULT_COOLDOWN = 300;
+    public static final int DEFAULT_COOLDOWN = 20;
 
     public void setCooldown(UUID identifier, long time, CommandType cmd){
         if(time < 1){
