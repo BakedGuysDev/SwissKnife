@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
 import static com.egirlsnation.swissknife.SwissKnife.Config.*;
+import static com.egirlsnation.swissknife.SwissKnife.Config.jihadsPower;
 
 public class onProjectileHit implements Listener {
 
@@ -14,11 +15,18 @@ public class onProjectileHit implements Listener {
 
     @EventHandler
     private void ProjectileHit(ProjectileHitEvent e) {
-        if (!e.getEntityType().equals(EntityType.SNOWBALL)) return;
-        if(!jihadsEnabled) return;
-        if (!radiusManager.isInRadius(e.getEntity().getLocation().getX(), e.getEntity().getLocation().getZ(), jihadsRadius) && limitJihadRadius) {
+        if (e.getEntityType().equals(EntityType.SNOWBALL)){
+            if(!jihadsEnabled) return;
+            if (!radiusManager.isInRadius(e.getEntity().getLocation().getX(), e.getEntity().getLocation().getZ(), jihadsRadius) && limitJihadRadius) {
+                return;
+            }
+            e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), (float) jihadsPower, true);
             return;
         }
-        e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), (float) jihadsPower, true);
+        if(e.getEntityType().equals(EntityType.DRAGON_FIREBALL)){
+            if(e.getEntity().getCustomName() == null) return;
+            if(!e.getEntity().getCustomName().equals("CusFireBallSwissKnife")) return;
+            e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), 2.5f, false);
+        }
     }
 }

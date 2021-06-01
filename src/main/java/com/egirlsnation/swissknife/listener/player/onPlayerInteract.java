@@ -36,18 +36,14 @@ public class onPlayerInteract implements Listener {
             e.setCancelled(true);
         }
 
-        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){
+        if(e.getAction().equals(Action.RIGHT_CLICK_AIR)){
             if(customItemHandler.isDraconiteSword(e.getItem())){
                 customItemHandler.handleSwordAbility(e.getPlayer(), e.getHand());
                 return;
             }else if(customItemHandler.isDraconiteAxe(e.getItem())){
                 customItemHandler.handleAxeAbility(e.getPlayer(), e.getHand(), plugin);
                 return;
-            }
-        }
-
-        if(e.getAction().equals(Action.RIGHT_CLICK_AIR)){
-            if(customItemHandler.isDraconiteCrystal(e.getItem())){
+            }else if(customItemHandler.isDraconiteCrystal(e.getItem())){
                 customItemHandler.handleCrystalAbility(e.getPlayer(), e.getHand(), plugin);
             }
         }

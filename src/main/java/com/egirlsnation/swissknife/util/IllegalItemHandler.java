@@ -8,12 +8,16 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static com.egirlsnation.swissknife.SwissKnife.Config.*;
+import static org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE;
+import static org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED;
 
 public class IllegalItemHandler {
 
@@ -58,15 +62,54 @@ public class IllegalItemHandler {
         Multimap<Attribute, AttributeModifier> modifierMap = meta.getAttributeModifiers();
         // In case something weird happens and the ancient weapon has just lore and no modifiers
         if(modifierMap == null) return null;
+
+        meta.removeAttributeModifier(GENERIC_ATTACK_SPEED);
+        meta.removeAttributeModifier(GENERIC_ATTACK_DAMAGE);
+        meta.addAttributeModifier(GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "attack_speed",-1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage",7, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        //Return the new meta
+        return meta;
+    }
+
+    public ItemMeta reduceDraconiteAxeMeta(ItemStack item){
+        if(!item.getType().equals(Material.NETHERITE_AXE)) return null;
+        ItemMeta meta = item.getItemMeta();
+        if(meta == null) return null;
+        if(!meta.hasLore()) return null;
+        if(meta.getLore() == null) return null;
+
+        if(!meta.getLore().contains("§cDraconite Weapon")) return null;
+
+        Multimap<Attribute, AttributeModifier> modifierMap = meta.getAttributeModifiers();
+        // In case something weird happens and the draconite weapon has just lore and no modifiers
+        if(modifierMap == null) return null;
         //Removing the Attack speed attribute from the meta
-        if(modifierMap.containsKey(Attribute.GENERIC_ATTACK_DAMAGE)){
-            if(modifierMap.get(Attribute.GENERIC_ATTACK_DAMAGE).contains(new AttributeModifier("attack_damage",10, AttributeModifier.Operation.ADD_NUMBER))){
-                return null;
-            }
-        }
-        meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE);
-        meta.removeAttributeModifier(Attribute.GENERIC_ATTACK_SPEED);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("attack_damage",10, AttributeModifier.Operation.ADD_NUMBER));
+        meta.removeAttributeModifier(GENERIC_ATTACK_SPEED);
+        meta.removeAttributeModifier(GENERIC_ATTACK_DAMAGE);
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "attack_speed",-2.5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        //Return the new meta
+        return meta;
+    }
+
+    public ItemMeta reduceDraconiteSwordMeta(ItemStack item){
+        if(!item.getType().equals(Material.NETHERITE_SWORD)) return null;
+        ItemMeta meta = item.getItemMeta();
+        if(meta == null) return null;
+        if(!meta.hasLore()) return null;
+        if(meta.getLore() == null) return null;
+
+        if(!meta.getLore().contains("§cDraconite Weapon")) return null;
+
+        Multimap<Attribute, AttributeModifier> modifierMap = meta.getAttributeModifiers();
+        // In case something weird happens and the draconite weapon has just lore and no modifiers
+        if(modifierMap == null) return null;
+        //Removing the Attack speed attribute from the meta
+
+        meta.removeAttributeModifier(GENERIC_ATTACK_SPEED);
+        meta.removeAttributeModifier(GENERIC_ATTACK_DAMAGE);
+        meta.addAttributeModifier(GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "attack_speed",-1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         //Return the new meta
         return meta;
     }
@@ -111,6 +154,21 @@ public class IllegalItemHandler {
             item.setItemStack(itemStack);
             return false;
         }
+
+        ItemMeta draconicAxeMeta = reduceDraconiteAxeMeta(itemStack);
+        if(draconicAxeMeta != null){
+            itemStack.setItemMeta(draconicAxeMeta);
+            item.setItemStack(itemStack);
+            return false;
+        }
+
+        ItemMeta draconicSwordMeta = reduceDraconiteSwordMeta(itemStack);
+        if(draconicSwordMeta != null){
+            itemStack.setItemMeta(draconicSwordMeta);
+            item.setItemStack(itemStack);
+            return false;
+        }
+
         return false;
     }
 
@@ -140,6 +198,18 @@ public class IllegalItemHandler {
             return false;
         }
 
+        ItemMeta draconicAxeMeta = reduceDraconiteAxeMeta(item);
+        if(draconicAxeMeta != null){
+            item.setItemMeta(draconicAxeMeta);
+            return false;
+        }
+
+        ItemMeta draconicSwordMeta = reduceDraconiteSwordMeta(item);
+        if(draconicSwordMeta != null){
+            item.setItemMeta(draconicSwordMeta);
+            return false;
+        }
+
         return false;
     }
 
@@ -164,6 +234,18 @@ public class IllegalItemHandler {
         ItemMeta ancientMeta = reduceAncientWeaponMeta(item);
         if(ancientMeta != null){
             item.setItemMeta(ancientMeta);
+            return false;
+        }
+
+        ItemMeta draconicAxeMeta = reduceDraconiteAxeMeta(item);
+        if(draconicAxeMeta != null){
+            item.setItemMeta(draconicAxeMeta);
+            return false;
+        }
+
+        ItemMeta draconicSwordMeta = reduceDraconiteSwordMeta(item);
+        if(draconicSwordMeta != null){
+            item.setItemMeta(draconicSwordMeta);
             return false;
         }
 

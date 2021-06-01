@@ -123,6 +123,7 @@ public class CustomItemHandler {
         if(TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= AbilityCooldownManager.DEFAULT_SWORD_COOLDOWN){
             DragonFireball fireball = player.getWorld().spawn(player.getEyeLocation(), DragonFireball.class);
             fireball.setShooter(player);
+            fireball.setCustomName("CusFireBallSwissKnife");
             fireball.setVelocity(player.getLocation().getDirection().multiply(3));
             abilityCooldownManager.setSwordCooldown(player.getUniqueId(), System.currentTimeMillis());
             player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_SHOOT, SoundCategory.PLAYERS, 100, 0);
@@ -145,13 +146,14 @@ public class CustomItemHandler {
             Bukkit.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
                 @Override
                 public void run() {
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100, 3));
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 50, 1));
                 }
             },50);
             Bukkit.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
                 @Override
                 public void run() {
                     player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, SoundCategory.PLAYERS, 100, 0);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 40, 2));
                 }
             },100);
         }else{

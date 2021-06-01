@@ -13,7 +13,9 @@ public class onBlockPlace implements Listener {
     private void BlockPlace(BlockPlaceEvent e){
         illegalBlockList.forEach( block -> {
             if(e.getBlock().getType().equals(Material.getMaterial(block))){
-                e.setCancelled(true);
+                if(e.getItemInHand().getType().equals(Material.getMaterial(block))){
+                    e.setCancelled(true);
+                }
             }
         });
     }

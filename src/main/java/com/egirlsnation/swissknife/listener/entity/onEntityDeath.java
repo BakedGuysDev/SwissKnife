@@ -4,6 +4,7 @@ import com.egirlsnation.swissknife.util.customItem.AnniversaryItemHanlder;
 import com.egirlsnation.swissknife.util.customItem.CustomItemHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,31 +33,31 @@ public class onEntityDeath implements Listener {
 
             case ZOMBIE:{
                 if(anniversaryItems){
-                    handleZombieDrops(e.getEntity(), chance);
+                    handleZombieDrops(e.getEntity(), e.getEntity().getKiller(), chance);
                 }
             }break;
 
             case SKELETON:{
                 if(anniversaryItems){
-                    handleSkeletonDrops(e.getEntity(), chance);
+                    handleSkeletonDrops(e.getEntity(), e.getEntity().getKiller(), chance);
                 }
             }break;
 
             case CREEPER:{
                 if(anniversaryItems){
-                    handleCreeperDrops(e.getEntity(), chance);
+                    handleCreeperDrops(e.getEntity(), e.getEntity().getKiller(), chance);
                 }
             }break;
 
             case WITHER:{
                 if(anniversaryItems){
-                    handleWitherDrops(e.getEntity(), chance);
+                    handleWitherDrops(e.getEntity(), e.getEntity().getKiller(), chance);
                 }
             }break;
 
             case SPIDER:{
                 if(anniversaryItems){
-                    handleSpiderDrops(e.getEntity(), chance);
+                    handleSpiderDrops(e.getEntity(), e.getEntity().getKiller(), chance);
                 }
             }break;
             case EVOKER:{
@@ -71,53 +72,55 @@ public class onEntityDeath implements Listener {
     private void handleEndermanDrops(Entity entity, Player player, int chance){
         if(chance > 5) return;
         entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteCrystal());
+        if(player == null) return;
         broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Crystal");
 
 
     }
 
-    private void handleZombieDrops(Entity entity, int chance){
+    private void handleZombieDrops(Entity entity, Player player, int chance){
         if(chance > 30) return;
         entity.getWorld().dropItemNaturally(entity.getLocation(), anniversaryItemHanlder.getFlesh());
         if(chance < 5){
-            entity.getWorld().dropItemNaturally(entity.getLocation(), anniversaryItemHanlder.getTpaToken());
+            addTpaToken(player);
         }
 
     }
 
-    private void handleSkeletonDrops(Entity entity, int chance){
+    private void handleSkeletonDrops(Entity entity, Player player, int chance){
         if(chance > 30) return;
         entity.getWorld().dropItemNaturally(entity.getLocation(), anniversaryItemHanlder.getBone());
         if(chance < 5){
-            entity.getWorld().dropItemNaturally(entity.getLocation(), anniversaryItemHanlder.getTpaToken());
+            addTpaToken(player);
         }
     }
 
-    private void handleCreeperDrops(Entity entity, int chance){
+    private void handleCreeperDrops(Entity entity, Player player, int chance){
         if(chance > 30) return;
         entity.getWorld().dropItemNaturally(entity.getLocation(), anniversaryItemHanlder.getGunpowder());
         if(chance < 5){
-            entity.getWorld().dropItemNaturally(entity.getLocation(), anniversaryItemHanlder.getTpaToken());
+            addTpaToken(player);
         }
     }
 
-    private void handleWitherDrops(Entity entity, int chance){
+    private void handleWitherDrops(Entity entity, Player player, int chance){
         if(chance > 20) return;
-        entity.getWorld().dropItemNaturally(entity.getLocation(), anniversaryItemHanlder.getTpaToken());
+        addTpaToken(player);
 
     }
 
-    private void handleSpiderDrops(Entity entity, int chance){
+    private void handleSpiderDrops(Entity entity, Player player, int chance){
         if(chance > 30) return;
         entity.getWorld().dropItemNaturally(entity.getLocation(), anniversaryItemHanlder.getString());
         if(chance < 5){
-            entity.getWorld().dropItemNaturally(entity.getLocation(), anniversaryItemHanlder.getTpaToken());
+            addTpaToken(player);
         }
     }
 
     private void handleEvokerDrops(Entity entity, Player player, int chance){
         if(chance > 10) return;
         entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getPopbobTotem());
+        if(player == null) return;
         broadcastFoundMessage(player, "the " + ChatColor.RED + "Totem of Popbob");
 
     }
@@ -126,14 +129,23 @@ public class onEntityDeath implements Listener {
         if(chance > 10) return;
         if(chance > 5){
             entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteAxe());
+            if(player == null) return;
             broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Axe");
         }else{
             entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteSword());
+            if(player == null) return;
             broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Sword");
         }
     }
 
     private void broadcastFoundMessage(Player player, String itemName){
          Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "[" + ChatColor.AQUA + "EVENT" + ChatColor.GREEN + "] " + player.getDisplayName() + ChatColor.GREEN + " has found " + itemName);
+    }
+
+    private void addTpaToken(Player player){
+        if(player == null) return;
+        final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        String command = "eco give " + player.getName() + " 1";
+        Bukkit.dispatchCommand(console, command);
     }
 }
