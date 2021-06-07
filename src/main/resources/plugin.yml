@@ -25,9 +25,9 @@ commands:
   shitlist:
     description: Allows you to shitlist someone if you have the permissions
     usage: /shitlist <add|remove> (playerName)
-  test:
-    description: test
-    usage: /test
+  rank:
+    description: rank
+    usage: /rank
 
 permissions:
   swissknife.kill.others:

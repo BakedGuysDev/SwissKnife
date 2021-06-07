@@ -93,6 +93,7 @@ public class SwissKnife extends JavaPlugin {
         this.getCommand("playtime").setExecutor(new PlaytimeCommand(this));
         this.getCommand("shitlist").setExecutor(new shitListCommand(this));
         this.getCommand("shrug").setExecutor(new ShrugCommand());
+        this.getCommand("rank").setExecutor(new RankCommand());
     }
 
     private void initSQL(){

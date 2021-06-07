@@ -142,10 +142,15 @@ public class IllegalItemHandler {
             return true;
         }
 
-        if(itemStack.getType().equals(Material.TOTEM_OF_UNDYING) && itemStack.getAmount() != maxTotemStack){
+        if(itemStack.getType().equals(Material.TOTEM_OF_UNDYING) && itemStack.getAmount() > maxTotemStack){
             itemStack.setAmount(1);
             item.setItemStack(itemStack);
-            return false;
+            return true;
+        }
+
+        if(hasTooLongName(item.getItemStack().getItemMeta())){
+            itemStack.setItemMeta(trimName(itemStack.getItemMeta()));
+            item.setItemStack(itemStack);
         }
 
         ItemMeta ancientMeta = reduceAncientWeaponMeta(itemStack);
@@ -187,9 +192,13 @@ public class IllegalItemHandler {
             return true;
         }
 
-        if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() != maxTotemStack){
+        if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() > maxTotemStack){
             item.setAmount(1);
-            return false;
+            return true;
+        }
+
+        if(hasTooLongName(item.getItemMeta())){
+            item.setItemMeta(trimName(item.getItemMeta()));
         }
 
         ItemMeta ancientMeta = reduceAncientWeaponMeta(item);
@@ -226,9 +235,13 @@ public class IllegalItemHandler {
             return true;
         }
 
-        if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() != maxTotemStack){
+        if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() > maxTotemStack){
             item.setAmount(1);
-            return false;
+            return true;
+        }
+
+        if(hasTooLongName(item.getItemMeta())){
+            item.setItemMeta(trimName(item.getItemMeta()));
         }
 
         ItemMeta ancientMeta = reduceAncientWeaponMeta(item);
@@ -258,6 +271,17 @@ public class IllegalItemHandler {
         meta.setDisplayName(ChatColor.RED + "I fucked ya mom");
         paper.setItemMeta(meta);
         return paper;
+    }
+
+    public boolean hasTooLongName(ItemMeta meta){
+        if(meta == null) return false;
+        if(!meta.hasDisplayName()) return false;
+        return meta.getDisplayName().length() > 25;
+    }
+
+    public ItemMeta trimName(ItemMeta meta){
+        meta.setDisplayName(meta.getDisplayName().substring(0, Math.min(meta.getDisplayName().length(), 26)));
+        return meta;
     }
 
 

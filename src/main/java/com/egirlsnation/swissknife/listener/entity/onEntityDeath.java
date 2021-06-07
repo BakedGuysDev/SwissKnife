@@ -17,13 +17,13 @@ import static com.egirlsnation.swissknife.SwissKnife.Config.anniversaryItems;
 
 public class onEntityDeath implements Listener {
 
-    private final Random random = new Random();
-
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
     private final AnniversaryItemHanlder anniversaryItemHanlder = new AnniversaryItemHanlder();
 
     @EventHandler
     private void EntityDeath(EntityDeathEvent e){
+
+        final Random random = new Random();
 
         int chance = random.nextInt(100) + 1;
         switch(e.getEntityType()){
@@ -70,7 +70,7 @@ public class onEntityDeath implements Listener {
     }
 
     private void handleEndermanDrops(Entity entity, Player player, int chance){
-        if(chance > 5) return;
+        if(chance > 3) return;
         entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteCrystal());
         if(player == null) return;
         broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Crystal");
@@ -118,7 +118,7 @@ public class onEntityDeath implements Listener {
     }
 
     private void handleEvokerDrops(Entity entity, Player player, int chance){
-        if(chance > 10) return;
+        if(chance >= 3) return;
         entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getPopbobTotem());
         if(player == null) return;
         broadcastFoundMessage(player, "the " + ChatColor.RED + "Totem of Popbob");
@@ -126,8 +126,8 @@ public class onEntityDeath implements Listener {
     }
 
     private void handleShulkerDrops(Entity entity, Player player, int chance){
-        if(chance > 10) return;
-        if(chance > 5){
+        if(chance > 5) return;
+        if(chance > 3){
             entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteAxe());
             if(player == null) return;
             broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Axe");

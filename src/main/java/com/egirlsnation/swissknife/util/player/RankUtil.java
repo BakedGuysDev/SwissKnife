@@ -17,16 +17,16 @@ public class RankUtil {
         if(!player.hasPlayedBefore()) return;
 
         //Name "PLAY_ONE_MINUTE" is missleading. It's actually in ticks.
-        int pt = player.getStatistic(Statistic.PLAY_ONE_MINUTE) / 20 / 60 / 60;
+        int pt = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
         final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
-        if(pt >= (midfagHours * 240) && !player.hasPermission("egirls.rank.vet")){ //Hours to ticks
+        if(pt >= getTicksFromHours(midfagHours) && !player.hasPermission("egirls.rank.vet")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add veteran";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GREEN + " reached " + ChatColor.YELLOW + "MidFag" + ChatColor.GREEN + "!");
         }
 
-        if(pt >= (oldfagHours * 240) && !player.hasPermission("egirls.rank.oldfag")){ //Hours to ticks
+        if(pt >= getTicksFromHours(oldfagHours) && !player.hasPermission("egirls.rank.oldfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add oldfag";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GREEN + " reached " + ChatColor.RED + "OldFag" + ChatColor.GREEN + "!");
@@ -34,7 +34,7 @@ public class RankUtil {
         }
 
         if(userUtils.getUserManager() == null) return;
-        if(pt >= (elderfagHours * 240) && userUtils.getVotes(player) >= 300 && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
+        if(pt >= getTicksFromHours(elderfagHours) && userUtils.getVotes(player) >= 300 && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add legend";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GREEN + " reached " + ChatColor.AQUA + "ElderFag" + ChatColor.GREEN + "!");
@@ -42,5 +42,12 @@ public class RankUtil {
                 p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 100, 0);
             }
         }
+    }
+
+    public int getTicksFromHours(int hours){
+        int ticks = hours * 20;
+        ticks = ticks * 60;
+        ticks = ticks * 60;
+        return ticks;
     }
 }

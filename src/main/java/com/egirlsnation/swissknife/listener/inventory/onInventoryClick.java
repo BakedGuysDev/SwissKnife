@@ -7,9 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class onInventoryClick implements Listener {
 
     private final IllegalItemHandler illegalItemHandler = new IllegalItemHandler();
@@ -18,12 +15,14 @@ public class onInventoryClick implements Listener {
     private void InventoryClick(InventoryClickEvent e){
         if(!(e.getWhoClicked() instanceof Player)) return;
 
-        List<ItemStack> items = new ArrayList<>();
-        items.add(e.getCursor());
-        items.add(e.getCurrentItem());
+        if(e.getClickedInventory() == null) return;
+        ItemStack[] items = e.getClickedInventory().getContents();
 
         for(ItemStack item : items){
-            illegalItemHandler.handleIllegals(item, (Player) e.getWhoClicked());
+            if(illegalItemHandler.handleIllegals(item, (Player) e.getWhoClicked())){
+                e.setCancelled(true);
+                return;
+            }
         }
     }
 }

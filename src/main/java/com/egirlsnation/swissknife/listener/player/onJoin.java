@@ -34,13 +34,14 @@ public class onJoin implements Listener {
 
         if(!player.hasPlayedBefore()) return;
 
+        rankUtil.promoteIfEligible(player);
+
         Bukkit.getServer().getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
                 for(ItemStack item : player.getInventory().getContents()){
                     illegalItemHandler.handleIllegals(item, player);
                 }
-                rankUtil.promoteIfEligible(player);
             }
         });
 
