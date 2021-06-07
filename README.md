@@ -31,6 +31,6 @@ If you still want to download the plugin you can do so in the actions tab.
 
 Maven is the recommended way to build the project.
 
-Clone the project with `git clone https://github.com/Lerbiq/EgirlsNationSwissKnife.git`.  
-Use `mvn clean package` in the main project directory to build the project.  
-The jar will be located at `/target/SwissKnife-version-Full.jar` (The full jar has some dependencies, as keeper, included).
+- Clone the project with `git clone https://github.com/Lerbiq/EgirlsNationSwissKnife.git`.  
+- Use `mvn clean package` in the main project directory to build the project.  
+- The jar will be located at `/target/SwissKnife-version-Full.jar` (The full jar has some dependencies, as keeper, included).
