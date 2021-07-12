@@ -91,7 +91,7 @@ public class SwissKnife extends JavaPlugin {
         this.getCommand("kill").setExecutor(new KillCommand(this));
         this.getCommand("ping").setExecutor(new PingCommand());
         this.getCommand("playtime").setExecutor(new PlaytimeCommand(this));
-        this.getCommand("shitlist").setExecutor(new shitListCommand(this));
+        this.getCommand("shitlist").setExecutor(new ShitListCommand(this));
         this.getCommand("shrug").setExecutor(new ShrugCommand());
         this.getCommand("rank").setExecutor(new RankCommand());
     }

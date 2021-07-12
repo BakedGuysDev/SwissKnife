@@ -6,11 +6,11 @@
 
     <groupId>com.egirlsnation</groupId>
     <artifactId>SwissKnife</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 
     <properties>
         <java.version>11</java.version>
-        <spigot-api.version>1.16.5-R0.1-SNAPSHOT</spigot-api.version>
+        <spigot-api.version>1.17-R0.1-SNAPSHOT</spigot-api.version>
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

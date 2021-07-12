@@ -1,5 +1,5 @@
 name: SwissKnife
-version: 0.1.0
+version: ${project.version}
 main: com.egirlsnation.swissknife.SwissKnife
 authors:
   - Lerbiq

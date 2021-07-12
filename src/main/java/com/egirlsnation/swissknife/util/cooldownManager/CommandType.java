@@ -4,5 +4,6 @@ public enum CommandType {
     KILL,
     ME,
     PLAYTIME,
-    AFK
+    AFK,
+    PING
 }

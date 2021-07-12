@@ -7,10 +7,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-public class shitListCommand implements CommandExecutor {
+public class ShitListCommand implements CommandExecutor {
 
     private final SwissKnife plugin;
-    public shitListCommand(SwissKnife plugin){ this.plugin = plugin; }
+    public ShitListCommand(SwissKnife plugin){ this.plugin = plugin; }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {

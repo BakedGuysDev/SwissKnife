@@ -63,6 +63,24 @@ public class CommandPreProcessor  implements Listener {
             return;
         }
 
+        if(e.getMessage().toLowerCase().startsWith("/ping")){
+            CommandType type = CommandType.PING;
+            Player player = e.getPlayer();
+
+            if(player.hasPermission("swissknife.cooldown.bypass")){
+                return;
+            }
+
+            if(!cooldownManager.isOnCooldown(player, type)){
+                cooldownManager.setCooldown(player.getUniqueId(), type);
+                return;
+            }
+
+            e.setCancelled(true);
+            player.sendMessage(ChatColor.RED + "You gotta wait before doing that m8");
+            return;
+        }
+
         if(radiusManager.isInRadius(e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getZ(), spawnRadius)){
             for(String command : commands){
                 if(e.getMessage().toLowerCase().startsWith("/" + command.toLowerCase())){
