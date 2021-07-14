@@ -10,6 +10,7 @@ import com.egirlsnation.swissknife.listener.inventory.onInventoryOpen;
 import com.egirlsnation.swissknife.listener.player.*;
 import com.egirlsnation.swissknife.sql.MySQL;
 import com.egirlsnation.swissknife.sql.SqlQuery;
+import com.egirlsnation.swissknife.util.player.PingUtil;
 import me.affanhaq.keeper.Keeper;
 import me.affanhaq.keeper.data.ConfigFile;
 import me.affanhaq.keeper.data.ConfigValue;
@@ -30,6 +31,8 @@ public class SwissKnife extends JavaPlugin {
 
     public MySQL SQL;
     public SqlQuery sqlQuery;
+
+    private PingUtil pingUtil = new PingUtil();
 
     @Override
     public void onEnable(){
@@ -125,6 +128,15 @@ public class SwissKnife extends JavaPlugin {
 
     public PluginManager getPluginManager() {
         return pluginManager;
+    }
+
+    private void startPingLogTask(){
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
+            @Override
+            public void run() {
+                pingUtil.uploadPingMap(pingUtil.getAllPings(), SQL, sqlQuery);
+            }
+        },6000,12000);
     }
 
     @ConfigFile("config.yml")

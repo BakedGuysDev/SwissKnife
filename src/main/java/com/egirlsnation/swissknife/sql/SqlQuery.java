@@ -1,6 +1,7 @@
 package com.egirlsnation.swissknife.sql;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.util.player.PlayerInfo;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
@@ -22,6 +23,33 @@ public class SqlQuery {
             ps = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerStats "
                     + "(Name VARCHAR(32),UUID CHAR(36),playTime INT(11),kills INT(11),deaths INT(11),mobKills INT(11),shitlisted TINYINT(1),firstPlayed VARCHAR(100),PRIMARY KEY (Name))");
             ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void createPingTable(){
+        PreparedStatement ps;
+        try{
+            ps = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerPing "
+                    + "(Name VARCHAR(32),UUID CHAR(36),ping INT(11), timestamp INT(11),PRIMARY KEY (Name))");
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void addPingRecord(PlayerInfo info, Integer ping){
+        try{
+            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO playerPing"
+                    + "(Name,UUID,ping,timestamp) VALUES (?,?,?,?)");
+            ps.setString(1, info.getName());
+            ps.setString(2, info.getUuid().toString());
+            ps.setInt(3, ping);
+            ps.setLong(4, System.currentTimeMillis() / 1000);
+
+            ps.executeUpdate();
+
         }catch (SQLException e){
             e.printStackTrace();
         }
