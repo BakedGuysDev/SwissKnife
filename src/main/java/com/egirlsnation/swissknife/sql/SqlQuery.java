@@ -32,7 +32,7 @@ public class SqlQuery {
         PreparedStatement ps;
         try{
             ps = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerPing "
-                    + "(Name VARCHAR(32),UUID CHAR(36),ping INT(11), timestamp INT(11),PRIMARY KEY (Name))");
+                    + "(ID INT(11),Name VARCHAR(32),UUID CHAR(36),ping INT(11), timestamp INT(11),PRIMARY KEY (ID))");
             ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
@@ -53,6 +53,28 @@ public class SqlQuery {
         }catch (SQLException e){
             e.printStackTrace();
         }
+    }
+
+    public void purgePingRecords(String playerName){
+        try{
+            PreparedStatement count = plugin.SQL.getConnection().prepareStatement("SELECT COUNT() FROM playerPing WHERE Name=? ORDER BY timestamp DESC");
+            count.setString(1, playerName);
+            ResultSet countSet = count.executeQuery();
+            int countNum = countSet.getInt(1);
+            if(countNum <= 100){
+                return;
+            }
+
+            int toDelete = countNum - 100;
+
+            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("DELETE FROM playerPing WHERE Name=? ORDER BY timestamp ASC limit ?");
+            ps.setString(1, playerName);
+            ps.setInt(2, toDelete);
+            ResultSet resultSet = ps.executeQuery();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return;
     }
 
     public void createPlayer(Player player){
