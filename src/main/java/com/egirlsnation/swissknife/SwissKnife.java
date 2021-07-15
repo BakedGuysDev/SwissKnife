@@ -120,6 +120,7 @@ public class SwissKnife extends JavaPlugin {
         if(SQL.isConnected()){
             LOGGER.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
             sqlQuery.createStatsTable();
+            sqlQuery.createPingTable();
         }
 
         LOGGER.info(ChatColor.GREEN + "Finished SQL initialization.");
