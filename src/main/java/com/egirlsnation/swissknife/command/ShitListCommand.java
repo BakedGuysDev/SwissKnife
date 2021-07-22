@@ -39,7 +39,7 @@ public class ShitListCommand implements CommandExecutor {
                 plugin.sqlQuery.addToShitlist(args[1]);
                 sender.sendMessage(ChatColor.GREEN + "Successfully added " + args[1] + " to the shitlist.");
             }else{
-                sender.sendMessage(ChatColor.RED + args[1] + " couldn't be shitlisted.");
+                sender.sendMessage(ChatColor.RED + args[1] + " couldn't be shitlisted, because he isn't in the database.");
             }
             return true;
         }
@@ -49,7 +49,7 @@ public class ShitListCommand implements CommandExecutor {
                 plugin.sqlQuery.removeFromShitlist(args[1]);
                 sender.sendMessage(ChatColor.GREEN + "Successfully removed " + args[1] + " from the shitlist.");
             }else{
-                sender.sendMessage(ChatColor.RED + args[1] + " couldn't be removed from the shitlist.");
+                sender.sendMessage(ChatColor.RED + args[1] + " couldn't be removed from the shitlist, because he isn't in the database.");
             }
         }
 

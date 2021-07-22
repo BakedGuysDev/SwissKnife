@@ -32,7 +32,7 @@ public class SwissKnife extends JavaPlugin {
     public MySQL SQL;
     public SqlQuery sqlQuery;
 
-    private PingUtil pingUtil = new PingUtil();
+    private final PingUtil pingUtil = new PingUtil();
 
     @Override
     public void onEnable(){
@@ -97,6 +97,7 @@ public class SwissKnife extends JavaPlugin {
         this.getCommand("shitlist").setExecutor(new ShitListCommand(this));
         this.getCommand("shrug").setExecutor(new ShrugCommand());
         this.getCommand("rank").setExecutor(new RankCommand());
+        this.getCommand("monkey").setExecutor(new MonkeyCommand());
     }
 
     private void initSQL(){
@@ -132,12 +133,7 @@ public class SwissKnife extends JavaPlugin {
     }
 
     private void startPingLogTask(){
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, new Runnable() {
-            @Override
-            public void run() {
-                pingUtil.uploadPingMap(pingUtil.getAllPings(), SQL, sqlQuery);
-            }
-        },6000,12000);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> pingUtil.uploadPingMap(pingUtil.getAllPings(), SQL, sqlQuery),6000,12000);
     }
 
     @ConfigFile("config.yml")

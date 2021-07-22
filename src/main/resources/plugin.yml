@@ -28,6 +28,9 @@ commands:
   rank:
     description: rank
     usage: /rank
+  monkey:
+    description: Monkey
+    usage: https://www.youtube.com/watch?v=5tQLFon8Yhk
 
 permissions:
   swissknife.kill.others:
