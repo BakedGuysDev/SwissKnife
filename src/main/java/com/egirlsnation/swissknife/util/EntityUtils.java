@@ -36,10 +36,11 @@ public class EntityUtils {
             return;
         }
 
+        int vehicleListSize = vehicleList.size();
         for(Entity entity : vehicleList){
-            if(vehicleList.size() > vehicleLimitChunk){
+            if(vehicleListSize > vehicleLimitChunk){
                 entity.remove();
-                vehicleList.remove(entity);
+                vehicleListSize--;
             }
         }
     }

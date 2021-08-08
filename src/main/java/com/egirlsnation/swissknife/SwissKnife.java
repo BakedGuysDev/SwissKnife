@@ -87,6 +87,8 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onPlayerPlaceCrystal(), this);
         pluginManager.registerEvents(new onSwapHandItems(), this);
         pluginManager.registerEvents(new EnderCrystalListeners(), this);
+        pluginManager.registerEvents(new onVehicleCreate(), this);
+        pluginManager.registerEvents(new onVehicleCollision(), this);
     }
 
     private void registerCommands(){
