@@ -68,7 +68,7 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onEntityDeath(), this);
         pluginManager.registerEvents(new onEntityPickupItem(), this);
         pluginManager.registerEvents(new onEntityPortalTeleport(), this);
-        pluginManager.registerEvents(new onEntitySpawn(), this);
+        pluginManager.registerEvents(new onCreatureSpawn(), this);
         pluginManager.registerEvents(new onProjectileHit(), this);
 
         LOGGER.info(ChatColor.AQUA + "Registering inventory events");
@@ -121,7 +121,7 @@ public class SwissKnife extends JavaPlugin {
         if(SQL.isConnected()){
             LOGGER.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
             sqlQuery.createStatsTable();
-            sqlQuery.createPingTable();
+            //sqlQuery.createPingTable();
         }
 
         LOGGER.info(ChatColor.GREEN + "Finished SQL initialization.");
@@ -166,8 +166,14 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("illegals.illegalBlockList")
         public static List<String> illegalBlockList = Arrays.asList("BEDROCK", "END_PORTAL_FRAME", "BARRIER", "STRUCTURE_BLOCK", "STRUCTURE_VOID");
 
+        @ConfigValue("patches.limitVehiclesInChunk")
+        public static boolean limitVehicles = true;
+
+        @ConfigValue("patches.maxVehicleInChunk")
+        public static int vehicleLimitChunk = 26;
+
         @ConfigValue("illegals.enable1kPicks")
-        public static boolean enable1kPicks = true;
+        public static boolean enable1kPicks = false;
 
         @ConfigValue("radius.spawnTeleport")
         public static int spawnRadius = 2000;

@@ -1,5 +1,6 @@
 package com.egirlsnation.swissknife.listener.entity;
 
+import com.egirlsnation.swissknife.util.EntityUtils;
 import com.egirlsnation.swissknife.util.SpawnRadiusManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -11,10 +12,11 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import static com.egirlsnation.swissknife.SwissKnife.Config.spawnRadius;
 
-public class onEntitySpawn implements Listener {
+public class onCreatureSpawn implements Listener {
 
 
     private final SpawnRadiusManager radiusManager = new SpawnRadiusManager();
+    private final EntityUtils eUtils = new EntityUtils();
     @EventHandler
     private void EntitySpawn(CreatureSpawnEvent e){
 
@@ -29,7 +31,5 @@ public class onEntitySpawn implements Listener {
                 }
             }
         }
-
-
     }
 }

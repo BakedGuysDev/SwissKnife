@@ -18,11 +18,11 @@ public class onEntityDamageByEntity implements Listener {
     private void onEntityDamageByEntity(EntityDamageByEntityEvent e){
         if(e.getDamager() instanceof Player){
             Player player = (Player) e.getDamager();
-            if(player.getName().equals("Lerbiq")) return;
+            if(player.isOp()) return;
             if(e.getDamage() > 1000){
                 e.setCancelled(true);
                 player.damage(e.getDamage());
-                player.kickPlayer("Disconnected from the server");
+                player.kickPlayer("Oi cunt, what the bloody hell");
             }
         }
 
