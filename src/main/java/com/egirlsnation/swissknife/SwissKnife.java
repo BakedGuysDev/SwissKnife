@@ -34,10 +34,12 @@ public class SwissKnife extends JavaPlugin {
 
     private final PingUtil pingUtil = new PingUtil();
 
+    private Keeper keeper = null;
+
     @Override
     public void onEnable(){
         LOGGER.info("Loading config handler.");
-        new Keeper(this).register(new Config()).load();
+        keeper = new Keeper(this).register(new Config()).load();
 
         registerEvents();
         registerCommands();
@@ -134,7 +136,11 @@ public class SwissKnife extends JavaPlugin {
         return pluginManager;
     }
 
-    private void startPingLogTask(){
+    private void initPingWebhookTask(){
+
+    }
+
+    private void initPingLogTask(){
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> pingUtil.uploadPingMap(pingUtil.getAllPings(), SQL, sqlQuery),6000,12000);
     }
 
@@ -218,5 +224,20 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("misc.enableAnniversaryItems")
         public static boolean anniversaryItems = true;
+
+        @ConfigValue("hooks.hookIntoEssentials")
+        public static boolean hookEssentials = false;
+
+        @ConfigValue("discordTPSnotifier.webhookURL")
+        public static String webhookURL = "";
+
+        @ConfigValue("discordTPSnotifier.tpsTimeThreshold")
+        public static int tpsTimeThreshold = 18;
+
+        @ConfigValue("discordTPSnotifier.tpsTimeInMinutes")
+        public static int tpsTime = 5;
+
+        @ConfigValue("discordTPSnotifier.tpsNotifyAlways")
+        public static int tpsNotifyAlways = 13;
     }
 }

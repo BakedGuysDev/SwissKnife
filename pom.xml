@@ -42,26 +42,20 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.haq.keeper</groupId>
             <artifactId>spigot</artifactId>
             <version>2.0</version>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>${spigot-api.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.BenCodez</groupId>
             <artifactId>VotingPlugin</artifactId>
             <version>LATEST</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
