@@ -10,7 +10,10 @@ import com.egirlsnation.swissknife.listener.inventory.onInventoryOpen;
 import com.egirlsnation.swissknife.listener.player.*;
 import com.egirlsnation.swissknife.sql.MySQL;
 import com.egirlsnation.swissknife.sql.SqlQuery;
+import com.egirlsnation.swissknife.util.ServerUtils;
+import com.egirlsnation.swissknife.util.discord.DiscordHandler;
 import com.egirlsnation.swissknife.util.player.PingUtil;
+import com.egirlsnation.swissknife.util.player.RankUtil;
 import me.affanhaq.keeper.Keeper;
 import me.affanhaq.keeper.data.ConfigFile;
 import me.affanhaq.keeper.data.ConfigValue;
@@ -19,10 +22,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+
+import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class SwissKnife extends JavaPlugin {
 
@@ -33,13 +39,30 @@ public class SwissKnife extends JavaPlugin {
     public SqlQuery sqlQuery;
 
     private final PingUtil pingUtil = new PingUtil();
+    private final DiscordHandler discordHandler = new DiscordHandler();
+    private final ServerUtils serverUtils = new ServerUtils();
+    private final RankUtil rankUtil = new RankUtil();
 
     private Keeper keeper = null;
 
     @Override
-    public void onEnable(){
+    public void onEnable() {
         LOGGER.info("Loading config handler.");
         keeper = new Keeper(this).register(new Config()).load();
+
+        if (!webhookURL.isBlank()) {
+            if (Bukkit.getServer().getTPS().length == 3) {
+                discordHandler.setWebhookURL(webhookURL);
+                discordHandler.setTpsArrSize(3);
+                initTPSnotifyTask();
+            } else if (Bukkit.getServer().getTPS().length == 4) {
+                discordHandler.setWebhookURL(webhookURL);
+                discordHandler.setTpsArrSize(4);
+                initTPSnotifyTask();
+            } else {
+                LOGGER.warning("You're running server software that's modifiying TPS results that's not supported by this plugin.\nTPS Notifications won't be sent.\nSupported server software for this feature is PaperMC, Tuinity, Airplane, Airplane-Purpur and Purpur");
+            }
+        }
 
         registerEvents();
         registerCommands();
@@ -50,12 +73,12 @@ public class SwissKnife extends JavaPlugin {
     }
 
     @Override
-    public void onDisable(){
+    public void onDisable() {
         SQL.disconnect();
         getLogger().info(ChatColor.GREEN + "Swiss Knife plugin disabled.");
     }
 
-    private void registerEvents(){
+    private void registerEvents() {
         pluginManager.registerEvents(new CommandPreProcessor(this), this);
         LOGGER.info(ChatColor.AQUA + "Registering block events");
         pluginManager.registerEvents(new onBlockDispense(), this);
@@ -64,7 +87,7 @@ public class SwissKnife extends JavaPlugin {
         LOGGER.info(ChatColor.AQUA + "Registering entity events");
         pluginManager.registerEvents(new onEntityChangeBlock(), this);
         pluginManager.registerEvents(new onEntityChangeBlock(), this);
-        pluginManager.registerEvents(new onEntityDamage(), this );
+        pluginManager.registerEvents(new onEntityDamage(), this);
         pluginManager.registerEvents(new onEntityDamageByBlock(), this);
         pluginManager.registerEvents(new onEntityDamageByEntity(), this);
         pluginManager.registerEvents(new onEntityDeath(), this);
@@ -93,7 +116,7 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onVehicleCollision(), this);
     }
 
-    private void registerCommands(){
+    private void registerCommands() {
         LOGGER.info("Registering commands.");
         this.getCommand("kill").setExecutor(new KillCommand(this));
         this.getCommand("ping").setExecutor(new PingCommand());
@@ -104,25 +127,25 @@ public class SwissKnife extends JavaPlugin {
         this.getCommand("monkey").setExecutor(new MonkeyCommand());
     }
 
-    private void initSQL(){
+    private void initSQL() {
         LOGGER.info(ChatColor.AQUA + "Starting up SQL driver.");
 
         this.SQL = new MySQL();
         this.sqlQuery = new SqlQuery(this);
 
-        if(Config.databaseName.equals("name") && Config.databaseUsername.equals("username") && Config.databasePassword.equals("password")){
+        if (Config.databaseName.equals("name") && Config.databaseUsername.equals("username") && Config.databasePassword.equals("password")) {
             LOGGER.warning("Default SQL config values detected. SQL driver won't be initiated.");
             return;
         }
 
-        try{
+        try {
             SQL.connect();
         } catch (SQLException | ClassNotFoundException throwables) {
             LOGGER.severe("Something went wrong while initiating SQL\nStack trace will follow.");
             throwables.printStackTrace();
         }
 
-        if(SQL.isConnected()){
+        if (SQL.isConnected()) {
             LOGGER.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
             sqlQuery.createStatsTable();
             //sqlQuery.createPingTable();
@@ -136,16 +159,38 @@ public class SwissKnife extends JavaPlugin {
         return pluginManager;
     }
 
-    private void initPingWebhookTask(){
-
+    private void initPingLogTask() {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> pingUtil.uploadPingMap(pingUtil.getAllPings(), SQL, sqlQuery), 6000, 12000);
     }
 
-    private void initPingLogTask(){
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> pingUtil.uploadPingMap(pingUtil.getAllPings(), SQL, sqlQuery),6000,12000);
+    private void initTPSnotifyTask() {
+        Bukkit.getScheduler().runTaskTimer(this, () -> {
+            List<Double> tps = serverUtils.getTPS();
+            if (discordHandler.shouldPostAlert(tps)) {
+                List<String> rankNames = null;
+                if(listOnlinePlayers){
+                    rankNames = rankUtil.getOnlinePlayerRankList();
+                }
+                List<String> namesUnderPt = null;
+                if(listLowPtPlayers){
+                    namesUnderPt = rankUtil.getOnlinePlayerNamesUnderPlaytime(lowPtThreshold);
+                }
+
+                List<String> finalRankNames = rankNames;
+                List<String> finalNamesUnderPt = namesUnderPt;
+                Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+                    try {
+                        discordHandler.postDiscordTPSNotif(tps, finalRankNames, finalNamesUnderPt);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        }, 6000, 1200);
     }
 
     @ConfigFile("config.yml")
-    public static class Config{
+    public static class Config {
 
         @ConfigValue("combatCheck.timeout")
         public static long combatTimeout = 20000;
@@ -231,13 +276,31 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("discordTPSnotifier.webhookURL")
         public static String webhookURL = "";
 
-        @ConfigValue("discordTPSnotifier.tpsTimeThreshold")
-        public static int tpsTimeThreshold = 18;
+        @ConfigValue("discordTPSnotifier.webhookName")
+        public static String webhookName = "TPS Alert";
 
-        @ConfigValue("discordTPSnotifier.tpsTimeInMinutes")
-        public static int tpsTime = 5;
+        @ConfigValue("discordTPSnotifier.webhookAvatarURL")
+        public static String webhookAvatarURL = "";
+
+        @ConfigValue("discordTPSnotifier.taskRepeatTimeTicks")
+        public static int tpsTaskTime = 1200;
+
+        @ConfigValue("discordTPSnotifier.tpsAverageThreshold")
+        public static int tpsAvgThreshold = 18;
+
+        @ConfigValue("discordTPSnotifier.useLongerAverageTPS")
+        public static boolean longerTPSavg = false;
 
         @ConfigValue("discordTPSnotifier.tpsNotifyAlways")
         public static int tpsNotifyAlways = 13;
+
+        @ConfigValue("discordTPSnotifier.listOnlinePlayers")
+        public static boolean listOnlinePlayers = true;
+
+        @ConfigValue("discordTPSnotifier.listLowPlaytimePlayers")
+        public static boolean listLowPtPlayers = true;
+
+        @ConfigValue("discordTPSnotifier.lowPlaytimeThresholdInHours")
+        public static int lowPtThreshold = 30;
     }
 }

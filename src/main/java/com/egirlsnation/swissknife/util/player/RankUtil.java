@@ -6,6 +6,9 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class RankUtil {
@@ -49,5 +52,23 @@ public class RankUtil {
         ticks = ticks * 60;
         ticks = ticks * 60;
         return ticks;
+    }
+
+    public List<String> getOnlinePlayerRankList(){
+        List<String> playerRankList = new ArrayList<>();
+        for(Player p : Bukkit.getOnlinePlayers()){
+            playerRankList.add(p.getDisplayName());
+        }
+        return playerRankList;
+    }
+
+    public List<String> getOnlinePlayerNamesUnderPlaytime(int playtimeHours){
+        List<String> playernames = new ArrayList<>();
+        for(Player p : Bukkit.getOnlinePlayers()){
+            if(p.getStatistic(Statistic.PLAY_ONE_MINUTE) < getTicksFromHours(playtimeHours)){
+                playernames.add(p.getName());
+            }
+        }
+        return playernames;
     }
 }
