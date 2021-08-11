@@ -31,6 +31,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.List;
 
+import static com.egirlsnation.swissknife.SwissKnife.Config.enablePickaxe;
+
 public class onPlayerInteract implements Listener {
 
     private final SwissKnife plugin;
@@ -57,6 +59,10 @@ public class onPlayerInteract implements Listener {
                 return;
             }else if(customItemHandler.isDraconiteCrystal(e.getItem())){
                 customItemHandler.handleCrystalAbility(e.getPlayer(), e.getHand(), plugin);
+                return;
+            }else if(customItemHandler.isDraconitePickaxe(e.getItem()) && enablePickaxe){
+                customItemHandler.handlePickaxeAbility(e.getPlayer(), e.getHand(), plugin);
+                return;
             }
         }
 

@@ -26,14 +26,22 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import static com.egirlsnation.swissknife.SwissKnife.Config.xpToDrain;
 
 public class CustomItemHandler {
 
     private final AbilityCooldownManager abilityCooldownManager = new AbilityCooldownManager();
+
+    private static final Map<UUID, BukkitTask> pickaxeTaskMap = new HashMap<>();
 
     public ItemStack getDraconiteCrystal() {
         ItemStack item = new ItemStack(Material.END_CRYSTAL);
@@ -125,6 +133,27 @@ public class CustomItemHandler {
         return meta.getLore().contains("§cDraconite Weapon");
     }
 
+    public ItemStack getDraconitePickaxe(){
+        ItemStack item = new ItemStack(Material.NETHERITE_PICKAXE);
+        ItemMeta meta = item.getItemMeta();
+        meta.setLore(Arrays.asList("", "§cDraconite Tool", "", "Legends say that this exact pickaxe was used to mine the first obsidian"));
+        meta.setDisplayName(ChatColor.RED + "Draconite Pickaxe");
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    public boolean isDraconitePickaxe(ItemStack item) {
+        if (item == null) return false;
+        if (!item.getType().equals(Material.NETHERITE_PICKAXE)) return false;
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return false;
+        if (!meta.hasLore()) return false;
+        if (meta.getLore() == null) return false;
+
+        return meta.getLore().contains("§cDraconite Tool");
+    }
+
     public void handleSwordAbility(Player player, EquipmentSlot equipmentSlot) {
         if (equipmentSlot.equals(EquipmentSlot.HAND)) {
             player.swingMainHand();
@@ -150,8 +179,9 @@ public class CustomItemHandler {
         } else {
             player.swingOffHand();
         }
-        long timeLeft = System.currentTimeMillis() - abilityCooldownManager.getAxeCooldown(player.getUniqueId());
-        if(TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= AbilityCooldownManager.DEFAULT_AXE_COOLDOWN){
+        long timeLeft = System.currentTimeMillis() - abilityCooldownManager.getPickaxeCooldown(player.getUniqueId());
+        if(TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= AbilityCooldownManager.DEFAULT_PICKAXE_COOLDOWN){
+            // Handle ability
             player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 100, 3));
             player.playSound(player.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.PLAYERS, 100, 0);
             abilityCooldownManager.setAxeCooldown(player.getUniqueId(), System.currentTimeMillis());
@@ -169,6 +199,7 @@ public class CustomItemHandler {
                 }
             },100);
         }else{
+            // Is still on cooldown
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.RED + abilityCooldownManager.getCooldownMessage(abilityCooldownManager.getAxeRemainingTime(player))));
         }
     }
@@ -191,6 +222,46 @@ public class CustomItemHandler {
                     player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_DEATH, SoundCategory.PLAYERS, 100, 0);
                 }
             },100);
+        }else{
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.RED + abilityCooldownManager.getCooldownMessage(abilityCooldownManager.getCrystalRemainingTime(player))));
+        }
+    }
+
+    public void handlePickaxeAbility(Player player, EquipmentSlot equipmentSlot, SwissKnife plugin){
+        if (equipmentSlot.equals(EquipmentSlot.HAND)) {
+            player.swingMainHand();
+        } else {
+            player.swingOffHand();
+        }
+        if(pickaxeTaskMap.containsKey(player.getUniqueId())){
+            pickaxeTaskMap.get(player.getUniqueId()).cancel();
+            // Play sound on ability cancel
+            abilityCooldownManager.setPickaxeCooldown(player.getUniqueId(), System.currentTimeMillis());
+            return;
+        }
+        long timeLeft = System.currentTimeMillis() - abilityCooldownManager.getPickaxeCooldown(player.getUniqueId());
+        if(TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= AbilityCooldownManager.DEFAULT_CRYSTAL_COOLDOWN){
+
+            //player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_HURT, SoundCategory.PLAYERS, 100, 0);
+            //abilityCooldownManager.setPickaxeCooldown(player.getUniqueId(), System.currentTimeMillis());
+
+            BukkitTask task = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if(player.getExp() < xpToDrain){
+                        player.setExp(0);
+                        pickaxeTaskMap.remove(player.getUniqueId());
+                        // Play sound
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 100, 3));
+                        abilityCooldownManager.setPickaxeCooldown(player.getUniqueId(), System.currentTimeMillis());
+                        this.cancel();
+                    }else{
+                        player.setExp(player.getExp() - xpToDrain);
+                        player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 101,3));
+                    }
+                }
+            }.runTaskTimer(plugin, 0, 100);
+            pickaxeTaskMap.put(player.getUniqueId(), task);
         }else{
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.RED + abilityCooldownManager.getCooldownMessage(abilityCooldownManager.getCrystalRemainingTime(player))));
         }

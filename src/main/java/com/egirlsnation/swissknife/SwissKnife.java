@@ -22,6 +22,7 @@ import com.egirlsnation.swissknife.listener.inventory.onInventoryOpen;
 import com.egirlsnation.swissknife.listener.player.*;
 import com.egirlsnation.swissknife.sql.MySQL;
 import com.egirlsnation.swissknife.sql.SqlQuery;
+import com.egirlsnation.swissknife.util.LOGGER;
 import com.egirlsnation.swissknife.util.ServerUtils;
 import com.egirlsnation.swissknife.util.discord.DiscordHandler;
 import com.egirlsnation.swissknife.util.player.PingUtil;
@@ -39,14 +40,12 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Logger;
 
 import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class SwissKnife extends JavaPlugin {
 
     private final PluginManager pluginManager = Bukkit.getPluginManager();
-    public static final Logger LOGGER = Bukkit.getLogger();
 
     public MySQL SQL;
     public SqlQuery sqlQuery;
@@ -157,7 +156,7 @@ public class SwissKnife extends JavaPlugin {
         try {
             SQL.connect();
         } catch (SQLException | ClassNotFoundException throwables) {
-            LOGGER.severe("Something went wrong while initiating SQL\nStack trace will follow.");
+            LOGGER.error("Something went wrong while initiating SQL\nStack trace will follow.");
             throwables.printStackTrace();
         }
 
@@ -322,6 +321,11 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("discordTPSnotifier.lowPlaytimeThresholdInHours")
         public static int lowPtThreshold = 30;
 
+        @ConfigValue("draconiteItems.enablePickaxe")
+        public static boolean enablePickaxe = false;
+
+        @ConfigValue("draconiteItems.pickaxeXpToDrain")
+        public static float xpToDrain = 0.5f;
 
 
 

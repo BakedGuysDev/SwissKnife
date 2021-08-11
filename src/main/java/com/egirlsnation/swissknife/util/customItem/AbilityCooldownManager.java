@@ -24,10 +24,12 @@ public class AbilityCooldownManager {
     private static final Map<UUID, Long> swordCooldowns = new HashMap<>();
     private static final Map<UUID, Long> axeCooldowns = new HashMap<>();
     private static final Map<UUID, Long> crystalCooldowns = new HashMap<>();
+    private static final Map<UUID, Long> pickaxeCooldowns = new HashMap<>();
 
     public static final int DEFAULT_AXE_COOLDOWN = 10;
     public static final int DEFAULT_SWORD_COOLDOWN = 15;
     public static final int DEFAULT_CRYSTAL_COOLDOWN = 300;
+    public static final int DEFAULT_PICKAXE_COOLDOWN = 30;
 
     public void setAxeCooldown(UUID identifier, long time){
         if(time < 1){
@@ -106,6 +108,28 @@ public class AbilityCooldownManager {
         if(TimeUnit.MILLISECONDS.toSeconds(timeDifference) >= DEFAULT_CRYSTAL_COOLDOWN) return 0;
 
         return DEFAULT_CRYSTAL_COOLDOWN - TimeUnit.MILLISECONDS.toSeconds(timeDifference);
+    }
+
+    public long getPickaxeCooldown(UUID identifier){
+        return crystalCooldowns.getOrDefault(identifier, 0L);
+    }
+
+    public void setPickaxeCooldown(UUID identifier, long time){
+        if(time < 1){
+            pickaxeCooldowns.remove(identifier);
+        }else{
+            crystalCooldowns.put(identifier, time);
+        }
+    }
+
+    public long getPickaxeRemainingTime(Player player){
+        UUID playerUUID = player.getUniqueId();
+        if(!crystalCooldowns.containsKey(playerUUID)) return 0;
+
+        long timeDifference = System.currentTimeMillis() - crystalCooldowns.get(playerUUID);
+        if(TimeUnit.MILLISECONDS.toSeconds(timeDifference) >= DEFAULT_PICKAXE_COOLDOWN) return 0;
+
+        return DEFAULT_PICKAXE_COOLDOWN - TimeUnit.MILLISECONDS.toSeconds(timeDifference);
     }
 
     public String getCooldownMessage(long remainingTime){
