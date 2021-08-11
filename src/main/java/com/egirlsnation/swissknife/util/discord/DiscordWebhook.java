@@ -1,20 +1,29 @@
+/*
+ * This file is part of the SwissKnife plugin distibution  (https://github.com/EgirlsNationDev/SwissKnife).
+ * Copyright (c) 2021 Egirls Nation Development
+ *
+ * This file is the original work of k3kdude.
+ * (https://gist.github.com/k3kdude/fba6f6b37594eae3d6f9475330733bdb)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the MIT License.
+ *
+ * You should have received a copy of the MIT
+ * License along with this program.  If not, see
+ * <https://opensource.org/licenses/MIT>.
+ */
+
 package com.egirlsnation.swissknife.util.discord;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.awt.Color;
+import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-/**
- * Class used to execute Discord Webhooks with low effort
- */
 public class DiscordWebhook {
 
     private final String url;

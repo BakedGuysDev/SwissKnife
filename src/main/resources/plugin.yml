@@ -31,6 +31,9 @@ commands:
   monkey:
     description: Monkey
     usage: https://www.youtube.com/watch?v=5tQLFon8Yhk
+  tpsalert:
+    description: Test command for tps alert
+    usage: /tpsalert
 
 permissions:
   swissknife.kill.others:

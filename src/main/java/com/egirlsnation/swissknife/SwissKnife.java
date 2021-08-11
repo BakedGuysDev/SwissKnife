@@ -1,3 +1,15 @@
+/*
+ * This file is part of the SwissKnife plugin distibution  (https://github.com/EgirlsNationDev/SwissKnife).
+ * Copyright (c) 2021 Egirls Nation Development
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the MIT License.
+ *
+ * You should have received a copy of the MIT
+* License along with this program.  If not, see
+* <https://opensource.org/licenses/MIT>.
+ */
+
 package com.egirlsnation.swissknife;
 
 import com.egirlsnation.swissknife.command.*;
@@ -26,6 +38,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import static com.egirlsnation.swissknife.SwissKnife.Config.*;
@@ -68,13 +81,15 @@ public class SwissKnife extends JavaPlugin {
         registerCommands();
 
         initSQL();
-
-
     }
 
     @Override
     public void onDisable() {
-        SQL.disconnect();
+        if(SQL != null) {
+            if (SQL.isConnected()) {
+                SQL.disconnect();
+            }
+        }
         getLogger().info(ChatColor.GREEN + "Swiss Knife plugin disabled.");
     }
 
@@ -118,13 +133,14 @@ public class SwissKnife extends JavaPlugin {
 
     private void registerCommands() {
         LOGGER.info("Registering commands.");
-        this.getCommand("kill").setExecutor(new KillCommand(this));
-        this.getCommand("ping").setExecutor(new PingCommand());
-        this.getCommand("playtime").setExecutor(new PlaytimeCommand(this));
-        this.getCommand("shitlist").setExecutor(new ShitListCommand(this));
-        this.getCommand("shrug").setExecutor(new ShrugCommand());
-        this.getCommand("rank").setExecutor(new RankCommand());
-        this.getCommand("monkey").setExecutor(new MonkeyCommand());
+        Objects.requireNonNull(this.getCommand("kill")).setExecutor(new KillCommand(this));
+        Objects.requireNonNull(this.getCommand("ping")).setExecutor(new PingCommand());
+        Objects.requireNonNull(this.getCommand("playtime")).setExecutor(new PlaytimeCommand(this));
+        Objects.requireNonNull(this.getCommand("shitlist")).setExecutor(new ShitListCommand(this));
+        Objects.requireNonNull(this.getCommand("shrug")).setExecutor(new ShrugCommand());
+        Objects.requireNonNull(this.getCommand("rank")).setExecutor(new RankCommand());
+        Objects.requireNonNull(this.getCommand("monkey")).setExecutor(new MonkeyCommand());
+        Objects.requireNonNull(this.getCommand("tpsalert")).setExecutor(new TpsAlertCommand(this));
     }
 
     private void initSQL() {
@@ -149,10 +165,8 @@ public class SwissKnife extends JavaPlugin {
             LOGGER.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
             sqlQuery.createStatsTable();
             //sqlQuery.createPingTable();
+            LOGGER.info(ChatColor.GREEN + "Finished SQL initialization.");
         }
-
-        LOGGER.info(ChatColor.GREEN + "Finished SQL initialization.");
-
     }
 
     public PluginManager getPluginManager() {
@@ -178,15 +192,17 @@ public class SwissKnife extends JavaPlugin {
 
                 List<String> finalRankNames = rankNames;
                 List<String> finalNamesUnderPt = namesUnderPt;
+                int playercount = Bukkit.getServer().getOnlinePlayers().size();
+                int maxSlots = Bukkit.getServer().getMaxPlayers();
                 Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
                     try {
-                        discordHandler.postDiscordTPSNotif(tps, finalRankNames, finalNamesUnderPt);
+                        discordHandler.postDiscordTPSNotif(tps, playercount, maxSlots, finalRankNames, finalNamesUnderPt);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 });
             }
-        }, 6000, 1200);
+        }, 6000, tpsTaskTime);
     }
 
     @ConfigFile("config.yml")
@@ -219,29 +235,26 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("illegals.illegalBlockList")
         public static List<String> illegalBlockList = Arrays.asList("BEDROCK", "END_PORTAL_FRAME", "BARRIER", "STRUCTURE_BLOCK", "STRUCTURE_VOID");
 
+        @ConfigValue("illegals.enable1kPicks")
+        public static boolean enable1kPicks = false;
+
         @ConfigValue("patches.limitVehiclesInChunk")
         public static boolean limitVehicles = true;
 
         @ConfigValue("patches.maxVehicleInChunk")
         public static int vehicleLimitChunk = 26;
 
-        @ConfigValue("illegals.enable1kPicks")
-        public static boolean enable1kPicks = false;
+        @ConfigValue("preventions.preventHighDamage")
+        public static boolean preventHighDmg = true;
+
+        @ConfigValue("preventions.kickOnHighDmg")
+        public static boolean kickOnHighDamage = true;
+
+        @ConfigValue("preventions.highDamageThreshold")
+        public static int highDmgThreshold = 1000;
 
         @ConfigValue("radius.spawnTeleport")
         public static int spawnRadius = 2000;
-
-        @ConfigValue("ranks.midfagHours")
-        public static int midfagHours = 48;
-
-        @ConfigValue("ranks.oldfagHours")
-        public static int oldfagHours = 408;
-
-        @ConfigValue("ranks.elderfagHours")
-        public static int elderfagHours = 2400;
-
-        @ConfigValue("rank.elderfagVotes")
-        public static int elderfagVotes = 300;
 
         @ConfigValue("sql.host")
         public static String databaseHost = "172.18.0.1";
@@ -282,8 +295,14 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("discordTPSnotifier.webhookAvatarURL")
         public static String webhookAvatarURL = "";
 
+        @ConfigValue("discordTPSnotifier.pingRolesIDs")
+        public static List<String> roleIDs = Arrays.asList("719274790795346031");
+
         @ConfigValue("discordTPSnotifier.taskRepeatTimeTicks")
         public static int tpsTaskTime = 1200;
+
+        @ConfigValue("discordTPSnotifier.secondsBetweenNotify")
+        public static int notifyDelay = 600;
 
         @ConfigValue("discordTPSnotifier.tpsAverageThreshold")
         public static int tpsAvgThreshold = 18;
@@ -302,5 +321,24 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("discordTPSnotifier.lowPlaytimeThresholdInHours")
         public static int lowPtThreshold = 30;
+
+
+
+
+
+        @ConfigValue("egirlsnation.ranksEnabled")
+        public static boolean ranksEnabled = false;
+
+        @ConfigValue("egirlsnation.midfagHours")
+        public static int midfagHours = 48;
+
+        @ConfigValue("egirlsnation.oldfagHours")
+        public static int oldfagHours = 408;
+
+        @ConfigValue("egirlsnation.elderfagHours")
+        public static int elderfagHours = 2400;
+
+        @ConfigValue("egirlsnation.elderfagVotes")
+        public static int elderfagVotes = 300;
     }
 }
