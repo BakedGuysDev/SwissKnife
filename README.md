@@ -2,7 +2,9 @@
 
 A paper based plugin dedicated to patching illegal items and some exploits that players have encountered on the Egirls Nation server... It's scuffed, but it works.  
 
-The plugin was made just for one server which is Egirls Nation, you can use it on other servers, but some features will most probably not work correctly.  
+The plugin was made just for one server which is Egirls Nation, you can use it on other servers, but some features may not work correctly or at all.
+
+> As of 12. Aug. 2021 adding config options to almost everything is in progress, so if you want to use the plugin, but with some features disabled, there is a big chance you'll get a config option soon. Of course you can always make an issue to nudge us in the right direction.  
   
 Pull requests are welcome!  
 
