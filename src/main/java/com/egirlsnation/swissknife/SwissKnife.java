@@ -279,11 +279,11 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("misc.endWorldName")
         public static String endWorldName = "world_the_end";
 
-        @ConfigValue("misc.enableAnniversaryItems")
-        public static boolean anniversaryItems = true;
-
         @ConfigValue("misc.petsUseTotems")
         public static boolean petsUseTotems = false;
+
+        @ConfigValue("misc.maxItemNameLength")
+        public static int maxItemNameLength = 50;
 
         @ConfigValue("hooks.hookIntoEssentials")
         public static boolean hookEssentials = false;
@@ -332,6 +332,8 @@ public class SwissKnife extends JavaPlugin {
 
 
 
+        @ConfigValue("egirlsnation.enableAnniversaryItems")
+        public static boolean anniversaryItems = true;
 
         @ConfigValue("egirlsnation.ranksEnabled")
         public static boolean ranksEnabled = false;

@@ -288,11 +288,11 @@ public class IllegalItemHandler {
     public boolean hasTooLongName(ItemMeta meta){
         if(meta == null) return false;
         if(!meta.hasDisplayName()) return false;
-        return meta.getDisplayName().length() > 25;
+        return meta.getDisplayName().length() > maxItemNameLength;
     }
 
     public ItemMeta trimName(ItemMeta meta){
-        meta.setDisplayName(meta.getDisplayName().substring(0, Math.min(meta.getDisplayName().length(), 26)));
+        meta.setDisplayName(meta.getDisplayName().substring(0, Math.min(meta.getDisplayName().length(), maxItemNameLength)));
         return meta;
     }
 
