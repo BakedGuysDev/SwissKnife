@@ -33,7 +33,7 @@ public class SqlQuery {
         PreparedStatement ps;
         try{
             ps = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerStats "
-                    + "(Name VARCHAR(32),UUID CHAR(36),playTime INT(11),kills INT(11),deaths INT(11),mobKills INT(11),shitlisted TINYINT(1),firstPlayed VARCHAR(100),PRIMARY KEY (Name))");
+                    + "(Name VARCHAR(32),UUID CHAR(36),playTime INT(11),kills INT(11),deaths INT(11),mobKills INT(11),shitlisted TINYINT(1),firstPlayed VARCHAR(100), blocksMined INT(11), distanceWalked INT(11), distanceElytra INT(11), distanceSprinted INT(11), timeSinceDeath INT(11) PRIMARY KEY (Name))");
             ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
@@ -103,7 +103,7 @@ public class SqlQuery {
                 String firstPlayed = sdf.format(date);
 
                 PreparedStatement ps2 = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO playerStats"
-                        + " (Name,UUID,playTime,kills,deaths,mobKills,shitlisted,firstPlayed) VALUES (?,?,?,?,?,?,?,?)");
+                        + " (Name,UUID,playTime,kills,deaths,mobKills,shitlisted,firstPlayed,blocksMined,distanceWalked,distanceEyltra,distanceSprinted,timeSinceDeath) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps2.setString(1, player.getName());
                 ps2.setString(2, uuid.toString());
                 ps2.setInt(3, 0);
@@ -112,6 +112,11 @@ public class SqlQuery {
                 ps2.setInt(6, 0);
                 ps2.setInt(7, 0);
                 ps2.setString(8, firstPlayed);
+                ps2.setInt(9, 0);
+                ps2.setInt(10, 0);
+                ps2.setInt(11, 0);
+                ps2.setInt(12,0);
+                ps2.setInt(13, 0);
 
                 ps2.executeUpdate();
 
@@ -136,7 +141,7 @@ public class SqlQuery {
                 String firstPlayed = sdf.format(date);
 
                 PreparedStatement ps2 = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO playerStats"
-                        + " (Name,UUID,playTime,kills,deaths,mobKills,shitlisted,firstPlayed) VALUES (?,?,?,?,?,?,?,?)");
+                        + " (Name,UUID,playTime,kills,deaths,mobKills,shitlisted,firstPlayed,blocksMined,distanceWalked,distanceElytra,distanceSprinted,timeSinceDeath) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps2.setString(1, player.getName());
                 ps2.setString(2, uuid.toString());
                 ps2.setInt(3, 0);
@@ -149,6 +154,11 @@ public class SqlQuery {
                     ps2.setInt(7, 0);
                 }
                 ps2.setString(8, firstPlayed);
+                ps2.setInt(9, 0);
+                ps2.setInt(10, 0);
+                ps2.setInt(11, 0);
+                ps2.setInt(12, 0);
+                ps2.setInt(13, 0);
 
                 ps2.executeUpdate();
 
@@ -187,13 +197,18 @@ public class SqlQuery {
 
     public void updateValues(Player player){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("UPDATE playerStats SET playTime=?,kills=?,deaths=?,mobKills=? WHERE UUID=?");
+            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("UPDATE playerStats SET playTime=?,kills=?,deaths=?,mobKills=?,blocksMined=?,distanceWalked=?,distanceElytra=?,distanceSprinted=?,timeSinceDeath=? WHERE UUID=?");
             ps.setInt(1, player.getStatistic(Statistic.PLAY_ONE_MINUTE));
             ps.setInt(2, player.getStatistic(Statistic.PLAYER_KILLS));
             ps.setInt(3, player.getStatistic(Statistic.DEATHS));
             ps.setInt(4, player.getStatistic(Statistic.MOB_KILLS));
+            ps.setInt(5, player.getStatistic(Statistic.MINE_BLOCK));
+            ps.setInt(6, player.getStatistic(Statistic.WALK_ONE_CM));
+            ps.setInt(7, player.getStatistic(Statistic.AVIATE_ONE_CM));
+            ps.setInt(8, player.getStatistic(Statistic.SPRINT_ONE_CM));
+            ps.setInt(9, player.getStatistic(Statistic.TIME_SINCE_DEATH));
 
-            ps.setString(5, player.getUniqueId().toString());
+            ps.setString(10, player.getUniqueId().toString());
             if (!exists(player.getUniqueId())) {
                 createPlayer(player);
             }
