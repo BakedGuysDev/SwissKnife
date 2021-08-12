@@ -1,8 +1,10 @@
 # SwissKnife - Scuffed but working
 
-A paper based plugin dedicated to patching illegal items and some exploits that players have encountered on the Egirls Nation server... It's scuffed, but it works.  
+A paper based plugin dedicated to patching illegal items, exploits and that players have encountered on the Egirls Nation server, plus adding all kinds of new features to the game... It's a bit scuffed, but it works.  
 
-The plugin was made just for one server which is Egirls Nation, you can use it on other servers, but some features will most probably not work correctly.  
+The plugin was made just for one server which is Egirls Nation. You can use it on other servers, however some features may not work correctly or at all.
+
+> As of 12. Aug. 2021 adding config options to almost everything is in progress, so if you want to use the plugin, but with some features disabled, there is a big chance you'll get a config option soon. Of course you can always make an issue to nudge us in the right direction.  
   
 Pull requests are welcome!  
 
@@ -14,6 +16,15 @@ Please do some research, if you have any concerns about features included in thi
 YOU are choosing to make these modifications to your server, and if you point the finger at us for messing up your server, we will laugh at you.  
 
 Thank you.  
+
+## Main Feaures
+- Multiple checks for removing illegal items
+- Lag preventions
+- Discord Webhook based lag alert
+- MySQL database for statistics
+- Custom items with abilities
+- Exploding snowballs!
+- And more... And more yet to come!
 
 ## Downloads
 
@@ -32,6 +43,6 @@ If you still want to download the plugin you can do so in the actions tab.
 
 Maven is the recommended way to build the project.
 
-- Clone the project with `git clone https://github.com/Lerbiq/EgirlsNationSwissKnife.git`.  
+- Clone the project with `git clone https://github.com/EgirlsNationDev/SwissKnife.git`.  
 - Use `mvn clean package` in the main project directory to build the project.  
-- The jar will be located at `/target/SwissKnife-version-Full.jar` (The full jar has some dependencies, as keeper, included).
+- The jar will be located at `/target/SwissKnife-version-Full.jar` (The full jar has some dependencies, for example keeper, included).
