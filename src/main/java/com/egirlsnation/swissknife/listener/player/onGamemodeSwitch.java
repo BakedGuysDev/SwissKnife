@@ -1,5 +1,5 @@
 /*
- * This file is part of the SwissKnife plugin distibution  (https://github.com/EgirlsNationDev/SwissKnife).
+ * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
  * Copyright (c) 2021 Egirls Nation Development
  *
  * This program is free software: you can redistribute it and/or modify
@@ -44,12 +44,7 @@ public class onGamemodeSwitch implements Listener {
             }
         }
 
-        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-            @Override
-            public void run() {
-                gamemodeUtil.ensureFlyDisable(player);
-            }
-        }, 10);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> gamemodeUtil.ensureFlyDisable(player), 10);
 
     }
 }

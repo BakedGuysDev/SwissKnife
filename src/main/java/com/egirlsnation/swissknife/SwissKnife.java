@@ -1,5 +1,5 @@
 /*
- * This file is part of the SwissKnife plugin distibution  (https://github.com/EgirlsNationDev/SwissKnife).
+ * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
  * Copyright (c) 2021 Egirls Nation Development
  *
  * This program is free software: you can redistribute it and/or modify
@@ -281,6 +281,9 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("misc.enableAnniversaryItems")
         public static boolean anniversaryItems = true;
+
+        @ConfigValue("misc.petsUseTotems")
+        public static boolean petsUseTotems = false;
 
         @ConfigValue("hooks.hookIntoEssentials")
         public static boolean hookEssentials = false;

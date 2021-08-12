@@ -1,5 +1,5 @@
 /*
- * This file is part of the SwissKnife plugin distibution  (https://github.com/EgirlsNationDev/SwissKnife).
+ * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
  * Copyright (c) 2021 Meteor Development
  *
  * This program is free software: you can redistribute it and/or modify

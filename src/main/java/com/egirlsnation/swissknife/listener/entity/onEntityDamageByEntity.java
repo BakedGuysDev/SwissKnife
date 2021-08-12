@@ -1,5 +1,5 @@
 /*
- * This file is part of the SwissKnife plugin distibution  (https://github.com/EgirlsNationDev/SwissKnife).
+ * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
  * Copyright (c) 2021 Egirls Nation Development
  *
  * This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.kickOnHighDamage;
-import static com.egirlsnation.swissknife.SwissKnife.Config.preventHighDmg;
+import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class onEntityDamageByEntity implements Listener {
 
@@ -39,7 +38,7 @@ public class onEntityDamageByEntity implements Listener {
             }
             if (preventHighDmg) {
                 if (player.isOp()) return;
-                if (e.getDamage() > 1000) {
+                if (e.getDamage() > highDmgThreshold) {
                     e.setCancelled(true);
                     player.damage(e.getDamage());
                     if(kickOnHighDamage){
