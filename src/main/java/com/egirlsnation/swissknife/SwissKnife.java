@@ -32,6 +32,7 @@ import me.affanhaq.keeper.data.ConfigFile;
 import me.affanhaq.keeper.data.ConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -284,6 +285,15 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("misc.maxItemNameLength")
         public static int maxItemNameLength = 50;
+
+        @ConfigValue("misc.disableEndermenGriefInEnd")
+        public static boolean disableEndermanGrief = false;
+
+        @ConfigValue("misc.disableEntityPortalTP")
+        public static boolean disableEntityPortal = true;
+
+        @ConfigValue("misc.disableEntityPortalTpList")
+        public static List<String> entityTypeDisablePortal = Arrays.asList(EntityType.BEE.name(), EntityType.ENDER_CRYSTAL.name());
 
         @ConfigValue("hooks.hookIntoEssentials")
         public static boolean hookEssentials = false;
