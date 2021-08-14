@@ -22,6 +22,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import static com.egirlsnation.swissknife.SwissKnife.Config.enableShitlist;
+import static com.egirlsnation.swissknife.SwissKnife.Config.leakCoords;
+
 public class onLeave implements Listener {
 
     private final CooldownManager cooldownManager = new CooldownManager();
@@ -38,7 +41,7 @@ public class onLeave implements Listener {
         if(plugin.SQL.isConnected()){
             plugin.sqlQuery.updateValues(e.getPlayer());
 
-            if(plugin.sqlQuery.isShitlisted(e.getPlayer())){
+            if(leakCoords && enableShitlist && plugin.sqlQuery.isShitlisted(e.getPlayer())){
                 Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
                     @Override
                     public void run() {

@@ -22,6 +22,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
+import static com.egirlsnation.swissknife.SwissKnife.Config.preventWithersAtSpawn;
 import static com.egirlsnation.swissknife.SwissKnife.Config.spawnRadius;
 
 public class onCreatureSpawn implements Listener {
@@ -33,6 +34,8 @@ public class onCreatureSpawn implements Listener {
     private void EntitySpawn(CreatureSpawnEvent e){
 
         //Limit wither spawning at spawn
+        if(!preventWithersAtSpawn) return;
+
         if(e.getEntityType() == EntityType.WITHER){
             if(radiusManager.isInRadius(e.getLocation().getX(), e.getLocation().getZ(), spawnRadius)){
                 e.setCancelled(true);

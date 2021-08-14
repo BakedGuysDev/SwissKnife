@@ -19,6 +19,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import static com.egirlsnation.swissknife.SwissKnife.Config.enableShitlist;
+
 public class ShitListCommand implements CommandExecutor {
 
     private final SwissKnife plugin;
@@ -29,6 +31,10 @@ public class ShitListCommand implements CommandExecutor {
         if(!sender.isOp()){
             sender.sendMessage(ChatColor.RED + "Go fuck yourself. You don't have enough permissions");
             return true;
+        }
+
+        if(!enableShitlist){
+            sender.sendMessage(ChatColor.RED + "This command is disabled.");
         }
 
         if(!plugin.SQL.isConnected()){

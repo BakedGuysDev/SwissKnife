@@ -77,6 +77,8 @@ public class SwissKnife extends JavaPlugin {
             }
         }
 
+        correctConfigValues();
+
         registerEvents();
         registerCommands();
 
@@ -136,7 +138,9 @@ public class SwissKnife extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("kill")).setExecutor(new KillCommand(this));
         Objects.requireNonNull(this.getCommand("ping")).setExecutor(new PingCommand());
         Objects.requireNonNull(this.getCommand("playtime")).setExecutor(new PlaytimeCommand(this));
-        Objects.requireNonNull(this.getCommand("shitlist")).setExecutor(new ShitListCommand(this));
+        if(enableShitlist) {
+            Objects.requireNonNull(this.getCommand("shitlist")).setExecutor(new ShitListCommand(this));
+        }
         Objects.requireNonNull(this.getCommand("shrug")).setExecutor(new ShrugCommand());
         Objects.requireNonNull(this.getCommand("rank")).setExecutor(new RankCommand());
         Objects.requireNonNull(this.getCommand("monkey")).setExecutor(new MonkeyCommand());
@@ -205,11 +209,29 @@ public class SwissKnife extends JavaPlugin {
         }, 6000, tpsTaskTime);
     }
 
+    private void correctConfigValues(){
+        if(replaceChance > 100){
+            replaceChance = 100;
+        }
+        if(replaceChance < 0){
+            replaceChance = 0;
+        }
+
+    }
+
     @ConfigFile("config.yml")
     public static class Config {
 
+        /*
+         * Combat check config options
+         */
+
         @ConfigValue("combatCheck.timeout")
         public static long combatTimeout = 20000;
+
+        /*
+         * Jihads config options
+         */
 
         @ConfigValue("jihads.enabled")
         public static boolean jihadsEnabled = true;
@@ -222,6 +244,10 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("jihads.power")
         public static double jihadsPower = 6.0;
+
+        /*
+         * Illegals config options
+         */
 
         @ConfigValue("illegals.maxEnchant")
         public static int maxEnchantLevel = 100;
@@ -238,11 +264,19 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("illegals.enable1kPicks")
         public static boolean enable1kPicks = false;
 
+        /*
+         * Patches config options
+         */
+
         @ConfigValue("patches.limitVehiclesInChunk")
         public static boolean limitVehicles = true;
 
         @ConfigValue("patches.maxVehicleInChunk")
         public static int vehicleLimitChunk = 26;
+
+        /*
+         * Preventions config options
+         */
 
         @ConfigValue("preventions.preventHighDamage")
         public static boolean preventHighDmg = true;
@@ -253,8 +287,15 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("preventions.highDamageThreshold")
         public static int highDmgThreshold = 1000;
 
-        @ConfigValue("radius.spawnTeleport")
+        @ConfigValue("preventions.preventWitherSpawningAtSpawn")
+        public static boolean preventWithersAtSpawn = false;
+
+        @ConfigValue("preventions.spawnRadius")
         public static int spawnRadius = 2000;
+
+        /*
+         * SQL config options
+         */
 
         @ConfigValue("sql.host")
         public static String databaseHost = "172.18.0.1";
@@ -270,6 +311,10 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("sql.dbPassword")
         public static String databasePassword = "password";
+
+        /*
+         * Misc config options
+         */
 
         @ConfigValue("misc.mainWorldName")
         public static String mainWorldName = "world";
@@ -295,8 +340,22 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("misc.disableEntityPortalTpList")
         public static List<String> entityTypeDisablePortal = Arrays.asList(EntityType.BEE.name(), EntityType.ENDER_CRYSTAL.name());
 
-        @ConfigValue("hooks.hookIntoEssentials")
-        public static boolean hookEssentials = false;
+        /*
+         * Disable Commands at spawn config options
+         */
+
+        @ConfigValue("disableCommandsAtSpawn.enabled")
+        public static boolean disableCommandsAtSpawn = true;
+
+        @ConfigValue("disableCommandsAtSpawn.radius")
+        public static int disableCommandsRadius = 2000;
+
+        @ConfigValue("disableCommandsAtSpawn.commands")
+        public static List<String> radiusLimitedCmds = Arrays.asList("tpa", "tpahere", "tpayes", "tpaccept", "tpaaccept", "tpno", "tpano", "tpdeny", "tpadeny", "tpyes");
+
+        /*
+         * Discord TPS Notifier config options
+         */
 
         @ConfigValue("discordTPSnotifier.webhookURL")
         public static String webhookURL = "";
@@ -334,13 +393,41 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("discordTPSnotifier.lowPlaytimeThresholdInHours")
         public static int lowPtThreshold = 30;
 
+        /*
+         * Shitlist config options
+         */
+
+        @ConfigValue("shitlist.enable")
+        public static boolean enableShitlist = true;
+
+        @ConfigValue("shitlist.blacklistedCommands")
+        public static List<String> blacklistedCommands = Arrays.asList("tpa", "tpahere", "tpayes", "tpaccept", "tpaaccept", "tpno", "tpano", "tpdeny", "tpadeny", "tpyes");
+
+        @ConfigValue("shitlist.leakCoords")
+        public static boolean leakCoords = false;
+
+        @ConfigValue("shitlist.swapWordsRandomly")
+        public static boolean swapWordsRandomly = true;
+
+        @ConfigValue("shitlist.wordsToReplaceWith")
+        public static List<String> replacementWords = Arrays.asList("titty", "pickle", "canoodle", "mitten", "badger", "doodlesack");
+
+        @ConfigValue("shitlist.replaceChance")
+        public static int replaceChance = 30;
+
+        /*
+         * Draconite Items config options
+         */
+
         @ConfigValue("draconiteItems.enablePickaxe")
         public static boolean enablePickaxe = false;
 
         @ConfigValue("draconiteItems.pickaxeXpToDrain")
         public static float xpToDrain = 0.5f;
 
-
+        /*
+         * EgirlsNation config options
+         */
 
         @ConfigValue("egirlsnation.enableAnniversaryItems")
         public static boolean anniversaryItems = true;
