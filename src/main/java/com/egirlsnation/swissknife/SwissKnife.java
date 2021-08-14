@@ -293,6 +293,12 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("preventions.spawnRadius")
         public static int spawnRadius = 2000;
 
+        @ConfigValue("preventions.preventXpBottleLag")
+        public static boolean preventXpBottleLag = true;
+
+        @ConfigValue("preventions.xpBottleLimit")
+        public static int xpBottleLimit = 64;
+
         /*
          * SQL config options
          */

@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.util;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 
@@ -55,5 +56,15 @@ public class EntityUtils {
                 vehicleListSize--;
             }
         }
+    }
+
+    public int countEntities(EntityType entityType, Entity[] entities){
+        int count = 0;
+        for(Entity entity : entities){
+            if(entity.getType().equals(entityType)){
+                count++;
+            }
+        }
+        return count;
     }
 }
