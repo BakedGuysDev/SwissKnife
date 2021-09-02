@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.util.discord;
 
+import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -89,6 +90,7 @@ public class DiscordHandler {
             if(playerDisplayNames.isEmpty()){
                 embed.addField("Players", "No players online", false);
             }else{
+                playerDisplayNames.forEach(ChatColor::stripColor);
                 embed.addField("Players", playerDisplayNames.stream().map(Objects::toString).collect(Collectors.joining(", ")), false );
             }
         }

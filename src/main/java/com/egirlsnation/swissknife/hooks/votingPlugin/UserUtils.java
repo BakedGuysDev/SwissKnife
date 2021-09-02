@@ -42,4 +42,8 @@ public class UserUtils {
         VotingPluginUser votingUser = userManager.getVotingPluginUser(player);
         return votingUser.getPoints();
     }
+
+    public boolean isVotingPluginHookActive(){
+        return votingPluginHooks != null;
+    }
 }

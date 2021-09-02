@@ -419,7 +419,7 @@ public class SwissKnife extends JavaPlugin {
         public static List<String> replacementWords = Arrays.asList("titty", "pickle", "canoodle", "mitten", "badger", "doodlesack");
 
         @ConfigValue("shitlist.replaceChance")
-        public static int replaceChance = 30;
+        public static int replaceChance = 50;
 
         /*
          * Draconite Items config options
