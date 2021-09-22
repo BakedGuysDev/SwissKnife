@@ -1,4 +1,5 @@
 /*
+ *
  * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
  * Copyright (c) 2021 Egirls Nation Development
  *
@@ -8,26 +9,28 @@
  * You should have received a copy of the MIT
  * License along with this program.  If not, see
  * <https://opensource.org/licenses/MIT>.
+ *
  */
 
 package com.egirlsnation.swissknife.listener.player;
 
-import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class onPlayerInteractEntity implements Listener {
+import static com.egirlsnation.swissknife.SwissKnife.Config.netherRoofHeight;
+import static com.egirlsnation.swissknife.SwissKnife.Config.preventPlayersOnNether;
+
+public class onPlayerTeleport implements Listener {
 
     @EventHandler
-    private void PlayerInteractAtEntity(PlayerInteractEntityEvent e){
-        if(e.getRightClicked().getType().equals(EntityType.ENDER_CRYSTAL)){
-            if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.NAME_TAG)){
-                e.setCancelled(true);
-                return;
-            }
-            if(e.getPlayer().getInventory().getItemInOffHand().getType().equals(Material.NAME_TAG)){
+    public void PlayerTeleport(PlayerTeleportEvent e){
+        if(preventPlayersOnNether){
+            Location l = e.getTo();
+            if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
+            if(l.getBlockY() >= netherRoofHeight && !e.getPlayer().isOp()){
                 e.setCancelled(true);
             }
         }

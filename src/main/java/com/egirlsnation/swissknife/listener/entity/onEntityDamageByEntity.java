@@ -40,7 +40,9 @@ public class onEntityDamageByEntity implements Listener {
                 if (player.isOp()) return;
                 if (e.getDamage() > highDmgThreshold) {
                     e.setCancelled(true);
-                    player.damage(e.getDamage());
+                    if(redirectHighDmg){
+                        player.damage(e.getDamage());
+                    }
                     if(kickOnHighDamage){
                         player.kickPlayer("Oi cunt, what the bloody hell");
                     }

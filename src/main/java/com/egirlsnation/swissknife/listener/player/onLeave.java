@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import static com.egirlsnation.swissknife.SwissKnife.Config.enableShitlist;
 import static com.egirlsnation.swissknife.SwissKnife.Config.leakCoords;
+import static com.egirlsnation.swissknife.listener.player.onSwapHandItems.handSwapDelay;
 
 public class onLeave implements Listener {
 
@@ -37,6 +38,7 @@ public class onLeave implements Listener {
     private void onPlayerLeave(PlayerQuitEvent e){
         cooldownManager.removePlayer(e.getPlayer());
         combatCheck.removePlayer(e.getPlayer());
+        handSwapDelay.remove(e.getPlayer());
 
         if(plugin.SQL.isConnected()){
             plugin.sqlQuery.updateValues(e.getPlayer());

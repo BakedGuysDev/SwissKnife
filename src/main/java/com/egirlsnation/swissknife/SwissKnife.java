@@ -222,28 +222,6 @@ public class SwissKnife extends JavaPlugin {
     @ConfigFile("config.yml")
     public static class Config {
 
-        /*
-         * Combat check config options
-         */
-
-        @ConfigValue("combatCheck.timeout")
-        public static long combatTimeout = 20000;
-
-        /*
-         * Jihads config options
-         */
-
-        @ConfigValue("jihads.enabled")
-        public static boolean jihadsEnabled = true;
-
-        @ConfigValue("jihads.limitRadius")
-        public static boolean limitJihadRadius = true;
-
-        @ConfigValue("jihads.radius")
-        public static int jihadsRadius = 10000;
-
-        @ConfigValue("jihads.power")
-        public static double jihadsPower = 6.0;
 
         /*
          * Illegals config options
@@ -278,26 +256,54 @@ public class SwissKnife extends JavaPlugin {
          * Preventions config options
          */
 
-        @ConfigValue("preventions.preventHighDamage")
+        @ConfigValue("preventions.highDamage.prevent")
         public static boolean preventHighDmg = true;
 
-        @ConfigValue("preventions.kickOnHighDmg")
+        @ConfigValue("preventions.highDamage.kick")
         public static boolean kickOnHighDamage = true;
 
-        @ConfigValue("preventions.highDamageThreshold")
+        @ConfigValue("preventions.highDamage.threshold")
         public static int highDmgThreshold = 1000;
 
-        @ConfigValue("preventions.preventWitherSpawningAtSpawn")
+        @ConfigValue("preventions.highDamage.redirect")
+        public static boolean redirectHighDmg = true;
+
+        @ConfigValue("preventions.preventWitherSpawningAtSpawn.enabled")
         public static boolean preventWithersAtSpawn = false;
 
-        @ConfigValue("preventions.spawnRadius")
+        @ConfigValue("preventions.preventWitherSpawningAtSpawn.spawnRadius")
         public static int spawnRadius = 2000;
 
-        @ConfigValue("preventions.preventXpBottleLag")
+        @ConfigValue("preventions.preventXpBottleLag.enabled")
         public static boolean preventXpBottleLag = true;
 
-        @ConfigValue("preventions.xpBottleLimit")
+        @ConfigValue("preventions.preventXpBottleLag.xpBottleLimit")
         public static int xpBottleLimit = 64;
+
+        @ConfigValue("preventions.handSwitchCrash.prevent")
+        public static boolean handSwitchCrash = true;
+
+        @ConfigValue("preventions.handSwitchCrash.kick")
+        public static boolean kickOnHandSwitchCrash = true;
+
+        @ConfigValue("preventions.preventPlayersOnNetherRoof.enabled")
+        public static boolean preventPlayersOnNether = true;
+
+        @ConfigValue("preventions.preventPlayersOnNetherRoof.teleportDown")
+        public static boolean teleportPlayersDown = true;
+
+        @ConfigValue("preventions.preventPlayersOnNetherRoof.dealDamage")
+        public static boolean dmgPlayersOnNether = false;
+
+        @ConfigValue("preventions.preventPlayersOnNetherRoof.roofHeight")
+        public static int netherRoofHeight = 127;
+
+        @ConfigValue("preventions.disableEntityPortalTP.enabled")
+        public static boolean disableEntityPortal = true;
+
+        @ConfigValue("preventions.disableEntityPortalTP.entityList")
+        public static List<String> entityTypeDisablePortal = Arrays.asList(EntityType.BEE.name(), EntityType.ENDER_CRYSTAL.name());
+
 
         /*
          * SQL config options
@@ -319,32 +325,28 @@ public class SwissKnife extends JavaPlugin {
         public static String databasePassword = "password";
 
         /*
-         * Misc config options
+         * Combat check config options
          */
 
-        @ConfigValue("misc.mainWorldName")
-        public static String mainWorldName = "world";
+        @ConfigValue("combatCheck.timeout")
+        public static long combatTimeout = 20000;
 
-        @ConfigValue("misc.netherWorldName")
-        public static String netherWorldName = "world_nether";
+        /*
+         * Jihads config options
+         */
 
-        @ConfigValue("misc.endWorldName")
-        public static String endWorldName = "world_the_end";
+        @ConfigValue("jihads.enabled")
+        public static boolean jihadsEnabled = true;
 
-        @ConfigValue("misc.petsUseTotems")
-        public static boolean petsUseTotems = false;
+        @ConfigValue("jihads.limitRadius")
+        public static boolean limitJihadRadius = true;
 
-        @ConfigValue("misc.maxItemNameLength")
-        public static int maxItemNameLength = 50;
+        @ConfigValue("jihads.radius")
+        public static int jihadsRadius = 10000;
 
-        @ConfigValue("misc.disableEndermenGriefInEnd")
-        public static boolean disableEndermanGrief = false;
+        @ConfigValue("jihads.power")
+        public static double jihadsPower = 6.0;
 
-        @ConfigValue("misc.disableEntityPortalTP")
-        public static boolean disableEntityPortal = true;
-
-        @ConfigValue("misc.disableEntityPortalTpList")
-        public static List<String> entityTypeDisablePortal = Arrays.asList(EntityType.BEE.name(), EntityType.ENDER_CRYSTAL.name());
 
         /*
          * Disable Commands at spawn config options
@@ -356,7 +358,7 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("disableCommandsAtSpawn.radius")
         public static int disableCommandsRadius = 2000;
 
-        @ConfigValue("disableCommandsAtSpawn.commands")
+        @ConfigValue("disableCommandsAtSpawn.commandsList")
         public static List<String> radiusLimitedCmds = Arrays.asList("tpa", "tpahere", "tpayes", "tpaccept", "tpaaccept", "tpno", "tpano", "tpdeny", "tpadeny", "tpyes");
 
         /*
@@ -430,6 +432,28 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("draconiteItems.pickaxeXpToDrain")
         public static float xpToDrain = 0.5f;
+
+        /*
+         * Misc config options
+         */
+
+        @ConfigValue("misc.mainWorldName")
+        public static String mainWorldName = "world";
+
+        @ConfigValue("misc.netherWorldName")
+        public static String netherWorldName = "world_nether";
+
+        @ConfigValue("misc.endWorldName")
+        public static String endWorldName = "world_the_end";
+
+        @ConfigValue("misc.petsUseTotems")
+        public static boolean petsUseTotems = false;
+
+        @ConfigValue("misc.maxItemNameLength")
+        public static int maxItemNameLength = 50;
+
+        @ConfigValue("misc.disableEndermenGriefInEnd")
+        public static boolean disableEndermanGrief = false;
 
         /*
          * EgirlsNation config options

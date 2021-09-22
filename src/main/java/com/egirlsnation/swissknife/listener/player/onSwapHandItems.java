@@ -13,11 +13,19 @@
 package com.egirlsnation.swissknife.listener.player;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
+import java.util.HashMap;
+
+import static com.egirlsnation.swissknife.SwissKnife.Config.handSwitchCrash;
+import static com.egirlsnation.swissknife.SwissKnife.Config.kickOnHandSwitchCrash;
+
 public class onSwapHandItems implements Listener {
+
+    public static final HashMap<Player, Long> handSwapDelay = new HashMap<>();
 
     @EventHandler
     private void SwapHandItems(PlayerSwapHandItemsEvent e){
@@ -36,6 +44,21 @@ public class onSwapHandItems implements Listener {
                 }
             }
         }
+
+        if(handSwitchCrash){
+            if(handSwapDelay.containsKey(e.getPlayer())){
+                handSwapDelay.put(e.getPlayer(), 0L);
+            }
+            if(System.currentTimeMillis() < handSwapDelay.get(e.getPlayer())){
+                e.setCancelled(true);
+                if(kickOnHandSwitchCrash){
+                    e.getPlayer().kickPlayer("Lost connection to the server");
+                }
+            }else{
+                handSwapDelay.put(e.getPlayer(), System.currentTimeMillis() + 750L);
+            }
+        }
+
 
     }
 }

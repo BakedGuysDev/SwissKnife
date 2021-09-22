@@ -6,7 +6,7 @@
 
     <groupId>com.egirlsnation</groupId>
     <artifactId>SwissKnife</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.3-DEV</version>
 
     <properties>
         <java.version>11</java.version>
@@ -33,6 +33,10 @@
             <id>Scarsz-Nexus</id>
             <url>https://nexus.scarsz.me/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>BenCodez Repo</id>
+            <url>https://nexus.bencodez.com/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -48,9 +52,9 @@
             <version>2.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.BenCodez</groupId>
-            <artifactId>VotingPlugin</artifactId>
-            <version>LATEST</version>
+            <groupId>com.bencodez</groupId>
+            <artifactId>votingplugin</artifactId>
+            <version>6.6.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

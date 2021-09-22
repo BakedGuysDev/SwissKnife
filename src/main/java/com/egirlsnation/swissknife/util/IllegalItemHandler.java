@@ -155,7 +155,7 @@ public class IllegalItemHandler {
         }
 
         if(itemStack.getType().equals(Material.TOTEM_OF_UNDYING) && itemStack.getAmount() > maxTotemStack){
-            itemStack.setAmount(1);
+            itemStack.setAmount(maxTotemStack);
             item.setItemStack(itemStack);
             return true;
         }
@@ -205,7 +205,7 @@ public class IllegalItemHandler {
         }
 
         if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() > maxTotemStack){
-            item.setAmount(1);
+            item.setAmount(maxTotemStack);
             return true;
         }
 
@@ -248,7 +248,7 @@ public class IllegalItemHandler {
         }
 
         if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() > maxTotemStack){
-            item.setAmount(1);
+            item.setAmount(maxTotemStack);
             return true;
         }
 
