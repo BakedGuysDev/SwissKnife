@@ -256,7 +256,7 @@ public class CustomItemHandler {
                         abilityCooldownManager.setPickaxeCooldown(player.getUniqueId(), System.currentTimeMillis());
                         this.cancel();
                     }else{
-                        player.setExp(player.getExp() - xpToDrain);
+                        player.setExp(player.getExp() - (float)xpToDrain);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 101,3));
                     }
                 }

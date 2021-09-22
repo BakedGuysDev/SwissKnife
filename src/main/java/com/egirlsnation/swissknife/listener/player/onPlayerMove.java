@@ -36,7 +36,7 @@ public class onPlayerMove implements Listener {
                         e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
                     }
                     if(dmgPlayersOnNether){
-                        e.getPlayer().damage(9999);
+                        e.getPlayer().damage(dmgToDealNether);
                     }
                 }
             }

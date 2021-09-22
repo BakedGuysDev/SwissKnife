@@ -253,7 +253,7 @@ public class SwissKnife extends JavaPlugin {
         public static int vehicleLimitChunk = 26;
 
         /*
-         * Preventions config options
+         * High damage prevention config options
          */
 
         @ConfigValue("preventions.highDamage.prevent")
@@ -268,11 +268,19 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("preventions.highDamage.redirect")
         public static boolean redirectHighDmg = true;
 
+        /*
+         * Wither spawning at spawn config options
+         */
+
         @ConfigValue("preventions.preventWitherSpawningAtSpawn.enabled")
         public static boolean preventWithersAtSpawn = false;
 
         @ConfigValue("preventions.preventWitherSpawningAtSpawn.spawnRadius")
         public static int spawnRadius = 2000;
+
+        /*
+         * XP bottle lag prevention config options
+         */
 
         @ConfigValue("preventions.preventXpBottleLag.enabled")
         public static boolean preventXpBottleLag = true;
@@ -280,11 +288,19 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("preventions.preventXpBottleLag.xpBottleLimit")
         public static int xpBottleLimit = 64;
 
+        /*
+         * Hand switch lag prevention config options
+         */
+
         @ConfigValue("preventions.handSwitchCrash.prevent")
         public static boolean handSwitchCrash = true;
 
         @ConfigValue("preventions.handSwitchCrash.kick")
         public static boolean kickOnHandSwitchCrash = true;
+
+        /*
+         * Nether roof prevention config options
+         */
 
         @ConfigValue("preventions.preventPlayersOnNetherRoof.enabled")
         public static boolean preventPlayersOnNether = true;
@@ -295,8 +311,15 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("preventions.preventPlayersOnNetherRoof.dealDamage")
         public static boolean dmgPlayersOnNether = false;
 
+        @ConfigValue("preventions.preventPlayersOnNetherRoof.damage")
+        public static int dmgToDealNether = 9999;
+
         @ConfigValue("preventions.preventPlayersOnNetherRoof.roofHeight")
         public static int netherRoofHeight = 127;
+
+        /*
+         * Entity portal teleportation config options
+         */
 
         @ConfigValue("preventions.disableEntityPortalTP.enabled")
         public static boolean disableEntityPortal = true;
@@ -431,7 +454,7 @@ public class SwissKnife extends JavaPlugin {
         public static boolean enablePickaxe = false;
 
         @ConfigValue("draconiteItems.pickaxeXpToDrain")
-        public static float xpToDrain = 0.5f;
+        public static double xpToDrain = 0.5F;
 
         /*
          * Misc config options
@@ -460,7 +483,7 @@ public class SwissKnife extends JavaPlugin {
          */
 
         @ConfigValue("egirlsnation.enableAnniversaryItems")
-        public static boolean anniversaryItems = true;
+        public static boolean anniversaryItems = false;
 
         @ConfigValue("egirlsnation.ranksEnabled")
         public static boolean ranksEnabled = false;
