@@ -15,16 +15,14 @@ package com.egirlsnation.swissknife.listener.entity;
 import org.bukkit.ChatColor;
 import org.bukkit.EntityEffect;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.petsUseTotems;
+import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class onEntityDamage implements Listener {
 
@@ -36,6 +34,14 @@ public class onEntityDamage implements Listener {
             if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) || e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
                 e.setCancelled(true);
                 return;
+            }
+        }
+
+        if(fixDragonDeath && e.getEntity().getType().equals(EntityType.ENDER_DRAGON)){
+            if((e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION))){
+                LivingEntity dragon = (LivingEntity) e.getEntity();
+                if(dragon.getHealth() > dragonHealth) return;
+                e.setCancelled(true);
             }
         }
 

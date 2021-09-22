@@ -499,5 +499,11 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("egirlsnation.elderfagVotes")
         public static int elderfagVotes = 300;
+
+        @ConfigValue("egirlsnation.fixDragonDeath.enabled")
+        public static boolean fixDragonDeath = false;
+
+        @ConfigValue("egirlsnation.fixDragonDeath.health")
+        public static int dragonHealth = 100;
     }
 }
