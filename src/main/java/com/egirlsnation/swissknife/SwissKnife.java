@@ -145,6 +145,7 @@ public class SwissKnife extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("rank")).setExecutor(new RankCommand());
         Objects.requireNonNull(this.getCommand("monkey")).setExecutor(new MonkeyCommand());
         Objects.requireNonNull(this.getCommand("tpsalert")).setExecutor(new TpsAlertCommand(this));
+        Objects.requireNonNull(this.getCommand("toggleitemability")).setExecutor(new ToggleItemAbilityCommand());
     }
 
     private void initSQL() {
@@ -242,6 +243,9 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("illegals.enable1kPicks")
         public static boolean enable1kPicks = false;
 
+        @ConfigValue("illegals.unstackOverstackedInShulkers")
+        public static boolean unstackInShulks = true;
+
         /*
          * Patches config options
          */
@@ -294,6 +298,9 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("preventions.handSwitchCrash.prevent")
         public static boolean handSwitchCrash = true;
+
+        @ConfigValue("preventions.handSwitchCrash.delayMs")
+        public static int handSwitchDelay = 250;
 
         @ConfigValue("preventions.handSwitchCrash.kick")
         public static boolean kickOnHandSwitchCrash = true;

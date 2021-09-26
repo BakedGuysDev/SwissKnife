@@ -52,15 +52,27 @@ public class onPlayerInteract implements Listener {
 
         if(e.getAction().equals(Action.RIGHT_CLICK_AIR)){
             if(customItemHandler.isDraconiteSword(e.getItem())){
+                if(customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())){
+                    return;
+                }
                 customItemHandler.handleSwordAbility(e.getPlayer(), e.getHand());
                 return;
             }else if(customItemHandler.isDraconiteAxe(e.getItem())){
+                if(customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())){
+                    return;
+                }
                 customItemHandler.handleAxeAbility(e.getPlayer(), e.getHand(), plugin);
                 return;
             }else if(customItemHandler.isDraconiteCrystal(e.getItem())){
+                if(customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())){
+                    return;
+                }
                 customItemHandler.handleCrystalAbility(e.getPlayer(), e.getHand(), plugin);
                 return;
             }else if(customItemHandler.isDraconitePickaxe(e.getItem()) && enablePickaxe){
+                if(customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())){
+                    return;
+                }
                 customItemHandler.handlePickaxeAbility(e.getPlayer(), e.getHand(), plugin);
                 return;
             }

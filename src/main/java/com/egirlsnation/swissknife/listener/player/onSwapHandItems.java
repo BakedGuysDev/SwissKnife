@@ -20,8 +20,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 import java.util.HashMap;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.handSwitchCrash;
-import static com.egirlsnation.swissknife.SwissKnife.Config.kickOnHandSwitchCrash;
+import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class onSwapHandItems implements Listener {
 
@@ -31,22 +30,22 @@ public class onSwapHandItems implements Listener {
     private void SwapHandItems(PlayerSwapHandItemsEvent e){
         if(e.getOffHandItem() != null){
             if(e.getOffHandItem().getType().equals(Material.TOTEM_OF_UNDYING)){
-                if(e.getOffHandItem().getAmount() > 2){
-                    e.getOffHandItem().setAmount(2);
+                if(e.getOffHandItem().getAmount() > maxTotemStack){
+                    e.getOffHandItem().setAmount(maxTotemStack);
                 }
             }
         }
 
         if(e.getMainHandItem() != null){
             if(e.getMainHandItem().getType().equals(Material.TOTEM_OF_UNDYING)){
-                if(e.getMainHandItem().getAmount() > 2){
-                    e.getMainHandItem().setAmount(2);
+                if(e.getMainHandItem().getAmount() > maxTotemStack){
+                    e.getMainHandItem().setAmount(maxTotemStack);
                 }
             }
         }
 
         if(handSwitchCrash){
-            if(handSwapDelay.containsKey(e.getPlayer())){
+            if(!handSwapDelay.containsKey(e.getPlayer())){
                 handSwapDelay.put(e.getPlayer(), 0L);
             }
             if(System.currentTimeMillis() < handSwapDelay.get(e.getPlayer())){
@@ -55,7 +54,7 @@ public class onSwapHandItems implements Listener {
                     e.getPlayer().kickPlayer("Lost connection to the server");
                 }
             }else{
-                handSwapDelay.put(e.getPlayer(), System.currentTimeMillis() + 750L);
+                handSwapDelay.put(e.getPlayer(), System.currentTimeMillis() + handSwitchDelay);
             }
         }
 

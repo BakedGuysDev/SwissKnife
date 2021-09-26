@@ -29,10 +29,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.egirlsnation.swissknife.SwissKnife.Config.xpToDrain;
@@ -42,6 +39,17 @@ public class CustomItemHandler {
     private final AbilityCooldownManager abilityCooldownManager = new AbilityCooldownManager();
 
     private static final Map<UUID, BukkitTask> pickaxeTaskMap = new HashMap<>();
+
+    private static final List<UUID> crystalEnabledList = new ArrayList<>();
+    private static final List<UUID> disabledPlayersList = new ArrayList<>();
+
+    public List<UUID> getCrystalEnabledList(){
+        return crystalEnabledList;
+    }
+
+    public List<UUID> getDisabledPlayersList(){
+        return disabledPlayersList;
+    }
 
     public ItemStack getDraconiteCrystal() {
         ItemStack item = new ItemStack(Material.END_CRYSTAL);
@@ -211,7 +219,11 @@ public class CustomItemHandler {
             player.swingOffHand();
         }
         long timeLeft = System.currentTimeMillis() - abilityCooldownManager.getCrystalCooldown(player.getUniqueId());
+
+        // Player isnt on cooldown. Run ability
         if(TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= AbilityCooldownManager.DEFAULT_CRYSTAL_COOLDOWN){
+            crystalEnabledList.add(player.getUniqueId());
+            player.setGliding(false);
             player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 100, 6));
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 150, 6));
             player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_HURT, SoundCategory.PLAYERS, 100, 0);
@@ -220,9 +232,10 @@ public class CustomItemHandler {
                 @Override
                 public void run() {
                     player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_DEATH, SoundCategory.PLAYERS, 100, 0);
+                    crystalEnabledList.remove(player.getUniqueId());
                 }
             },100);
-        }else{
+        }else{ // Player is on cooldown. Display cooldown message
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.RED + abilityCooldownManager.getCooldownMessage(abilityCooldownManager.getCrystalRemainingTime(player))));
         }
     }
