@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.listener.entity;
 
+import com.egirlsnation.swissknife.util.CombatCheck;
 import com.egirlsnation.swissknife.util.customItem.CustomItemHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,12 +22,13 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 public class onEntityToggleGlide implements Listener {
 
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    private final CombatCheck combatCheck = new CombatCheck();
 
     @EventHandler
     public void EntityToggleGlide(EntityToggleGlideEvent e){
         if(!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
-        if(customItemHandler.getCrystalEnabledList().contains(player.getUniqueId())){
+        if(customItemHandler.getCrystalEnabledList().contains(player.getUniqueId()) || combatCheck.getElytraMap().containsKey(player.getUniqueId())){
             e.setCancelled(true);
         }
     }

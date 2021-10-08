@@ -20,7 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class RankCommand implements CommandExecutor {
+public class RefreshRankCommand implements CommandExecutor {
 
     private final RankUtil rankUtil = new RankUtil();
 
@@ -34,8 +34,6 @@ public class RankCommand implements CommandExecutor {
 
         Player player = (Player) sender;
         rankUtil.promoteIfEligible(player);
-
-
         return true;
     }
 

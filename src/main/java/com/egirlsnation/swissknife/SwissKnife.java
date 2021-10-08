@@ -24,6 +24,7 @@ import com.egirlsnation.swissknife.sql.MySQL;
 import com.egirlsnation.swissknife.sql.SqlQuery;
 import com.egirlsnation.swissknife.util.LOGGER;
 import com.egirlsnation.swissknife.util.ServerUtils;
+import com.egirlsnation.swissknife.util.customItem.CustomItemHandler;
 import com.egirlsnation.swissknife.util.discord.DiscordHandler;
 import com.egirlsnation.swissknife.util.player.PingUtil;
 import com.egirlsnation.swissknife.util.player.RankUtil;
@@ -32,7 +33,10 @@ import me.affanhaq.keeper.data.ConfigFile;
 import me.affanhaq.keeper.data.ConfigValue;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -55,6 +59,7 @@ public class SwissKnife extends JavaPlugin {
     private final DiscordHandler discordHandler = new DiscordHandler();
     private final ServerUtils serverUtils = new ServerUtils();
     private final RankUtil rankUtil = new RankUtil();
+    private final CustomItemHandler customItemHandler = new CustomItemHandler();
 
     private Keeper keeper = null;
 
@@ -81,6 +86,7 @@ public class SwissKnife extends JavaPlugin {
 
         registerEvents();
         registerCommands();
+        registerRecipes();
 
         initSQL();
     }
@@ -128,7 +134,7 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onRespawn(), this);
         pluginManager.registerEvents(new onPlayerPlaceCrystal(), this);
         pluginManager.registerEvents(new onSwapHandItems(), this);
-        pluginManager.registerEvents(new EnderCrystalListeners(), this);
+        pluginManager.registerEvents(new EnderCrystalListeners(this), this);
         pluginManager.registerEvents(new onVehicleCreate(), this);
         pluginManager.registerEvents(new onVehicleCollision(), this);
     }
@@ -142,10 +148,11 @@ public class SwissKnife extends JavaPlugin {
             Objects.requireNonNull(this.getCommand("shitlist")).setExecutor(new ShitListCommand(this));
         }
         Objects.requireNonNull(this.getCommand("shrug")).setExecutor(new ShrugCommand());
-        Objects.requireNonNull(this.getCommand("rank")).setExecutor(new RankCommand());
+        Objects.requireNonNull(this.getCommand("refreshrank")).setExecutor(new RefreshRankCommand());
         Objects.requireNonNull(this.getCommand("monkey")).setExecutor(new MonkeyCommand());
         Objects.requireNonNull(this.getCommand("tpsalert")).setExecutor(new TpsAlertCommand(this));
         Objects.requireNonNull(this.getCommand("toggleitemability")).setExecutor(new ToggleItemAbilityCommand());
+        Objects.requireNonNull(this.getCommand("givepick")).setExecutor(new GivePickCommand());
     }
 
     private void initSQL() {
@@ -207,7 +214,27 @@ public class SwissKnife extends JavaPlugin {
                     }
                 });
             }
-        }, 6000, tpsTaskTime);
+        }, serverUtils.getTicksFromMinutes(delayAfterLoad), tpsTaskTime);
+    }
+
+    private void registerRecipes(){
+        LOGGER.info("Registering recipes");
+        if(enablePickaxeCraft){
+            LOGGER.info("Registering draconite pickaxe recipe");
+            NamespacedKey draconitePickKey = new NamespacedKey(this, "draconite_pickaxe");
+            ShapedRecipe draconitePick = new ShapedRecipe(draconitePickKey, customItemHandler.getDraconitePickaxe())
+                    .shape("GHG", "S", "S");
+            if(useDraconiteGems){
+                draconitePick.setIngredient('G', Material.PLAYER_HEAD).setIngredient('H', Material.END_CRYSTAL);
+            }else{
+                draconitePick.setIngredient('G', Material.END_CRYSTAL).setIngredient('H', Material.DRAGON_HEAD);
+            }
+            if(useBedrockSticks){
+                draconitePick.setIngredient('S', Material.BEDROCK);
+            }else{
+                draconitePick.setIngredient('S', Material.STICK);
+            }
+        }
     }
 
     private void correctConfigValues(){
@@ -246,6 +273,9 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("illegals.unstackOverstackedInShulkers")
         public static boolean unstackInShulks = true;
 
+        @ConfigValue("illegals.maxArmorStack")
+        public static int maxArmorStack = 2;
+
         /*
          * Patches config options
          */
@@ -255,6 +285,12 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("patches.maxVehicleInChunk")
         public static int vehicleLimitChunk = 26;
+
+        @ConfigValue("patches.limitCrystalPlacementSpeed")
+        public static boolean limitCrystalPlacementSpeed = false;
+
+        @ConfigValue("patches.crystalsPerSecond")
+        public static int crystalsPerSecond = 3;
 
         /*
          * High damage prevention config options
@@ -334,6 +370,25 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("preventions.disableEntityPortalTP.entityList")
         public static List<String> entityTypeDisablePortal = Arrays.asList(EntityType.BEE.name(), EntityType.ENDER_CRYSTAL.name());
 
+        /*
+         * Nether floor prevention config options
+         */
+
+        @ConfigValue("preventions.preventPlayersBellowBedrock.enabledOverworld")
+        public static boolean preventPlayerBellowOw = true;
+
+        @ConfigValue("preventions.preventPlayersBellowBedrock.enabledNether")
+        public static boolean preventPlayerBellowNether = true;
+
+        @ConfigValue("preventions.preventPlayersBellowBedrock.repairFloor")
+        public static boolean placeBedrockBellow = true;
+
+        @ConfigValue("preventions.preventPlayersBellowBedrock.dealDmg")
+        public static boolean dealDmgBellow = false;
+
+        @ConfigValue("preventions.preventPlayersBellowBedrock.damage")
+        public static int dmgToDealBellow = 9999;
+
 
         /*
          * SQL config options
@@ -407,6 +462,9 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("discordTPSnotifier.pingRolesIDs")
         public static List<String> roleIDs = Arrays.asList("719274790795346031");
 
+        @ConfigValue("discordTPSnotifier.minuteDelayAfterLoad")
+        public static int delayAfterLoad = 6;
+
         @ConfigValue("discordTPSnotifier.taskRepeatTimeTicks")
         public static int tpsTaskTime = 1200;
 
@@ -457,11 +515,23 @@ public class SwissKnife extends JavaPlugin {
          * Draconite Items config options
          */
 
-        @ConfigValue("draconiteItems.enablePickaxe")
+        @ConfigValue("draconiteItems.pickaxe.enable")
         public static boolean enablePickaxe = false;
 
-        @ConfigValue("draconiteItems.pickaxeXpToDrain")
-        public static double xpToDrain = 0.5F;
+        @ConfigValue("draconiteItems.pickaxe.crafting.enable")
+        public static boolean enablePickaxeCraft = true;
+
+        @ConfigValue("draconiteItems.pickaxe.crafting.useDraconiteGemsRecipe")
+        public static boolean useDraconiteGems = true;
+
+        @ConfigValue("draconiteItems.pickaxe.crafting.useBedrockInsteadOfSticks")
+        public static boolean useBedrockSticks = true;
+
+        @ConfigValue("draconiteItems.pickaxe.xpToDrain")
+        public static int xpToDrain = 5;
+
+        @ConfigValue("draconiteItems.pickaxe.hasteLevel")
+        public static int hasteLevel = 4;
 
         /*
          * Misc config options

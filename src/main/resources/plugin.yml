@@ -25,9 +25,9 @@ commands:
   shitlist:
     description: Allows you to shitlist someone if you have the permissions
     usage: /shitlist <add|remove> (playerName)
-  rank:
-    description: rank
-    usage: /rank
+  refreshrank:
+    description: Checks if you're eligible to rank up
+    usage: /refreshrank
   monkey:
     description: Monkey
     usage: https://www.youtube.com/watch?v=5tQLFon8Yhk
@@ -37,6 +37,9 @@ commands:
   toggleitemability:
     description: Allows you to toggle abilities of draconite items
     usage: /toggleitemability
+  givepick:
+    description: Gives pick
+    usage: /givepick
 
 permissions:
   swissknife.kill.others:

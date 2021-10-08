@@ -33,7 +33,7 @@ public class SqlQuery {
         PreparedStatement ps;
         try{
             ps = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerStats "
-                    + "(Name VARCHAR(32),UUID CHAR(36),playTime INT(11),kills INT(11),deaths INT(11),mobKills INT(11),shitlisted TINYINT(1),firstPlayed VARCHAR(100), blocksMined INT(11), distanceWalked INT(11), distanceElytra INT(11), distanceSprinted INT(11), timeSinceDeath INT(11) PRIMARY KEY (Name))");
+                    + "(Name VARCHAR(32),UUID CHAR(36),playTime INT(11),kills INT(11),deaths INT(11),mobKills INT(11),shitlisted TINYINT(1),firstPlayed VARCHAR(100), blocksMined INT(11), distanceWalked INT(11), distanceElytra INT(11), distanceSprinted INT(11), timeSinceDeath INT(11), combatLogs INT(11), PRIMARY KEY (Name))");
             ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
@@ -103,7 +103,7 @@ public class SqlQuery {
                 String firstPlayed = sdf.format(date);
 
                 PreparedStatement ps2 = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO playerStats"
-                        + " (Name,UUID,playTime,kills,deaths,mobKills,shitlisted,firstPlayed,blocksMined,distanceWalked,distanceEyltra,distanceSprinted,timeSinceDeath) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                        + " (Name,UUID,playTime,kills,deaths,mobKills,shitlisted,firstPlayed,blocksMined,distanceWalked,distanceEyltra,distanceSprinted,timeSinceDeath,combatLogs) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps2.setString(1, player.getName());
                 ps2.setString(2, uuid.toString());
                 ps2.setInt(3, 0);
@@ -117,6 +117,7 @@ public class SqlQuery {
                 ps2.setInt(11, 0);
                 ps2.setInt(12,0);
                 ps2.setInt(13, 0);
+                ps2.setInt(14, 0);
 
                 ps2.executeUpdate();
 
@@ -141,7 +142,7 @@ public class SqlQuery {
                 String firstPlayed = sdf.format(date);
 
                 PreparedStatement ps2 = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO playerStats"
-                        + " (Name,UUID,playTime,kills,deaths,mobKills,shitlisted,firstPlayed,blocksMined,distanceWalked,distanceElytra,distanceSprinted,timeSinceDeath) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                        + " (Name,UUID,playTime,kills,deaths,mobKills,shitlisted,firstPlayed,blocksMined,distanceWalked,distanceElytra,distanceSprinted,timeSinceDeath,combatLogs) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps2.setString(1, player.getName());
                 ps2.setString(2, uuid.toString());
                 ps2.setInt(3, 0);
@@ -159,6 +160,7 @@ public class SqlQuery {
                 ps2.setInt(11, 0);
                 ps2.setInt(12, 0);
                 ps2.setInt(13, 0);
+                ps2.setInt(14, 0);
 
                 ps2.executeUpdate();
 
@@ -343,5 +345,14 @@ public class SqlQuery {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public void increaseCombatLog(UUID uuid){
+        try{
+            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("UPDATE playerStats SET combatLog = combatLog + 1 WHERE UUID=?");
+            ps.setString(1, uuid.toString());
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
     }
 }

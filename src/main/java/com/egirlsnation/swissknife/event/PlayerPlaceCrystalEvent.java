@@ -24,6 +24,7 @@ public class PlayerPlaceCrystalEvent extends Event {
     private final Player player;
     private final EnderCrystal enderCrystal;
     private final ItemStack crystalItem;
+    private boolean cancelled = false;
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -56,5 +57,13 @@ public class PlayerPlaceCrystalEvent extends Event {
 
     public Location getLocation(){
         return enderCrystal.getLocation();
+    }
+
+    public boolean isCancelled(){
+        return cancelled;
+    }
+
+    public void setCancelled(boolean shouldCancel){
+        cancelled = shouldCancel;
     }
 }

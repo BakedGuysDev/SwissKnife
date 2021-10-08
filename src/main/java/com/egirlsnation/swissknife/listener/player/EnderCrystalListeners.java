@@ -17,7 +17,9 @@
 package com.egirlsnation.swissknife.listener.player;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
+import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.heads.HeadsHandler;
+import com.egirlsnation.swissknife.util.CombatCheck;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EnderCrystal;
@@ -29,6 +31,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,12 +39,21 @@ import java.util.Map;
 // SwissKnife : Rename to EnderCrystalListeners from DeathMessageListener
 public class EnderCrystalListeners implements Listener {
 
+    private final SwissKnife plugin;
+
+    public EnderCrystalListeners(SwissKnife plugin){
+        this.plugin = plugin;
+    }
+
+
     private final Map<Player, EntityDamageEvent.DamageCause> lastDmgCause = new HashMap<>();
     private final Map<Player, Entity> lastAttacker = new HashMap<>();
     private final Map<EnderCrystal, Player> crystalExploder = new HashMap<>();
 
-    private final HeadsHandler headsHandler = new HeadsHandler(); // SwissKnife
-
+    // SwissKnife start
+    private final HeadsHandler headsHandler = new HeadsHandler();
+    private final CombatCheck combatCheck = new CombatCheck();
+    // SwissKnife end
 
     @EventHandler
     private void onTick(ServerTickEndEvent e){
@@ -68,6 +80,28 @@ public class EnderCrystalListeners implements Listener {
 
         lastDmgCause.put(player, e.getCause());
         lastAttacker.put(player, e.getDamager());
+
+        // SwissKnife start
+        if(e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)){
+
+            if(e.getDamager() instanceof EnderCrystal){
+                if(player.isDead()) return;
+                Player exploder = crystalExploder.remove((EnderCrystal) e.getDamager());
+                if(combatCheck.getElytraMap().containsKey(exploder.getUniqueId())){
+                    combatCheck.getElytraMap().get(exploder.getUniqueId()).cancel();
+                    exploder.setGliding(false);
+                }
+                if(combatCheck.getElytraMap().containsKey(player.getUniqueId())){
+                    combatCheck.getElytraMap().get(player.getUniqueId()).cancel();
+                    exploder.setGliding(false);
+                }
+                BukkitTask taskExploder = Bukkit.getScheduler().runTaskLater(plugin, () -> combatCheck.getElytraMap().remove(exploder.getUniqueId()), 100);
+                BukkitTask taskVictim = Bukkit.getScheduler().runTaskLater(plugin, () -> combatCheck.getElytraMap().remove(player.getUniqueId()), 100);
+                combatCheck.getElytraMap().put(exploder.getUniqueId(), taskExploder);
+                combatCheck.getElytraMap().put(player.getUniqueId(), taskVictim);
+            }
+        }
+        // SwissKnife end
     }
 
     @EventHandler
@@ -108,7 +142,6 @@ public class EnderCrystalListeners implements Listener {
 
                 if(attacker.getCustomName() == null) return;
                 if(attacker.getCustomName().equals("Draconite Crystal")){
-                    Bukkit.getLogger().info("Crystal was Draconite");
                     headsHandler.dropHeadIfLucky(player, exploder);
                 }
                 //SwissKnife end

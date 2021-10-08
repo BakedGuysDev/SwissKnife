@@ -35,4 +35,8 @@ public class ServerUtils {
         }
         return roundedTPS;
     }
+
+    public int getTicksFromMinutes(int minutes){
+        return minutes * 60 * 20;
+    }
 }

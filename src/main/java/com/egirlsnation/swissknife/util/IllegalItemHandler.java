@@ -126,6 +126,15 @@ public class IllegalItemHandler {
         return meta;
     }
 
+    public boolean isArmorPiece(ItemStack item){
+        if(item == null) return false;
+        final String itemTypeString = item.getType().name();
+        return itemTypeString.endsWith("_HELMET")
+                || itemTypeString.endsWith("_CHESTPLATE")
+                || itemTypeString.endsWith("_LEGGINGS")
+                || itemTypeString.endsWith("_BOOTS");
+    }
+
     public boolean handleIfSpawnEgg(ItemStack item){
         if(item == null) return false;
         if(item.getType().toString().matches("[A-Z]*?_?[A-Z]*_SPAWN_EGG")) return false;
@@ -156,6 +165,12 @@ public class IllegalItemHandler {
 
         if(itemStack.getType().equals(Material.TOTEM_OF_UNDYING) && itemStack.getAmount() > maxTotemStack){
             itemStack.setAmount(maxTotemStack);
+            item.setItemStack(itemStack);
+            return true;
+        }
+
+        if(isArmorPiece(itemStack) && itemStack.getAmount() > maxArmorStack){
+            itemStack.setAmount(maxArmorStack);
             item.setItemStack(itemStack);
             return true;
         }
@@ -209,6 +224,11 @@ public class IllegalItemHandler {
             return true;
         }
 
+        if(isArmorPiece(item) && item.getAmount() > maxArmorStack){
+            item.setAmount(maxArmorStack);
+            return true;
+        }
+
         if(hasTooLongName(item.getItemMeta())){
             item.setItemMeta(trimName(item.getItemMeta()));
         }
@@ -249,6 +269,11 @@ public class IllegalItemHandler {
 
         if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() > maxTotemStack){
             item.setAmount(maxTotemStack);
+            return true;
+        }
+
+        if(isArmorPiece(item) && item.getAmount() > maxArmorStack){
+            item.setAmount(maxArmorStack);
             return true;
         }
 

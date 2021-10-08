@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.util;
 
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ import static com.egirlsnation.swissknife.SwissKnife.Config.combatTimeout;
 public class CombatCheck {
 
     private static final Map<UUID, Long> combatMap = new HashMap<>();
+    private static final Map<UUID, BukkitTask> elytraDisableMap = new HashMap<>();
 
     public void addToCombatMap(Player player){
         UUID playerUUID = player.getUniqueId();
@@ -55,5 +57,9 @@ public class CombatCheck {
 
     public void removePlayer(Player player){
         combatMap.remove(player.getUniqueId());
+    }
+
+    public Map<UUID, BukkitTask> getElytraMap(){
+        return elytraDisableMap;
     }
 }

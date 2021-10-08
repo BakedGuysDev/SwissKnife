@@ -15,6 +15,7 @@ package com.egirlsnation.swissknife.listener.player;
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.util.CombatCheck;
 import com.egirlsnation.swissknife.util.cooldownManager.CooldownManager;
+import com.egirlsnation.swissknife.util.customItem.CustomItemHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -30,28 +31,32 @@ public class onLeave implements Listener {
 
     private final CooldownManager cooldownManager = new CooldownManager();
     private final CombatCheck combatCheck = new CombatCheck();
+    private final CustomItemHandler customItemHandler = new CustomItemHandler();
 
     private final SwissKnife plugin;
     public onLeave(SwissKnife plugin){ this.plugin = plugin; }
 
     @EventHandler
     private void onPlayerLeave(PlayerQuitEvent e){
-        cooldownManager.removePlayer(e.getPlayer());
-        combatCheck.removePlayer(e.getPlayer());
-        handSwapDelay.remove(e.getPlayer());
 
         if(plugin.SQL.isConnected()){
+            if(e.getReason().equals(PlayerQuitEvent.QuitReason.DISCONNECTED) && combatCheck.isInCombat(e.getPlayer())){
+                plugin.sqlQuery.increaseCombatLog(e.getPlayer().getUniqueId());
+            }
             plugin.sqlQuery.updateValues(e.getPlayer());
 
             if(leakCoords && enableShitlist && plugin.sqlQuery.isShitlisted(e.getPlayer())){
-                Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-                    @Override
-                    public void run() {
-                        Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "The coords of " + e.getPlayer().getDisplayName() + ChatColor.GREEN + " are " + getFormattedCoords(e.getPlayer().getLocation()));
-                    }
-                },40);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "The coords of " + e.getPlayer().getDisplayName() + ChatColor.GREEN + " are " + getFormattedCoords(e.getPlayer().getLocation())),40);
             }
         }
+
+        cooldownManager.removePlayer(e.getPlayer());
+        handSwapDelay.remove(e.getPlayer());
+        combatCheck.getElytraMap().get(e.getPlayer().getUniqueId()).cancel();
+        combatCheck.getElytraMap().remove(e.getPlayer().getUniqueId());
+        customItemHandler.getCrystalEnabledList().remove(e.getPlayer().getUniqueId());
+        customItemHandler.getDisabledPlayersList().remove(e.getPlayer().getUniqueId());
+        combatCheck.removePlayer(e.getPlayer());
 
     }
 

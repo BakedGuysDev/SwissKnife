@@ -15,6 +15,7 @@
 package com.egirlsnation.swissknife.listener.player;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,6 +27,17 @@ public class onPlayerMove implements Listener {
 
     @EventHandler
     public void PlayerMove(PlayerMoveEvent e){
+        if(preventPlayerBellowOw || preventPlayerBellowNether){
+            if(e.getTo().getY() < 0){
+                World.Environment env = e.getTo().getWorld().getEnvironment();
+                if(preventPlayerBellowOw && env.equals(World.Environment.NORMAL)){
+                    handlePlayerBellowFloor(e);
+                }else if(preventPlayerBellowNether && env.equals(World.Environment.NETHER)){
+                    handlePlayerBellowFloor(e);
+                }
+            }
+        }
+
         if(preventPlayersOnNether){
             Location l = e.getTo();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
@@ -41,5 +53,12 @@ public class onPlayerMove implements Listener {
                 }
             }
         }
+    }
+
+    private void handlePlayerBellowFloor(PlayerMoveEvent e){
+        if(placeBedrockBellow){
+            e.getPlayer().getWorld().getBlockAt(e.getTo().getBlockX(), 0, e.getTo().getBlockZ()).setType(Material.BEDROCK);
+        }
+        e.setTo(e.getFrom().add(0, 2, 0));
     }
 }

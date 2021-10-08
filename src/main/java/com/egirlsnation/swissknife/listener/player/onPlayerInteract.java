@@ -14,8 +14,8 @@ package com.egirlsnation.swissknife.listener.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.event.PlayerPlaceCrystalEvent;
-import com.egirlsnation.swissknife.util.customItem.CustomItemHandler;
 import com.egirlsnation.swissknife.util.IllegalItemHandler;
+import com.egirlsnation.swissknife.util.customItem.CustomItemHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -69,8 +69,12 @@ public class onPlayerInteract implements Listener {
                 }
                 customItemHandler.handleCrystalAbility(e.getPlayer(), e.getHand(), plugin);
                 return;
-            }else if(customItemHandler.isDraconitePickaxe(e.getItem()) && enablePickaxe){
-                if(customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())){
+            }
+        }
+
+        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){
+            if(customItemHandler.isDraconitePickaxe(e.getItem()) && enablePickaxe) {
+                if (customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())) {
                     return;
                 }
                 customItemHandler.handlePickaxeAbility(e.getPlayer(), e.getHand(), plugin);
@@ -90,7 +94,11 @@ public class onPlayerInteract implements Listener {
                             Block belowCrystal = crystal.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
                             if(e.getClickedBlock().equals(belowCrystal)){
-                                Bukkit.getPluginManager().callEvent(new PlayerPlaceCrystalEvent(e.getPlayer(), crystal, e.getItem()));
+                                PlayerPlaceCrystalEvent playerPlaceCrystalEvent = new PlayerPlaceCrystalEvent(e.getPlayer(), crystal, e.getItem());
+                                Bukkit.getPluginManager().callEvent(playerPlaceCrystalEvent);
+                                if(playerPlaceCrystalEvent.isCancelled()){
+                                    e.setCancelled(true);
+                                }
                                 break;
                             }
                         }
