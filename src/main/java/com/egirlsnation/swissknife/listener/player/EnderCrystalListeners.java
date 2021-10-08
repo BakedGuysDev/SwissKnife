@@ -36,7 +36,8 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.HashMap;
 import java.util.Map;
 
-// SwissKnife : Rename to EnderCrystalListeners from DeathMessageListener
+// SwissKnife : Rename to EnderCrystalListeners from DeathMessageListener and suppress warnings for commented out code
+@SuppressWarnings("CommentedOutCode")
 public class EnderCrystalListeners implements Listener {
 
     private final SwissKnife plugin;

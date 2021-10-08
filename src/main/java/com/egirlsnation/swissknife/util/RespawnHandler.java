@@ -47,5 +47,5 @@ public class RespawnHandler {
         return loc;
     }
 
-    private final int generateInt(int min, int max){ return ThreadLocalRandom.current().nextInt(min, max + 1); }
+    private int generateInt(int min, int max){ return ThreadLocalRandom.current().nextInt(min, max + 1); }
 }

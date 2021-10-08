@@ -61,12 +61,10 @@ public class SwissKnife extends JavaPlugin {
     private final RankUtil rankUtil = new RankUtil();
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
 
-    private Keeper keeper = null;
-
     @Override
     public void onEnable() {
         LOGGER.info("Loading config handler.");
-        keeper = new Keeper(this).register(new Config()).load();
+        Keeper keeper = new Keeper(this).register(new Config()).load();
 
         if (!webhookURL.isBlank()) {
             if (Bukkit.getServer().getTPS().length == 3) {
@@ -223,7 +221,7 @@ public class SwissKnife extends JavaPlugin {
             LOGGER.info("Registering draconite pickaxe recipe");
             NamespacedKey draconitePickKey = new NamespacedKey(this, "draconite_pickaxe");
             ShapedRecipe draconitePick = new ShapedRecipe(draconitePickKey, customItemHandler.getDraconitePickaxe())
-                    .shape("GHG", "S", "S");
+                    .shape("GHG", " S ", " S ");
             if(useDraconiteGems){
                 draconitePick.setIngredient('G', Material.PLAYER_HEAD).setIngredient('H', Material.END_CRYSTAL);
             }else{
@@ -233,6 +231,9 @@ public class SwissKnife extends JavaPlugin {
                 draconitePick.setIngredient('S', Material.BEDROCK);
             }else{
                 draconitePick.setIngredient('S', Material.STICK);
+            }
+            if(Bukkit.getRecipe(draconitePickKey) != null){
+                Bukkit.addRecipe(draconitePick);
             }
         }
     }
