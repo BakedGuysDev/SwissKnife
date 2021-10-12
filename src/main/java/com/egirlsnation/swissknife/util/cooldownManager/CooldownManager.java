@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static com.egirlsnation.swissknife.SwissKnife.Config.*;
+
 public class CooldownManager {
 
     private static final Map<UUID,CommandInfo> cooldowns = new HashMap<>();
@@ -49,7 +51,31 @@ public class CooldownManager {
 
         long timeLeft = System.currentTimeMillis() - getCommandInfo(player.getUniqueId(), type).getCooldown();
 
-        if(TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= CooldownManager.DEFAULT_COOLDOWN){
+        int cooldown;
+        switch(type){
+            case ME:
+                cooldown = ME_COOLDOWN;
+                break;
+            case AFK:
+                cooldown = AFK_COOLDOWN;
+                break;
+            case KILL:
+                cooldown = KILL_COOLDOWN;
+                break;
+            case PING:
+                cooldown = PING_COOLDOWN;
+                break;
+            case PLAYTIME:
+                cooldown = PLAYTIME_COOLDOWN;
+                break;
+            case REFRESHRANK:
+                cooldown = REFRESHRANK_COOLDOWN;
+                break;
+            default:
+                cooldown = 20;
+        }
+
+        if(TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= cooldown){
             return false;
         }
         return true;

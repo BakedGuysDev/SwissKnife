@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.util.player;
 
 import com.egirlsnation.swissknife.hooks.votingPlugin.UserUtils;
+import com.egirlsnation.swissknife.hooks.votingPlugin.VotingPluginHook;
 import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 public class RankUtil {
 
     private final UserUtils userUtils = new UserUtils();
+    private VotingPluginHook votingPluginHook = new VotingPluginHook();
 
     public void promoteIfEligible(@NotNull Player player){
 
@@ -52,11 +54,11 @@ public class RankUtil {
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 100, 0);
         }
 
-        if(userUtils.getUserManager() == null) return;
+        if(!votingPluginHook.isVotingPluginHookActive()) return;
         if(pt >= getTicksFromHours(elderfagHours) && userUtils.getVotes(player) >= 300 && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add legend";
             Bukkit.dispatchCommand(console, command);
-            Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GREEN + " reached " + ChatColor.AQUA + "ElderFag" + ChatColor.GREEN + "!");
+            Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.AQUA + "ElderFag" + ChatColor.GOLD + "!");
             for(Player p : Bukkit.getServer().getOnlinePlayers()){
                 p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 100, 0);
             }

@@ -52,7 +52,12 @@ public class onLeave implements Listener {
 
         cooldownManager.removePlayer(e.getPlayer());
         handSwapDelay.remove(e.getPlayer());
-        combatCheck.getElytraMap().get(e.getPlayer().getUniqueId()).cancel();
+
+        if(combatCheck.getElytraMap().containsKey(e.getPlayer().getUniqueId())){
+            combatCheck.getElytraMap().get(e.getPlayer().getUniqueId()).cancel();
+            combatCheck.getElytraMap().remove(e.getPlayer().getUniqueId());
+        }
+
         combatCheck.getElytraMap().remove(e.getPlayer().getUniqueId());
         customItemHandler.getCrystalEnabledList().remove(e.getPlayer().getUniqueId());
         customItemHandler.getDisabledPlayersList().remove(e.getPlayer().getUniqueId());

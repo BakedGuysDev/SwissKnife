@@ -30,7 +30,7 @@ public class onPlayerTeleport implements Listener {
         if(preventPlayersOnNether){
             Location l = e.getTo();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if(l.getBlockY() >= netherRoofHeight && !e.getPlayer().isOp()){
+            if(l.getBlockY() >= netherRoofHeight){
                 e.setCancelled(true);
             }
         }

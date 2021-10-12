@@ -29,9 +29,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.enablePickaxe;
+import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class onPlayerInteract implements Listener {
 
@@ -40,6 +43,8 @@ public class onPlayerInteract implements Listener {
 
     private final IllegalItemHandler illegalItemHandler = new IllegalItemHandler();
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
+
+    private final static Map<UUID, Long> crystalMap = new HashMap<>();
 
     @EventHandler
     private void onPlayerInteractEvent(PlayerInteractEvent e){
@@ -85,8 +90,24 @@ public class onPlayerInteract implements Listener {
         if(!Action.RIGHT_CLICK_BLOCK.equals(e.getAction())) return;
         if(e.getClickedBlock().getType().equals(Material.OBSIDIAN) || e.getClickedBlock().getType().equals(Material.BEDROCK) || e.getClickedBlock().getType().equals(Material.CRYING_OBSIDIAN)){
             if(e.getMaterial().equals(Material.END_CRYSTAL)){
+
+                if(limitCrystalPlacementSpeed){
+                    UUID uuid = e.getPlayer().getUniqueId();
+                    if(!crystalMap.containsKey(uuid)){
+                        crystalMap.put(uuid, System.currentTimeMillis());
+                    }else{
+                        long timeLeft = System.currentTimeMillis() - crystalMap.get(uuid);
+                        if(timeLeft < crystalDelay){
+                            e.setCancelled(true);
+                            return;
+                        }else{
+                            crystalMap.put(uuid, System.currentTimeMillis());
+                        }
+                    }
+                }
+
                 Bukkit.getScheduler().runTask(plugin, () -> {
-                    List<Entity> entities = e.getPlayer().getNearbyEntities(4, 4, 4);
+                    List<Entity> entities = e.getPlayer().getNearbyEntities(3, 3, 3);
 
                     for(Entity entity : entities){
                         if(EntityType.ENDER_CRYSTAL.equals(entity.getType())){
@@ -94,11 +115,7 @@ public class onPlayerInteract implements Listener {
                             Block belowCrystal = crystal.getLocation().getBlock().getRelative(BlockFace.DOWN);
 
                             if(e.getClickedBlock().equals(belowCrystal)){
-                                PlayerPlaceCrystalEvent playerPlaceCrystalEvent = new PlayerPlaceCrystalEvent(e.getPlayer(), crystal, e.getItem());
-                                Bukkit.getPluginManager().callEvent(playerPlaceCrystalEvent);
-                                if(playerPlaceCrystalEvent.isCancelled()){
-                                    e.setCancelled(true);
-                                }
+                                Bukkit.getPluginManager().callEvent(new PlayerPlaceCrystalEvent(e.getPlayer(), crystal, e.getItem()));
                                 break;
                             }
                         }

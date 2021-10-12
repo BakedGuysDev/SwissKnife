@@ -56,3 +56,5 @@ permissions:
     default: op
   swissknife.bypass.fly:
     description: Allows user to bypass fly checks of this plugin
+  swissknife.bypass.creative:
+    description: Allows user to bypass all creative checks (includes swissknife.bypass.fly)

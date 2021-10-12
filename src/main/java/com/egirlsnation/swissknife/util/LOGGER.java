@@ -22,15 +22,15 @@ public class LOGGER {
     private static final java.util.logging.Logger bukkitLogger = Bukkit.getLogger();
 
     public static void info(String string){
-        bukkitLogger.info(ChatColor.AQUA + "[SwissKnife | Info] " + string);
+        bukkitLogger.info(ChatColor.AQUA + "[SwissKnife] " + string);
     }
 
     public static void warning(String string){
-        bukkitLogger.warning("[SwissKnife | Warning] " + string);
+        bukkitLogger.warning("[SwissKnife] " + string);
     }
 
     public static void error(String string){
-        bukkitLogger.severe("[SwissKnife | Error] " + string);
+        bukkitLogger.severe("[SwissKnife] " + string);
     }
 
     public static void debug(String string){

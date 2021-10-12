@@ -12,8 +12,7 @@
 
 package com.egirlsnation.swissknife.hooks;
 
-import com.bencodez.votingplugin.user.UserManager;
-import com.egirlsnation.swissknife.hooks.votingPlugin.UserUtils;
+import com.egirlsnation.swissknife.hooks.votingPlugin.VotingPluginHook;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,23 +22,23 @@ import org.bukkit.event.server.PluginEnableEvent;
 
 public class PluginManagerEvents implements Listener {
 
-    private final UserUtils userUtils = new UserUtils();
+    private final VotingPluginHook votingPluginHook = new VotingPluginHook();
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEnable(PluginEnableEvent e){
         if("VotingPlugin".equals(e.getPlugin().getName())){
-            if(userUtils.getUserManager() != null) return;
+            if(votingPluginHook.isVotingPluginHookActive()) return;
             Bukkit.getLogger().info("Enabling VotingPlugin hook.");
-            userUtils.setUserManager(UserManager.getInstance());
+            votingPluginHook.initVotingPluginHook();
         }
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onEnable(PluginDisableEvent e){
+    public void onDisable(PluginDisableEvent e){
         if("VotingPlugin".equals(e.getPlugin().getName())){
-            if(userUtils.getUserManager() == null) return;
+            if(!votingPluginHook.isVotingPluginHookActive()) return;
             Bukkit.getLogger().info("Disabling VotingPlugin hook.");
-            userUtils.setUserManager(null);
+            votingPluginHook.removeVotingPluginHook();
         }
     }
 }

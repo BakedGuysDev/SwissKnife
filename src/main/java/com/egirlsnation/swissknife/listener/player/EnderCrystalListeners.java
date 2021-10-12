@@ -31,7 +31,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,6 +82,7 @@ public class EnderCrystalListeners implements Listener {
         lastAttacker.put(player, e.getDamager());
 
         // SwissKnife start
+        /*
         if(e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)){
 
             if(e.getDamager() instanceof EnderCrystal){
@@ -102,6 +102,7 @@ public class EnderCrystalListeners implements Listener {
                 combatCheck.getElytraMap().put(player.getUniqueId(), taskVictim);
             }
         }
+         */
         // SwissKnife end
     }
 

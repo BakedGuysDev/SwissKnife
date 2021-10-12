@@ -12,7 +12,9 @@
 
 package com.egirlsnation.swissknife.util.player;
 
+import com.egirlsnation.swissknife.util.LOGGER;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class GamemodeUtil {
 
@@ -21,5 +23,13 @@ public class GamemodeUtil {
             player.setFlying(false);
             player.setAllowFlight(false);
         }
+    }
+
+    public void removeClickedItem(Player player){
+        if(player.hasPermission("swissknife.bypass.creative")) return;
+        ItemStack clickedItem = player.getItemOnCursor();
+        if(clickedItem == null) return;
+        LOGGER.info(player.getCustomName() + " tried to bring a " + clickedItem.getItemMeta().getDisplayName() + "( " + clickedItem.getType() + ") out of creative. (Possibly illegal?)" );
+        player.setItemOnCursor(null);
     }
 }

@@ -10,13 +10,21 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.util.cooldownManager;
+package com.egirlsnation.swissknife.hooks.votingPlugin;
 
-public enum CommandType {
-    KILL,
-    ME,
-    PLAYTIME,
-    AFK,
-    PING,
-    REFRESHRANK
+public class VotingPluginHook {
+
+    private UserUtils userUtils = new UserUtils();
+
+    public void initVotingPluginHook(){
+        userUtils.setUserManager();
+    }
+
+    public void removeVotingPluginHook(){
+        userUtils.removeUserManager();
+    }
+
+    public boolean isVotingPluginHookActive(){
+        return userUtils.getUserManager() != null;
+    }
 }

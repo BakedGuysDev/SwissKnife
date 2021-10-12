@@ -37,14 +37,13 @@ public class onGamemodeSwitch implements Listener {
         Player player = e.getPlayer();
 
         if(e.getNewGameMode().equals(GameMode.CREATIVE)){
-            if(player.hasPermission("swissknife.bypass.combat")) return;
-            if(combatCheck.isInCombat(player)){
+            if(!player.hasPermission("swissknife.bypass.combat") && combatCheck.isInCombat(player)){
                 player.sendMessage(ChatColor.RED + "You cannot do that command in combat. Time remaining: " + combatCheck.getRemainingTime(player) + " seconds");
                 e.setCancelled(true);
             }
+        }else{
+            gamemodeUtil.removeClickedItem(player);
         }
-
         Bukkit.getScheduler().runTaskLater(plugin, () -> gamemodeUtil.ensureFlyDisable(player), 10);
-
     }
 }

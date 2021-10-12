@@ -16,6 +16,7 @@ import com.egirlsnation.swissknife.command.*;
 import com.egirlsnation.swissknife.listener.block.onBlockDispense;
 import com.egirlsnation.swissknife.listener.block.onBlockPlace;
 import com.egirlsnation.swissknife.listener.entity.*;
+import com.egirlsnation.swissknife.listener.inventory.onCraftItemEvent;
 import com.egirlsnation.swissknife.listener.inventory.onInventoryClick;
 import com.egirlsnation.swissknife.listener.inventory.onInventoryClose;
 import com.egirlsnation.swissknife.listener.inventory.onInventoryOpen;
@@ -135,6 +136,9 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new EnderCrystalListeners(this), this);
         pluginManager.registerEvents(new onVehicleCreate(), this);
         pluginManager.registerEvents(new onVehicleCollision(), this);
+        pluginManager.registerEvents(new onPlayerMove(), this);
+        pluginManager.registerEvents(new onPlayerTeleport(), this);
+        pluginManager.registerEvents(new onCraftItemEvent(), this);
     }
 
     private void registerCommands() {
@@ -233,8 +237,9 @@ public class SwissKnife extends JavaPlugin {
                 draconitePick.setIngredient('S', Material.STICK);
             }
             if(Bukkit.getRecipe(draconitePickKey) != null){
-                Bukkit.addRecipe(draconitePick);
+                Bukkit.removeRecipe(draconitePickKey);
             }
+            Bukkit.addRecipe(draconitePick);
         }
     }
 
@@ -290,8 +295,8 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("patches.limitCrystalPlacementSpeed")
         public static boolean limitCrystalPlacementSpeed = false;
 
-        @ConfigValue("patches.crystalsPerSecond")
-        public static int crystalsPerSecond = 3;
+        @ConfigValue("patches.msBetweenCrystals")
+        public static int crystalDelay = 1000;
 
         /*
          * High damage prevention config options
@@ -513,6 +518,28 @@ public class SwissKnife extends JavaPlugin {
         public static int replaceChance = 50;
 
         /*
+         * Command cooldowns options
+         */
+        @ConfigValue("commandCooldowns.enable")
+        public boolean enableCooldowns = true;
+
+        @ConfigValue("commandCooldowns.meCmd")
+        public static int ME_COOLDOWN = 60;
+
+        @ConfigValue("commandCooldowns.killCmd")
+        public static int KILL_COOLDOWN = 60;
+
+        @ConfigValue("commandCooldowns.playtimeCmd")
+        public static int PLAYTIME_COOLDOWN = 60;
+
+        @ConfigValue("commandCooldowns.afkCmd")
+        public static int AFK_COOLDOWN = 20;
+
+        @ConfigValue("commandCooldowns.pingCmd")
+        public static int PING_COOLDOWN = 60;
+
+
+        /*
          * Draconite Items config options
          */
 
@@ -565,6 +592,9 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("egirlsnation.ranksEnabled")
         public static boolean ranksEnabled = false;
+
+        @ConfigValue("egirlsnation.refreshrankCmdCooldown")
+        public static int REFRESHRANK_COOLDOWN = 60;
 
         @ConfigValue("egirlsnation.midfagHours")
         public static int midfagHours = 48;
