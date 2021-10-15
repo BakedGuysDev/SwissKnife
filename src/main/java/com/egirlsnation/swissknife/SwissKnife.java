@@ -139,6 +139,7 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onPlayerMove(), this);
         pluginManager.registerEvents(new onPlayerTeleport(), this);
         pluginManager.registerEvents(new onCraftItemEvent(), this);
+        pluginManager.registerEvents(new onProjectileLaunch(), this);
     }
 
     private void registerCommands() {
@@ -154,7 +155,6 @@ public class SwissKnife extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("monkey")).setExecutor(new MonkeyCommand());
         Objects.requireNonNull(this.getCommand("tpsalert")).setExecutor(new TpsAlertCommand(this));
         Objects.requireNonNull(this.getCommand("toggleitemability")).setExecutor(new ToggleItemAbilityCommand());
-        Objects.requireNonNull(this.getCommand("givepick")).setExecutor(new GivePickCommand());
     }
 
     private void initSQL() {
@@ -297,6 +297,16 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("patches.msBetweenCrystals")
         public static int crystalDelay = 1000;
+
+        /*
+         * Throwables speed limit config options
+         */
+
+        @ConfigValue("patches.limitThrowablesSpeed.enabled")
+        public static boolean limitThrowables = true;
+
+        @ConfigValue("patches.limitThrowablesSpeed.delayMs")
+        public static int throwablesDelay = 250;
 
         /*
          * High damage prevention config options

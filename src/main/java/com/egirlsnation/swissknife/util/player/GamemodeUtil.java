@@ -27,9 +27,13 @@ public class GamemodeUtil {
 
     public void removeClickedItem(Player player){
         if(player.hasPermission("swissknife.bypass.creative")) return;
+        if(player.getItemOnCursor() == null) return;
         ItemStack clickedItem = player.getItemOnCursor();
-        if(clickedItem == null) return;
-        LOGGER.info(player.getCustomName() + " tried to bring a " + clickedItem.getItemMeta().getDisplayName() + "( " + clickedItem.getType() + ") out of creative. (Possibly illegal?)" );
+        if(clickedItem.getItemMeta() == null){
+            LOGGER.info(player.getCustomName() + " tried to bring a " + clickedItem.getType() + " out of creative. (Possibly illegal?)" );
+        }else{
+            LOGGER.info(player.getCustomName() + " tried to bring a " + clickedItem.getItemMeta().getDisplayName() + "( " + clickedItem.getType() + ") out of creative. (Possibly illegal?)" );
+        }
         player.setItemOnCursor(null);
     }
 }

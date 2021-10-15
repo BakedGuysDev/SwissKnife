@@ -63,24 +63,27 @@ public class IllegalItemHandler {
         return meta.getLore().stream().anyMatch(element -> illegalLoreList.contains(element));
     }
 
-    public ItemMeta reduceAncientWeaponMeta(ItemStack item){
+    public ItemMeta reduceAncientMeta(ItemStack item){
         ItemMeta meta = item.getItemMeta();
         if(meta == null) return null;
         if(!meta.hasLore()) return null;
         if(meta.getLore() == null) return null;
 
-        if(!meta.getLore().contains("§6Ancient weapon")) return null;
+        if(meta.getLore().contains("§6Ancient weapon") || meta.getLore().contains("§6Ancient tool")) {
+            LOGGER.debug("Item is ancient");
+            Multimap<Attribute, AttributeModifier> modifierMap = meta.getAttributeModifiers();
 
-        Multimap<Attribute, AttributeModifier> modifierMap = meta.getAttributeModifiers();
-        // In case something weird happens and the ancient weapon has just lore and no modifiers
-        if(modifierMap == null) return null;
+            // If modifier map is empty the item has stock modifiers
+            if (modifierMap == null) return null;
+            LOGGER.debug(modifierMap.toString());
+            modifierMap = null;
 
-        meta.removeAttributeModifier(GENERIC_ATTACK_SPEED);
-        meta.removeAttributeModifier(GENERIC_ATTACK_DAMAGE);
-        meta.addAttributeModifier(GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "attack_speed",-1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage",7, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-        //Return the new meta
-        return meta;
+            meta.setAttributeModifiers(modifierMap);
+            //Return the new meta
+            return meta;
+        }
+
+        return null;
     }
 
     public ItemMeta reduceDraconiteAxeMeta(ItemStack item){
@@ -120,7 +123,7 @@ public class IllegalItemHandler {
 
         meta.removeAttributeModifier(GENERIC_ATTACK_SPEED);
         meta.removeAttributeModifier(GENERIC_ATTACK_DAMAGE);
-        meta.addAttributeModifier(GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "attack_speed",-1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "attack_speed",-2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         //Return the new meta
         return meta;
@@ -180,7 +183,7 @@ public class IllegalItemHandler {
             item.setItemStack(itemStack);
         }
 
-        ItemMeta ancientMeta = reduceAncientWeaponMeta(itemStack);
+        ItemMeta ancientMeta = reduceAncientMeta(itemStack);
         if(ancientMeta != null){
             itemStack.setItemMeta(ancientMeta);
             item.setItemStack(itemStack);
@@ -233,7 +236,7 @@ public class IllegalItemHandler {
             item.setItemMeta(trimName(item.getItemMeta()));
         }
 
-        ItemMeta ancientMeta = reduceAncientWeaponMeta(item);
+        ItemMeta ancientMeta = reduceAncientMeta(item);
         if(ancientMeta != null){
             item.setItemMeta(ancientMeta);
             return false;
@@ -281,7 +284,7 @@ public class IllegalItemHandler {
             item.setItemMeta(trimName(item.getItemMeta()));
         }
 
-        ItemMeta ancientMeta = reduceAncientWeaponMeta(item);
+        ItemMeta ancientMeta = reduceAncientMeta(item);
         if(ancientMeta != null){
             item.setItemMeta(ancientMeta);
             return false;
