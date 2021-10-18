@@ -6,7 +6,7 @@
 
     <groupId>com.egirlsnation</groupId>
     <artifactId>SwissKnife</artifactId>
-    <version>0.1.3-DEV</version>
+    <version>0.2.0</version>
 
     <properties>
         <java.version>11</java.version>

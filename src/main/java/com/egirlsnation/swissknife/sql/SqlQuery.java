@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.sql;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.util.player.PlayerInfo;
+import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
@@ -103,7 +104,7 @@ public class SqlQuery {
                 String firstPlayed = sdf.format(date);
 
                 PreparedStatement ps2 = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO playerStats"
-                        + " (Name,UUID,playTime,kills,deaths,mobKills,shitlisted,firstPlayed,blocksMined,distanceWalked,distanceEyltra,distanceSprinted,timeSinceDeath,combatLogs) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                        + " (Name,UUID,playTime,kills,deaths,mobKills,shitlisted,firstPlayed,blocksMined,distanceWalked,distanceElytra,distanceSprinted,timeSinceDeath,combatLogs) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps2.setString(1, player.getName());
                 ps2.setString(2, uuid.toString());
                 ps2.setInt(3, 0);
@@ -204,7 +205,7 @@ public class SqlQuery {
             ps.setInt(2, player.getStatistic(Statistic.PLAYER_KILLS));
             ps.setInt(3, player.getStatistic(Statistic.DEATHS));
             ps.setInt(4, player.getStatistic(Statistic.MOB_KILLS));
-            ps.setInt(5, player.getStatistic(Statistic.MINE_BLOCK));
+            ps.setInt(5, player.getStatistic(Statistic.MINE_BLOCK, Material.OBSIDIAN));
             ps.setInt(6, player.getStatistic(Statistic.WALK_ONE_CM));
             ps.setInt(7, player.getStatistic(Statistic.AVIATE_ONE_CM));
             ps.setInt(8, player.getStatistic(Statistic.SPRINT_ONE_CM));
