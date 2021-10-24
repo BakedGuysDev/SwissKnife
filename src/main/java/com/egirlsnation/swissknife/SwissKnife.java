@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife;
 
 import com.egirlsnation.swissknife.command.*;
+import com.egirlsnation.swissknife.hooks.votingPlugin.VotingPluginHook;
 import com.egirlsnation.swissknife.listener.block.onBlockDispense;
 import com.egirlsnation.swissknife.listener.block.onBlockPlace;
 import com.egirlsnation.swissknife.listener.entity.*;
@@ -61,6 +62,7 @@ public class SwissKnife extends JavaPlugin {
     private final ServerUtils serverUtils = new ServerUtils();
     private final RankUtil rankUtil = new RankUtil();
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    private final VotingPluginHook votingPluginHook = new VotingPluginHook();
 
     @Override
     public void onEnable() {
@@ -87,6 +89,7 @@ public class SwissKnife extends JavaPlugin {
         registerCommands();
         registerRecipes();
 
+        initPluginHooks();
         initSQL();
     }
 
@@ -189,6 +192,14 @@ public class SwissKnife extends JavaPlugin {
 
     private void initPingLogTask() {
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> pingUtil.uploadPingMap(pingUtil.getAllPings(), SQL, sqlQuery), 6000, 12000);
+    }
+
+    private void initPluginHooks(){
+        if(pluginManager.getPlugin("VotingPlugin").isEnabled()){
+            if(votingPluginHook.isVotingPluginHookActive()) return;
+            LOGGER.info("Enabling VotingPlugin hook.");
+            votingPluginHook.initVotingPluginHook();
+        }
     }
 
     private void initTPSnotifyTask() {

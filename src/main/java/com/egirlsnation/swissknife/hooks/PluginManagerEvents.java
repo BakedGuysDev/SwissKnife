@@ -13,7 +13,7 @@
 package com.egirlsnation.swissknife.hooks;
 
 import com.egirlsnation.swissknife.hooks.votingPlugin.VotingPluginHook;
-import org.bukkit.Bukkit;
+import com.egirlsnation.swissknife.util.LOGGER;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,7 +28,7 @@ public class PluginManagerEvents implements Listener {
     public void onEnable(PluginEnableEvent e){
         if("VotingPlugin".equals(e.getPlugin().getName())){
             if(votingPluginHook.isVotingPluginHookActive()) return;
-            Bukkit.getLogger().info("Enabling VotingPlugin hook.");
+            LOGGER.info("Enabling VotingPlugin hook.");
             votingPluginHook.initVotingPluginHook();
         }
     }
@@ -37,7 +37,7 @@ public class PluginManagerEvents implements Listener {
     public void onDisable(PluginDisableEvent e){
         if("VotingPlugin".equals(e.getPlugin().getName())){
             if(!votingPluginHook.isVotingPluginHookActive()) return;
-            Bukkit.getLogger().info("Disabling VotingPlugin hook.");
+            LOGGER.warning("Disabling VotingPlugin hook.");
             votingPluginHook.removeVotingPluginHook();
         }
     }

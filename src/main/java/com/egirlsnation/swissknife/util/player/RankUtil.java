@@ -31,9 +31,7 @@ public class RankUtil {
 
     public void promoteIfEligible(@NotNull Player player){
 
-        if(!ranksEnabled){
-            return;
-        }
+        if(!ranksEnabled) return;
 
         if(!player.hasPlayedBefore()) return;
 
