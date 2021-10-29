@@ -15,6 +15,7 @@
 package com.egirlsnation.swissknife.listener.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -44,5 +45,14 @@ public class onPlayerChat implements Listener {
             }
             e.setMessage(sb.toString());
         }
+
+        if(greentext && e.getPlayer().hasPermission("swissknife.chat.greentext") && e.getMessage().charAt(0) == '>'){
+            if(e.getPlayer().getName().equals("Lerbiq")){
+                e.setMessage(ChatColor.LIGHT_PURPLE + e.getMessage());
+            }
+            e.setMessage(ChatColor.GREEN + e.getMessage());
+        }
+
+
     }
 }

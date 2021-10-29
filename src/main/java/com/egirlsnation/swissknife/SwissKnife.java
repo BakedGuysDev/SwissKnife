@@ -143,6 +143,7 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onPlayerTeleport(), this);
         pluginManager.registerEvents(new onCraftItemEvent(), this);
         pluginManager.registerEvents(new onProjectileLaunch(), this);
+        pluginManager.registerEvents(new onPlayerChat(this), this);
     }
 
     private void registerCommands() {
@@ -581,6 +582,13 @@ public class SwissKnife extends JavaPlugin {
 
         @ConfigValue("draconiteItems.pickaxe.hasteLevel")
         public static int hasteLevel = 4;
+
+        /*
+         * Chat config options
+         */
+
+        @ConfigValue("chat.greentext.enabled")
+         public static boolean greentext = true;
 
         /*
          * Misc config options
