@@ -588,7 +588,23 @@ public class SwissKnife extends JavaPlugin {
          */
 
         @ConfigValue("chat.greentext.enabled")
-         public static boolean greentext = true;
+        public static boolean greentext = true;
+
+        @ConfigValue("chat.coords.enabled")
+        public static boolean coordsEnabled = true;
+
+        @ConfigValue("chat.coords.placeholderRegex")
+        public static String coordsPlaceholder = "(?i)(\\[coords\\])";
+
+        @ConfigValue("chat.coords.replaceWith")
+        public static String coordsReplace = "&bWorld: &f%player_world% &eX:&f%player_x% &eY:&f%player_y% &eZ:&f%player_z%";
+
+        @ConfigValue("chat.coords.replaceInCommands")
+        public static boolean coordsCommandsEnabled = true;
+
+        @ConfigValue("chat.coords.commands")
+        public static List<String> coordsCommands = Arrays.asList("/w", "/whisper", "/msg", "/r", "/message", "/reply");
+
 
         /*
          * Misc config options
@@ -625,17 +641,26 @@ public class SwissKnife extends JavaPlugin {
         @ConfigValue("egirlsnation.refreshrankCmdCooldown")
         public static int REFRESHRANK_COOLDOWN = 60;
 
+        @ConfigValue("egirlsnation.newfagHours")
+        public static int newfagHours = 48;
+
         @ConfigValue("egirlsnation.midfagHours")
-        public static int midfagHours = 48;
+        public static int midfagHours = 168;
 
         @ConfigValue("egirlsnation.oldfagHours")
-        public static int oldfagHours = 408;
+        public static int oldfagHours = 432;
 
         @ConfigValue("egirlsnation.elderfagHours")
-        public static int elderfagHours = 2400;
+        public static int elderfagHours = 1200;
 
         @ConfigValue("egirlsnation.elderfagVotes")
-        public static int elderfagVotes = 300;
+        public static int elderfagVotes = 100;
+
+        @ConfigValue("egirlsnation.boomerfagHours")
+        public static int boomerfagHours = 2400;
+
+        @ConfigValue("egirlsnation.boomerfagVotes")
+        public static int boomerfagVotes = 300;
 
         @ConfigValue("egirlsnation.fixDragonDeath.enabled")
         public static boolean fixDragonDeath = false;

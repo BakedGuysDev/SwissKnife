@@ -14,11 +14,11 @@ package com.egirlsnation.swissknife.listener.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.util.CombatCheck;
+import com.egirlsnation.swissknife.util.StringUtils;
 import com.egirlsnation.swissknife.util.cooldownManager.CooldownManager;
 import com.egirlsnation.swissknife.util.customItem.CustomItemHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -32,6 +32,7 @@ public class onLeave implements Listener {
     private final CooldownManager cooldownManager = new CooldownManager();
     private final CombatCheck combatCheck = new CombatCheck();
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    private final StringUtils stringUtils = new StringUtils();
 
     private final SwissKnife plugin;
     public onLeave(SwissKnife plugin){ this.plugin = plugin; }
@@ -46,7 +47,7 @@ public class onLeave implements Listener {
             plugin.sqlQuery.updateValues(e.getPlayer());
 
             if(leakCoords && enableShitlist && plugin.sqlQuery.isShitlisted(e.getPlayer())){
-                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "The coords of " + e.getPlayer().getDisplayName() + ChatColor.GREEN + " are " + getFormattedCoords(e.getPlayer().getLocation())),40);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "The coords of " + e.getPlayer().getDisplayName() + ChatColor.GREEN + " are " + stringUtils.getFormattedCoords(e.getPlayer().getLocation())),40);
             }
         }
 
@@ -65,11 +66,5 @@ public class onLeave implements Listener {
 
     }
 
-    private String getFormattedCoords(Location loc){
-        int x = (int) loc.getX();
-        int y = (int) loc.getY();
-        int z = (int) loc.getZ();
 
-        return "X: " + x + " Y: " + y + " Z: " + z;
-    }
 }

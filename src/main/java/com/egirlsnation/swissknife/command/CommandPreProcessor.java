@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.command;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.util.SpawnRadiusManager;
+import com.egirlsnation.swissknife.util.StringUtils;
 import com.egirlsnation.swissknife.util.cooldownManager.CommandType;
 import com.egirlsnation.swissknife.util.cooldownManager.CooldownManager;
 import org.bukkit.ChatColor;
@@ -33,6 +34,7 @@ public class CommandPreProcessor  implements Listener {
 
     private final CooldownManager cooldownManager = new CooldownManager();
     private final SpawnRadiusManager radiusManager = new SpawnRadiusManager();
+    private final StringUtils stringUtils = new StringUtils();
 
     @EventHandler
     public void CommandPreProcessorEvent(PlayerCommandPreprocessEvent e){
@@ -117,6 +119,16 @@ public class CommandPreProcessor  implements Listener {
                     e.getPlayer().sendMessage(ChatColor.RED + "You need to be further from spawn in order to do this command.");
                 }
             }
+        }
+
+        if(coordsCommandsEnabled){
+            for(String command : coordsCommands){
+                if(e.getMessage().toLowerCase().startsWith(command)){
+                    e.setMessage(e.getMessage().replaceAll(coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
+                    break;
+                }
+            }
+
         }
 
         if(!plugin.SQL.isConnected()) return;

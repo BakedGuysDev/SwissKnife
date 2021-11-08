@@ -15,6 +15,7 @@
 package com.egirlsnation.swissknife.listener.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.util.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,6 +33,7 @@ public class onPlayerChat implements Listener {
     }
 
     private final Random rng = new Random();
+    private final StringUtils stringUtils = new StringUtils();
 
     @EventHandler
     public void PlayerChat(AsyncPlayerChatEvent e){
@@ -53,6 +55,10 @@ public class onPlayerChat implements Listener {
             e.setMessage(ChatColor.GREEN + e.getMessage());
         }
 
-
+        if(coordsEnabled){
+            e.setMessage(e.getMessage().replaceAll(coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
+        }
     }
+
+
 }

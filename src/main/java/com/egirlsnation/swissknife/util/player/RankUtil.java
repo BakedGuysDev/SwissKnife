@@ -39,6 +39,11 @@ public class RankUtil {
         int pt = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
         final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
+        if(pt >= getTicksFromHours(newfagHours) && !player.hasPermission("egirls.rank.newfag")){ //Hours to ticks
+            String command = "lp user " + player.getName() + " parent add newfag";
+            Bukkit.dispatchCommand(console, command);
+        }
+
         if(pt >= getTicksFromHours(midfagHours) && !player.hasPermission("egirls.rank.vet")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add veteran";
             Bukkit.dispatchCommand(console, command);
@@ -53,10 +58,19 @@ public class RankUtil {
         }
 
         if(!votingPluginHook.isVotingPluginHookActive()) return;
-        if(pt >= getTicksFromHours(elderfagHours) && userUtils.getVotes(player) >= 300 && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
+        if(pt >= getTicksFromHours(elderfagHours) && userUtils.getVotes(player) >= elderfagVotes && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add legend";
             Bukkit.dispatchCommand(console, command);
-            Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.AQUA + "ElderFag" + ChatColor.GOLD + "!");
+            Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.DARK_AQUA + "ElderFag" + ChatColor.GOLD + "!");
+            for(Player p : Bukkit.getServer().getOnlinePlayers()){
+                p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 100, 0);
+            }
+        }
+
+        if(pt >= getTicksFromHours(boomerfagHours) && userUtils.getVotes(player) >= boomerfagVotes && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
+            String command = "lp user " + player.getName() + " parent add boomerfag";
+            Bukkit.dispatchCommand(console, command);
+            Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.AQUA + "BoomerFag" + ChatColor.GOLD + "!");
             for(Player p : Bukkit.getServer().getOnlinePlayers()){
                 p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 100, 0);
             }

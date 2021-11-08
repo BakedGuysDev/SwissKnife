@@ -80,22 +80,33 @@ public class HeadsHandler {
             player.sendMessage(ChatColor.DARK_PURPLE + "Your DragonSlayer rank protected you from dropping your head.");
             return;
         }
-        if(player.hasPermission("egirls.rank.legend") && (r.nextInt(100) < 10)){
+
+        if(player.hasPermission("egirls.rank.boomerfag") && (r.nextInt(100) < 10)){
             dropHead(player, killer, true);
             return;
         }
 
-        if(player.hasPermission("egirls.rank.oldfag") && (r.nextInt(100) < 25)){
+        if(player.hasPermission("egirls.rank.legend") && (r.nextInt(100) < 20)){
             dropHead(player, killer, true);
             return;
         }
 
-        if(player.hasPermission("egirls.rank.vet") && (r.nextInt(100) < 50)){
+        if(player.hasPermission("egirls.rank.oldfag") && (r.nextInt(100) < 30)){
+            dropHead(player, killer, true);
+            return;
+        }
+
+        if(player.hasPermission("egirls.rank.vet") && (r.nextInt(100) + 1 < 50)){
             dropHead(player,killer, true);
             return;
         }
 
-        if(player.hasPermission("egirls.rank.default")){
+        if(player.hasPermission("egirls.rank.newfag") && (r.nextInt(100) + 1 < 75)){
+            dropHead(player,killer, true);
+            return;
+        }
+
+        if(player.hasPermission("egirls.rank.default") && (r.nextInt(100) + 1 < 90)){
             dropHead(player,killer, true);
             return;
         }
@@ -113,23 +124,33 @@ public class HeadsHandler {
             player.sendMessage(ChatColor.DARK_PURPLE + "Your DragonSlayer rank protected you from dropping your head.");
             return;
         }
-        if(player.hasPermission("egirls.rank.legend") && (r.nextInt(100) < 10)){
+        if(player.hasPermission("egirls.rank.boomerfag") && (r.nextInt(100) < 10)){
             dropHead(player, killer, true);
             return;
         }
 
-        if(player.hasPermission("egirls.rank.oldfag") && (r.nextInt(100) < 25)){
+        if(player.hasPermission("egirls.rank.legend") && (r.nextInt(100) < 20)){
             dropHead(player, killer, true);
             return;
         }
 
-        if(player.hasPermission("egirls.rank.vet") && (r.nextInt(100) < 50)){
+        if(player.hasPermission("egirls.rank.oldfag") && (r.nextInt(100) < 30)){
+            dropHead(player, killer, true);
+            return;
+        }
+
+        if(player.hasPermission("egirls.rank.vet") && (r.nextInt(100) + 1 < 50)){
             dropHead(player,killer, true);
             return;
         }
 
-        if(player.hasPermission("egirls.rank.default")){
-            dropHead(player,killer, false);
+        if(player.hasPermission("egirls.rank.newfag") && (r.nextInt(100) + 1 < 75)){
+            dropHead(player,killer, true);
+            return;
+        }
+
+        if(player.hasPermission("egirls.rank.default") && (r.nextInt(100) + 1 < 90)){
+            dropHead(player,killer, true);
             return;
         }
 

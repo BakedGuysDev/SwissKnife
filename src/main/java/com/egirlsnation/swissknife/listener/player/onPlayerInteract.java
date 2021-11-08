@@ -18,6 +18,7 @@ import com.egirlsnation.swissknife.util.IllegalItemHandler;
 import com.egirlsnation.swissknife.util.customItem.CustomItemHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -88,6 +89,10 @@ public class onPlayerInteract implements Listener {
         }
 
         if(!Action.RIGHT_CLICK_BLOCK.equals(e.getAction())) return;
+        if(e.getMaterial().equals(Material.TNT_MINECART) && e.getPlayer().getGameMode().equals(GameMode.CREATIVE) && !e.getPlayer().hasPermission("swissknife.bypass.creative")){
+            e.setCancelled(true);
+            return;
+        }
         if(e.getClickedBlock().getType().equals(Material.OBSIDIAN) || e.getClickedBlock().getType().equals(Material.BEDROCK) || e.getClickedBlock().getType().equals(Material.CRYING_OBSIDIAN)){
             if(e.getMaterial().equals(Material.END_CRYSTAL)){
 

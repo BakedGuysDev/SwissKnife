@@ -13,6 +13,10 @@
 package com.egirlsnation.swissknife.util;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
+import static com.egirlsnation.swissknife.SwissKnife.Config.coordsReplace;
 
 public class StringUtils {
 
@@ -30,6 +34,25 @@ public class StringUtils {
         } else {
             return "" + ChatColor.DARK_RED + ping;
         }
+    }
+
+    public String getFormattedCoords(Location loc){
+        int x = (int) loc.getX();
+        int y = (int) loc.getY();
+        int z = (int) loc.getZ();
+
+        return "X: " + x + " Y: " + y + " Z: " + z;
+    }
+
+    public String getCoordsPlaceholderFormatted(Player player){
+
+        String res = ChatColor.translateAlternateColorCodes('&', coordsReplace.replaceAll("%player_world%", player.getWorld().getName())
+                .replaceAll("%player_x%", (int) player.getLocation().getX() + "")
+                .replaceAll("%player_y%", (int) player.getLocation().getY() + "")
+                .replaceAll("%player_z%", (int) player.getLocation().getZ() + "")
+        );
+
+        return res;
     }
 
 
