@@ -196,10 +196,12 @@ public class SwissKnife extends JavaPlugin {
     }
 
     private void initPluginHooks(){
-        if(Objects.requireNonNull(pluginManager.getPlugin("VotingPlugin")).isEnabled()){
-            if(votingPluginHook.isVotingPluginHookActive()) return;
-            SwissLogger.info("Enabling VotingPlugin hook.");
-            votingPluginHook.initVotingPluginHook();
+        if(pluginManager.getPlugin("VotingPlugin") != null){
+            if(pluginManager.getPlugin("VotingPlugin").isEnabled()){
+                if(votingPluginHook.isVotingPluginHookActive()) return;
+                SwissLogger.info("Enabling VotingPlugin hook.");
+                votingPluginHook.initVotingPluginHook();
+            }
         }
     }
 
