@@ -31,15 +31,12 @@ commands:
   monkey:
     description: Monkey
     usage: https://www.youtube.com/watch?v=5tQLFon8Yhk
-  tpsalert:
+  tpsalerttest:
     description: Test command for tps alert
-    usage: /tpsalert
+    usage: /tpsalerttest
   toggleitemability:
     description: Allows you to toggle abilities of draconite items
     usage: /toggleitemability
-  givepick:
-    description: Gives pick
-    usage: /givepick
 
 permissions:
   swissknife.kill.others:

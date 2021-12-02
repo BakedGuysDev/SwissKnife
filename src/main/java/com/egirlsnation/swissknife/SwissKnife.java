@@ -12,24 +12,24 @@
 
 package com.egirlsnation.swissknife;
 
-import com.egirlsnation.swissknife.command.*;
-import com.egirlsnation.swissknife.hooks.votingPlugin.VotingPluginHook;
-import com.egirlsnation.swissknife.listener.block.onBlockDispense;
-import com.egirlsnation.swissknife.listener.block.onBlockPlace;
-import com.egirlsnation.swissknife.listener.entity.*;
-import com.egirlsnation.swissknife.listener.inventory.onCraftItemEvent;
-import com.egirlsnation.swissknife.listener.inventory.onInventoryClick;
-import com.egirlsnation.swissknife.listener.inventory.onInventoryClose;
-import com.egirlsnation.swissknife.listener.inventory.onInventoryOpen;
-import com.egirlsnation.swissknife.listener.player.*;
-import com.egirlsnation.swissknife.sql.MySQL;
-import com.egirlsnation.swissknife.sql.SqlQuery;
-import com.egirlsnation.swissknife.util.LOGGER;
-import com.egirlsnation.swissknife.util.ServerUtils;
-import com.egirlsnation.swissknife.util.customItem.CustomItemHandler;
-import com.egirlsnation.swissknife.util.discord.DiscordHandler;
-import com.egirlsnation.swissknife.util.player.PingUtil;
-import com.egirlsnation.swissknife.util.player.RankUtil;
+import com.egirlsnation.swissknife.systems.commands.*;
+import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
+import com.egirlsnation.swissknife.listeners.block.onBlockDispense;
+import com.egirlsnation.swissknife.listeners.block.onBlockPlace;
+import com.egirlsnation.swissknife.listeners.entity.*;
+import com.egirlsnation.swissknife.listeners.inventory.onCraftItemEvent;
+import com.egirlsnation.swissknife.listeners.inventory.onInventoryClick;
+import com.egirlsnation.swissknife.listeners.inventory.onInventoryClose;
+import com.egirlsnation.swissknife.listeners.inventory.onInventoryOpen;
+import com.egirlsnation.swissknife.listeners.player.*;
+import com.egirlsnation.swissknife.systems.sql.MySQL;
+import com.egirlsnation.swissknife.systems.sql.SqlQuery;
+import com.egirlsnation.swissknife.utils.SwissLogger;
+import com.egirlsnation.swissknife.utils.ServerUtil;
+import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
+import com.egirlsnation.swissknife.systems.discord.DiscordHandler;
+import com.egirlsnation.swissknife.utils.player.PingUtil;
+import com.egirlsnation.swissknife.utils.player.RankUtil;
 import me.affanhaq.keeper.Keeper;
 import me.affanhaq.keeper.data.ConfigFile;
 import me.affanhaq.keeper.data.ConfigValue;
@@ -59,14 +59,14 @@ public class SwissKnife extends JavaPlugin {
 
     private final PingUtil pingUtil = new PingUtil();
     private final DiscordHandler discordHandler = new DiscordHandler();
-    private final ServerUtils serverUtils = new ServerUtils();
+    private final ServerUtil serverUtil = new ServerUtil();
     private final RankUtil rankUtil = new RankUtil();
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
     private final VotingPluginHook votingPluginHook = new VotingPluginHook();
 
     @Override
     public void onEnable() {
-        LOGGER.info("Loading config handler.");
+        SwissLogger.info("Loading config handler.");
         Keeper keeper = new Keeper(this).register(new Config()).load();
 
         if (!webhookURL.isBlank()) {
@@ -79,7 +79,7 @@ public class SwissKnife extends JavaPlugin {
                 discordHandler.setTpsArrSize(4);
                 initTPSnotifyTask();
             } else {
-                LOGGER.warning("You're running server software that's modifiying TPS results that's not supported by this plugin.\nTPS Notifications won't be sent.\nSupported server software for this feature is PaperMC, Tuinity, Airplane, Airplane-Purpur and Purpur");
+                SwissLogger.warning("You're running server software that's modifiying TPS results that's not supported by this plugin.\nTPS Notifications won't be sent.\nSupported server software for this feature is PaperMC, Tuinity, Airplane, Airplane-Purpur and Purpur");
             }
         }
 
@@ -105,11 +105,11 @@ public class SwissKnife extends JavaPlugin {
 
     private void registerEvents() {
         pluginManager.registerEvents(new CommandPreProcessor(this), this);
-        LOGGER.info(ChatColor.AQUA + "Registering block events");
+        SwissLogger.info(ChatColor.AQUA + "Registering block events");
         pluginManager.registerEvents(new onBlockDispense(), this);
         pluginManager.registerEvents(new onBlockPlace(), this);
 
-        LOGGER.info(ChatColor.AQUA + "Registering entity events");
+        SwissLogger.info(ChatColor.AQUA + "Registering entity events");
         pluginManager.registerEvents(new onEntityChangeBlock(), this);
         pluginManager.registerEvents(new onEntityChangeBlock(), this);
         pluginManager.registerEvents(new onEntityDamage(), this);
@@ -121,12 +121,12 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onCreatureSpawn(), this);
         pluginManager.registerEvents(new onProjectileHit(), this);
 
-        LOGGER.info(ChatColor.AQUA + "Registering inventory events");
+        SwissLogger.info(ChatColor.AQUA + "Registering inventory events");
         pluginManager.registerEvents(new onInventoryClick(), this);
         pluginManager.registerEvents(new onInventoryClose(), this);
         pluginManager.registerEvents(new onInventoryOpen(), this);
 
-        LOGGER.info(ChatColor.AQUA + "Registering player events");
+        SwissLogger.info(ChatColor.AQUA + "Registering player events");
         pluginManager.registerEvents(new onGamemodeSwitch(this), this);
         pluginManager.registerEvents(new onJoin(this), this);
         pluginManager.registerEvents(new onLeave(this), this);
@@ -147,7 +147,7 @@ public class SwissKnife extends JavaPlugin {
     }
 
     private void registerCommands() {
-        LOGGER.info("Registering commands.");
+        SwissLogger.info("Registering commands.");
         Objects.requireNonNull(this.getCommand("kill")).setExecutor(new KillCommand(this));
         Objects.requireNonNull(this.getCommand("ping")).setExecutor(new PingCommand());
         Objects.requireNonNull(this.getCommand("playtime")).setExecutor(new PlaytimeCommand(this));
@@ -157,33 +157,33 @@ public class SwissKnife extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("shrug")).setExecutor(new ShrugCommand());
         Objects.requireNonNull(this.getCommand("refreshrank")).setExecutor(new RefreshRankCommand());
         Objects.requireNonNull(this.getCommand("monkey")).setExecutor(new MonkeyCommand());
-        Objects.requireNonNull(this.getCommand("tpsalert")).setExecutor(new TpsAlertCommand(this));
+        Objects.requireNonNull(this.getCommand("tpsalerttest")).setExecutor(new TpsAlertTestCommand(this));
         Objects.requireNonNull(this.getCommand("toggleitemability")).setExecutor(new ToggleItemAbilityCommand());
     }
 
     private void initSQL() {
-        LOGGER.info(ChatColor.AQUA + "Starting up SQL driver.");
+        SwissLogger.info(ChatColor.AQUA + "Starting up SQL driver.");
 
         this.SQL = new MySQL();
         this.sqlQuery = new SqlQuery(this);
 
         if (Config.databaseName.equals("name") && Config.databaseUsername.equals("username") && Config.databasePassword.equals("password")) {
-            LOGGER.warning("Default SQL config values detected. SQL driver won't be initiated.");
+            SwissLogger.warning("Default SQL config values detected. SQL driver won't be initiated.");
             return;
         }
 
         try {
             SQL.connect();
         } catch (SQLException | ClassNotFoundException throwables) {
-            LOGGER.error("Something went wrong while initiating SQL\nStack trace will follow.");
+            SwissLogger.error("Something went wrong while initiating SQL\nStack trace will follow.");
             throwables.printStackTrace();
         }
 
         if (SQL.isConnected()) {
-            LOGGER.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
+            SwissLogger.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
             sqlQuery.createStatsTable();
             //sqlQuery.createPingTable();
-            LOGGER.info(ChatColor.GREEN + "Finished SQL initialization.");
+            SwissLogger.info(ChatColor.GREEN + "Finished SQL initialization.");
         }
     }
 
@@ -196,16 +196,16 @@ public class SwissKnife extends JavaPlugin {
     }
 
     private void initPluginHooks(){
-        if(pluginManager.getPlugin("VotingPlugin").isEnabled()){
+        if(Objects.requireNonNull(pluginManager.getPlugin("VotingPlugin")).isEnabled()){
             if(votingPluginHook.isVotingPluginHookActive()) return;
-            LOGGER.info("Enabling VotingPlugin hook.");
+            SwissLogger.info("Enabling VotingPlugin hook.");
             votingPluginHook.initVotingPluginHook();
         }
     }
 
     private void initTPSnotifyTask() {
         Bukkit.getScheduler().runTaskTimer(this, () -> {
-            List<Double> tps = serverUtils.getTPS();
+            List<Double> tps = serverUtil.getTPS();
             if (discordHandler.shouldPostAlert(tps)) {
                 List<String> rankNames = null;
                 if(listOnlinePlayers){
@@ -228,13 +228,13 @@ public class SwissKnife extends JavaPlugin {
                     }
                 });
             }
-        }, serverUtils.getTicksFromMinutes(delayAfterLoad), tpsTaskTime);
+        }, serverUtil.getTicksFromMinutes(delayAfterLoad), tpsTaskTime);
     }
 
     private void registerRecipes(){
-        LOGGER.info("Registering recipes");
+        SwissLogger.info("Registering recipes");
         if(enablePickaxeCraft){
-            LOGGER.info("Registering draconite pickaxe recipe");
+            SwissLogger.info("Registering draconite pickaxe recipe");
             NamespacedKey draconitePickKey = new NamespacedKey(this, "draconite_pickaxe");
             ShapedRecipe draconitePick = new ShapedRecipe(draconitePickKey, customItemHandler.getDraconitePickaxe())
                     .shape("GHG", " S ", " S ");
