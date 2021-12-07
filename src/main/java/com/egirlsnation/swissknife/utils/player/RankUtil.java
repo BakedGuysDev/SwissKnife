@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.utils.player;
 
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.UserUtils;
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -22,8 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.*;
-
 public class RankUtil {
 
     private final UserUtils userUtils = new UserUtils();
@@ -31,7 +30,7 @@ public class RankUtil {
 
     public void promoteIfEligible(@NotNull Player player){
 
-        if(!ranksEnabled) return;
+        if(!Config.instance.ranksEnabled) return;
 
         if(!player.hasPlayedBefore()) return;
 
@@ -39,18 +38,18 @@ public class RankUtil {
         int pt = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
         final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
-        if(pt >= getTicksFromHours(newfagHours) && !player.hasPermission("egirls.rank.newfag")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Config.instance.newfagHours) && !player.hasPermission("egirls.rank.newfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add newfag";
             Bukkit.dispatchCommand(console, command);
         }
 
-        if(pt >= getTicksFromHours(midfagHours) && !player.hasPermission("egirls.rank.vet")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Config.instance.midfagHours) && !player.hasPermission("egirls.rank.vet")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add veteran";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GREEN + " reached " + ChatColor.YELLOW + "MidFag" + ChatColor.GREEN + "!");
         }
 
-        if(pt >= getTicksFromHours(oldfagHours) && !player.hasPermission("egirls.rank.oldfag")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Config.instance.oldfagHours) && !player.hasPermission("egirls.rank.oldfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add oldfag";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GREEN + " reached " + ChatColor.RED + "OldFag" + ChatColor.GREEN + "!");
@@ -58,7 +57,7 @@ public class RankUtil {
         }
 
         if(!votingPluginHook.isVotingPluginHookActive()) return;
-        if(pt >= getTicksFromHours(elderfagHours) && userUtils.getVotes(player) >= elderfagVotes && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Config.instance.elderfagHours) && userUtils.getVotes(player) >= Config.instance.elderfagVotes && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add legend";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.DARK_AQUA + "ElderFag" + ChatColor.GOLD + "!");
@@ -67,7 +66,7 @@ public class RankUtil {
             }
         }
 
-        if(pt >= getTicksFromHours(boomerfagHours) && userUtils.getVotes(player) >= boomerfagVotes && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Config.instance.boomerfagHours) && userUtils.getVotes(player) >= Config.instance.boomerfagVotes && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add boomerfag";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.AQUA + "BoomerFag" + ChatColor.GOLD + "!");

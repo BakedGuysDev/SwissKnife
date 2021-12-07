@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.EntityEffect;
 import org.bukkit.Material;
@@ -21,8 +22,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class onEntityDamage implements Listener {
 
@@ -37,16 +36,16 @@ public class onEntityDamage implements Listener {
             }
         }
 
-        if(fixDragonDeath && e.getEntity().getType().equals(EntityType.ENDER_DRAGON)){
+        if(Config.instance.fixDragonDeath && e.getEntity().getType().equals(EntityType.ENDER_DRAGON)){
             if((e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION))){
                 LivingEntity dragon = (LivingEntity) e.getEntity();
-                if(dragon.getHealth() > dragonHealth) return;
+                if(dragon.getHealth() > Config.instance.dragonHealth) return;
                 e.setCancelled(true);
             }
         }
 
         //Pet totems
-        if(petsUseTotems){
+        if(Config.instance.petsUseTotems){
             if (!(e.getEntity() instanceof Tameable)) return;
             Tameable pet = (Tameable) e.getEntity();
             if ((pet.getHealth() - e.getDamage()) > 0) return;

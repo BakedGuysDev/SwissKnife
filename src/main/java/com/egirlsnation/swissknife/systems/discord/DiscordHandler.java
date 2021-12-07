@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.discord;
 
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,8 +21,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class DiscordHandler {
 
@@ -33,20 +32,20 @@ public class DiscordHandler {
 
 
     public boolean shouldPostAlert(List<Double> tps){
-        if(tps.get(0) <= tpsNotifyAlways){
+        if(tps.get(0) <= Config.instance.tpsNotifyAlways){
             return true;
         }
-        if (((System.currentTimeMillis() /1000) - lastAlertTimeSec) < notifyDelay) {
+        if (((System.currentTimeMillis() /1000) - lastAlertTimeSec) < Config.instance.notifyDelay) {
             return false;
         }
         if(tpsArrSize == 3){
-            if(longerTPSavg && tps.get(2) <= tpsAvgThreshold){
+            if(Config.instance.longerTPSavg && tps.get(2) <= Config.instance.tpsAvgThreshold){
                 return true;
-            }else return !longerTPSavg && tps.get(1) <= tpsAvgThreshold;
+            }else return !Config.instance.longerTPSavg && tps.get(1) <= Config.instance.tpsAvgThreshold;
         }else{
-            if(longerTPSavg && tps.get(3) <= tpsAvgThreshold){
+            if(Config.instance.longerTPSavg && tps.get(3) <= Config.instance.tpsAvgThreshold){
                 return true;
-            }else return !longerTPSavg && tps.get(2) <= tpsAvgThreshold;
+            }else return !Config.instance.longerTPSavg && tps.get(2) <= Config.instance.tpsAvgThreshold;
         }
     }
 
@@ -60,17 +59,17 @@ public class DiscordHandler {
 
     public void postDiscordTPSNotif(@NotNull List<Double> tps, int playercount, int maxSlots, List<String> playerDisplayNames, List<String> lowPtNames) throws IOException {
         DiscordWebhook webhook = new DiscordWebhook(webhookURL);
-        if(webhookName.isBlank()){
+        if(Config.instance.webhookName.isBlank()){
             webhook.setUsername("TPS Alert");
         }else{
-            webhook.setUsername(webhookName);
+            webhook.setUsername(Config.instance.webhookName);
         }
-        if(!webhookAvatarURL.isBlank()){
-            webhook.setAvatarUrl(webhookAvatarURL);
+        if(!Config.instance.webhookAvatarURL.isBlank()){
+            webhook.setAvatarUrl(Config.instance.webhookAvatarURL);
         }
-        if(!roleIDs.isEmpty()){
+        if(!Config.instance.roleIDs.isEmpty()){
             String pings = "";
-            for(String id : roleIDs){
+            for(String id : Config.instance.roleIDs){
                 pings = pings + " <@&" + id +">";
             }
             webhook.setContent(pings);

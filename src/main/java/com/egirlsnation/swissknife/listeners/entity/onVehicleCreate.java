@@ -12,13 +12,11 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
+import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.EntityUtil;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.limitVehicles;
-import static com.egirlsnation.swissknife.SwissKnife.Config.vehicleLimitChunk;
 
 public class onVehicleCreate implements Listener {
 
@@ -28,8 +26,8 @@ public class onVehicleCreate implements Listener {
     public void VehicleCreate(VehicleCreateEvent e){
 
         //Limits the number of vehicles in chunk
-        if(limitVehicles){
-            if(entityUtil.countVehicles(e.getVehicle().getLocation().getChunk().getEntities()) > vehicleLimitChunk){
+        if(Config.instance.limitVehicles){
+            if(entityUtil.countVehicles(e.getVehicle().getLocation().getChunk().getEntities()) > Config.instance.vehicleLimitChunk){
                 e.setCancelled(true);
             }
         }

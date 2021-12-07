@@ -20,8 +20,6 @@ import org.bukkit.entity.Vehicle;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.vehicleLimitChunk;
-
 public class EntityUtil {
 
     public Integer countVehicles(Entity[] entities){
@@ -45,13 +43,13 @@ public class EntityUtil {
     }
 
     public void removeExcessVehicles(List<Entity> vehicleList){
-        if(vehicleList.isEmpty() || vehicleList.size() < vehicleLimitChunk){
+        if(vehicleList.isEmpty() || vehicleList.size() < Config.instance.vehicleLimitChunk){
             return;
         }
 
         int vehicleListSize = vehicleList.size();
         for(Entity entity : vehicleList){
-            if(vehicleListSize > vehicleLimitChunk){
+            if(vehicleListSize > Config.instance.vehicleLimitChunk){
                 entity.remove();
                 vehicleListSize--;
             }

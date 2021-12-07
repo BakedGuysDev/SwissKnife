@@ -14,13 +14,12 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
+import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.EntityUtil;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ExpBottleEvent;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class onXpBottle implements Listener {
 
@@ -28,8 +27,8 @@ public class onXpBottle implements Listener {
 
     @EventHandler
     public void xpBottleListener(ExpBottleEvent e){
-        if(!preventXpBottleLag) return;
-        if(entityUtil.countEntities(EntityType.THROWN_EXP_BOTTLE, e.getEntity().getLocation().getChunk().getEntities()) > xpBottleLimit){
+        if(!Config.instance.preventXpBottleLag) return;
+        if(entityUtil.countEntities(EntityType.THROWN_EXP_BOTTLE, e.getEntity().getLocation().getChunk().getEntities()) > Config.instance.xpBottleLimit){
             e.setCancelled(true);
             e.getEntity().remove();
         }

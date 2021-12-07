@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.Listener;
@@ -21,9 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.limitThrowables;
-import static com.egirlsnation.swissknife.SwissKnife.Config.throwablesDelay;
-
 public class onProjectileLaunch implements Listener {
 
     private final Map<UUID, Long> throwablesMap = new HashMap<>();
@@ -32,13 +30,13 @@ public class onProjectileLaunch implements Listener {
         if(!(e.getEntity().getShooter() instanceof Player)) return;
         if(e.getEntity() instanceof Snowball) return;
         Player player = (Player) e.getEntity().getShooter();
-        if(limitThrowables){
+        if(Config.instance.limitThrowables){
             UUID uuid = player.getUniqueId();
             if(!throwablesMap.containsKey(uuid)){
                 throwablesMap.put(uuid, System.currentTimeMillis());
             }else{
                 long timeLeft = System.currentTimeMillis() - throwablesMap.get(uuid);
-                if(timeLeft < throwablesDelay){
+                if(timeLeft < Config.instance.throwablesDelay){
                     e.setCancelled(true);
                 }else{
                     throwablesMap.put(uuid, System.currentTimeMillis());

@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.listeners.entity;
 
 import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -21,8 +22,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class onEntityDamageByEntity implements Listener {
 
@@ -36,14 +35,14 @@ public class onEntityDamageByEntity implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (preventHighDmg) {
+            if (Config.instance.preventHighDmg) {
                 if (player.isOp()) return;
-                if (e.getDamage() > highDmgThreshold) {
+                if (e.getDamage() > Config.instance.highDmgThreshold) {
                     e.setCancelled(true);
-                    if(redirectHighDmg){
+                    if(Config.instance.redirectHighDmg){
                         player.damage(e.getDamage());
                     }
-                    if(kickOnHighDamage){
+                    if(Config.instance.kickOnHighDamage){
                         player.kickPlayer("Oi cunt, what the bloody hell");
                     }
                 }

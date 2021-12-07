@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
+import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.EntityUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -21,9 +22,6 @@ import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 
 import java.util.List;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.limitVehicles;
-import static com.egirlsnation.swissknife.SwissKnife.Config.vehicleLimitChunk;
-
 public class onVehicleCollision implements Listener {
 
     private final EntityUtil entityUtil = new EntityUtil();
@@ -31,9 +29,9 @@ public class onVehicleCollision implements Listener {
     @EventHandler
     public void VehicleCollision(VehicleEntityCollisionEvent e){
         //Limits the number of vehicles in chunk
-        if(limitVehicles){
+        if(Config.instance.limitVehicles){
             List<Entity> vehicles = entityUtil.filterVehicles(e.getVehicle().getLocation().getChunk().getEntities());
-            if(vehicles.size() > vehicleLimitChunk){
+            if(vehicles.size() > Config.instance.vehicleLimitChunk){
                 entityUtil.removeExcessVehicles(vehicles);
                 Bukkit.getLogger().warning("Removed excess vehicles in chunk at: " +  e.getVehicle().getLocation().getBlockX() + " " + e.getVehicle().getLocation().getBlockY() + " " + e.getVehicle().getLocation().getBlockZ());
             }

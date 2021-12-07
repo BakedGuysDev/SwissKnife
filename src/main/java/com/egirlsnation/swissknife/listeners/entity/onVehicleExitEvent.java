@@ -14,6 +14,7 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -21,17 +22,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.netherRoofHeight;
-import static com.egirlsnation.swissknife.SwissKnife.Config.preventPlayersOnNether;
-
 public class onVehicleExitEvent implements Listener {
 
     @EventHandler
     public void VehicleExit(VehicleExitEvent e){
-        if(preventPlayersOnNether && e.getExited() instanceof Player){
+        if(Config.instance.preventPlayersOnNether && e.getExited() instanceof Player){
             Location l = e.getVehicle().getLocation();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if(l.getBlockY() >= netherRoofHeight && !e.getExited().isOp()){
+            if(l.getBlockY() >= Config.instance.netherRoofHeight && !e.getExited().isOp()){
                 e.setCancelled(true);
                 e.getVehicle().remove();
             }

@@ -14,17 +14,16 @@ package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
-import com.egirlsnation.swissknife.utils.StringUtil;
 import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CooldownHandler;
 import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
+import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.enableShitlist;
-import static com.egirlsnation.swissknife.SwissKnife.Config.leakCoords;
 import static com.egirlsnation.swissknife.listeners.player.onSwapHandItems.handSwapDelay;
 
 public class onLeave implements Listener {
@@ -46,7 +45,7 @@ public class onLeave implements Listener {
             }
             plugin.sqlQuery.updateValues(e.getPlayer());
 
-            if(leakCoords && enableShitlist && plugin.sqlQuery.isShitlisted(e.getPlayer())){
+            if(Config.instance.leakCoords && Config.instance.enableShitlist && plugin.sqlQuery.isShitlisted(e.getPlayer())){
                 Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "The coords of " + e.getPlayer().getDisplayName() + ChatColor.GREEN + " are " + stringUtils.getFormattedCoords(e.getPlayer().getLocation())),40);
             }
         }

@@ -12,14 +12,13 @@
 
 package com.egirlsnation.swissknife.systems.handlers.commandCooldown;
 
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class CooldownHandler {
 
@@ -54,22 +53,22 @@ public class CooldownHandler {
         int cooldown;
         switch(type){
             case ME:
-                cooldown = ME_COOLDOWN;
+                cooldown = Config.instance.ME_COOLDOWN;
                 break;
             case AFK:
-                cooldown = AFK_COOLDOWN;
+                cooldown = Config.instance.AFK_COOLDOWN;
                 break;
             case KILL:
-                cooldown = KILL_COOLDOWN;
+                cooldown = Config.instance.KILL_COOLDOWN;
                 break;
             case PING:
-                cooldown = PING_COOLDOWN;
+                cooldown = Config.instance.PING_COOLDOWN;
                 break;
             case PLAYTIME:
-                cooldown = PLAYTIME_COOLDOWN;
+                cooldown = Config.instance.PLAYTIME_COOLDOWN;
                 break;
             case REFRESHRANK:
-                cooldown = REFRESHRANK_COOLDOWN;
+                cooldown = Config.instance.REFRESHRANK_COOLDOWN;
                 break;
             default:
                 cooldown = 20;

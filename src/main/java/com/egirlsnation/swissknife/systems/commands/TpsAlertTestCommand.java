@@ -13,8 +13,9 @@
 package com.egirlsnation.swissknife.systems.commands;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.utils.ServerUtil;
 import com.egirlsnation.swissknife.systems.discord.DiscordHandler;
+import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.ServerUtil;
 import com.egirlsnation.swissknife.utils.player.RankUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,8 +27,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.List;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class TpsAlertTestCommand implements CommandExecutor {
 
@@ -48,12 +47,12 @@ public class TpsAlertTestCommand implements CommandExecutor {
         }
         List<Double> tps = serverUtil.getTPS();
         List<String> rankNames = null;
-        if (listOnlinePlayers) {
+        if (Config.instance.listOnlinePlayers) {
             rankNames = rankUtil.getOnlinePlayerRankList();
         }
         List<String> namesUnderPt = null;
-        if (listLowPtPlayers) {
-            namesUnderPt = rankUtil.getOnlinePlayerNamesUnderPlaytime(lowPtThreshold);
+        if (Config.instance.listLowPtPlayers) {
+            namesUnderPt = rankUtil.getOnlinePlayerNamesUnderPlaytime(Config.instance.lowPtThreshold);
         }
 
         List<String> finalRankNames = rankNames;

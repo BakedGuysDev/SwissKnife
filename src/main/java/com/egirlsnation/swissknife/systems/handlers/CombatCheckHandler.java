@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.handlers;
 
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -19,8 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.combatTimeout;
 
 public class CombatCheckHandler {
 
@@ -37,7 +36,7 @@ public class CombatCheckHandler {
         if(!combatMap.containsKey(playerUUID)) return false;
 
         long timeDifference = System.currentTimeMillis() - combatMap.get(playerUUID);
-        if(timeDifference >= combatTimeout){
+        if(timeDifference >= Config.instance.combatTimeout){
             combatMap.remove(playerUUID);
             return false;
         }else{
@@ -50,9 +49,9 @@ public class CombatCheckHandler {
         if(!combatMap.containsKey(playerUUID)) return 0;
 
         long timeDifference = System.currentTimeMillis() - combatMap.get(playerUUID);
-        if(timeDifference >= combatTimeout) return 0;
+        if(timeDifference >= Config.instance.combatTimeout) return 0;
 
-        return TimeUnit.MILLISECONDS.toSeconds(combatTimeout -timeDifference);
+        return TimeUnit.MILLISECONDS.toSeconds(Config.instance.combatTimeout -timeDifference);
     }
 
     public void removePlayer(Player player){

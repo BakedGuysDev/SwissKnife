@@ -14,23 +14,21 @@
 
 package com.egirlsnation.swissknife.listeners.player;
 
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.netherRoofHeight;
-import static com.egirlsnation.swissknife.SwissKnife.Config.preventPlayersOnNether;
-
 public class onPlayerTeleport implements Listener {
 
     @EventHandler
     public void PlayerTeleport(PlayerTeleportEvent e){
-        if(preventPlayersOnNether){
+        if(Config.instance.preventPlayersOnNether){
             Location l = e.getTo();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if(l.getBlockY() >= netherRoofHeight){
+            if(l.getBlockY() >= Config.instance.netherRoofHeight){
                 e.setCancelled(true);
             }
         }

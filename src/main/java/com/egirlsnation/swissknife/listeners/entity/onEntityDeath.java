@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.listeners.entity;
 
 import com.egirlsnation.swissknife.systems.handlers.customItems.AnniversaryItemHanlder;
 import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.ConsoleCommandSender;
@@ -24,8 +25,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.Random;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.anniversaryItems;
 
 public class onEntityDeath implements Listener {
 
@@ -44,31 +43,31 @@ public class onEntityDeath implements Listener {
             }break;
 
             case ZOMBIE:{
-                if(anniversaryItems){
+                if(Config.instance.anniversaryItems){
                     handleZombieDrops(e.getEntity(), e.getEntity().getKiller(), chance);
                 }
             }break;
 
             case SKELETON:{
-                if(anniversaryItems){
+                if(Config.instance.anniversaryItems){
                     handleSkeletonDrops(e.getEntity(), e.getEntity().getKiller(), chance);
                 }
             }break;
 
             case CREEPER:{
-                if(anniversaryItems){
+                if(Config.instance.anniversaryItems){
                     handleCreeperDrops(e.getEntity(), e.getEntity().getKiller(), chance);
                 }
             }break;
 
             case WITHER:{
-                if(anniversaryItems){
+                if(Config.instance.anniversaryItems){
                     handleWitherDrops(e.getEntity(), e.getEntity().getKiller(), chance);
                 }
             }break;
 
             case SPIDER:{
-                if(anniversaryItems){
+                if(Config.instance.anniversaryItems){
                     handleSpiderDrops(e.getEntity(), e.getEntity().getKiller(), chance);
                 }
             }break;
@@ -85,7 +84,7 @@ public class onEntityDeath implements Listener {
         if(chance > 3) return;
         entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteCrystal());
         if(player == null) return;
-        if(anniversaryItems){
+        if(Config.instance.anniversaryItems){
             broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Crystal");
         }
     }
@@ -133,7 +132,7 @@ public class onEntityDeath implements Listener {
         if(chance >= 3) return;
         entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getPopbobTotem());
         if(player == null) return;
-        if(anniversaryItems){
+        if(Config.instance.anniversaryItems){
             broadcastFoundMessage(player, "the " + ChatColor.RED + "Totem of Popbob");
         }
 
@@ -144,13 +143,13 @@ public class onEntityDeath implements Listener {
         if(chance > 3){
             entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteAxe());
             if(player == null) return;
-            if(anniversaryItems){
+            if(Config.instance.anniversaryItems){
                 broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Axe");
             }
         }else{
             entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteSword());
             if(player == null) return;
-            if(anniversaryItems){
+            if(Config.instance.anniversaryItems){
                 broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Sword");
             }
         }

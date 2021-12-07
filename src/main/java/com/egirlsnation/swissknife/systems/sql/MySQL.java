@@ -12,11 +12,11 @@
 
 package com.egirlsnation.swissknife.systems.sql;
 
+import com.egirlsnation.swissknife.utils.Config;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class MySQL {
 
@@ -28,7 +28,7 @@ public class MySQL {
 
     public void connect() throws ClassNotFoundException, SQLException{
         if(!isConnected()){
-            connection = DriverManager.getConnection("jdbc:mysql://" + databaseHost + ":" + databasePort + "/" + databaseName + "?useSSL=false", databaseUsername, databasePassword);
+            connection = DriverManager.getConnection("jdbc:mysql://" + Config.instance.databaseHost + ":" + Config.instance.databasePort + "/" + Config.instance.databaseName + "?useSSL=false", Config.instance.databaseUsername, Config.instance.databasePassword);
         }
     }
 

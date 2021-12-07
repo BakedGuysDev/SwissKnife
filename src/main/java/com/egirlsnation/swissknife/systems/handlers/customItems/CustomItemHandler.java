@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.systems.handlers.customItems;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.player.ExpUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -32,9 +33,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.hasteLevel;
-import static com.egirlsnation.swissknife.SwissKnife.Config.xpToDrain;
 
 public class CustomItemHandler {
 
@@ -272,7 +270,7 @@ public class CustomItemHandler {
                 @Override
                 public void run() {
 
-                    if(ExpUtil.getExp(player) < xpToDrain){
+                    if(ExpUtil.getExp(player) < Config.instance.xpToDrain){
                         player.setExp(0);
                         player.setLevel(0);
                         pickaxeTaskMap.remove(player.getUniqueId());
@@ -283,8 +281,8 @@ public class CustomItemHandler {
                         this.cancel();
                     }else{
                         if(isDraconitePickaxe(player.getInventory().getItemInMainHand())){
-                            ExpUtil.changeExp(player, -xpToDrain);
-                            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 20,hasteLevel));
+                            ExpUtil.changeExp(player, - Config.instance.xpToDrain);
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 20, Config.instance.hasteLevel));
                         }
                     }
                 }

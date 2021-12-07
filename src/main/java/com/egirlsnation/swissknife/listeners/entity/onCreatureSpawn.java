@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
+import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.EntityUtil;
 import com.egirlsnation.swissknife.utils.LocationUtil;
 import org.bukkit.ChatColor;
@@ -22,9 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
-import static com.egirlsnation.swissknife.SwissKnife.Config.preventWithersAtSpawn;
-import static com.egirlsnation.swissknife.SwissKnife.Config.spawnRadius;
-
 public class onCreatureSpawn implements Listener {
 
 
@@ -34,10 +32,10 @@ public class onCreatureSpawn implements Listener {
     private void EntitySpawn(CreatureSpawnEvent e){
 
         //Limit wither spawning at spawn
-        if(!preventWithersAtSpawn) return;
+        if(!Config.instance.preventWithersAtSpawn) return;
 
         if(e.getEntityType() == EntityType.WITHER){
-            if(radiusManager.isInRadius(e.getLocation().getX(), e.getLocation().getZ(), spawnRadius)){
+            if(radiusManager.isInRadius(e.getLocation().getX(), e.getLocation().getZ(), Config.instance.spawnRadius)){
                 e.setCancelled(true);
                 for(Entity entity : e.getEntity().getNearbyEntities(e.getLocation().getX(), e.getLocation().getY(), e.getLocation().getZ())){
                     if(entity instanceof Player){

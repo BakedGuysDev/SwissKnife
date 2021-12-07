@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.player;
 
+import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,8 +20,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 import java.util.HashMap;
-
-import static com.egirlsnation.swissknife.SwissKnife.Config.*;
 
 public class onSwapHandItems implements Listener {
 
@@ -30,31 +29,31 @@ public class onSwapHandItems implements Listener {
     private void SwapHandItems(PlayerSwapHandItemsEvent e){
         if(e.getOffHandItem() != null){
             if(e.getOffHandItem().getType().equals(Material.TOTEM_OF_UNDYING)){
-                if(e.getOffHandItem().getAmount() > maxTotemStack){
-                    e.getOffHandItem().setAmount(maxTotemStack);
+                if(e.getOffHandItem().getAmount() > Config.instance.maxTotemStack){
+                    e.getOffHandItem().setAmount(Config.instance.maxTotemStack);
                 }
             }
         }
 
         if(e.getMainHandItem() != null){
             if(e.getMainHandItem().getType().equals(Material.TOTEM_OF_UNDYING)){
-                if(e.getMainHandItem().getAmount() > maxTotemStack){
-                    e.getMainHandItem().setAmount(maxTotemStack);
+                if(e.getMainHandItem().getAmount() > Config.instance.maxTotemStack){
+                    e.getMainHandItem().setAmount(Config.instance.maxTotemStack);
                 }
             }
         }
 
-        if(handSwitchCrash){
+        if(Config.instance.handSwitchCrash){
             if(!handSwapDelay.containsKey(e.getPlayer())){
                 handSwapDelay.put(e.getPlayer(), 0L);
             }
             if(System.currentTimeMillis() < handSwapDelay.get(e.getPlayer())){
                 e.setCancelled(true);
-                if(kickOnHandSwitchCrash){
+                if(Config.instance.kickOnHandSwitchCrash){
                     e.getPlayer().kickPlayer("Lost connection to the server");
                 }
             }else{
-                handSwapDelay.put(e.getPlayer(), System.currentTimeMillis() + handSwitchDelay);
+                handSwapDelay.put(e.getPlayer(), System.currentTimeMillis() + Config.instance.handSwitchDelay);
             }
         }
 
