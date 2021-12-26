@@ -59,6 +59,7 @@ target/
 .idea/modules.xml
 .idea/*.iml
 .idea/modules
+.idea/libraries
 *.iml
 *.ipr
 

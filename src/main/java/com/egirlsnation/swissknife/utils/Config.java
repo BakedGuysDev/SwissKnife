@@ -16,6 +16,7 @@ import com.egirlsnation.swissknife.SwissKnife;
 import me.affanhaq.keeper.Keeper;
 import me.affanhaq.keeper.data.ConfigFile;
 import me.affanhaq.keeper.data.ConfigValue;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 
 import java.util.Arrays;
@@ -29,6 +30,8 @@ public class Config {
         instance = new Config();
         Keeper keeper = new Keeper(plugin).register(instance).load();
     }
+
+    public String prefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife" + ChatColor.GOLD + "]" + ChatColor.RESET;
 
     /*
      * Illegals config options

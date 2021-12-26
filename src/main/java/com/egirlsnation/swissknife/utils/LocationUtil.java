@@ -12,25 +12,15 @@
 
 package com.egirlsnation.swissknife.utils;
 
+import java.awt.*;
+
 public class LocationUtil {
 
-    public boolean isOutsideRadius(double LocX, double LocZ, int radius){
-        if (LocX < 0){
-            //Negative x
-            if (LocZ < 0) {
-                return !(LocX > -radius) || !(LocZ > -radius);
-            } else {
-                return !(LocX > -radius) || !(LocZ < radius);
-            }
-        } else if (LocZ < 0) {
-            //Negative z
-            return !(LocX < radius) || !(LocZ > -radius);
-        } else if (LocX > -1 && LocZ > -1) {
-            //Both positive
-            return !(LocX < radius) || !(LocZ < radius);
-        } else {
-            return true;
-        }
+    public boolean isInSpawnRadius(int x, int z, int radius){
+        Point p1 = new Point(0, 0);
+        Point p2 = new Point(x, z);
+
+        return p2.distance(p1) < radius;
     }
 
     public boolean isInRadius(double LocX, double LocZ, int radius){
