@@ -22,7 +22,7 @@ import java.util.List;
 
 public class EntityUtil {
 
-    public Integer countVehicles(Entity[] entities){
+    public static Integer countVehicles(Entity[] entities){
         int count = 0;
         for(Entity entity : entities){
             if(entity instanceof Vehicle){
@@ -32,7 +32,7 @@ public class EntityUtil {
         return count;
     }
 
-    public List<Entity> filterVehicles(Entity[] entities){
+    public static List<Entity> filterVehicles(Entity[] entities){
         List<Entity> vehicles = new ArrayList<>();
         for(Entity entity : entities){
             if(entity instanceof Vehicle && !entity.getPassengers().stream().anyMatch(e -> e instanceof Player)){
@@ -42,7 +42,7 @@ public class EntityUtil {
         return vehicles;
     }
 
-    public void removeExcessVehicles(List<Entity> vehicleList){
+    public static void removeExcessVehicles(List<Entity> vehicleList){
         if(vehicleList.isEmpty() || vehicleList.size() < Config.instance.vehicleLimitChunk){
             return;
         }
@@ -56,7 +56,7 @@ public class EntityUtil {
         }
     }
 
-    public int countEntities(EntityType entityType, Entity[] entities){
+    public static int countEntities(EntityType entityType, Entity[] entities){
         int count = 0;
         for(Entity entity : entities){
             if(entity.getType().equals(entityType)){

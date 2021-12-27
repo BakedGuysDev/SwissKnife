@@ -13,12 +13,13 @@
 package com.egirlsnation.swissknife.utils.player;
 
 import com.egirlsnation.swissknife.utils.SwissLogger;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class GamemodeUtil {
 
-    public void ensureFlyDisable(Player player){
+    public static void ensureFlyDisable(Player player){
         if(!player.hasPermission("swissknife.bypass.fly")){
             player.setFlying(false);
             player.setAllowFlight(false);
@@ -27,7 +28,7 @@ public class GamemodeUtil {
 
     public void removeClickedItem(Player player){
         if(player.hasPermission("swissknife.bypass.creative")) return;
-        if(player.getItemOnCursor() == null) return;
+        if(player.getItemOnCursor().getType().equals(Material.AIR)) return;
         ItemStack clickedItem = player.getItemOnCursor();
         if(clickedItem.getItemMeta() == null){
             SwissLogger.info(player.getCustomName() + " tried to bring a " + clickedItem.getType() + " out of creative. (Possibly illegal?)" );
@@ -35,9 +36,5 @@ public class GamemodeUtil {
             SwissLogger.info(player.getCustomName() + " tried to bring a " + clickedItem.getItemMeta().getDisplayName() + "( " + clickedItem.getType() + ") out of creative. (Possibly illegal?)" );
         }
         player.setItemOnCursor(null);
-    }
-
-    public void removeItemsFromCraftingSlots(Player player){
-
     }
 }
