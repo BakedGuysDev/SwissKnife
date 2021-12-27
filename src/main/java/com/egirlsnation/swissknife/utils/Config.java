@@ -25,11 +25,22 @@ import java.util.List;
 @ConfigFile("Config.instance.yml")
 public class Config {
     public static Config instance = null;
+    private static Keeper keeper = null;
 
     public static void init(SwissKnife plugin){
         instance = new Config();
-        Keeper keeper = new Keeper(plugin).register(instance).load();
+        keeper = new Keeper(plugin).register(instance).load();
     }
+
+    public static void save(){
+        try{
+            keeper.save();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    // Config values
 
     public String prefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife" + ChatColor.GOLD + "]" + ChatColor.RESET;
 
@@ -37,7 +48,7 @@ public class Config {
      * Illegals config options
      */
 
-    @ConfigValue("illegals.maxEnchant")
+    @ConfigValue("illegals.maxEnchant") // Done
     public int maxEnchantLevel = 100;
 
     @ConfigValue("illegals.checkLores")
@@ -46,7 +57,7 @@ public class Config {
     @ConfigValue("illegals.maxTotemStack")
     public int maxTotemStack = 2;
 
-    @ConfigValue("illegals.illegalBlockList")
+    @ConfigValue("illegals.illegalBlockList") // Done
     public List<String> illegalBlockList = Arrays.asList("BEDROCK", "END_PORTAL_FRAME", "BARRIER", "STRUCTURE_BLOCK", "STRUCTURE_VOID");
 
     @ConfigValue("illegals.enable1kPicks")

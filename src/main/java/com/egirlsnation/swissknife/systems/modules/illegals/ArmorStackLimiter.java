@@ -13,7 +13,9 @@
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
+import com.egirlsnation.swissknife.utils.ItemUtil;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,35 +25,32 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class IllegalEnchants extends Module {
-    public IllegalEnchants() {
-        super("illegal-enchants");
+public class ArmorStackLimiter extends Module {
+    public ArmorStackLimiter() {
+        super("armor-stack-limiter", "Limits how big can illegally stacked armor piece stacks can be");
     }
-
-    //TODO: Configurable max values for each enchant
-    //TODO: Logging
 
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
-        if(scanAndRemoveFromInv(e.getInventory()) && e.getPlayer() instanceof Player){
-            IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getPlayer());
+        if(scanAndTrimStacks(e.getInventory()) && e.getPlayer() instanceof Player){
+            IllegalItemsUtil.notifyPlayerAboutOSI((Player) e.getPlayer());
         }
     }
 
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e){
         if(e.getClickedInventory() == null) return;
-        if(scanAndRemoveFromInv(e.getInventory()) && e.getWhoClicked() instanceof Player){
-            IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getWhoClicked());
+        if(scanAndTrimStacks(e.getInventory()) && e.getWhoClicked() instanceof Player){
+            IllegalItemsUtil.notifyPlayerAboutOSI((Player) e.getWhoClicked());
         }
 
     }
 
-    private boolean scanAndRemoveFromInv(Inventory inv){
+    private boolean scanAndTrimStacks(Inventory inv){
         boolean found = false;
         for(ItemStack item : inv.getContents()){
-            if(IllegalItemsUtil.isOverEnchanted(item)){
-                item.setAmount(0);
+            if(ItemUtil.isArmorPiece(item) && item.getAmount() > Config.instance.maxArmorStack){
+                item.setAmount(Config.instance.maxArmorStack);
                 found = true;
             }
         }
@@ -62,15 +61,12 @@ public class IllegalEnchants extends Module {
     private void onPlayerPickup(EntityPickupItemEvent e){
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
-        if(IllegalItemsUtil.isOverEnchanted(e.getItem().getItemStack())){
-            e.getItem().remove();
-            e.setCancelled(true);
+        if(ItemUtil.isArmorPiece(e.getItem().getItemStack()) && e.getItem().getItemStack().getAmount() > Config.instance.maxArmorStack){
+            e.getItem().getItemStack().setAmount(Config.instance.maxArmorStack);
 
             if(e.getEntity() instanceof Player){
-                IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getEntity());
+                IllegalItemsUtil.notifyPlayerAboutOSI((Player) e.getEntity());
             }
         }
     }
-
-
 }

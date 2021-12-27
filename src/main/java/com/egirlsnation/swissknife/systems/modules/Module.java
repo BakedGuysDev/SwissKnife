@@ -18,10 +18,12 @@ public abstract class Module implements Listener {
 
 
     public final String name;
+    public final String description;
     //public final Category category;
 
-    public Module(String name){
+    public Module(String name, String description){
         this.name = name;
+        this.description = description;
     }
 
 }

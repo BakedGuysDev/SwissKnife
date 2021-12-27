@@ -25,8 +25,8 @@ public class IllegalItemsUtil {
 
     public static boolean isOverEnchanted(@Nullable ItemStack item){
         if(item == null) return false;
+        if(item.getItemMeta() == null) return false;
         ItemMeta meta = item.getItemMeta();
-        if(meta == null) return false;
         if(!meta.hasEnchants()) return false;
 
         Map<Enchantment, Integer> enchantMap = meta.getEnchants();
@@ -38,6 +38,25 @@ public class IllegalItemsUtil {
 
     public static void notifyPlayerAboutOEI(Player player){
         player.sendMessage(Config.instance.prefix + ChatColor.RED + "Over-enchanted item found. This incident will be reported");
+    }
+
+    public static boolean hasIllegalLore(@Nullable ItemStack item){
+        if(item == null) return false;
+        if(item.getItemMeta() == null) return false;
+        ItemMeta meta = item.getItemMeta();
+
+        if(!meta.hasLore()) return false;
+        if(meta.lore() == null) return false;
+
+        return meta.lore().stream().anyMatch(element -> Config.instance.illegalLoreList.contains(element));
+    }
+
+    public static void notifyPlayerAboutIllegal(Player player){
+        player.sendMessage(Config.instance.prefix + ChatColor.RED + "Illegal item found. This incident will be reported");
+    }
+
+    public static void notifyPlayerAboutOSI(Player player){
+        player.sendMessage(Config.instance.prefix + ChatColor.RED + "Overstacked item found. The stack has been trimmed");
     }
 
 }
