@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.utils;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -57,6 +58,19 @@ public class IllegalItemsUtil {
 
     public static void notifyPlayerAboutOSI(Player player){
         player.sendMessage(Config.instance.prefix + ChatColor.RED + "Overstacked item found. The stack has been trimmed");
+    }
+
+    public static boolean isSpawnEgg(ItemStack item){
+        if(item == null) return false;
+        return item.getType().toString().matches("[A-Z]*?_?[A-Z]*_SPAWN_EGG");
+    }
+
+    public static ItemStack getReplacementItem(){
+        ItemStack paper = new ItemStack(Material.PAPER);
+        ItemMeta meta = paper.getItemMeta();
+        meta.setDisplayName(ChatColor.RED + "I fucked ya mom");
+        paper.setItemMeta(meta);
+        return paper;
     }
 
 }

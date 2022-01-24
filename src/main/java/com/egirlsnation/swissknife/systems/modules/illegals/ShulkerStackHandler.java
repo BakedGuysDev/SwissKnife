@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShulkerStackHandler extends Module {
     public ShulkerStackHandler() {
-        super("stacks-in-shulkers", "Sets itemstacks to their max stack size when closing a shulker (might not be needed on some versions)");
+        super("stacks-in-shulkers", "Sets itemstacks to their max stack size when closing a shulker to prevent NBT bans and kicks (might not be needed on some versions)");
     }
 
     @EventHandler

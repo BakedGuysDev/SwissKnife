@@ -23,18 +23,15 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class IllegalEnchantHandler extends Module {
-    public IllegalEnchantHandler() {
-        super("illegal-enchants", "Removes items with way too high enchant levels");
+public class IllegalLores extends Module {
+    public IllegalLores() {
+        super("illegal-lores", "Removes items with certain lores");
     }
-
-    //TODO: Configurable max values for each enchant
-    //TODO: Logging
 
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
         if(scanAndRemoveFromInv(e.getInventory()) && e.getPlayer() instanceof Player){
-            IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getPlayer());
+            IllegalItemsUtil.notifyPlayerAboutIllegal((Player) e.getPlayer());
         }
     }
 
@@ -42,7 +39,7 @@ public class IllegalEnchantHandler extends Module {
     private void onInventoryClick(InventoryClickEvent e){
         if(e.getClickedInventory() == null) return;
         if(scanAndRemoveFromInv(e.getInventory()) && e.getWhoClicked() instanceof Player){
-            IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getWhoClicked());
+            IllegalItemsUtil.notifyPlayerAboutIllegal((Player) e.getWhoClicked());
         }
 
     }
@@ -50,7 +47,7 @@ public class IllegalEnchantHandler extends Module {
     private boolean scanAndRemoveFromInv(Inventory inv){
         boolean found = false;
         for(ItemStack item : inv.getContents()){
-            if(IllegalItemsUtil.isOverEnchanted(item)){
+            if(IllegalItemsUtil.hasIllegalLore(item)){
                 item.setAmount(0);
                 found = true;
             }
@@ -62,15 +59,13 @@ public class IllegalEnchantHandler extends Module {
     private void onPlayerPickup(EntityPickupItemEvent e){
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
-        if(IllegalItemsUtil.isOverEnchanted(e.getItem().getItemStack())){
+        if(IllegalItemsUtil.hasIllegalLore(e.getItem().getItemStack())){
             e.getItem().remove();
             e.setCancelled(true);
 
             if(e.getEntity() instanceof Player){
-                IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getEntity());
+                IllegalItemsUtil.notifyPlayerAboutIllegal((Player) e.getEntity());
             }
         }
     }
-
-
 }

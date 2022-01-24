@@ -143,7 +143,7 @@ public class IllegalItemHandler {
         return true;
     }
 
-    public boolean isSpawnEgg(ItemStack item){
+    public static boolean isSpawnEgg(ItemStack item){
         if(item == null) return false;
         return item.getType().toString().matches("[A-Z]*?_?[A-Z]*_SPAWN_EGG");
     }

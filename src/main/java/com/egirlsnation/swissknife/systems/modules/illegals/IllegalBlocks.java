@@ -18,8 +18,8 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-public class IllegalBlockHandler extends Module {
-    public IllegalBlockHandler() {
+public class IllegalBlocks extends Module {
+    public IllegalBlocks() {
         super("illegal-blocks", "Prevents players from placing illegal blocks");
     }
 

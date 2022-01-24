@@ -1,6 +1,6 @@
 /*
  * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
- * Copyright (c) 2021 Egirls Nation Development
+ * Copyright (c) 2022 Egirls Nation Development
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the MIT License.
@@ -10,42 +10,27 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.listeners.entity;
+package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.EntityEffect;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class onEntityDamage implements Listener {
+public class PetTotems extends Module {
+    public PetTotems() {
+        super("pet-totems", "Allows pets to use totems of their owner");
+    }
 
     @EventHandler
-    private void EntityDamage(EntityDamageEvent e) {
-        //Heads
-        if (e.getEntity() instanceof Item) {
-            Item item = (Item) e.getEntity();
-            if (!item.getItemStack().getType().equals(Material.PLAYER_HEAD)) return;
-            if (e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) || e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION)) {
-                e.setCancelled(true);
-                return;
-            }
-        }
-
-        if(Config.instance.fixDragonDeath && e.getEntity().getType().equals(EntityType.ENDER_DRAGON)){
-            if((e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION))){
-                LivingEntity dragon = (LivingEntity) e.getEntity();
-                if(dragon.getHealth() > Config.instance.dragonHealth) return;
-                e.setCancelled(true);
-            }
-        }
-
-        //Pet totems
+    public void onEntityDamage(EntityDamageEvent e){
         if(Config.instance.petsUseTotems){
             if (!(e.getEntity() instanceof Tameable)) return;
             Tameable pet = (Tameable) e.getEntity();
@@ -64,15 +49,12 @@ public class onEntityDamage implements Listener {
             pet.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 800, 1));
             pet.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 100, 2));
         }
-
-
     }
 
     public String getPetName(Tameable pet){
         if(pet.getCustomName() == null){
-           return pet.getName();
+            return pet.getName();
         }
         return pet.getCustomName();
     }
 }
-

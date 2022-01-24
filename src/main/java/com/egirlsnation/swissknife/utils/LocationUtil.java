@@ -16,9 +16,9 @@ import java.awt.*;
 
 public class LocationUtil {
 
-    public static boolean isInSpawnRadius(int x, int z, int radius){
+    public static boolean isInSpawnRadius(double x, double z, int radius){
         Point p1 = new Point(0, 0);
-        Point p2 = new Point(x, z);
+        Point p2 = new Point((int) x, (int) z);
 
         return p2.distance(p1) < radius;
     }

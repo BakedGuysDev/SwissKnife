@@ -35,7 +35,7 @@ public class WitherSpawnLimiter extends Module {
         if(!Config.instance.preventWithersAtSpawn) return;
 
         if(e.getEntityType() == EntityType.WITHER){
-            if(LocationUtil.isInSpawnRadius((int) e.getLocation().getX(), (int) e.getLocation().getZ(), Config.instance.spawnRadius)){
+            if(LocationUtil.isInSpawnRadius(e.getLocation().getX(),e.getLocation().getZ(), Config.instance.spawnRadius)){
                 e.setCancelled(true);
                 for(Entity entity : e.getEntity().getNearbyEntities(e.getLocation().getX(), e.getLocation().getY(), e.getLocation().getZ())){
                     if(entity instanceof Player){

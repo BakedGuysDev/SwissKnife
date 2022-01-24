@@ -64,7 +64,7 @@ public class KillCommand implements CommandExecutor {
             // Getting time left for this player for this command
             long timeLeft = System.currentTimeMillis() - cooldownHandler.getCommandInfo(player.getUniqueId(), killCommand).getCooldown();
 
-            if(player.hasPermission("swissknife.cooldown.bypass")){
+            if(player.hasPermission("swissknife.bypass.cooldown")){
                 healthUtil.killPlayer(player, swissKnife);
                 return true;
             }else if(TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= CooldownHandler.DEFAULT_COOLDOWN){

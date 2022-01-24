@@ -26,7 +26,7 @@ public class GamemodeUtil {
         }
     }
 
-    public void removeClickedItem(Player player){
+    public static void removeClickedItem(Player player){
         if(player.hasPermission("swissknife.bypass.creative")) return;
         if(player.getItemOnCursor().getType().equals(Material.AIR)) return;
         ItemStack clickedItem = player.getItemOnCursor();

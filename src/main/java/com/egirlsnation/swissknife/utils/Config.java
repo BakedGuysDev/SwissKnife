@@ -83,7 +83,7 @@ public class Config {
     public boolean limitCrystalPlacementSpeed = false;
 
     @ConfigValue("patches.msBetweenCrystals")
-    public int crystalDelay = 1000;
+    public int crystalDelay = 200;
 
     /*
      * Throwables speed limit config options

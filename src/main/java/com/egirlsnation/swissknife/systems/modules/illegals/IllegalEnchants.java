@@ -17,21 +17,25 @@ import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class IllegalLoreHandler extends Module {
-    public IllegalLoreHandler() {
-        super("illegal-lores", "Removes items with certain lores");
+public class IllegalEnchants extends Module {
+    public IllegalEnchants() {
+        super("illegal-enchants", "Removes items with way too high enchant levels");
     }
+
+    //TODO: Configurable max values for each enchant
+    //TODO: Logging
 
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
         if(scanAndRemoveFromInv(e.getInventory()) && e.getPlayer() instanceof Player){
-            IllegalItemsUtil.notifyPlayerAboutIllegal((Player) e.getPlayer());
+            IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getPlayer());
         }
     }
 
@@ -39,7 +43,7 @@ public class IllegalLoreHandler extends Module {
     private void onInventoryClick(InventoryClickEvent e){
         if(e.getClickedInventory() == null) return;
         if(scanAndRemoveFromInv(e.getInventory()) && e.getWhoClicked() instanceof Player){
-            IllegalItemsUtil.notifyPlayerAboutIllegal((Player) e.getWhoClicked());
+            IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getWhoClicked());
         }
 
     }
@@ -47,7 +51,7 @@ public class IllegalLoreHandler extends Module {
     private boolean scanAndRemoveFromInv(Inventory inv){
         boolean found = false;
         for(ItemStack item : inv.getContents()){
-            if(IllegalItemsUtil.hasIllegalLore(item)){
+            if(IllegalItemsUtil.isOverEnchanted(item)){
                 item.setAmount(0);
                 found = true;
             }
@@ -59,13 +63,23 @@ public class IllegalLoreHandler extends Module {
     private void onPlayerPickup(EntityPickupItemEvent e){
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
-        if(IllegalItemsUtil.hasIllegalLore(e.getItem().getItemStack())){
+        if(IllegalItemsUtil.isOverEnchanted(e.getItem().getItemStack())){
             e.getItem().remove();
             e.setCancelled(true);
 
             if(e.getEntity() instanceof Player){
-                IllegalItemsUtil.notifyPlayerAboutIllegal((Player) e.getEntity());
+                IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getEntity());
             }
         }
     }
+
+    //TODO: Config option to restrict dispense check only to armor
+    @EventHandler
+    private void onBlockDispenseEvent(BlockDispenseEvent e){
+        if(IllegalItemsUtil.isOverEnchanted(e.getItem())) {
+            e.setItem(IllegalItemsUtil.getReplacementItem());
+        }
+    }
+
+
 }

@@ -26,6 +26,7 @@ public class onProjectileLaunch implements Listener {
 
     private final Map<UUID, Long> throwablesMap = new HashMap<>();
 
+    //Nope
     public void ProjectileLaunch(ProjectileLaunchEvent e){
         if(!(e.getEntity().getShooter() instanceof Player)) return;
         if(e.getEntity() instanceof Snowball) return;
