@@ -17,12 +17,14 @@ package com.egirlsnation.swissknife.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import java.util.function.Supplier;
+
 public final class SwissLogger {
 
     private static final java.util.logging.Logger bukkitLogger = Bukkit.getLogger();
 
-    public static void info(String msg){
-        bukkitLogger.info(ChatColor.AQUA + "[SwissKnife] " + msg);
+    public static void info(String string){
+        bukkitLogger.info(ChatColor.AQUA + "[SwissKnife] " + string);
     }
 
     public static void warning(String string){
@@ -35,5 +37,21 @@ public final class SwissLogger {
 
     public static void debug(String string){
         bukkitLogger.info(ChatColor.LIGHT_PURPLE + "[SwissKnife | Debug] " + string);
+    }
+
+    public static void info(Supplier<String> msgSupplier){
+        bukkitLogger.info(ChatColor.AQUA + "[SwissKnife] " + msgSupplier);
+    }
+
+    public static void warning(Supplier<String> msgSupplier){
+        bukkitLogger.warning("[SwissKnife] " + msgSupplier);
+    }
+
+    public static void error(Supplier<String> msgSupplier){
+        bukkitLogger.severe("[SwissKnife] " + msgSupplier);
+    }
+
+    public static void debug(Supplier<String> msgSupplier){
+        bukkitLogger.info(ChatColor.LIGHT_PURPLE + "[SwissKnife | Debug] " + msgSupplier);
     }
 }

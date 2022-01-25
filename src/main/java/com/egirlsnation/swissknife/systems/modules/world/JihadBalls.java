@@ -31,7 +31,7 @@ public class JihadBalls extends Module {
             if (!LocationUtil.isInSpawnRadius(e.getEntity().getLocation().getX(), e.getEntity().getLocation().getZ(), Config.instance.jihadsRadius) && Config.instance.limitJihadRadius) {
                 return;
             }
-            e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), (float) Config.instance.jihadsPower, true);
+            e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), (float) Config.instance.jihadsPower, true, true, e.getEntity());
         }
     }
 }

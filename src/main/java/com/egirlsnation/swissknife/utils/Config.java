@@ -219,6 +219,9 @@ public class Config {
     @ConfigValue("combatCheck.timeout")
     public long combatTimeout = 20000;
 
+    @ConfigValue("combatCheck.elytraTimeout")
+    public long elytraTimeout = 5000;
+
     /*
      * Jihads config options
      */

@@ -34,7 +34,7 @@ public class StringUtil {
         }
     }
 
-    public String getFormattedCoords(Location loc){
+    public static String getFormattedCoords(Location loc){
         int x = (int) loc.getX();
         int y = (int) loc.getY();
         int z = (int) loc.getZ();
@@ -42,7 +42,7 @@ public class StringUtil {
         return "X: " + x + " Y: " + y + " Z: " + z;
     }
 
-    public String getCoordsPlaceholderFormatted(Player player){
+    public static String getCoordsPlaceholderFormatted(Player player){
 
         String res = ChatColor.translateAlternateColorCodes('&', Config.instance.coordsReplace.replaceAll("%player_world%", player.getWorld().getName())
                 .replaceAll("%player_x%", (int) player.getLocation().getX() + "")

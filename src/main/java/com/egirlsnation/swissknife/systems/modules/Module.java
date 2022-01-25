@@ -21,9 +21,21 @@ public abstract class Module implements Listener {
     public final String description;
     //public final Category category;
 
+    private boolean active;
+
     public Module(String name, String description){
         this.name = name;
         this.description = description;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void toggle(){
+        if(!active){
+            active = true;
+            Modules.addActive(this);
+        }
+    }
 }

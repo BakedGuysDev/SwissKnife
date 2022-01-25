@@ -26,12 +26,12 @@ public class CombatCheckHandler {
     private static final Map<UUID, Long> combatMap = new HashMap<>();
     private static final Map<UUID, BukkitTask> elytraDisableMap = new HashMap<>();
 
-    public void addToCombatMap(Player player){
+    public static void addToCombatMap(Player player){
         UUID playerUUID = player.getUniqueId();
         combatMap.put(playerUUID, System.currentTimeMillis());
     }
 
-    public boolean isInCombat(Player player){
+    public static boolean isInCombat(Player player){
         UUID playerUUID = player.getUniqueId();
         if(!combatMap.containsKey(playerUUID)) return false;
 
@@ -44,7 +44,7 @@ public class CombatCheckHandler {
         }
     }
 
-    public long getRemainingTime(Player player){
+    public static long getRemainingTime(Player player){
         UUID playerUUID = player.getUniqueId();
         if(!combatMap.containsKey(playerUUID)) return 0;
 
@@ -54,11 +54,11 @@ public class CombatCheckHandler {
         return TimeUnit.MILLISECONDS.toSeconds(Config.instance.combatTimeout -timeDifference);
     }
 
-    public void removePlayer(Player player){
+    public static void removePlayer(Player player){
         combatMap.remove(player.getUniqueId());
     }
 
-    public Map<UUID, BukkitTask> getElytraMap(){
+    public static Map<UUID, BukkitTask> getElytraMap(){
         return elytraDisableMap;
     }
 }

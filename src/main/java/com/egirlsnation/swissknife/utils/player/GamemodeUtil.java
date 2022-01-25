@@ -33,7 +33,7 @@ public class GamemodeUtil {
         if(clickedItem.getItemMeta() == null){
             SwissLogger.info(player.getCustomName() + " tried to bring a " + clickedItem.getType() + " out of creative. (Possibly illegal?)" );
         }else{
-            SwissLogger.info(player.getCustomName() + " tried to bring a " + clickedItem.getItemMeta().getDisplayName() + "( " + clickedItem.getType() + ") out of creative. (Possibly illegal?)" );
+            SwissLogger.info(player.getCustomName() + " tried to bring a " + clickedItem.getItemMeta().displayName() + "( " + clickedItem.getType() + ") out of creative. (Possibly illegal?)" );
         }
         player.setItemOnCursor(null);
     }
