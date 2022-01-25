@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.SwissLogger;
@@ -34,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CombatCheck extends Module {
     public CombatCheck() {
-        super("combat-check", "Combat check for various situations");
+        super(Categories.Player, "combat-check", "Combat check for various situations");
     }
 
     private static final Map<UUID, Long> combatMap = new HashMap<>();

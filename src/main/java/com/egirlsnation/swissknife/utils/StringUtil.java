@@ -12,9 +12,13 @@
 
 package com.egirlsnation.swissknife.utils;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class StringUtil {
 
@@ -53,5 +57,8 @@ public class StringUtil {
         return res;
     }
 
+    public static String nameToTitle(String name){
+        return Arrays.stream(name.split("-")).map(StringUtils::capitalize).collect(Collectors.joining(" "));
+    }
 
 }

@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.utils.player.GamemodeUtil;
@@ -30,7 +31,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class RestrictedCreativeAddon extends Module {
     public RestrictedCreativeAddon() {
-        super("restricted-creative-addon", "Additional checks for RestrictedCreative to make it safe-ish");
+        super(Categories.Player, "restricted-creative-addon", "Additional checks for RestrictedCreative to make it safe-ish");
     }
 
     @EventHandler
@@ -52,9 +53,8 @@ public class RestrictedCreativeAddon extends Module {
     private void onGamemodeSwitchEvent (PlayerGameModeChangeEvent e){
         Player player = e.getPlayer();
 
-        //TODO: Combat check
         if(e.getNewGameMode().equals(GameMode.CREATIVE)){
-            if(!player.hasPermission("swissknife.bypass.combat") && Modules.get(CombatCheck.class).isInCombat(player)){
+            if(!player.hasPermission("swissknife.bypass.combat") && Modules.get().get(CombatCheck.class).isInCombat(player)){
                 player.sendMessage(ChatColor.RED + "You cannot do that command in combat. Time remaining: " + CombatCheckHandler.getRemainingTime(player) + " seconds");
                 e.setCancelled(true);
             }

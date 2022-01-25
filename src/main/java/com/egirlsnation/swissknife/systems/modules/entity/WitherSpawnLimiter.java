@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.LocationUtil;
@@ -25,7 +26,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 public class WitherSpawnLimiter extends Module {
 
     public WitherSpawnLimiter() {
-        super("wither-spawn-limiter", "Limits spawning withers at spawn");
+        super(Categories.Entity,"wither-spawn-limiter", "Limits spawning withers at spawn");
     }
 
     @EventHandler

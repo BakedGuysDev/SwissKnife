@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.SwissLogger;
@@ -26,7 +27,7 @@ import org.bukkit.event.vehicle.VehicleExitEvent;
 
 public class NetherRoofDisabler extends Module {
     public NetherRoofDisabler() {
-        super("nether-roof-disabler", "Prevents players from going onto the nether roof");
+        super(Categories.Player, "nether-roof-disabler", "Prevents players from going onto the nether roof");
     }
 
     @EventHandler

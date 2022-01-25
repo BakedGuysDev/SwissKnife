@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.EntityUtil;
@@ -21,10 +22,9 @@ import org.bukkit.event.entity.ExpBottleEvent;
 
 public class XpBottleLimiter extends Module {
     public XpBottleLimiter() {
-        super("xp-bottle-limiter", "Limits how many xp bottles can be in a chunk");
+        super(Categories.Entity,"xp-bottle-limiter", "Limits how many xp bottles can be in a chunk");
     }
 
-    //TODO: Enhance, this shit sucks
 
     @EventHandler
     public void xpBottleListener(ExpBottleEvent e){

@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
@@ -26,7 +27,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public class ArmorStackLimiter extends Module {
     public ArmorStackLimiter() {
-        super("armor-stack-limiter", "Limits how big can illegally stacked armor piece stacks can be");
+        super(Categories.Illegals, "armor-stack-limiter", "Limits how big can illegally stacked armor piece stacks can be");
     }
 
     @EventHandler

@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.EntityUtil;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class VehicleLimiter extends Module {
     public VehicleLimiter() {
-        super("vehicle-limiter", "Limits how many vehicles can be in chunk");
+        super(Categories.Entity,"vehicle-limiter", "Limits how many vehicles can be in chunk");
     }
 
     @EventHandler

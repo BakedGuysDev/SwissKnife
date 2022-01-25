@@ -12,19 +12,22 @@
 
 package com.egirlsnation.swissknife.systems.modules;
 
+import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.event.Listener;
 
 public abstract class Module implements Listener {
 
-
+    public final Category category;
     public final String name;
+    public final String title;
     public final String description;
-    //public final Category category;
 
     private boolean active;
 
-    public Module(String name, String description){
+    public Module(Category category ,String name, String description){
+        this.category = category;
         this.name = name;
+        this.title = StringUtil.nameToTitle(name);
         this.description = description;
     }
 
@@ -35,7 +38,7 @@ public abstract class Module implements Listener {
     public void toggle(){
         if(!active){
             active = true;
-            Modules.addActive(this);
+            Modules.get().addActive(this);
         }
     }
 }

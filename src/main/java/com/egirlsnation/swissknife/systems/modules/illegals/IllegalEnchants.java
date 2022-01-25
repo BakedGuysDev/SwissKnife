@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
 import org.bukkit.entity.HumanEntity;
@@ -26,7 +27,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class IllegalEnchants extends Module {
     public IllegalEnchants() {
-        super("illegal-enchants", "Removes items with way too high enchant levels");
+        super(Categories.Illegals, "illegal-enchants", "Removes items with way too high enchant levels");
     }
 
     //TODO: Configurable max values for each enchant

@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.world;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.World;
@@ -21,7 +22,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 
 public class EndermenGrief extends Module {
     public EndermenGrief() {
-        super("endermen-grief", "Disables endermen picking up blocks in the end");
+        super(Categories.World, "endermen-grief", "Disables endermen picking up blocks in the end");
     }
 
     @EventHandler

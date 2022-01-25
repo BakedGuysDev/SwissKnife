@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.ChatColor;
@@ -26,7 +27,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class PetTotems extends Module {
     public PetTotems() {
-        super("pet-totems", "Allows pets to use totems of their owner");
+        super(Categories.Entity,"pet-totems", "Allows pets to use totems of their owner");
     }
 
     @EventHandler

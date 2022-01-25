@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.entity.EntityType;
@@ -21,7 +22,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class DragonSlayerAddon extends Module {
     public DragonSlayerAddon() {
-        super("dragonslayer-addon", "Implements some fixes for the dragonslayer plugin");
+        super(Categories.Entity,"dragonslayer-addon", "Implements some fixes for the dragonslayer plugin");
     }
 
     @EventHandler

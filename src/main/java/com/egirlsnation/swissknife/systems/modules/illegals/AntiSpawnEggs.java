@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
 import org.bukkit.event.EventHandler;
@@ -20,7 +21,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class AntiSpawnEggs extends Module {
     public AntiSpawnEggs() {
-        super("anti-spawn-eggs", "Prevents players from using spawn eggs");
+        super(Categories.Illegals,"anti-spawn-eggs", "Prevents players from using spawn eggs");
     }
 
     @EventHandler

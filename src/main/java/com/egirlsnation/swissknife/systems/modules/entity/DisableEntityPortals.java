@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.event.EventHandler;
@@ -19,7 +20,7 @@ import org.bukkit.event.entity.EntityPortalEvent;
 
 public class DisableEntityPortals extends Module {
     public DisableEntityPortals() {
-        super("disable-entity-portals", "Disables portals for certain entities");
+        super(Categories.Entity, "disable-entity-portals", "Disables portals for certain entities");
     }
 
     @EventHandler

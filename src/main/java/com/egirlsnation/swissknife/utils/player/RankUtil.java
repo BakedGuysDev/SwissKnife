@@ -25,10 +25,10 @@ import java.util.List;
 
 public class RankUtil {
 
-    private final UserUtils userUtils = new UserUtils();
-    private VotingPluginHook votingPluginHook = new VotingPluginHook();
+    private static final UserUtils userUtils = new UserUtils();
+    private static final VotingPluginHook votingPluginHook = new VotingPluginHook();
 
-    public void promoteIfEligible(@NotNull Player player){
+    public static void promoteIfEligible(@NotNull Player player){
 
         if(!Config.instance.ranksEnabled) return;
 
@@ -76,14 +76,14 @@ public class RankUtil {
         }
     }
 
-    public int getTicksFromHours(int hours){
+    public static int getTicksFromHours(int hours){
         int ticks = hours * 20;
         ticks = ticks * 60;
         ticks = ticks * 60;
         return ticks;
     }
 
-    public List<String> getOnlinePlayerRankList(){
+    public static List<String> getOnlinePlayerRankList(){
         List<String> playerRankList = new ArrayList<>();
         for(Player p : Bukkit.getOnlinePlayers()){
             playerRankList.add(p.getDisplayName());
@@ -91,7 +91,7 @@ public class RankUtil {
         return playerRankList;
     }
 
-    public List<String> getOnlinePlayerNamesUnderPlaytime(int playtimeHours){
+    public static List<String> getOnlinePlayerNamesUnderPlaytime(int playtimeHours){
         List<String> playernames = new ArrayList<>();
         for(Player p : Bukkit.getOnlinePlayers()){
             if(p.getStatistic(Statistic.PLAY_ONE_MINUTE) < getTicksFromHours(playtimeHours)){

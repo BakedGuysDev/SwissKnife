@@ -1,6 +1,6 @@
 /*
  * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
- * Copyright (c) 2021 Egirls Nation Development
+ * Copyright (c) 2022 Egirls Nation Development
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the MIT License.
@@ -10,8 +10,9 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.systems.modules.illegals;
+package com.egirlsnation.swissknife.systems.modules.misc;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.event.EventHandler;
@@ -21,7 +22,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShulkerStackHandler extends Module {
     public ShulkerStackHandler() {
-        super("stacks-in-shulkers", "Sets itemstacks to their max stack size when closing a shulker to prevent NBT bans and kicks (might not be needed on some versions)");
+        super(Categories.Misc, "stacks-in-shulkers", "Sets itemstacks to their max stack size when closing a shulker to prevent NBT bans and kicks (might not be needed on some versions)");
     }
 
     @EventHandler

@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
@@ -27,7 +28,7 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 public class TotemStackLimiter extends Module {
     public TotemStackLimiter() {
-        super("totem-stack-limiter", "Limits how big illegally stacked totem stacks can be");
+        super(Categories.Illegals, "totem-stack-limiter", "Limits how big illegally stacked totem stacks can be");
     }
 
     //TODO: Merge with ArmorStackLimiter when new config's done

@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.world;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.LocationUtil;
@@ -21,7 +22,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class JihadBalls extends Module {
     public JihadBalls() {
-        super("jihad-balls", "Makes snowballs explode");
+        super(Categories.World, "jihad-balls", "Makes snowballs explode");
     }
 
     @EventHandler

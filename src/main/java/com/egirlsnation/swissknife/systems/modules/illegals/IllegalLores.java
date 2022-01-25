@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
 import org.bukkit.entity.HumanEntity;
@@ -25,7 +26,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class IllegalLores extends Module {
     public IllegalLores() {
-        super("illegal-lores", "Removes items with certain lores");
+        super(Categories.Illegals, "illegal-lores", "Removes items with certain lores");
     }
 
     @EventHandler

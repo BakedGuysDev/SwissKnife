@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.misc;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.StringUtil;
@@ -21,7 +22,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatTweaks extends Module {
     public ChatTweaks() {
-        super("chat-tweaks", "Adds minor features to chat");
+        super(Categories.Misc, "chat-tweaks", "Adds minor features to chat");
     }
 
     @EventHandler

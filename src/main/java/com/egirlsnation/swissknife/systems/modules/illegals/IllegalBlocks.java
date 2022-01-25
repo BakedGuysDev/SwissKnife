@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.Material;
@@ -20,7 +21,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 public class IllegalBlocks extends Module {
     public IllegalBlocks() {
-        super("illegal-blocks", "Prevents players from placing illegal blocks");
+        super(Categories.Illegals, "illegal-blocks", "Prevents players from placing illegal blocks");
     }
 
     @EventHandler

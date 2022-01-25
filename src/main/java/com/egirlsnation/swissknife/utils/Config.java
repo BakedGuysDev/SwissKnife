@@ -22,6 +22,8 @@ import org.bukkit.entity.EntityType;
 import java.util.Arrays;
 import java.util.List;
 
+//TODO: Better config system to work integrate with the new codebase
+
 @ConfigFile("Config.instance.yml")
 public class Config {
     public static Config instance = null;

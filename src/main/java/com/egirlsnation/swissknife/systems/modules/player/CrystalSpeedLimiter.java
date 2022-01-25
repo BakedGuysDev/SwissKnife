@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
+import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.entity.EntityType;
@@ -27,7 +28,7 @@ import java.util.UUID;
 public class CrystalSpeedLimiter extends Module {
 
     public CrystalSpeedLimiter() {
-        super("crystal-speed-limiter", "Limits how many crystals can player break per second");
+        super(Categories.Player, "crystal-speed-limiter", "Limits how many crystals can player break per second");
     }
 
     private final static Map<UUID, Long> crystalMap = new HashMap<>();
