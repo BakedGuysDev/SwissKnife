@@ -35,6 +35,7 @@ public class CrystalSpeedLimiter extends Module {
 
     @EventHandler
     private void onPlayerDamageEntity(EntityDamageByEntityEvent e){
+        if(!isEnabled()) return;
         if(!e.getEntity().getType().equals(EntityType.ENDER_CRYSTAL)) return;
         if(!(e.getDamager() instanceof Player)) return;
         Player player = (Player) e.getDamager();
@@ -56,6 +57,7 @@ public class CrystalSpeedLimiter extends Module {
 
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent e){
+        if(!isEnabled()) return;
         crystalMap.remove(e.getPlayer().getUniqueId());
     }
 }

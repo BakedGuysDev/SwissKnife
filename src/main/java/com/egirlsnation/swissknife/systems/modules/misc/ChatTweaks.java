@@ -27,7 +27,7 @@ public class ChatTweaks extends Module {
 
     @EventHandler
     public void PlayerChat(AsyncPlayerChatEvent e){
-
+        if(!isEnabled()) return;
         if(Config.instance.greentext && e.getPlayer().hasPermission("swissknife.chat.greentext") && e.getMessage().charAt(0) == '>'){
             if(e.getPlayer().getName().equals("Lerbiq")){
                 e.setMessage(ChatColor.LIGHT_PURPLE + e.getMessage());

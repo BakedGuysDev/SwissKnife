@@ -32,6 +32,7 @@ public class NetherRoofDisabler extends Module {
 
     @EventHandler
     public void PlayerMove(PlayerMoveEvent e) {
+        if(!isEnabled()) return;
         if (Config.instance.preventPlayersOnNether) {
             Location l = e.getTo();
             if (!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
@@ -50,6 +51,7 @@ public class NetherRoofDisabler extends Module {
 
     @EventHandler
     public void PlayerTeleport(PlayerTeleportEvent e){
+        if(!isEnabled()) return;
         if(Config.instance.preventPlayersOnNether){
             Location l = e.getTo();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;

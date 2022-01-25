@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.utils.player;
 
+import com.egirlsnation.swissknife.systems.hooks.Hooks;
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.UserUtils;
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
 import com.egirlsnation.swissknife.utils.Config;
@@ -56,8 +57,8 @@ public class RankUtil {
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 100, 0);
         }
 
-        if(!votingPluginHook.isVotingPluginHookActive()) return;
-        if(pt >= getTicksFromHours(Config.instance.elderfagHours) && userUtils.getVotes(player) >= Config.instance.elderfagVotes && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
+        if(!Hooks.get().isActive(VotingPluginHook.class)) return;
+        if(pt >= getTicksFromHours(Config.instance.elderfagHours) && Hooks.get().get(VotingPluginHook.class).getVotes(player) >= Config.instance.elderfagVotes && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add legend";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.DARK_AQUA + "ElderFag" + ChatColor.GOLD + "!");
@@ -66,7 +67,7 @@ public class RankUtil {
             }
         }
 
-        if(pt >= getTicksFromHours(Config.instance.boomerfagHours) && userUtils.getVotes(player) >= Config.instance.boomerfagVotes && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Config.instance.boomerfagHours) && Hooks.get().get(VotingPluginHook.class).getVotes(player) >= Config.instance.boomerfagVotes && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add boomerfag";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.AQUA + "BoomerFag" + ChatColor.GOLD + "!");

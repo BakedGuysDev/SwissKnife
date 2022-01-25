@@ -27,7 +27,7 @@ public class ShulkerStackHandler extends Module {
 
     @EventHandler
     private void InventoryClose(InventoryCloseEvent e){
-
+        if(!isEnabled()) return;
         if(!Config.instance.unstackInShulks) return;
         if(e.getInventory().getType() != InventoryType.SHULKER_BOX) return;
 

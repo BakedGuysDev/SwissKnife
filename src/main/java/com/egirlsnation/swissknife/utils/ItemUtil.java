@@ -48,5 +48,18 @@ public class ItemUtil {
         return meta;
     }
 
+    public static boolean isAncientOrDraconite(@Nullable ItemStack item){
+        if(item == null) return false;
+        if(item.getItemMeta() == null) return false;
+        if(!item.getItemMeta().hasLore()) return false;
+        if(item.getItemMeta().getLore() == null) return false;
+        if(item.getItemMeta().getLore().contains("§6Ancient weapon")){
+            return true;
+        }
+        if(item.getItemMeta().getLore().contains("§cDraconite Weapon")){
+            return true;
+        }
+        return false;
+    }
 
 }

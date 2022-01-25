@@ -58,3 +58,5 @@ permissions:
     default: op
   swissknife.chat.greentext:
     description: Allows user to prefix message with > to change color of the message to green
+  swissknife.heads.nodrop:
+    description: Prevents player from dropping head

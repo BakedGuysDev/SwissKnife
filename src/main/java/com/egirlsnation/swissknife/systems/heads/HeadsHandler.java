@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.heads;
 
+import com.egirlsnation.swissknife.events.PlayerHeadDropEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -34,7 +35,6 @@ public class HeadsHandler {
     public ItemStack getHead(Player holder,Player killer){
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta= (SkullMeta) Bukkit.getItemFactory().getItemMeta(Material.PLAYER_HEAD);
-        assert meta != null;
         meta.setOwningPlayer(holder);
         meta.setDisplayName(ChatColor.RED + "Head of " + holder.getName());
         meta.setLore(getLore(holder, killer));

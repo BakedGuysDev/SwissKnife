@@ -27,6 +27,7 @@ public class EndermenGrief extends Module {
 
     @EventHandler
     private void EntityChangeBlock(EntityChangeBlockEvent e){
+        if(!isEnabled()) return;
         if(!Config.instance.disableEndermanGrief) return;
         if(!e.getEntity().getType().equals(EntityType.ENDERMAN)) return;
         if(!e.getBlock().getLocation().getWorld().getEnvironment().equals(World.Environment.THE_END)) return;

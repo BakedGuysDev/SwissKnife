@@ -28,6 +28,7 @@ public class BedrockFloorDisabler extends Module {
 
     @EventHandler
     public void PlayerMove(PlayerMoveEvent e) {
+        if(!isEnabled()) return;
         if (Config.instance.preventPlayerBellowOw || Config.instance.preventPlayerBellowNether) {
             if (e.getTo().getY() < 0) {
                 World.Environment env = e.getTo().getWorld().getEnvironment();
@@ -41,6 +42,7 @@ public class BedrockFloorDisabler extends Module {
     }
 
     private void handlePlayerBellowFloor(PlayerMoveEvent e) {
+        if(!isEnabled()) return;
         if (Config.instance.placeBedrockBellow) {
             e.getPlayer().getWorld().getBlockAt(e.getTo().getBlockX(), 0, e.getTo().getBlockZ()).setType(Material.BEDROCK);
         }

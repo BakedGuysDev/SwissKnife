@@ -38,7 +38,7 @@ public class Modules extends System<Module> {
     private final Map<Class<? extends Module>, Module> moduleInstances = new HashMap<>();
     private final Map<Category, List<Module>> groups = new HashMap<>();
 
-    private final List<Module> active = new ArrayList<>();
+    private final List<Module> enabled = new ArrayList<>();
 
 
     public Modules(){
@@ -85,20 +85,20 @@ public class Modules extends System<Module> {
 
     public boolean isActive(Class<? extends Module> klass) {
         Module module = get(klass);
-        return module != null && module.isActive();
+        return module != null && module.isEnabled();
     }
 
-    void addActive(Module module){
-        synchronized (active){
-            if(!active.contains(module)){
-                active.add(module);
+    void addEnabled(Module module){
+        synchronized (enabled){
+            if(!enabled.contains(module)){
+                enabled.add(module);
             }
         }
     }
 
-    void removeActive(Module module){
-        synchronized (active){
-            active.remove(module);
+    void removeEnabled(Module module){
+        synchronized (enabled){
+            enabled.remove(module);
         }
     }
 

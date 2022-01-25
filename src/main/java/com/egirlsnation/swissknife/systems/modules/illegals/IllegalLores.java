@@ -31,6 +31,7 @@ public class IllegalLores extends Module {
 
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
+        if(!isEnabled()) return;
         if(scanAndRemoveFromInv(e.getInventory()) && e.getPlayer() instanceof Player){
             IllegalItemsUtil.notifyPlayerAboutIllegal((Player) e.getPlayer());
         }
@@ -38,6 +39,7 @@ public class IllegalLores extends Module {
 
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e){
+        if(!isEnabled()) return;
         if(e.getClickedInventory() == null) return;
         if(scanAndRemoveFromInv(e.getInventory()) && e.getWhoClicked() instanceof Player){
             IllegalItemsUtil.notifyPlayerAboutIllegal((Player) e.getWhoClicked());
@@ -58,6 +60,7 @@ public class IllegalLores extends Module {
 
     @EventHandler
     private void onPlayerPickup(EntityPickupItemEvent e){
+        if(!isEnabled()) return;
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
         if(IllegalItemsUtil.hasIllegalLore(e.getItem().getItemStack())){

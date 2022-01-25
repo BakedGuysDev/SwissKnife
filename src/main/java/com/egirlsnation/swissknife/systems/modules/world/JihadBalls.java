@@ -27,6 +27,7 @@ public class JihadBalls extends Module {
 
     @EventHandler
     private void ProjectileHit(ProjectileHitEvent e) {
+        if(!isEnabled()) return;
         if (e.getEntityType().equals(EntityType.SNOWBALL)) {
             if (!Config.instance.jihadsEnabled) return;
             if (!LocationUtil.isInSpawnRadius(e.getEntity().getLocation().getX(), e.getEntity().getLocation().getZ(), Config.instance.jihadsRadius) && Config.instance.limitJihadRadius) {

@@ -25,6 +25,7 @@ public class DisableEntityPortals extends Module {
 
     @EventHandler
     private void onEntityPortalTeleportEvent(EntityPortalEvent e){
+        if(!isEnabled()) return;
         if(!Config.instance.disableEntityPortal) return;
         if(Config.instance.entityTypeDisablePortal.contains(e.getEntityType().name())) {
             e.setCancelled(true);

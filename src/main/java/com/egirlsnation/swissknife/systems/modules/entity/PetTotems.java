@@ -32,6 +32,7 @@ public class PetTotems extends Module {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent e){
+        if(!isEnabled()) return;
         if(Config.instance.petsUseTotems){
             if (!(e.getEntity() instanceof Tameable)) return;
             Tameable pet = (Tameable) e.getEntity();

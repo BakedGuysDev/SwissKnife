@@ -14,15 +14,18 @@ package com.egirlsnation.swissknife.systems.modules;
 
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
-public abstract class Module implements Listener {
+import java.util.Objects;
+
+public abstract class Module implements Listener, Comparable<Module> {
 
     public final Category category;
     public final String name;
     public final String title;
     public final String description;
 
-    private boolean active;
+    private boolean enabled;
 
     public Module(Category category ,String name, String description){
         this.category = category;
@@ -31,14 +34,41 @@ public abstract class Module implements Listener {
         this.description = description;
     }
 
-    public boolean isActive() {
-        return active;
+    public boolean isEnabled() {
+        return enabled;
     }
 
+    public void onActivate() {}
+    public void onDeactivate() {}
+
     public void toggle(){
-        if(!active){
-            active = true;
-            Modules.get().addActive(this);
+        if(!enabled){
+            enabled = true;
+            Modules.get().addEnabled(this);
+            onActivate();
+
+        }else{
+            enabled = false;
+            Modules.get().removeEnabled(this);
+            onDeactivate();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Module module = (Module) o;
+        return Objects.equals(name, module.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public int compareTo(@NotNull Module o) {
+        return name.compareTo(o.name);
     }
 }

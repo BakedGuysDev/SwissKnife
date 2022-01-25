@@ -45,6 +45,7 @@ public class CombatCheck extends Module {
 
     @EventHandler
     private void onEntityDamageByBlockEvent(EntityDamageByBlockEvent e){
+        if(!isEnabled()) return;
         if(!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
         EntityDamageEvent.DamageCause cause = e.getCause();
@@ -62,7 +63,7 @@ public class CombatCheck extends Module {
 
     @EventHandler
     private void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
-
+        if(!isEnabled()) return;
         if (!(e.getEntity() instanceof Player)) return;
         Player player = (Player) e.getEntity();
         EntityDamageEvent.DamageCause cause = e.getCause();
@@ -97,20 +98,21 @@ public class CombatCheck extends Module {
 
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent e){
+        if(!isEnabled()) return;
         combatMap.remove(e.getPlayer().getUniqueId());
         elytraMap.remove(e.getPlayer().getUniqueId());
     }
 
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent e){
+        if(!isEnabled()) return;
         combatMap.remove(e.getEntity().getUniqueId());
         elytraMap.remove(e.getEntity().getUniqueId());
     }
 
 
     public void addToCombatMap(Player player){
-        UUID playerUUID = player.getUniqueId();
-        combatMap.put(playerUUID, System.currentTimeMillis());
+        combatMap.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     public void addToElytraMap(Player player){

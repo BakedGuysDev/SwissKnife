@@ -28,6 +28,7 @@ public class XpBottleLimiter extends Module {
 
     @EventHandler
     public void xpBottleListener(ExpBottleEvent e){
+        if(!isEnabled()) return;
         if(!Config.instance.preventXpBottleLag) return;
         if(EntityUtil.countEntities(EntityType.THROWN_EXP_BOTTLE, e.getEntity().getLocation().getChunk().getEntities()) > Config.instance.xpBottleLimit){
             e.setCancelled(true);

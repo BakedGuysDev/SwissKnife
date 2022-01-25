@@ -31,7 +31,7 @@ public class WitherSpawnLimiter extends Module {
 
     @EventHandler
     private void EntitySpawn(CreatureSpawnEvent e){
-
+        if(!isEnabled()) return;
         //Limit wither spawning at spawn
         if(!Config.instance.preventWithersAtSpawn) return;
 

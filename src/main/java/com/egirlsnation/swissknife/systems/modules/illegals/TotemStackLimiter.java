@@ -35,6 +35,7 @@ public class TotemStackLimiter extends Module {
 
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
+        if(!isEnabled()) return;
         if(InventoryUtil.scanAndTrimTotemStack(e.getInventory()) && e.getPlayer() instanceof Player){
             IllegalItemsUtil.notifyPlayerAboutOSI((Player) e.getPlayer());
         }
@@ -42,6 +43,7 @@ public class TotemStackLimiter extends Module {
 
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e){
+        if(!isEnabled()) return;
         if(e.getClickedInventory() == null) return;
         if(InventoryUtil.scanAndTrimTotemStack(e.getInventory()) && e.getWhoClicked() instanceof Player){
             IllegalItemsUtil.notifyPlayerAboutOSI((Player) e.getWhoClicked());
@@ -53,6 +55,7 @@ public class TotemStackLimiter extends Module {
 
     @EventHandler
     private void onPlayerPickup(EntityPickupItemEvent e){
+        if(!isEnabled()) return;
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
         if(e.getItem().getItemStack().getType().equals(Material.TOTEM_OF_UNDYING) && e.getItem().getItemStack().getAmount() > Config.instance.maxTotemStack){
@@ -66,6 +69,7 @@ public class TotemStackLimiter extends Module {
 
     @EventHandler
     private void SwapHandItems(PlayerSwapHandItemsEvent e) {
+        if(!isEnabled()) return;
         if (e.getOffHandItem() != null) {
             if (e.getOffHandItem().getType().equals(Material.TOTEM_OF_UNDYING)) {
                 if (e.getOffHandItem().getAmount() > Config.instance.maxTotemStack) {

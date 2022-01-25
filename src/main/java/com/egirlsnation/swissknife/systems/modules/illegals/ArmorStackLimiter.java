@@ -32,6 +32,7 @@ public class ArmorStackLimiter extends Module {
 
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
+        if(!isEnabled()) return;
         if(InventoryUtil.scanAndTrimArmorStacks(e.getInventory()) && e.getPlayer() instanceof Player){
             IllegalItemsUtil.notifyPlayerAboutOSI((Player) e.getPlayer());
         }
@@ -39,6 +40,7 @@ public class ArmorStackLimiter extends Module {
 
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e){
+        if(!isEnabled()) return;
         if(e.getClickedInventory() == null) return;
         if(InventoryUtil.scanAndTrimArmorStacks(e.getInventory()) && e.getWhoClicked() instanceof Player){
             IllegalItemsUtil.notifyPlayerAboutOSI((Player) e.getWhoClicked());
@@ -48,6 +50,7 @@ public class ArmorStackLimiter extends Module {
 
     @EventHandler
     private void onPlayerPickup(EntityPickupItemEvent e){
+        if(!isEnabled()) return;
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
         if(ItemUtil.isArmorPiece(e.getItem().getItemStack()) && e.getItem().getItemStack().getAmount() > Config.instance.maxArmorStack){

@@ -35,6 +35,7 @@ public class IllegalEnchants extends Module {
 
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
+        if(!isEnabled()) return;
         if(scanAndRemoveFromInv(e.getInventory()) && e.getPlayer() instanceof Player){
             IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getPlayer());
         }
@@ -42,6 +43,7 @@ public class IllegalEnchants extends Module {
 
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e){
+        if(!isEnabled()) return;
         if(e.getClickedInventory() == null) return;
         if(scanAndRemoveFromInv(e.getInventory()) && e.getWhoClicked() instanceof Player){
             IllegalItemsUtil.notifyPlayerAboutOEI((Player) e.getWhoClicked());
@@ -62,6 +64,7 @@ public class IllegalEnchants extends Module {
 
     @EventHandler
     private void onPlayerPickup(EntityPickupItemEvent e){
+        if(!isEnabled()) return;
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
         if(IllegalItemsUtil.isOverEnchanted(e.getItem().getItemStack())){
@@ -77,6 +80,7 @@ public class IllegalEnchants extends Module {
     //TODO: Config option to restrict dispense check only to armor
     @EventHandler
     private void onBlockDispenseEvent(BlockDispenseEvent e){
+        if(!isEnabled()) return;
         if(IllegalItemsUtil.isOverEnchanted(e.getItem())) {
             e.setItem(IllegalItemsUtil.getReplacementItem());
         }

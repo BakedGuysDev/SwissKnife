@@ -26,6 +26,7 @@ public class IllegalBlocks extends Module {
 
     @EventHandler
     private void onBlockPlace(BlockPlaceEvent e){
+        if(!isEnabled()) return;
         Config.instance.illegalBlockList.forEach(block -> {
             if(e.getBlock().getType().equals(Material.getMaterial(block))){
                 //TODO: Check if it allows a bypass with spoofing a different block being held

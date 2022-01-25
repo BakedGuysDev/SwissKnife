@@ -51,6 +51,7 @@ public class RestrictedCreativeAddon extends Module {
 
     @EventHandler
     private void onGamemodeSwitchEvent (PlayerGameModeChangeEvent e){
+        if(!isEnabled()) return;
         Player player = e.getPlayer();
 
         if(e.getNewGameMode().equals(GameMode.CREATIVE)){

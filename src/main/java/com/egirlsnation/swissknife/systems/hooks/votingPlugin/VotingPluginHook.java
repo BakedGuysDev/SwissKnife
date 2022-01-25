@@ -12,19 +12,60 @@
 
 package com.egirlsnation.swissknife.systems.hooks.votingPlugin;
 
-public class VotingPluginHook {
+import com.bencodez.votingplugin.user.UserManager;
+import com.egirlsnation.swissknife.systems.hooks.Hook;
+import com.egirlsnation.swissknife.utils.SwissLogger;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.event.server.PluginEnableEvent;
 
-    private UserUtils userUtils = new UserUtils();
+public class VotingPluginHook extends Hook {
 
-    public void initVotingPluginHook(){
-        userUtils.setUserManager();
+    public VotingPluginHook() {
+        super("voting-plugin-hook", "VotingPlugin");
     }
 
-    public void removeVotingPluginHook(){
-        userUtils.removeUserManager();
+    private static UserManager userManager = null;
+
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    private void onEnable(PluginEnableEvent e){
+        if(e.getPlugin().getName().equals(pluginName)){
+            if(isActive()) return;
+            SwissLogger.info("Enabling VotingPlugin hook.");
+            //Enable hook
+        }
     }
 
-    public boolean isVotingPluginHookActive(){
-        return userUtils.getUserManager() != null;
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    private void onDisable(PluginDisableEvent e){
+        if(e.getPlugin().getName().equals(pluginName)){
+            if(!isActive()) return;
+            SwissLogger.info("Disabling VotingPlugin hook.");
+            //Disable hook
+        }
     }
+
+    public UserManager getUserManager() {
+        return userManager;
+    }
+
+
+    public double getVotes(Player player){
+        return userManager.getVotingPluginUser(player).getPoints();
+    }
+
+    private void initHook(){
+        userManager = UserManager.getInstance();
+        setActive(true);
+    }
+
+    private void removeHook(){
+        userManager = null;
+        setActive(false);
+    }
+
+
 }

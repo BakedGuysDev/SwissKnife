@@ -12,29 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.hooks.votingPlugin;
 
-import com.bencodez.votingplugin.user.UserManager;
-import com.bencodez.votingplugin.user.VotingPluginUser;
-import org.bukkit.entity.Player;
-
 public class UserUtils {
 
-    private static UserManager userManager = null;
 
-    public void setUserManager(){
-        userManager = UserManager.getInstance();
-    }
-
-    public void removeUserManager(){
-        userManager = null;
-    }
-
-    public UserManager getUserManager() {
-        return userManager;
-    }
-
-
-    public double getVotes(Player player){
-        VotingPluginUser votingUser = userManager.getVotingPluginUser(player);
-        return votingUser.getPoints();
-    }
 }

@@ -27,6 +27,7 @@ public class DragonSlayerAddon extends Module {
 
     @EventHandler
     private void onEntityDamage(EntityDamageEvent e){
+        if(!isEnabled()) return;
         if(Config.instance.fixDragonDeath && e.getEntity().getType().equals(EntityType.ENDER_DRAGON)){
             if((e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION))){
                 LivingEntity dragon = (LivingEntity) e.getEntity();

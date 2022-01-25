@@ -31,7 +31,7 @@ public class VehicleLimiter extends Module {
 
     @EventHandler
     public void VehicleCreate(VehicleCreateEvent e){
-
+        if(!isEnabled()) return;
         //Limits the number of vehicles in chunk
         if(Config.instance.limitVehicles){
             if(EntityUtil.countVehicles(e.getVehicle().getLocation().getChunk().getEntities()) > Config.instance.vehicleLimitChunk){
@@ -42,6 +42,7 @@ public class VehicleLimiter extends Module {
 
     @EventHandler
     public void VehicleCollision(VehicleEntityCollisionEvent e){
+        if(!isEnabled()) return;
         //Limits the number of vehicles in chunk
         if(Config.instance.limitVehicles){
             List<Entity> vehicles = EntityUtil.filterVehicles(e.getVehicle().getLocation().getChunk().getEntities());

@@ -26,6 +26,7 @@ public class AntiSpawnEggs extends Module {
 
     @EventHandler
     private void onBlockDispenseEvent(BlockDispenseEvent e){
+        if(!isEnabled()) return;
         if(IllegalItemsUtil.isSpawnEgg(e.getItem())){
             e.setItem(IllegalItemsUtil.getReplacementItem());
         }
@@ -33,7 +34,7 @@ public class AntiSpawnEggs extends Module {
 
     @EventHandler
     private void onPlayerInteractEvent(PlayerInteractEvent e) {
-
+        if(!isEnabled()) return;
         if (e.getClickedBlock() != null && IllegalItemsUtil.isSpawnEgg(e.getItem())) {
             IllegalItemsUtil.notifyPlayerAboutIllegal(e.getPlayer());
             e.getItem().setAmount(0);
