@@ -21,7 +21,7 @@ import com.egirlsnation.swissknife.listeners.inventory.onInventoryClose;
 import com.egirlsnation.swissknife.listeners.inventory.onInventoryOpen;
 import com.egirlsnation.swissknife.listeners.player.*;
 import com.egirlsnation.swissknife.systems.commands.*;
-import com.egirlsnation.swissknife.systems.discord.DiscordHandler;
+import com.egirlsnation.swissknife.utils.DiscordUtil;
 import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
@@ -52,7 +52,7 @@ public class SwissKnife extends JavaPlugin {
     public SqlQuery sqlQuery;
 
     private final PingUtil pingUtil = new PingUtil();
-    private final DiscordHandler discordHandler = new DiscordHandler();
+    private final DiscordUtil discordUtil = new DiscordUtil();
     private final ServerUtil serverUtil = new ServerUtil();
     private final RankUtil rankUtil = new RankUtil();
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
@@ -65,12 +65,12 @@ public class SwissKnife extends JavaPlugin {
 
         if (!Config.instance.webhookURL.isBlank()) {
             if (Bukkit.getServer().getTPS().length == 3) {
-                discordHandler.setWebhookURL(Config.instance.webhookURL);
-                discordHandler.setTpsArrSize(3);
+                discordUtil.setWebhookURL(Config.instance.webhookURL);
+                discordUtil.setTpsArrSize(3);
                 initTPSnotifyTask();
             } else if (Bukkit.getServer().getTPS().length == 4) {
-                discordHandler.setWebhookURL(Config.instance.webhookURL);
-                discordHandler.setTpsArrSize(4);
+                discordUtil.setWebhookURL(Config.instance.webhookURL);
+                discordUtil.setTpsArrSize(4);
                 initTPSnotifyTask();
             } else {
                 SwissLogger.warning("You're running server software that's modifiying TPS results that's not supported by this plugin.\nTPS Notifications won't be sent.\nSupported server software for this feature is Spigot, PaperMC, Tuinity, Airplane, Purpur and Pufferfish");
@@ -190,6 +190,7 @@ public class SwissKnife extends JavaPlugin {
     }
 
     private void initPluginHooks(){
+        //TODO: Startup hooks init
         if(pluginManager.getPlugin("VotingPlugin") != null){
             if(pluginManager.getPlugin("VotingPlugin").isEnabled()){
                 if(votingPluginHook.isVotingPluginHookActive()) return;
@@ -202,7 +203,7 @@ public class SwissKnife extends JavaPlugin {
     private void initTPSnotifyTask() {
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             List<Double> tps = serverUtil.getTPS();
-            if (discordHandler.shouldPostAlert(tps)) {
+            if (discordUtil.shouldPostAlert(tps)) {
                 List<String> rankNames = null;
                 if(Config.instance.listOnlinePlayers){
                     rankNames = rankUtil.getOnlinePlayerRankList();
@@ -218,7 +219,7 @@ public class SwissKnife extends JavaPlugin {
                 int maxSlots = Bukkit.getServer().getMaxPlayers();
                 Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
                     try {
-                        discordHandler.postDiscordTPSNotif(tps, playercount, maxSlots, finalRankNames, finalNamesUnderPt);
+                        discordUtil.postDiscordTPSNotif(tps, playercount, maxSlots, finalRankNames, finalNamesUnderPt);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

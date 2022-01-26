@@ -1,6 +1,6 @@
 /*
  * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
- * Copyright (c) 2021 Egirls Nation Development
+ * Copyright (c) 2022 Egirls Nation Development
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the MIT License.
@@ -10,9 +10,9 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.systems.discord;
+package com.egirlsnation.swissknife.utils;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.systems.modules.misc.discord.DiscordWebhook;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class DiscordHandler {
+public class DiscordUtil {
 
     private static int tpsArrSize;
 

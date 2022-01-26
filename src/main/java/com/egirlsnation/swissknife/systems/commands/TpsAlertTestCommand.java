@@ -13,7 +13,7 @@
 package com.egirlsnation.swissknife.systems.commands;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.systems.discord.DiscordHandler;
+import com.egirlsnation.swissknife.utils.DiscordUtil;
 import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.ServerUtil;
 import com.egirlsnation.swissknife.utils.player.RankUtil;
@@ -37,7 +37,7 @@ public class TpsAlertTestCommand implements CommandExecutor {
     }
 
     private final ServerUtil serverUtil = new ServerUtil();
-    private final DiscordHandler discordHandler = new DiscordHandler();
+    private final DiscordUtil discordUtil = new DiscordUtil();
     private final RankUtil rankUtil = new RankUtil();
 
     @Override
@@ -61,7 +61,7 @@ public class TpsAlertTestCommand implements CommandExecutor {
         int maxSlots = Bukkit.getServer().getMaxPlayers();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
-                discordHandler.postDiscordTPSNotif(tps, playercount, maxSlots, finalRankNames, finalNamesUnderPt);
+                discordUtil.postDiscordTPSNotif(tps, playercount, maxSlots, finalRankNames, finalNamesUnderPt);
                 Bukkit.getLogger().info("Webhook posted successfully.");
             } catch (IOException e) {
                 e.printStackTrace();
