@@ -12,22 +12,35 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.settings.Setting;
+import com.egirlsnation.swissknife.settings.SettingGroup;
+import com.egirlsnation.swissknife.settings.StringListSetting;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPortalEvent;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class DisableEntityPortals extends Module {
     public DisableEntityPortals() {
         super(Categories.Entity, "disable-entity-portals", "Disables portals for certain entities");
     }
 
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<List<String>> entities = sgGeneral.add(new StringListSetting.Builder()
+            .name("entities")
+            .description("Entities to not allow to teleport with portals")
+            .defaultValue(Arrays.asList("bee","end_crystal"))
+            .build()
+    );
+
     @EventHandler
     private void onEntityPortalTeleportEvent(EntityPortalEvent e){
         if(!isEnabled()) return;
-        if(!Config.instance.disableEntityPortal) return;
-        if(Config.instance.entityTypeDisablePortal.contains(e.getEntityType().name())) {
+        if(entities.get().contains(e.getEntityType().name())) {
             e.setCancelled(true);
         }
     }

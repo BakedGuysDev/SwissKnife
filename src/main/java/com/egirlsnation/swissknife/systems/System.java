@@ -39,7 +39,6 @@ public abstract class System<T>{
         if(file == null) return;
 
         try{
-            writeToConfig();
             file.save();
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,6 +52,7 @@ public abstract class System<T>{
         try{
             if(file.exists()){
                 file.loadWithComments();
+                readFromConfig();
             }else{
                 SwissLogger.info(StringUtils.capitalize(getName()) +" config doesn't exist. Creating default one.");
                 writeToConfig();

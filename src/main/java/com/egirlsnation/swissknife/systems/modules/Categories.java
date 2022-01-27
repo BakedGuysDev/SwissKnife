@@ -16,20 +16,21 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class Categories {
-    public static final Category Entity = new Category("Entity", new ItemStack(Material.ZOMBIE_HEAD));
-    public static final Category Illegals = new Category("Illegals", new ItemStack(Material.BEDROCK));
-    public static final Category Player = new Category("Player", new ItemStack(Material.PLAYER_HEAD));
-    public static final Category World = new Category("World", new ItemStack(Material.GRASS_BLOCK));
-    public static final Category Misc = new Category("Misc", new ItemStack(Material.POPPY));
-    public static final Category EgirlsNation = new Category("EgirlsNation", new ItemStack(Material.BLAZE_POWDER));
+    public static final Category Entity = new Category("entity", new ItemStack(Material.ZOMBIE_HEAD));
+    public static final Category Illegals = new Category("illegals", new ItemStack(Material.BEDROCK));
+    public static final Category Player = new Category("player", new ItemStack(Material.PLAYER_HEAD));
+    public static final Category World = new Category("world", new ItemStack(Material.GRASS_BLOCK));
+    public static final Category Misc = new Category("misc", new ItemStack(Material.POPPY));
+    public static final Category EgirlsNation = new Category("egirls-nation", new ItemStack(Material.BLAZE_POWDER));
 
     public static boolean REGISTERING;
 
     public static void init(){
         REGISTERING = true;
 
-        Modules.registerCategory(Entity);
+        //Note to self: Registration order decides config order because yes
         Modules.registerCategory(Illegals);
+        Modules.registerCategory(Entity);
         Modules.registerCategory(Player);
         Modules.registerCategory(World);
         Modules.registerCategory(Misc);

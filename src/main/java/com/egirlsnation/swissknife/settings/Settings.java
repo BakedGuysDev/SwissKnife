@@ -16,25 +16,53 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Settings implements Iterable<Setting<Object>> {
-    final List<Setting<Object>> settings = new ArrayList<>(1);
+public class Settings implements Iterable<SettingGroup> {
+    private SettingGroup defaultGroup;
+    public final List<SettingGroup> groups = new ArrayList<>(1);
 
-    public Setting<Object> get(String name){
-        for(Setting<Object> setting : this) {
-            if(setting.name.equalsIgnoreCase(name)) return setting;
+    public void onActivated() {
+        for (SettingGroup group : groups) {
+            for (Setting<?> setting : group) {
+                setting.onActivated();
+            }
+        }
+    }
+
+    public Setting<?> get(String name) {
+        for (SettingGroup sg : this) {
+            for (Setting<?> setting : sg) {
+                if (name.equalsIgnoreCase(setting.name)) return setting;
+            }
         }
 
         return null;
     }
 
-    public Setting<Object> add(Setting<Object> setting){
-        settings.add(setting);
-        return setting;
+    public SettingGroup getGroup(String name) {
+        for (SettingGroup sg : this) {
+            if (sg.name.equals(name)) return sg;
+        }
+
+        return null;
     }
 
+    public int sizeGroups() {
+        return groups.size();
+    }
+
+    public SettingGroup getDefaultGroup() {
+        if (defaultGroup == null) defaultGroup = createGroup("general");
+        return defaultGroup;
+    }
+
+    public SettingGroup createGroup(String name) {
+        SettingGroup group = new SettingGroup(name);
+        groups.add(group);
+        return group;
+    }
 
     @Override
-    public Iterator<Setting<Object>> iterator() {
-        return settings.iterator();
+    public Iterator<SettingGroup> iterator() {
+        return groups.iterator();
     }
 }
