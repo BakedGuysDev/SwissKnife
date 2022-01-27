@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.systems.modules;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.systems.System;
 import com.egirlsnation.swissknife.systems.Systems;
 import com.egirlsnation.swissknife.systems.modules.egirls.Ranks;
@@ -27,7 +28,10 @@ import com.egirlsnation.swissknife.systems.modules.player.RestrictedCreativeAddo
 import com.egirlsnation.swissknife.systems.modules.world.EndermenGrief;
 import com.egirlsnation.swissknife.systems.modules.world.JihadBalls;
 import org.bukkit.Bukkit;
+import org.simpleyaml.configuration.ConfigurationSection;
+import org.simpleyaml.configuration.comments.CommentType;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Modules extends System<Module> {
@@ -138,5 +142,42 @@ public class Modules extends System<Module> {
 
     private void initEgirls(){
         add(new Ranks());
+    }
+
+    @Override
+    public void writeToConfig(){
+        for(Module module : modules){
+            ConfigurationSection section = getFile().createSection(module.name);
+            getFile().setComment(module.name, module.description, CommentType.SIDE);
+            section.set("enabled", module.isEnabled());
+            for(Setting<?> setting : module.settings){
+                section.set("settings." + setting.name, setting.get());
+                getFile().setComment(module.name + ".settings." + setting.name, setting.description, CommentType.SIDE);
+            }
+        }
+        try {
+            getFile().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void readFromConfig(){
+        for(Module module : modules){
+            ConfigurationSection section = getFile().getConfigurationSection(module.name);
+            boolean enabled = section.getBoolean("enabled");
+            if(enabled && !module.isEnabled()){
+                module.toggle();
+            }
+            for(Setting<Object> setting : module.settings){
+                setting.set(section.get("settings." + setting.name));
+            }
+        }
+        try {
+            getFile().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

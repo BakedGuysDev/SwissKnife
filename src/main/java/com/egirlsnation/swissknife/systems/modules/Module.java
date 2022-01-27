@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules;
 
+import com.egirlsnation.swissknife.settings.Settings;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +26,9 @@ public abstract class Module implements Listener, Comparable<Module> {
     public final String title;
     public final String description;
 
-    private boolean enabled;
+    public final Settings settings = new Settings();
+
+    private boolean enabled = false;
 
     public Module(Category category ,String name, String description){
         this.category = category;
@@ -38,21 +41,22 @@ public abstract class Module implements Listener, Comparable<Module> {
         return enabled;
     }
 
-    public void onActivate() {}
-    public void onDeactivate() {}
+    public void onEnable() {}
+    public void onDisable() {}
 
     public void toggle(){
         if(!enabled){
             enabled = true;
             Modules.get().addEnabled(this);
-            onActivate();
+            onEnable();
 
         }else{
             enabled = false;
             Modules.get().removeEnabled(this);
-            onDeactivate();
+            onDisable();
         }
     }
+
 
     @Override
     public boolean equals(Object o) {

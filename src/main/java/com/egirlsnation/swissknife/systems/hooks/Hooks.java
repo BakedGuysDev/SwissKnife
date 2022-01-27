@@ -15,8 +15,11 @@ package com.egirlsnation.swissknife.systems.hooks;
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.System;
 import com.egirlsnation.swissknife.systems.Systems;
+import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
 import org.bukkit.Bukkit;
+import org.simpleyaml.configuration.ConfigurationSection;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Hooks extends System<Hook> {
@@ -37,7 +40,37 @@ public class Hooks extends System<Hook> {
 
     @Override
     public void init(){
+        add(new VotingPluginHook());
+    }
 
+    @Override
+    public void writeToConfig() {
+        for(Hook hook : hooks){
+            ConfigurationSection section = getFile().createSection(hook.name);
+            section.set("enabled", hook.isEnabled());
+        }
+        try {
+            getFile().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void readFromConfig() {
+        for(Hook hook : hooks){
+            ConfigurationSection section = getFile().createSection(hook.name);
+            boolean enabled = section.getBoolean("enabled");
+
+            if(enabled && !hook.isEnabled()){
+                hook.toggle();
+            }
+        }
+        try {
+            getFile().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void sortModules(){

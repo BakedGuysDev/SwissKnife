@@ -20,7 +20,10 @@ import com.egirlsnation.swissknife.listeners.inventory.onInventoryClick;
 import com.egirlsnation.swissknife.listeners.inventory.onInventoryClose;
 import com.egirlsnation.swissknife.listeners.inventory.onInventoryOpen;
 import com.egirlsnation.swissknife.listeners.player.*;
+import com.egirlsnation.swissknife.systems.Systems;
 import com.egirlsnation.swissknife.systems.commands.*;
+import com.egirlsnation.swissknife.systems.modules.Categories;
+import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.utils.DiscordUtil;
 import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
@@ -46,6 +49,9 @@ import java.util.Objects;
 
 public class SwissKnife extends JavaPlugin {
 
+    public static SwissKnife INSTANCE;
+
+
     private final PluginManager pluginManager = Bukkit.getPluginManager();
 
     public MySQL SQL;
@@ -60,6 +66,21 @@ public class SwissKnife extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        if(INSTANCE == null){
+            INSTANCE = this;
+        }
+
+        SwissLogger.info("Initializing SwissKnife");
+
+        Categories.init();
+
+        Systems.init();
+
+        Modules.get().sortModules();
+
+        Systems.load();
+
+        /*
         SwissLogger.info("Loading config handler.");
         Config.init(this);
 
@@ -85,15 +106,19 @@ public class SwissKnife extends JavaPlugin {
 
         initPluginHooks();
         initSQL();
+         */
     }
 
     @Override
     public void onDisable() {
+        /*
         if(SQL != null) {
             if (SQL.isConnected()) {
                 SQL.disconnect();
             }
         }
+        */
+        Systems.save();
         getLogger().info(ChatColor.GREEN + "Swiss Knife plugin disabled.");
     }
 
@@ -189,6 +214,7 @@ public class SwissKnife extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> pingUtil.uploadPingMap(pingUtil.getAllPings(), SQL, sqlQuery), 6000, 12000);
     }
 
+    /*
     private void initPluginHooks(){
         //TODO: Startup hooks init
         if(pluginManager.getPlugin("VotingPlugin") != null){
@@ -199,6 +225,7 @@ public class SwissKnife extends JavaPlugin {
             }
         }
     }
+     */
 
     private void initTPSnotifyTask() {
         Bukkit.getScheduler().runTaskTimer(this, () -> {

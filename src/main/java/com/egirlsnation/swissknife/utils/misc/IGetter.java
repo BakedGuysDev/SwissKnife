@@ -12,6 +12,6 @@
 
 package com.egirlsnation.swissknife.utils.misc;
 
-public interface IGetter<T> {
-    T get();
+public interface IGetter<Object>{
+    Object get();
 }

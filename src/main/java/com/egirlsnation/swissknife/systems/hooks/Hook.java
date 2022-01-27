@@ -13,20 +13,21 @@
 package com.egirlsnation.swissknife.systems.hooks;
 
 import com.egirlsnation.swissknife.utils.StringUtil;
+import com.egirlsnation.swissknife.utils.SwissLogger;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-//TODO: Hook system
 public abstract class Hook implements Listener, Comparable<Hook> {
 
     public final String name;
     public final String title;
     public final String pluginName;
 
-    private boolean enabled;
-    private boolean active;
+    private boolean enabled = false;
+    private boolean active = false;
 
     public Hook(String name, String pluginName){
         this.name = name;
@@ -40,15 +41,27 @@ public abstract class Hook implements Listener, Comparable<Hook> {
     public void onActivate() {}
     public void onDeactivate() {}
 
+    public void init(){
+        if(Bukkit.getPluginManager().getPlugin(pluginName) == null) return;
+
+        if(Bukkit.getPluginManager().getPlugin(pluginName).isEnabled()){
+            if(active) return;
+            initHook();
+            SwissLogger.info(pluginName + "hook activated.");
+        }
+    }
+
     public void toggle(){
         if(!enabled){
             enabled = true;
             Hooks.get().addEnabled(this);
+            init();
             onActivate();
 
         }else{
             enabled = false;
             Hooks.get().removeEnabled(this);
+            removeHook();
             onDeactivate();
         }
     }
@@ -82,4 +95,8 @@ public abstract class Hook implements Listener, Comparable<Hook> {
     public int compareTo(@NotNull Hook o) {
         return name.compareTo(o.name);
     }
+
+    protected abstract void initHook();
+
+    protected abstract void removeHook();
 }

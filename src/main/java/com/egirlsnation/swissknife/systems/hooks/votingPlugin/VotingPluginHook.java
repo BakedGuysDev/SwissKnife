@@ -27,24 +27,29 @@ public class VotingPluginHook extends Hook {
         super("voting-plugin-hook", "VotingPlugin");
     }
 
+    //TODO: Error when missing votingplugin because of missing imports
     private static UserManager userManager = null;
 
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onEnable(PluginEnableEvent e){
+        if(!isEnabled()) return;
+
         if(e.getPlugin().getName().equals(pluginName)){
             if(isActive()) return;
             SwissLogger.info("Enabling VotingPlugin hook.");
-            //Enable hook
+            initHook();
         }
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onDisable(PluginDisableEvent e){
+        if(!isEnabled()) return;
+
         if(e.getPlugin().getName().equals(pluginName)){
             if(!isActive()) return;
             SwissLogger.info("Disabling VotingPlugin hook.");
-            //Disable hook
+            removeHook();
         }
     }
 
@@ -54,15 +59,18 @@ public class VotingPluginHook extends Hook {
 
 
     public double getVotes(Player player){
+        if(!isActive()) return 0;
         return userManager.getVotingPluginUser(player).getPoints();
     }
 
-    private void initHook(){
+    @Override
+    protected void initHook(){
         userManager = UserManager.getInstance();
         setActive(true);
     }
 
-    private void removeHook(){
+    @Override
+    protected void removeHook(){
         userManager = null;
         setActive(false);
     }

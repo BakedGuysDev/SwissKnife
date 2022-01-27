@@ -13,7 +13,6 @@
 package com.egirlsnation.swissknife.utils.player;
 
 import com.egirlsnation.swissknife.systems.hooks.Hooks;
-import com.egirlsnation.swissknife.systems.hooks.votingPlugin.UserUtils;
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
 import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.*;
@@ -26,7 +25,6 @@ import java.util.List;
 
 public class RankUtil {
 
-    private static final UserUtils userUtils = new UserUtils();
     private static final VotingPluginHook votingPluginHook = new VotingPluginHook();
 
     public static void promoteIfEligible(@NotNull Player player){

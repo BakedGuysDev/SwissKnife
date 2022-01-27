@@ -18,18 +18,18 @@ import com.egirlsnation.swissknife.utils.misc.IGetter;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public abstract class Setting<T> implements IGetter<T> {
+public abstract class Setting<Object> implements IGetter<Object> {
     public final String name, title, description;
 
-    protected final T defaultValue;
-    protected T value;
+    protected final Object defaultValue;
+    protected Object value;
 
-    private final Consumer<T> onChanged;
-    public final Consumer<Setting<T>> onModuleActivated;
+    private final Consumer<Object> onChanged;
+    public final Consumer<Setting<Object>> onModuleActivated;
 
     public Module module;
 
-    public Setting(String name, String description, T defaultValue, Consumer<T> onChanged, Consumer<Setting<T>> onModuleActivated){
+    public Setting(String name, String description, Object defaultValue, Consumer<Object> onChanged, Consumer<Setting<Object>> onModuleActivated){
         this.name = name;
         this.title = StringUtil.nameToTitle(name);
         this.description = description;
@@ -39,12 +39,11 @@ public abstract class Setting<T> implements IGetter<T> {
         this.onModuleActivated = onModuleActivated;
     }
 
-    @Override
-    public T get(){
+    public Object get(){
         return value;
     }
 
-    public boolean set(T value){
+    public boolean set(Object value){
         if(!isValueValid(value)) return false;
         this.value = value;
         changed();
@@ -60,12 +59,12 @@ public abstract class Setting<T> implements IGetter<T> {
         reset(true);
     }
 
-    public T getDefaultValue(){
+    public Object getDefaultValue(){
         return defaultValue;
     }
 
     public boolean parse(String str){
-        T newValue = parseImpl(str);
+        Object newValue = parseImpl(str);
 
         if(newValue != null){
             if(isValueValid(newValue)){
@@ -85,22 +84,15 @@ public abstract class Setting<T> implements IGetter<T> {
         if(onModuleActivated != null) onModuleActivated.accept(this);
     }
 
-    protected abstract  T parseImpl(String str);
+    protected abstract  Object parseImpl(String str);
 
-    protected abstract boolean isValueValid(T value);
+    protected abstract boolean isValueValid(Object value);
 
     @Override
     public String toString() {
         return value.toString();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Setting<?> setting = (Setting<?>) o;
-        return Objects.equals(name, setting.name);
-    }
 
     @Override
     public int hashCode() {
