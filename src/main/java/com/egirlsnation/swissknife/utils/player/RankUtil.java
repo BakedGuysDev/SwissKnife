@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.utils.player;
 
 import com.egirlsnation.swissknife.systems.hooks.Hooks;
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
+import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VpUserManager;
 import com.egirlsnation.swissknife.utils.Config;
 import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
@@ -56,7 +57,7 @@ public class RankUtil {
         }
 
         if(!Hooks.get().isActive(VotingPluginHook.class)) return;
-        if(pt >= getTicksFromHours(Config.instance.elderfagHours) && Hooks.get().get(VotingPluginHook.class).getVotes(player) >= Config.instance.elderfagVotes && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Config.instance.elderfagHours) && VpUserManager.getVotes(player) >= Config.instance.elderfagVotes && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add legend";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.DARK_AQUA + "ElderFag" + ChatColor.GOLD + "!");
@@ -65,7 +66,7 @@ public class RankUtil {
             }
         }
 
-        if(pt >= getTicksFromHours(Config.instance.boomerfagHours) && Hooks.get().get(VotingPluginHook.class).getVotes(player) >= Config.instance.boomerfagVotes && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Config.instance.boomerfagHours) && VpUserManager.getVotes(player) >= Config.instance.boomerfagVotes && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add boomerfag";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.AQUA + "BoomerFag" + ChatColor.GOLD + "!");

@@ -12,8 +12,6 @@
 
 package com.egirlsnation.swissknife.systems.modules.egirls;
 
-import com.egirlsnation.swissknife.systems.hooks.Hooks;
-import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.player.RankUtil;
@@ -29,7 +27,6 @@ public class Ranks extends Module {
     private void onJoin(PlayerJoinEvent e){
         if(!isEnabled()) return;
         if(!e.getPlayer().hasPlayedBefore()) return;
-        Hooks.get().get(VotingPluginHook.class).getVotes(e.getPlayer());
         RankUtil.promoteIfEligible(e.getPlayer());
     }
 }

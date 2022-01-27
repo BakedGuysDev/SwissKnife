@@ -12,10 +12,8 @@
 
 package com.egirlsnation.swissknife.systems.hooks.votingPlugin;
 
-import com.bencodez.votingplugin.user.UserManager;
 import com.egirlsnation.swissknife.systems.hooks.Hook;
 import com.egirlsnation.swissknife.utils.SwissLogger;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -26,10 +24,6 @@ public class VotingPluginHook extends Hook {
     public VotingPluginHook() {
         super("voting-plugin-hook", "VotingPlugin");
     }
-
-    //TODO: Error when missing votingplugin because of missing imports
-    private static UserManager userManager = null;
-
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onEnable(PluginEnableEvent e){
@@ -53,25 +47,15 @@ public class VotingPluginHook extends Hook {
         }
     }
 
-    public UserManager getUserManager() {
-        return userManager;
-    }
-
-
-    public double getVotes(Player player){
-        if(!isActive()) return 0;
-        return userManager.getVotingPluginUser(player).getPoints();
-    }
-
     @Override
     protected void initHook(){
-        userManager = UserManager.getInstance();
+        VpUserManager.initUserManager();
         setActive(true);
     }
 
     @Override
     protected void removeHook(){
-        userManager = null;
+        VpUserManager.removeUserManager();
         setActive(false);
     }
 
