@@ -14,7 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
 import com.egirlsnation.swissknife.utils.InventoryUtil;
 import org.bukkit.Material;
@@ -30,8 +30,6 @@ public class TotemStackLimiter extends Module {
     public TotemStackLimiter() {
         super(Categories.Illegals, "totem-stack-limiter", "Limits how big illegally stacked totem stacks can be");
     }
-
-    //TODO: Merge with ArmorStackLimiter when new config's done
 
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
@@ -58,8 +56,8 @@ public class TotemStackLimiter extends Module {
         if(!isEnabled()) return;
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
-        if(e.getItem().getItemStack().getType().equals(Material.TOTEM_OF_UNDYING) && e.getItem().getItemStack().getAmount() > Config.instance.maxTotemStack){
-            e.getItem().getItemStack().setAmount(Config.instance.maxTotemStack);
+        if(e.getItem().getItemStack().getType().equals(Material.TOTEM_OF_UNDYING) && e.getItem().getItemStack().getAmount() > OldConfig.instance.maxTotemStack){
+            e.getItem().getItemStack().setAmount(OldConfig.instance.maxTotemStack);
 
             if(e.getEntity() instanceof Player){
                 IllegalItemsUtil.notifyPlayerAboutOSI((Player) e.getEntity());
@@ -72,16 +70,16 @@ public class TotemStackLimiter extends Module {
         if(!isEnabled()) return;
         if (e.getOffHandItem() != null) {
             if (e.getOffHandItem().getType().equals(Material.TOTEM_OF_UNDYING)) {
-                if (e.getOffHandItem().getAmount() > Config.instance.maxTotemStack) {
-                    e.getOffHandItem().setAmount(Config.instance.maxTotemStack);
+                if (e.getOffHandItem().getAmount() > OldConfig.instance.maxTotemStack) {
+                    e.getOffHandItem().setAmount(OldConfig.instance.maxTotemStack);
                 }
             }
         }
 
         if (e.getMainHandItem() != null) {
             if (e.getMainHandItem().getType().equals(Material.TOTEM_OF_UNDYING)) {
-                if (e.getMainHandItem().getAmount() > Config.instance.maxTotemStack) {
-                    e.getMainHandItem().setAmount(Config.instance.maxTotemStack);
+                if (e.getMainHandItem().getAmount() > OldConfig.instance.maxTotemStack) {
+                    e.getMainHandItem().setAmount(OldConfig.instance.maxTotemStack);
                 }
             }
         }

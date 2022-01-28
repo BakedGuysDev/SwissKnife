@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.LocationUtil;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -26,11 +26,11 @@ public class onProjectileHit implements Listener {
     @EventHandler
     private void ProjectileHit(ProjectileHitEvent e) {
         if (e.getEntityType().equals(EntityType.SNOWBALL)){
-            if(!Config.instance.jihadsEnabled) return;
-            if (!radiusManager.isInRadius(e.getEntity().getLocation().getX(), e.getEntity().getLocation().getZ(), Config.instance.jihadsRadius) && Config.instance.limitJihadRadius) {
+            if(!OldConfig.instance.jihadsEnabled) return;
+            if (!radiusManager.isInRadius(e.getEntity().getLocation().getX(), e.getEntity().getLocation().getZ(), OldConfig.instance.jihadsRadius) && OldConfig.instance.limitJihadRadius) {
                 return;
             }
-            e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), (float) Config.instance.jihadsPower, true);
+            e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), (float) OldConfig.instance.jihadsPower, true);
             return;
         }
         if(e.getEntityType().equals(EntityType.DRAGON_FIREBALL)){

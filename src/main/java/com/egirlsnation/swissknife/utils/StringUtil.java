@@ -48,7 +48,7 @@ public class StringUtil {
 
     public static String getCoordsPlaceholderFormatted(Player player){
 
-        String res = ChatColor.translateAlternateColorCodes('&', Config.instance.coordsReplace.replaceAll("%player_world%", player.getWorld().getName())
+        String res = ChatColor.translateAlternateColorCodes('&', OldConfig.instance.coordsReplace.replaceAll("%player_world%", player.getWorld().getName())
                 .replaceAll("%player_x%", (int) player.getLocation().getX() + "")
                 .replaceAll("%player_y%", (int) player.getLocation().getY() + "")
                 .replaceAll("%player_z%", (int) player.getLocation().getZ() + "")

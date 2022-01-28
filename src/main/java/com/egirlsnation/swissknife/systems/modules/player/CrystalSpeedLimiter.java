@@ -14,7 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.player;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,13 +40,13 @@ public class CrystalSpeedLimiter extends Module {
         if(!(e.getDamager() instanceof Player)) return;
         Player player = (Player) e.getDamager();
 
-        if(Config.instance.limitCrystalPlacementSpeed){
+        if(OldConfig.instance.limitCrystalPlacementSpeed){
             UUID uuid = player.getUniqueId();
             if(!crystalMap.containsKey(uuid)){
                 crystalMap.put(uuid, System.currentTimeMillis());
             }else{
                 long timeLeft = System.currentTimeMillis() - crystalMap.get(uuid);
-                if(timeLeft < Config.instance.crystalDelay){
+                if(timeLeft < OldConfig.instance.crystalDelay){
                     e.setCancelled(true);
                 }else{
                     crystalMap.put(uuid, System.currentTimeMillis());

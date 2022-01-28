@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.handlers;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -36,7 +36,7 @@ public class CombatCheckHandler {
         if(!combatMap.containsKey(playerUUID)) return false;
 
         long timeDifference = System.currentTimeMillis() - combatMap.get(playerUUID);
-        if(timeDifference >= Config.instance.combatTimeout){
+        if(timeDifference >= OldConfig.instance.combatTimeout){
             combatMap.remove(playerUUID);
             return false;
         }else{
@@ -49,9 +49,9 @@ public class CombatCheckHandler {
         if(!combatMap.containsKey(playerUUID)) return 0;
 
         long timeDifference = System.currentTimeMillis() - combatMap.get(playerUUID);
-        if(timeDifference >= Config.instance.combatTimeout) return 0;
+        if(timeDifference >= OldConfig.instance.combatTimeout) return 0;
 
-        return TimeUnit.MILLISECONDS.toSeconds(Config.instance.combatTimeout -timeDifference);
+        return TimeUnit.MILLISECONDS.toSeconds(OldConfig.instance.combatTimeout -timeDifference);
     }
 
     public static void removePlayer(Player player){

@@ -14,7 +14,7 @@ package com.egirlsnation.swissknife.systems.commands;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.utils.DiscordUtil;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.ServerUtil;
 import com.egirlsnation.swissknife.utils.player.RankUtil;
 import org.bukkit.Bukkit;
@@ -47,12 +47,12 @@ public class TpsAlertTestCommand implements CommandExecutor {
         }
         List<Double> tps = serverUtil.getTPS();
         List<String> rankNames = null;
-        if (Config.instance.listOnlinePlayers) {
+        if (OldConfig.instance.listOnlinePlayers) {
             rankNames = rankUtil.getOnlinePlayerRankList();
         }
         List<String> namesUnderPt = null;
-        if (Config.instance.listLowPtPlayers) {
-            namesUnderPt = rankUtil.getOnlinePlayerNamesUnderPlaytime(Config.instance.lowPtThreshold);
+        if (OldConfig.instance.listLowPtPlayers) {
+            namesUnderPt = rankUtil.getOnlinePlayerNamesUnderPlaytime(OldConfig.instance.lowPtThreshold);
         }
 
         List<String> finalRankNames = rankNames;

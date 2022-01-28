@@ -16,7 +16,7 @@ import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.api.IllegalItemHandler;
 import com.egirlsnation.swissknife.events.PlayerPlaceCrystalEvent;
 import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -78,7 +78,7 @@ public class onPlayerInteract implements Listener {
         }
 
         if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){
-            if(customItemHandler.isDraconitePickaxe(e.getItem()) && Config.instance.enablePickaxe) {
+            if(customItemHandler.isDraconitePickaxe(e.getItem()) && OldConfig.instance.enablePickaxe) {
                 if (customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())) {
                     return;
                 }
@@ -95,13 +95,13 @@ public class onPlayerInteract implements Listener {
         if(e.getClickedBlock().getType().equals(Material.OBSIDIAN) || e.getClickedBlock().getType().equals(Material.BEDROCK) || e.getClickedBlock().getType().equals(Material.CRYING_OBSIDIAN)){
             if(e.getMaterial().equals(Material.END_CRYSTAL)){
 
-                if(Config.instance.limitCrystalPlacementSpeed){
+                if(OldConfig.instance.limitCrystalPlacementSpeed){
                     UUID uuid = e.getPlayer().getUniqueId();
                     if(!crystalMap.containsKey(uuid)){
                         crystalMap.put(uuid, System.currentTimeMillis());
                     }else{
                         long timeLeft = System.currentTimeMillis() - crystalMap.get(uuid);
-                        if(timeLeft < Config.instance.crystalDelay){
+                        if(timeLeft < OldConfig.instance.crystalDelay){
                             e.setCancelled(true);
                             return;
                         }else{

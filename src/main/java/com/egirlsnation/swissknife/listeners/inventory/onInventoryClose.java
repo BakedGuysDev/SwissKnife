@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.inventory;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -24,7 +24,7 @@ public class onInventoryClose implements Listener {
     @EventHandler
     private void InventoryClose(InventoryCloseEvent e){
 
-        if(!Config.instance.unstackInShulks) return;
+        if(!OldConfig.instance.unstackInShulks) return;
         if(e.getInventory().getType() != InventoryType.SHULKER_BOX) return;
 
         for(ItemStack item : e.getInventory().getContents()){

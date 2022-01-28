@@ -12,30 +12,60 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.settings.BoolSetting;
+import com.egirlsnation.swissknife.settings.IntSetting;
+import com.egirlsnation.swissknife.settings.Setting;
+import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.EntityUtil;
-import org.bukkit.Bukkit;
+import com.egirlsnation.swissknife.utils.LocationUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 import org.bukkit.event.vehicle.VehicleEntityCollisionEvent;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class VehicleLimiter extends Module {
-    public VehicleLimiter() {
-        super(Categories.Entity,"vehicle-limiter", "Limits how many vehicles can be in chunk");
+    public VehicleLimiter(){
+        super(Categories.Entity, "vehicle-limiter", "Limits how many vehicles can be in chunk");
     }
+
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Integer> vehicleCount = sgGeneral.add(new IntSetting.Builder()
+            .name("vehicle-count")
+            .description("How many vehicles can be in a chunk")
+            .defaultValue(26)
+            .min(0)
+            .build()
+    );
+
+    private final Setting<Boolean> sortList = sgGeneral.add(new BoolSetting.Builder()
+            .name("remove-new-first")
+            .description("Removes vehicles depending on age - newest to oldest (might lag a bit with huge vehicle counts)")
+            .defaultValue(false)
+            .build()
+
+    );
+
+    private final Setting<Boolean> log = sgGeneral.add(new BoolSetting.Builder()
+            .name("logging")
+            .description("If the plugin should log removed vehicles")
+            .defaultValue(false)
+            .build()
+    );
 
     @EventHandler
     public void VehicleCreate(VehicleCreateEvent e){
         if(!isEnabled()) return;
-        //Limits the number of vehicles in chunk
-        if(Config.instance.limitVehicles){
-            if(EntityUtil.countVehicles(e.getVehicle().getLocation().getChunk().getEntities()) > Config.instance.vehicleLimitChunk){
-                e.setCancelled(true);
+
+        if(EntityUtil.countVehicles(e.getVehicle().getLocation().getChunk().getEntities()) > vehicleCount.get()){
+            e.setCancelled(true);
+            if(log.get()){
+                info("Cancelled creating vehicle in chunk over vehicle limit at: " + LocationUtil.getLocationString(e.getVehicle().getLocation()));
             }
         }
     }
@@ -43,12 +73,28 @@ public class VehicleLimiter extends Module {
     @EventHandler
     public void VehicleCollision(VehicleEntityCollisionEvent e){
         if(!isEnabled()) return;
-        //Limits the number of vehicles in chunk
-        if(Config.instance.limitVehicles){
-            List<Entity> vehicles = EntityUtil.filterVehicles(e.getVehicle().getLocation().getChunk().getEntities());
-            if(vehicles.size() > Config.instance.vehicleLimitChunk){
-                EntityUtil.removeExcessVehicles(vehicles);
-                Bukkit.getLogger().warning("Removed excess vehicles in chunk at: " +  e.getVehicle().getLocation().getBlockX() + " " + e.getVehicle().getLocation().getBlockY() + " " + e.getVehicle().getLocation().getBlockZ());
+
+        List<Entity> vehicles = EntityUtil.filterVehicles(e.getVehicle().getLocation().getChunk().getEntities());
+        if(vehicles.size() > vehicleCount.get()){
+            removeExcessVehicles(vehicles);
+            info("Removed vehicles over chunk limit at: " + LocationUtil.getLocationString(e.getVehicle().getLocation()));
+        }
+    }
+
+    private void removeExcessVehicles(List<Entity> vehicleList){
+        if(vehicleList.isEmpty() || vehicleList.size() < vehicleCount.get()){
+            return;
+        }
+
+        if(sortList.get()){
+            vehicleList.sort(Comparator.comparing(Entity::getTicksLived));
+        }
+
+        int i = vehicleList.size();
+        for(Entity entity : vehicleList){
+            if(i > vehicleCount.get()){
+                entity.remove();
+                i--;
             }
         }
     }

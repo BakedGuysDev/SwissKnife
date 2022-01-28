@@ -13,7 +13,7 @@
 package com.egirlsnation.swissknife.listeners.inventory;
 
 import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,12 +30,12 @@ public class onCraftItemEvent implements Listener {
         if (!(e.getView().getPlayer() instanceof Player)) return;
         if (!customItemHandler.isDraconitePickaxe(e.getInventory().getResult())) return;
 
-        if (!Config.instance.enablePickaxeCraft) {
+        if (!OldConfig.instance.enablePickaxeCraft) {
             e.setCancelled(true);
             return;
         }
 
-        if (!Config.instance.useDraconiteGems) return;
+        if (!OldConfig.instance.useDraconiteGems) return;
         int gems = 0;
 
         for (ItemStack item : e.getInventory().getContents()) {

@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.Listener;
@@ -31,13 +31,13 @@ public class onProjectileLaunch implements Listener {
         if(!(e.getEntity().getShooter() instanceof Player)) return;
         if(e.getEntity() instanceof Snowball) return;
         Player player = (Player) e.getEntity().getShooter();
-        if(Config.instance.limitThrowables){
+        if(OldConfig.instance.limitThrowables){
             UUID uuid = player.getUniqueId();
             if(!throwablesMap.containsKey(uuid)){
                 throwablesMap.put(uuid, System.currentTimeMillis());
             }else{
                 long timeLeft = System.currentTimeMillis() - throwablesMap.get(uuid);
-                if(timeLeft < Config.instance.throwablesDelay){
+                if(timeLeft < OldConfig.instance.throwablesDelay){
                     e.setCancelled(true);
                 }else{
                     throwablesMap.put(uuid, System.currentTimeMillis());

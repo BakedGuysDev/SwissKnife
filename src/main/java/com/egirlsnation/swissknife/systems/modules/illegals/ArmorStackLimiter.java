@@ -14,7 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
 import com.egirlsnation.swissknife.utils.InventoryUtil;
 import com.egirlsnation.swissknife.utils.ItemUtil;
@@ -53,8 +53,8 @@ public class ArmorStackLimiter extends Module {
         if(!isEnabled()) return;
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
-        if(ItemUtil.isArmorPiece(e.getItem().getItemStack()) && e.getItem().getItemStack().getAmount() > Config.instance.maxArmorStack){
-            e.getItem().getItemStack().setAmount(Config.instance.maxArmorStack);
+        if(ItemUtil.isArmorPiece(e.getItem().getItemStack()) && e.getItem().getItemStack().getAmount() > OldConfig.instance.maxArmorStack){
+            e.getItem().getItemStack().setAmount(OldConfig.instance.maxArmorStack);
 
             if(e.getEntity() instanceof Player){
                 IllegalItemsUtil.notifyPlayerAboutOSI((Player) e.getEntity());

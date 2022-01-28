@@ -14,7 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.player;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.SwissLogger;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -124,7 +124,7 @@ public class CombatCheck extends Module {
         if(!combatMap.containsKey(playerUUID)) return false;
 
         long timeDifference = System.currentTimeMillis() - combatMap.get(playerUUID);
-        if(timeDifference >= Config.instance.combatTimeout){
+        if(timeDifference >= OldConfig.instance.combatTimeout){
             combatMap.remove(playerUUID);
             return false;
         }else{
@@ -137,7 +137,7 @@ public class CombatCheck extends Module {
         if(!elytraMap.containsKey(playerUUID)) return false;
 
         long timeDifference = System.currentTimeMillis() - elytraMap.get(playerUUID);
-        if(timeDifference >= Config.instance.elytraTimeout){
+        if(timeDifference >= OldConfig.instance.elytraTimeout){
             elytraMap.remove(playerUUID);
             return false;
         }else{
@@ -150,9 +150,9 @@ public class CombatCheck extends Module {
         if(!combatMap.containsKey(playerUUID)) return 0;
 
         long timeDifference = System.currentTimeMillis() - combatMap.get(playerUUID);
-        if(timeDifference >= Config.instance.combatTimeout) return 0;
+        if(timeDifference >= OldConfig.instance.combatTimeout) return 0;
 
-        return TimeUnit.MILLISECONDS.toSeconds(Config.instance.combatTimeout -timeDifference);
+        return TimeUnit.MILLISECONDS.toSeconds(OldConfig.instance.combatTimeout -timeDifference);
     }
 
     public long getRemainingElytraTime(Player player){
@@ -160,9 +160,9 @@ public class CombatCheck extends Module {
         if(!elytraMap.containsKey(playerUUID)) return 0;
 
         long timeDifference = System.currentTimeMillis() - elytraMap.get(playerUUID);
-        if(timeDifference >= Config.instance.elytraTimeout) return 0;
+        if(timeDifference >= OldConfig.instance.elytraTimeout) return 0;
 
-        return TimeUnit.MILLISECONDS.toSeconds(Config.instance.elytraTimeout -timeDifference);
+        return TimeUnit.MILLISECONDS.toSeconds(OldConfig.instance.elytraTimeout -timeDifference);
     }
 
 

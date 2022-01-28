@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEvent;
@@ -21,8 +21,8 @@ public class onEntityPortalTeleport implements Listener {
 
     @EventHandler
     private void onEntityPortalTeleportEvent(EntityPortalEvent e){
-        if(!Config.instance.disableEntityPortal) return;
-        if(Config.instance.entityTypeDisablePortal.contains(e.getEntityType().name())) {
+        if(!OldConfig.instance.disableEntityPortal) return;
+        if(OldConfig.instance.entityTypeDisablePortal.contains(e.getEntityType().name())) {
             e.setCancelled(true);
         }
     }

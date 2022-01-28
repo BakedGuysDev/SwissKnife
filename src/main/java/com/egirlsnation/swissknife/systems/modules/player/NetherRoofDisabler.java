@@ -14,7 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.player;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.SwissLogger;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -33,17 +33,17 @@ public class NetherRoofDisabler extends Module {
     @EventHandler
     public void PlayerMove(PlayerMoveEvent e) {
         if(!isEnabled()) return;
-        if (Config.instance.preventPlayersOnNether) {
+        if (OldConfig.instance.preventPlayersOnNether) {
             Location l = e.getTo();
             if (!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if (l.getY() >= Config.instance.netherRoofHeight) {
+            if (l.getY() >= OldConfig.instance.netherRoofHeight) {
                 SwissLogger.info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
                 e.setCancelled(true);
-                if (Config.instance.teleportPlayersDown) {
+                if (OldConfig.instance.teleportPlayersDown) {
                     e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
                 }
-                if (Config.instance.dmgPlayersOnNether) {
-                    e.getPlayer().damage(Config.instance.dmgToDealNether);
+                if (OldConfig.instance.dmgPlayersOnNether) {
+                    e.getPlayer().damage(OldConfig.instance.dmgToDealNether);
                 }
             }
         }
@@ -52,10 +52,10 @@ public class NetherRoofDisabler extends Module {
     @EventHandler
     public void PlayerTeleport(PlayerTeleportEvent e){
         if(!isEnabled()) return;
-        if(Config.instance.preventPlayersOnNether){
+        if(OldConfig.instance.preventPlayersOnNether){
             Location l = e.getTo();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if(l.getBlockY() >= Config.instance.netherRoofHeight){
+            if(l.getBlockY() >= OldConfig.instance.netherRoofHeight){
                 SwissLogger.info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
                 e.setCancelled(true);
             }
@@ -64,10 +64,10 @@ public class NetherRoofDisabler extends Module {
 
     @EventHandler
     public void VehicleEnter(VehicleEnterEvent e){
-        if(Config.instance.preventPlayersOnNether && e.getEntered() instanceof Player){
+        if(OldConfig.instance.preventPlayersOnNether && e.getEntered() instanceof Player){
             Location l = e.getVehicle().getLocation();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if(l.getBlockY() >= Config.instance.netherRoofHeight && !e.getEntered().isOp()){
+            if(l.getBlockY() >= OldConfig.instance.netherRoofHeight && !e.getEntered().isOp()){
                 e.setCancelled(true);
                 SwissLogger.info("Player " + e.getEntered().getName() + " attempted to go above the nether roof");
                 e.getVehicle().remove();
@@ -77,10 +77,10 @@ public class NetherRoofDisabler extends Module {
 
     @EventHandler
     public void VehicleExit(VehicleExitEvent e){
-        if(Config.instance.preventPlayersOnNether && e.getExited() instanceof Player){
+        if(OldConfig.instance.preventPlayersOnNether && e.getExited() instanceof Player){
             Location l = e.getVehicle().getLocation();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if(l.getBlockY() >= Config.instance.netherRoofHeight && !e.getExited().isOp()){
+            if(l.getBlockY() >= OldConfig.instance.netherRoofHeight && !e.getExited().isOp()){
                 e.setCancelled(true);
                 SwissLogger.info("Player " + e.getExited().getName() + " attempted to go above the nether roof");
                 e.getVehicle().remove();

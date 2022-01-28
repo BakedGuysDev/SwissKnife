@@ -14,7 +14,7 @@
 
 package com.egirlsnation.swissknife.listeners.player;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.SwissLogger;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,35 +27,35 @@ public class onPlayerMove implements Listener {
 
     @EventHandler
     public void PlayerMove(PlayerMoveEvent e) {
-        if (Config.instance.preventPlayerBellowOw || Config.instance.preventPlayerBellowNether) {
+        if (OldConfig.instance.preventPlayerBellowOw || OldConfig.instance.preventPlayerBellowNether) {
             if (e.getTo().getY() < 0) {
                 World.Environment env = e.getTo().getWorld().getEnvironment();
-                if (Config.instance.preventPlayerBellowOw && env.equals(World.Environment.NORMAL)) {
+                if (OldConfig.instance.preventPlayerBellowOw && env.equals(World.Environment.NORMAL)) {
                     handlePlayerBellowFloor(e);
-                } else if (Config.instance.preventPlayerBellowNether && env.equals(World.Environment.NETHER)) {
+                } else if (OldConfig.instance.preventPlayerBellowNether && env.equals(World.Environment.NETHER)) {
                     handlePlayerBellowFloor(e);
                 }
             }
         }
 
-        if (Config.instance.preventPlayersOnNether) {
+        if (OldConfig.instance.preventPlayersOnNether) {
             Location l = e.getTo();
             if (!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if (l.getY() >= Config.instance.netherRoofHeight) {
+            if (l.getY() >= OldConfig.instance.netherRoofHeight) {
                 SwissLogger.info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
                 e.setCancelled(true);
-                if (Config.instance.teleportPlayersDown) {
+                if (OldConfig.instance.teleportPlayersDown) {
                     e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
                 }
-                if (Config.instance.dmgPlayersOnNether) {
-                    e.getPlayer().damage(Config.instance.dmgToDealNether);
+                if (OldConfig.instance.dmgPlayersOnNether) {
+                    e.getPlayer().damage(OldConfig.instance.dmgToDealNether);
                 }
             }
         }
     }
 
     private void handlePlayerBellowFloor(PlayerMoveEvent e) {
-        if (Config.instance.placeBedrockBellow) {
+        if (OldConfig.instance.placeBedrockBellow) {
             e.getPlayer().getWorld().getBlockAt(e.getTo().getBlockX(), 0, e.getTo().getBlockZ()).setType(Material.BEDROCK);
         }
         e.setTo(e.getFrom().add(0, 2, 0));

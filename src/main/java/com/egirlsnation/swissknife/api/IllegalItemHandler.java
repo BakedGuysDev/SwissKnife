@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.api;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.google.common.collect.Multimap;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,7 +39,7 @@ public class IllegalItemHandler {
         if(meta == null) return false;
         if(!meta.hasEnchants()) return false;
 
-        if(item.getType().equals(Material.NETHERITE_PICKAXE) && Config.instance.enable1kPicks){
+        if(item.getType().equals(Material.NETHERITE_PICKAXE) && OldConfig.instance.enable1kPicks){
             Map<Enchantment, Integer> enchantMap = meta.getEnchants();
             for(Map.Entry<Enchantment, Integer> enchant: enchantMap.entrySet()){
                 if(enchant.getValue() > 1100) return true;
@@ -49,7 +49,7 @@ public class IllegalItemHandler {
 
         Map<Enchantment, Integer> enchantMap = meta.getEnchants();
         for(Map.Entry<Enchantment, Integer> enchant: enchantMap.entrySet()){
-            if(enchant.getValue() > Config.instance.maxEnchantLevel) return true;
+            if(enchant.getValue() > OldConfig.instance.maxEnchantLevel) return true;
         }
         return false;
     }
@@ -60,7 +60,7 @@ public class IllegalItemHandler {
         if(!meta.hasLore()) return false;
         if(meta.getLore() == null) return false;
 
-        return meta.getLore().stream().anyMatch(element -> Config.instance.illegalLoreList.contains(element));
+        return meta.getLore().stream().anyMatch(element -> OldConfig.instance.illegalLoreList.contains(element));
     }
 
     public ItemMeta reduceAncientMeta(ItemStack item){
@@ -164,14 +164,14 @@ public class IllegalItemHandler {
             return true;
         }
 
-        if(itemStack.getType().equals(Material.TOTEM_OF_UNDYING) && itemStack.getAmount() > Config.instance.maxTotemStack){
-            itemStack.setAmount(Config.instance.maxTotemStack);
+        if(itemStack.getType().equals(Material.TOTEM_OF_UNDYING) && itemStack.getAmount() > OldConfig.instance.maxTotemStack){
+            itemStack.setAmount(OldConfig.instance.maxTotemStack);
             item.setItemStack(itemStack);
             return true;
         }
 
-        if(isArmorPiece(itemStack) && itemStack.getAmount() > Config.instance.maxArmorStack){
-            itemStack.setAmount(Config.instance.maxArmorStack);
+        if(isArmorPiece(itemStack) && itemStack.getAmount() > OldConfig.instance.maxArmorStack){
+            itemStack.setAmount(OldConfig.instance.maxArmorStack);
             item.setItemStack(itemStack);
             return true;
         }
@@ -220,13 +220,13 @@ public class IllegalItemHandler {
             return true;
         }
 
-        if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() > Config.instance.maxTotemStack){
-            item.setAmount(Config.instance.maxTotemStack);
+        if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() > OldConfig.instance.maxTotemStack){
+            item.setAmount(OldConfig.instance.maxTotemStack);
             return true;
         }
 
-        if(isArmorPiece(item) && item.getAmount() > Config.instance.maxArmorStack){
-            item.setAmount(Config.instance.maxArmorStack);
+        if(isArmorPiece(item) && item.getAmount() > OldConfig.instance.maxArmorStack){
+            item.setAmount(OldConfig.instance.maxArmorStack);
             return true;
         }
 
@@ -268,13 +268,13 @@ public class IllegalItemHandler {
             return true;
         }
 
-        if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() > Config.instance.maxTotemStack){
-            item.setAmount(Config.instance.maxTotemStack);
+        if(item.getType().equals(Material.TOTEM_OF_UNDYING) && item.getAmount() > OldConfig.instance.maxTotemStack){
+            item.setAmount(OldConfig.instance.maxTotemStack);
             return true;
         }
 
-        if(isArmorPiece(item) && item.getAmount() > Config.instance.maxArmorStack){
-            item.setAmount(Config.instance.maxArmorStack);
+        if(isArmorPiece(item) && item.getAmount() > OldConfig.instance.maxArmorStack){
+            item.setAmount(OldConfig.instance.maxArmorStack);
             return true;
         }
 
@@ -314,11 +314,11 @@ public class IllegalItemHandler {
     public boolean hasTooLongName(ItemMeta meta){
         if(meta == null) return false;
         if(!meta.hasDisplayName()) return false;
-        return meta.getDisplayName().length() > Config.instance.maxItemNameLength;
+        return meta.getDisplayName().length() > OldConfig.instance.maxItemNameLength;
     }
 
     public ItemMeta trimName(ItemMeta meta){
-        meta.setDisplayName(meta.getDisplayName().substring(0, Math.min(meta.getDisplayName().length(), Config.instance.maxItemNameLength)));
+        meta.setDisplayName(meta.getDisplayName().substring(0, Math.min(meta.getDisplayName().length(), OldConfig.instance.maxItemNameLength)));
         return meta;
     }
 

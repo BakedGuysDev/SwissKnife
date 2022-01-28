@@ -12,10 +12,10 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
+import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
-import com.egirlsnation.swissknife.utils.SwissLogger;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -29,12 +29,12 @@ public class BedrockFloorDisabler extends Module {
     @EventHandler
     public void PlayerMove(PlayerMoveEvent e) {
         if(!isEnabled()) return;
-        if (Config.instance.preventPlayerBellowOw || Config.instance.preventPlayerBellowNether) {
+        if (OldConfig.instance.preventPlayerBellowOw || OldConfig.instance.preventPlayerBellowNether) {
             if (e.getTo().getY() < 0) {
                 World.Environment env = e.getTo().getWorld().getEnvironment();
-                if (Config.instance.preventPlayerBellowOw && env.equals(World.Environment.NORMAL)) {
+                if (OldConfig.instance.preventPlayerBellowOw && env.equals(World.Environment.NORMAL)) {
                     handlePlayerBellowFloor(e);
-                } else if (Config.instance.preventPlayerBellowNether && env.equals(World.Environment.NETHER)) {
+                } else if (OldConfig.instance.preventPlayerBellowNether && env.equals(World.Environment.NETHER)) {
                     handlePlayerBellowFloor(e);
                 }
             }
@@ -43,10 +43,10 @@ public class BedrockFloorDisabler extends Module {
 
     private void handlePlayerBellowFloor(PlayerMoveEvent e) {
         if(!isEnabled()) return;
-        if (Config.instance.placeBedrockBellow) {
+        if (OldConfig.instance.placeBedrockBellow) {
             e.getPlayer().getWorld().getBlockAt(e.getTo().getBlockX(), 0, e.getTo().getBlockZ()).setType(Material.BEDROCK);
         }
         e.setTo(e.getFrom().add(0, 2, 0));
-        SwissLogger.info("Player " + e.getPlayer().getName() + " attempted to go bellow the bedrock floor");
+        SwissKnife.swissLogger.info("Player " + e.getPlayer().getName() + " attempted to go bellow the bedrock floor");
     }
 }

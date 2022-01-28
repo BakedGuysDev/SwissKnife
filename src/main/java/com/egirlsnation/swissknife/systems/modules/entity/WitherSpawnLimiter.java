@@ -12,10 +12,14 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.settings.BoolSetting;
+import com.egirlsnation.swissknife.settings.Setting;
+import com.egirlsnation.swissknife.settings.SettingGroup;
+import com.egirlsnation.swissknife.settings.StringSetting;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.LocationUtil;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -29,18 +33,33 @@ public class WitherSpawnLimiter extends Module {
         super(Categories.Entity,"wither-spawn-limiter", "Limits spawning withers at spawn");
     }
 
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
+            .name("alert-players")
+            .description("Whether to send message to players when attempting to spawn withers")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<String> message = sgGeneral.add(new StringSetting.Builder()
+            .name("message")
+            .description("The message to send (supports color codes)")
+            .defaultValue(ChatColor.RED + "You cannot spawn withers this close to spawn")
+            .build()
+    );
+
     @EventHandler
     private void EntitySpawn(CreatureSpawnEvent e){
         if(!isEnabled()) return;
-        //Limit wither spawning at spawn
-        if(!Config.instance.preventWithersAtSpawn) return;
 
         if(e.getEntityType() == EntityType.WITHER){
-            if(LocationUtil.isInSpawnRadius(e.getLocation().getX(),e.getLocation().getZ(), Config.instance.spawnRadius)){
+            if(LocationUtil.isInSpawnRadius(e.getLocation().getX(),e.getLocation().getZ(), OldConfig.instance.spawnRadius)){
                 e.setCancelled(true);
+                if(!alertPlayers.get()) return;
                 for(Entity entity : e.getEntity().getNearbyEntities(e.getLocation().getX(), e.getLocation().getY(), e.getLocation().getZ())){
                     if(entity instanceof Player){
-                        entity.sendMessage(ChatColor.RED + "You cannot spawn withers this close to spawn.");
+                        entity.sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
                     }
                 }
             }

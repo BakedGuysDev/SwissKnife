@@ -35,25 +35,11 @@ public class EntityUtil {
     public static List<Entity> filterVehicles(Entity[] entities){
         List<Entity> vehicles = new ArrayList<>();
         for(Entity entity : entities){
-            if(entity instanceof Vehicle && !entity.getPassengers().stream().anyMatch(e -> e instanceof Player)){
+            if(entity instanceof Vehicle && entity.getPassengers().stream().noneMatch(e -> e instanceof Player)){
                 vehicles.add(entity);
             }
         }
         return vehicles;
-    }
-
-    public static void removeExcessVehicles(List<Entity> vehicleList){
-        if(vehicleList.isEmpty() || vehicleList.size() < Config.instance.vehicleLimitChunk){
-            return;
-        }
-
-        int vehicleListSize = vehicleList.size();
-        for(Entity entity : vehicleList){
-            if(vehicleListSize > Config.instance.vehicleLimitChunk){
-                entity.remove();
-                vehicleListSize--;
-            }
-        }
     }
 
     public static int countEntities(EntityType entityType, Entity[] entities){

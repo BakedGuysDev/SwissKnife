@@ -38,13 +38,13 @@ public class ItemUtil {
         if(item.getItemMeta() == null) return false;
         ItemMeta meta = item.getItemMeta();
         if(!meta.hasDisplayName()) return false;
-        return meta.getDisplayName().length() > Config.instance.maxItemNameLength;
+        return meta.getDisplayName().length() > OldConfig.instance.maxItemNameLength;
     }
 
     public ItemMeta trimName(@NotNull ItemStack item){
         if(item.getItemMeta() == null) return null;
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(meta.getDisplayName().substring(0, Math.min(meta.getDisplayName().length(), Config.instance.maxItemNameLength)));
+        meta.setDisplayName(meta.getDisplayName().substring(0, Math.min(meta.getDisplayName().length(), OldConfig.instance.maxItemNameLength)));
         return meta;
     }
 

@@ -32,20 +32,20 @@ public class DiscordUtil {
 
 
     public boolean shouldPostAlert(List<Double> tps){
-        if(tps.get(0) <= Config.instance.tpsNotifyAlways){
+        if(tps.get(0) <= OldConfig.instance.tpsNotifyAlways){
             return true;
         }
-        if (((System.currentTimeMillis() /1000) - lastAlertTimeSec) < Config.instance.notifyDelay) {
+        if (((System.currentTimeMillis() /1000) - lastAlertTimeSec) < OldConfig.instance.notifyDelay) {
             return false;
         }
         if(tpsArrSize == 3){
-            if(Config.instance.longerTPSavg && tps.get(2) <= Config.instance.tpsAvgThreshold){
+            if(OldConfig.instance.longerTPSavg && tps.get(2) <= OldConfig.instance.tpsAvgThreshold){
                 return true;
-            }else return !Config.instance.longerTPSavg && tps.get(1) <= Config.instance.tpsAvgThreshold;
+            }else return !OldConfig.instance.longerTPSavg && tps.get(1) <= OldConfig.instance.tpsAvgThreshold;
         }else{
-            if(Config.instance.longerTPSavg && tps.get(3) <= Config.instance.tpsAvgThreshold){
+            if(OldConfig.instance.longerTPSavg && tps.get(3) <= OldConfig.instance.tpsAvgThreshold){
                 return true;
-            }else return !Config.instance.longerTPSavg && tps.get(2) <= Config.instance.tpsAvgThreshold;
+            }else return !OldConfig.instance.longerTPSavg && tps.get(2) <= OldConfig.instance.tpsAvgThreshold;
         }
     }
 
@@ -59,17 +59,17 @@ public class DiscordUtil {
 
     public void postDiscordTPSNotif(@NotNull List<Double> tps, int playercount, int maxSlots, List<String> playerDisplayNames, List<String> lowPtNames) throws IOException {
         DiscordWebhook webhook = new DiscordWebhook(webhookURL);
-        if(Config.instance.webhookName.isBlank()){
+        if(OldConfig.instance.webhookName.isBlank()){
             webhook.setUsername("TPS Alert");
         }else{
-            webhook.setUsername(Config.instance.webhookName);
+            webhook.setUsername(OldConfig.instance.webhookName);
         }
-        if(!Config.instance.webhookAvatarURL.isBlank()){
-            webhook.setAvatarUrl(Config.instance.webhookAvatarURL);
+        if(!OldConfig.instance.webhookAvatarURL.isBlank()){
+            webhook.setAvatarUrl(OldConfig.instance.webhookAvatarURL);
         }
-        if(!Config.instance.roleIDs.isEmpty()){
+        if(!OldConfig.instance.roleIDs.isEmpty()){
             String pings = "";
-            for(String id : Config.instance.roleIDs){
+            for(String id : OldConfig.instance.roleIDs){
                 pings = pings + " <@&" + id +">";
             }
             webhook.setContent(pings);

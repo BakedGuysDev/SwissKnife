@@ -14,7 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.entity;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -28,10 +28,10 @@ public class DragonSlayerAddon extends Module {
     @EventHandler
     private void onEntityDamage(EntityDamageEvent e){
         if(!isEnabled()) return;
-        if(Config.instance.fixDragonDeath && e.getEntity().getType().equals(EntityType.ENDER_DRAGON)){
+        if(e.getEntity().getType().equals(EntityType.ENDER_DRAGON)){
             if((e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION))){
                 LivingEntity dragon = (LivingEntity) e.getEntity();
-                if(dragon.getHealth() > Config.instance.dragonHealth) return;
+                if(dragon.getHealth() > OldConfig.instance.dragonHealth) return;
                 e.setCancelled(true);
             }
         }

@@ -13,7 +13,7 @@
 package com.egirlsnation.swissknife.listeners.entity;
 
 import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -35,14 +35,14 @@ public class onEntityDamageByEntity implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (Config.instance.preventHighDmg) {
+            if (OldConfig.instance.preventHighDmg) {
                 if (player.isOp()) return;
-                if (e.getDamage() > Config.instance.highDmgThreshold) {
+                if (e.getDamage() > OldConfig.instance.highDmgThreshold) {
                     e.setCancelled(true);
-                    if(Config.instance.redirectHighDmg){
+                    if(OldConfig.instance.redirectHighDmg){
                         player.damage(e.getDamage());
                     }
-                    if(Config.instance.kickOnHighDamage){
+                    if(OldConfig.instance.kickOnHighDamage){
                         player.kickPlayer("Oi cunt, what the bloody hell");
                     }
                 }

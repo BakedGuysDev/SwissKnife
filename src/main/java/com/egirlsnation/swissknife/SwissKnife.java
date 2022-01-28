@@ -29,7 +29,7 @@ import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandle
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.systems.sql.SqlQuery;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.ServerUtil;
 import com.egirlsnation.swissknife.utils.SwissLogger;
 import com.egirlsnation.swissknife.utils.player.PingUtil;
@@ -50,6 +50,7 @@ import java.util.Objects;
 public class SwissKnife extends JavaPlugin {
 
     public static SwissKnife INSTANCE;
+    public static SwissLogger swissLogger;
 
 
     private final PluginManager pluginManager = Bukkit.getPluginManager();
@@ -70,7 +71,11 @@ public class SwissKnife extends JavaPlugin {
             INSTANCE = this;
         }
 
-        SwissLogger.info("Initializing SwissKnife");
+        if(swissLogger == null){
+            swissLogger = new SwissLogger(INSTANCE);
+        }
+
+        swissLogger.info("Initializing SwissKnife");
 
         Categories.init();
 
@@ -119,16 +124,16 @@ public class SwissKnife extends JavaPlugin {
         }
         */
         Systems.save();
-        getLogger().info(ChatColor.GREEN + "Swiss Knife plugin disabled.");
+        swissLogger.info("Swiss Knife plugin disabled.");
     }
 
     private void registerEvents() {
         pluginManager.registerEvents(new CommandPreProcessor(this), this);
-        SwissLogger.info(ChatColor.AQUA + "Registering block events");
+        swissLogger.info("Registering block events");
         pluginManager.registerEvents(new onBlockDispense(), this);
         pluginManager.registerEvents(new onBlockPlace(), this);
 
-        SwissLogger.info(ChatColor.AQUA + "Registering entity events");
+        swissLogger.info("Registering entity events");
         pluginManager.registerEvents(new onEntityChangeBlock(), this);
         pluginManager.registerEvents(new onEntityChangeBlock(), this);
         pluginManager.registerEvents(new onEntityDamage(), this);
@@ -140,12 +145,12 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onCreatureSpawn(), this);
         pluginManager.registerEvents(new onProjectileHit(), this);
 
-        SwissLogger.info(ChatColor.AQUA + "Registering inventory events");
+        swissLogger.info("Registering inventory events");
         pluginManager.registerEvents(new onInventoryClick(), this);
         pluginManager.registerEvents(new onInventoryClose(), this);
         pluginManager.registerEvents(new onInventoryOpen(), this);
 
-        SwissLogger.info(ChatColor.AQUA + "Registering player events");
+        swissLogger.info("Registering player events");
         pluginManager.registerEvents(new onGamemodeSwitch(this), this);
         pluginManager.registerEvents(new onJoin(this), this);
         pluginManager.registerEvents(new onLeave(this), this);
@@ -166,11 +171,11 @@ public class SwissKnife extends JavaPlugin {
     }
 
     private void registerCommands() {
-        SwissLogger.info("Registering commands.");
+        swissLogger.info("Registering commands.");
         Objects.requireNonNull(this.getCommand("kill")).setExecutor(new KillCommand(this));
         Objects.requireNonNull(this.getCommand("ping")).setExecutor(new PingCommand());
         Objects.requireNonNull(this.getCommand("playtime")).setExecutor(new PlaytimeCommand(this));
-        if(Config.instance.enableShitlist) {
+        if(OldConfig.instance.enableShitlist) {
             Objects.requireNonNull(this.getCommand("shitlist")).setExecutor(new ShitListCommand(this));
         }
         Objects.requireNonNull(this.getCommand("shrug")).setExecutor(new ShrugCommand());
@@ -181,37 +186,33 @@ public class SwissKnife extends JavaPlugin {
     }
 
     private void initSQL() {
-        SwissLogger.info(ChatColor.AQUA + "Starting up SQL driver.");
+        swissLogger.info("Starting up SQL driver.");
 
         this.SQL = new MySQL();
         this.sqlQuery = new SqlQuery(this);
 
-        if (Config.instance.databaseName.equals("name") && Config.instance.databaseUsername.equals("username") && Config.instance.databasePassword.equals("password")) {
-            SwissLogger.warning("Default SQL config values detected. SQL driver won't be initiated.");
+        if (OldConfig.instance.databaseName.equals("name") && OldConfig.instance.databaseUsername.equals("username") && OldConfig.instance.databasePassword.equals("password")) {
+            swissLogger.warning("Default SQL config values detected. SQL driver won't be initiated.");
             return;
         }
 
         try {
             SQL.connect();
         } catch (SQLException | ClassNotFoundException throwables) {
-            SwissLogger.error("Something went wrong while initiating SQL\nStack trace will follow.");
+            swissLogger.severe("Something went wrong while initiating SQL\nStack trace will follow.");
             throwables.printStackTrace();
         }
 
         if (SQL.isConnected()) {
-            SwissLogger.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
+            swissLogger.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
             sqlQuery.createStatsTable();
             //sqlQuery.createPingTable();
-            SwissLogger.info(ChatColor.GREEN + "Finished SQL initialization.");
+            swissLogger.info(ChatColor.GREEN + "Finished SQL initialization.");
         }
     }
 
     public PluginManager getPluginManager() {
         return pluginManager;
-    }
-
-    private void initPingLogTask() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(this, () -> pingUtil.uploadPingMap(pingUtil.getAllPings(), SQL, sqlQuery), 6000, 12000);
     }
 
     /*
@@ -228,16 +229,17 @@ public class SwissKnife extends JavaPlugin {
      */
 
     private void initTPSnotifyTask() {
+        //TODO
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             List<Double> tps = serverUtil.getTPS();
             if (discordUtil.shouldPostAlert(tps)) {
                 List<String> rankNames = null;
-                if(Config.instance.listOnlinePlayers){
+                if(OldConfig.instance.listOnlinePlayers){
                     rankNames = rankUtil.getOnlinePlayerRankList();
                 }
                 List<String> namesUnderPt = null;
-                if(Config.instance.listLowPtPlayers){
-                    namesUnderPt = rankUtil.getOnlinePlayerNamesUnderPlaytime(Config.instance.lowPtThreshold);
+                if(OldConfig.instance.listLowPtPlayers){
+                    namesUnderPt = rankUtil.getOnlinePlayerNamesUnderPlaytime(OldConfig.instance.lowPtThreshold);
                 }
 
                 List<String> finalRankNames = rankNames;
@@ -252,22 +254,23 @@ public class SwissKnife extends JavaPlugin {
                     }
                 });
             }
-        }, serverUtil.getTicksFromMinutes(Config.instance.delayAfterLoad), Config.instance.tpsTaskTime);
+        }, serverUtil.getTicksFromMinutes(OldConfig.instance.delayAfterLoad), OldConfig.instance.tpsTaskTime);
     }
 
     private void registerRecipes(){
-        SwissLogger.info("Registering recipes");
-        if(Config.instance.enablePickaxeCraft){
-            SwissLogger.info("Registering draconite pickaxe recipe");
+        //TODO
+        swissLogger.info("Registering recipes");
+        if(OldConfig.instance.enablePickaxeCraft){
+            swissLogger.info("Registering draconite pickaxe recipe");
             NamespacedKey draconitePickKey = new NamespacedKey(this, "draconite_pickaxe");
             ShapedRecipe draconitePick = new ShapedRecipe(draconitePickKey, customItemHandler.getDraconitePickaxe())
                     .shape("GHG", " S ", " S ");
-            if(Config.instance.useDraconiteGems){
+            if(OldConfig.instance.useDraconiteGems){
                 draconitePick.setIngredient('G', Material.PLAYER_HEAD).setIngredient('H', Material.END_CRYSTAL);
             }else{
                 draconitePick.setIngredient('G', Material.END_CRYSTAL).setIngredient('H', Material.DRAGON_HEAD);
             }
-            if(Config.instance.useBedrockSticks){
+            if(OldConfig.instance.useBedrockSticks){
                 draconitePick.setIngredient('S', Material.BEDROCK);
             }else{
                 draconitePick.setIngredient('S', Material.STICK);
@@ -277,15 +280,5 @@ public class SwissKnife extends JavaPlugin {
             }
             Bukkit.addRecipe(draconitePick);
         }
-    }
-
-    private void correctConfigValues(){
-        if(Config.instance.replaceChance > 100){
-            Config.instance.replaceChance = 100;
-        }
-        if(Config.instance.replaceChance < 0){
-            Config.instance.replaceChance = 0;
-        }
-
     }
 }

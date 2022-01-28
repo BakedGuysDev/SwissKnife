@@ -16,7 +16,7 @@ import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
 import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CooldownHandler;
 import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,7 +45,7 @@ public class onLeave implements Listener {
             }
             plugin.sqlQuery.updateValues(e.getPlayer());
 
-            if(Config.instance.leakCoords && Config.instance.enableShitlist && plugin.sqlQuery.isShitlisted(e.getPlayer())){
+            if(OldConfig.instance.leakCoords && OldConfig.instance.enableShitlist && plugin.sqlQuery.isShitlisted(e.getPlayer())){
                 Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "The coords of " + e.getPlayer().getDisplayName() + ChatColor.GREEN + " are " + stringUtils.getFormattedCoords(e.getPlayer().getLocation())),40);
             }
         }

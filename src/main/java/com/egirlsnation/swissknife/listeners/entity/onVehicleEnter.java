@@ -14,7 +14,7 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -26,10 +26,10 @@ public class onVehicleEnter implements Listener {
 
     @EventHandler
     public void VehicleEnter(VehicleEnterEvent e){
-        if(Config.instance.preventPlayersOnNether && e.getEntered() instanceof Player){
+        if(OldConfig.instance.preventPlayersOnNether && e.getEntered() instanceof Player){
             Location l = e.getVehicle().getLocation();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if(l.getBlockY() >= Config.instance.netherRoofHeight && !e.getEntered().isOp()){
+            if(l.getBlockY() >= OldConfig.instance.netherRoofHeight && !e.getEntered().isOp()){
                 e.setCancelled(true);
                 e.getVehicle().remove();
             }

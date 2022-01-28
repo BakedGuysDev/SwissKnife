@@ -12,10 +12,14 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
+import com.egirlsnation.swissknife.settings.BoolSetting;
+import com.egirlsnation.swissknife.settings.IntSetting;
+import com.egirlsnation.swissknife.settings.Setting;
+import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
 import com.egirlsnation.swissknife.utils.EntityUtil;
+import com.egirlsnation.swissknife.utils.LocationUtil;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ExpBottleEvent;
@@ -25,14 +29,33 @@ public class XpBottleLimiter extends Module {
         super(Categories.Entity,"xp-bottle-limiter", "Limits how many xp bottles can be in a chunk");
     }
 
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Integer> xpBottleCount = sgGeneral.add(new IntSetting.Builder()
+            .name("bottle-count")
+            .description("How many xp bottles there can be in a chunk")
+            .defaultValue(64)
+            .min(0)
+            .build()
+    );
+
+    private final Setting<Boolean> log = sgGeneral.add(new BoolSetting.Builder()
+            .name("logging")
+            .description("If the plugin should log removing xp bottles over the limit")
+            .defaultValue(false)
+            .build()
+    );
 
     @EventHandler
     public void xpBottleListener(ExpBottleEvent e){
         if(!isEnabled()) return;
-        if(!Config.instance.preventXpBottleLag) return;
-        if(EntityUtil.countEntities(EntityType.THROWN_EXP_BOTTLE, e.getEntity().getLocation().getChunk().getEntities()) > Config.instance.xpBottleLimit){
+
+        if(EntityUtil.countEntities(EntityType.THROWN_EXP_BOTTLE, e.getEntity().getLocation().getChunk().getEntities()) > xpBottleCount.get()){
             e.setCancelled(true);
             e.getEntity().remove();
+            if(log.get()){
+                info("Removed xp bottle over limit at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));
+            }
         }
     }
 }

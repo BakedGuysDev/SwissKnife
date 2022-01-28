@@ -13,7 +13,7 @@
 package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.systems.handlers.RespawnHandler;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,6 +26,6 @@ public class onRespawn implements Listener {
     @EventHandler
     private void Respawn(PlayerRespawnEvent e){
         if(e.getPlayer().getBedSpawnLocation() != null) return;
-        e.setRespawnLocation(respawnHandler.getRandomLocation(Bukkit.getWorld(Config.instance.mainWorldName)));
+        e.setRespawnLocation(respawnHandler.getRandomLocation(Bukkit.getWorld(OldConfig.instance.mainWorldName)));
     }
 }

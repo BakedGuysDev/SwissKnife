@@ -12,8 +12,8 @@
 
 package com.egirlsnation.swissknife.systems.hooks.votingPlugin;
 
+import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.hooks.Hook;
-import com.egirlsnation.swissknife.utils.SwissLogger;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -31,8 +31,8 @@ public class VotingPluginHook extends Hook {
 
         if(e.getPlugin().getName().equals(pluginName)){
             if(isActive()) return;
-            SwissLogger.info("Enabling VotingPlugin hook.");
-            initHook();
+            SwissKnife.swissLogger.info("Activating VotingPlugin hook.");
+            toggleActive();
         }
     }
 
@@ -42,21 +42,19 @@ public class VotingPluginHook extends Hook {
 
         if(e.getPlugin().getName().equals(pluginName)){
             if(!isActive()) return;
-            SwissLogger.info("Disabling VotingPlugin hook.");
-            removeHook();
+            SwissKnife.swissLogger.info("Deactivating VotingPlugin hook.");
+            toggleActive();
         }
     }
 
     @Override
     protected void initHook(){
         VpUserManager.initUserManager();
-        setActive(true);
     }
 
     @Override
     protected void removeHook(){
         VpUserManager.removeUserManager();
-        setActive(false);
     }
 
 

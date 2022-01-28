@@ -15,7 +15,7 @@
 package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -37,10 +37,10 @@ public class onPlayerChat implements Listener {
     @EventHandler
     public void PlayerChat(AsyncPlayerChatEvent e){
         if(plugin.SQL.isConnected()){
-            if(Config.instance.enableShitlist && Config.instance.swapWordsRandomly && plugin.sqlQuery.isShitlisted(e.getPlayer())){
-                if((rng.nextInt(100) + 1) > Config.instance.replaceChance) return;
+            if(OldConfig.instance.enableShitlist && OldConfig.instance.swapWordsRandomly && plugin.sqlQuery.isShitlisted(e.getPlayer())){
+                if((rng.nextInt(100) + 1) > OldConfig.instance.replaceChance) return;
                 String[] words = e.getMessage().split(" ");
-                words[rng.nextInt(words.length)] = Config.instance.replacementWords.get(rng.nextInt(Config.instance.replacementWords.size()));
+                words[rng.nextInt(words.length)] = OldConfig.instance.replacementWords.get(rng.nextInt(OldConfig.instance.replacementWords.size()));
                 StringBuilder sb = new StringBuilder();
                 for(String word : words){
                     sb.append(word);
@@ -49,15 +49,15 @@ public class onPlayerChat implements Listener {
             }
         }
 
-        if(Config.instance.greentext && e.getPlayer().hasPermission("swissknife.chat.greentext") && e.getMessage().charAt(0) == '>'){
+        if(OldConfig.instance.greentext && e.getPlayer().hasPermission("swissknife.chat.greentext") && e.getMessage().charAt(0) == '>'){
             if(e.getPlayer().getName().equals("Lerbiq")){
                 e.setMessage(ChatColor.LIGHT_PURPLE + e.getMessage());
             }
             e.setMessage(ChatColor.GREEN + e.getMessage());
         }
 
-        if(Config.instance.coordsEnabled){
-            e.setMessage(e.getMessage().replaceAll(Config.instance.coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
+        if(OldConfig.instance.coordsEnabled){
+            e.setMessage(e.getMessage().replaceAll(OldConfig.instance.coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
         }
     }
 

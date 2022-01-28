@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.player;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,31 +29,31 @@ public class onSwapHandItems implements Listener {
     private void SwapHandItems(PlayerSwapHandItemsEvent e){
         if(e.getOffHandItem() != null){
             if(e.getOffHandItem().getType().equals(Material.TOTEM_OF_UNDYING)){
-                if(e.getOffHandItem().getAmount() > Config.instance.maxTotemStack){
-                    e.getOffHandItem().setAmount(Config.instance.maxTotemStack);
+                if(e.getOffHandItem().getAmount() > OldConfig.instance.maxTotemStack){
+                    e.getOffHandItem().setAmount(OldConfig.instance.maxTotemStack);
                 }
             }
         }
 
         if(e.getMainHandItem() != null){
             if(e.getMainHandItem().getType().equals(Material.TOTEM_OF_UNDYING)){
-                if(e.getMainHandItem().getAmount() > Config.instance.maxTotemStack){
-                    e.getMainHandItem().setAmount(Config.instance.maxTotemStack);
+                if(e.getMainHandItem().getAmount() > OldConfig.instance.maxTotemStack){
+                    e.getMainHandItem().setAmount(OldConfig.instance.maxTotemStack);
                 }
             }
         }
 
-        if(Config.instance.handSwitchCrash){
+        if(OldConfig.instance.handSwitchCrash){
             if(!handSwapDelay.containsKey(e.getPlayer())){
                 handSwapDelay.put(e.getPlayer(), 0L);
             }
             if(System.currentTimeMillis() < handSwapDelay.get(e.getPlayer())){
                 e.setCancelled(true);
-                if(Config.instance.kickOnHandSwitchCrash){
+                if(OldConfig.instance.kickOnHandSwitchCrash){
                     e.getPlayer().kickPlayer("Lost connection to the server");
                 }
             }else{
-                handSwapDelay.put(e.getPlayer(), System.currentTimeMillis() + Config.instance.handSwitchDelay);
+                handSwapDelay.put(e.getPlayer(), System.currentTimeMillis() + OldConfig.instance.handSwitchDelay);
             }
         }
 

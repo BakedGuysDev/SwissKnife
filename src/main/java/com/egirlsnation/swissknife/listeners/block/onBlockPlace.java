@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.block;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +22,7 @@ public class onBlockPlace implements Listener {
 
     @EventHandler
     private void BlockPlace(BlockPlaceEvent e){
-        Config.instance.illegalBlockList.forEach(block -> {
+        OldConfig.instance.illegalBlockList.forEach(block -> {
             if(e.getBlock().getType().equals(Material.getMaterial(block))){
                 if(e.getItemInHand().getType().equals(Material.getMaterial(block))){
                     e.setCancelled(true);

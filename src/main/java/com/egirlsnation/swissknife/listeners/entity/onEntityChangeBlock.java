@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,9 +22,9 @@ public class onEntityChangeBlock implements Listener {
 
     @EventHandler
     private void EntityChangeBlock(EntityChangeBlockEvent e){
-        if(!Config.instance.disableEndermanGrief) return;
+        if(!OldConfig.instance.disableEndermanGrief) return;
         if(!e.getEntity().getType().equals(EntityType.ENDERMAN)) return;
-        if(!e.getBlock().getLocation().getWorld().getName().equals(Config.instance.endWorldName)) return;
+        if(!e.getBlock().getLocation().getWorld().getName().equals(OldConfig.instance.endWorldName)) return;
         e.setCancelled(true);
     }
 }

@@ -13,7 +13,7 @@
 package com.egirlsnation.swissknife.systems.commands;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,7 +32,7 @@ public class ShitListCommand implements CommandExecutor {
             return true;
         }
 
-        if(!Config.instance.enableShitlist){
+        if(!OldConfig.instance.enableShitlist){
             sender.sendMessage(ChatColor.RED + "This command is disabled.");
         }
 

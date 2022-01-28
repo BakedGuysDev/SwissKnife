@@ -63,7 +63,7 @@ public class Hooks extends System<Hook> {
             boolean enabled = section.getBoolean("enabled");
 
             if(enabled && !hook.isEnabled()){
-                hook.toggle();
+                hook.toggleEnabled();
             }
         }
         try {

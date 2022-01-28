@@ -12,6 +12,8 @@
 
 package com.egirlsnation.swissknife.utils;
 
+import org.bukkit.Location;
+
 import java.awt.*;
 
 public class LocationUtil {
@@ -56,5 +58,12 @@ public class LocationUtil {
         } else {
             return false;
         }
+    }
+
+    public static String getLocationString(Location location){
+        return "[ " +
+                location.getWorld().getName() + " : " +
+                location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ() +
+                " ]";
     }
 }

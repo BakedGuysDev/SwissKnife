@@ -15,7 +15,7 @@ package com.egirlsnation.swissknife.systems.commands;
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CommandType;
 import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CooldownHandler;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.LocationUtil;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.ChatColor;
@@ -111,8 +111,8 @@ public class CommandPreProcessor  implements Listener {
         }
 
 
-        if(Config.instance.disableCommandsAtSpawn && radiusManager.isInRadius(e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getZ(), Config.instance.disableCommandsRadius)){
-            for(String command : Config.instance.radiusLimitedCmds){
+        if(OldConfig.instance.disableCommandsAtSpawn && radiusManager.isInRadius(e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getZ(), OldConfig.instance.disableCommandsRadius)){
+            for(String command : OldConfig.instance.radiusLimitedCmds){
                 if(e.getMessage().toLowerCase().startsWith("/" + command.toLowerCase())){
                     e.setCancelled(true);
                     e.getPlayer().sendMessage(ChatColor.RED + "You need to be further from spawn in order to do this command.");
@@ -120,10 +120,10 @@ public class CommandPreProcessor  implements Listener {
             }
         }
 
-        if(Config.instance.coordsCommandsEnabled){
-            for(String command : Config.instance.coordsCommands){
+        if(OldConfig.instance.coordsCommandsEnabled){
+            for(String command : OldConfig.instance.coordsCommands){
                 if(e.getMessage().toLowerCase().startsWith(command)){
-                    e.setMessage(e.getMessage().replaceAll(Config.instance.coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
+                    e.setMessage(e.getMessage().replaceAll(OldConfig.instance.coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
                     break;
                 }
             }
@@ -131,10 +131,10 @@ public class CommandPreProcessor  implements Listener {
         }
 
         if(!plugin.SQL.isConnected()) return;
-        if(!Config.instance.enableShitlist) return;
+        if(!OldConfig.instance.enableShitlist) return;
 
         if(plugin.sqlQuery.isShitlisted(e.getPlayer())){
-            for(String command : Config.instance.blacklistedCommands){
+            for(String command : OldConfig.instance.blacklistedCommands){
                 if(e.getMessage().toLowerCase().startsWith("/" + command.toLowerCase())){
                     e.setCancelled(true);
                     e.getPlayer().sendMessage(ChatColor.RED + "You are shitlisted and can't do this command.");

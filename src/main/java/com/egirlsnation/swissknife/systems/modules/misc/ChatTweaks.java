@@ -14,7 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.misc;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.Config;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -28,15 +28,15 @@ public class ChatTweaks extends Module {
     @EventHandler
     public void PlayerChat(AsyncPlayerChatEvent e){
         if(!isEnabled()) return;
-        if(Config.instance.greentext && e.getPlayer().hasPermission("swissknife.chat.greentext") && e.getMessage().charAt(0) == '>'){
+        if(OldConfig.instance.greentext && e.getPlayer().hasPermission("swissknife.chat.greentext") && e.getMessage().charAt(0) == '>'){
             if(e.getPlayer().getName().equals("Lerbiq")){
                 e.setMessage(ChatColor.LIGHT_PURPLE + e.getMessage());
             }
             e.setMessage(ChatColor.GREEN + e.getMessage());
         }
 
-        if(Config.instance.coordsEnabled){
-            e.setMessage(e.getMessage().replaceAll(Config.instance.coordsPlaceholder, StringUtil.getCoordsPlaceholderFormatted(e.getPlayer())));
+        if(OldConfig.instance.coordsEnabled){
+            e.setMessage(e.getMessage().replaceAll(OldConfig.instance.coordsPlaceholder, StringUtil.getCoordsPlaceholderFormatted(e.getPlayer())));
         }
     }
 }

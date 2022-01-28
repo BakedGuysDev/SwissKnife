@@ -12,6 +12,9 @@
 
 package com.egirlsnation.swissknife.utils;
 
+import com.egirlsnation.swissknife.systems.config.Config;
+import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.modules.illegals.IllegalEnchants;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -32,13 +35,14 @@ public class IllegalItemsUtil {
 
         Map<Enchantment, Integer> enchantMap = meta.getEnchants();
         for(Map.Entry<Enchantment, Integer> enchant: enchantMap.entrySet()){
-            if(enchant.getValue() > Config.instance.maxEnchantLevel) return true;
+            //TODO: Max enchant value
+            if(enchant.getValue() > Modules.get().get(IllegalEnchants.class) ) return true;
         }
         return false;
     }
 
     public static void notifyPlayerAboutOEI(Player player){
-        player.sendMessage(Config.instance.prefix + ChatColor.RED + "Over-enchanted item found. This incident will be reported");
+        player.sendMessage(Config.prefix + ChatColor.RED + "Over-enchanted item found. This incident will be reported");
     }
 
     public static boolean hasIllegalLore(@Nullable ItemStack item){
@@ -49,15 +53,15 @@ public class IllegalItemsUtil {
         if(!meta.hasLore()) return false;
         if(meta.lore() == null) return false;
 
-        return meta.lore().stream().anyMatch(element -> Config.instance.illegalLoreList.contains(element));
+        return meta.lore().stream().anyMatch(element -> OldConfig.instance.illegalLoreList.contains(element));
     }
 
     public static void notifyPlayerAboutIllegal(Player player){
-        player.sendMessage(Config.instance.prefix + ChatColor.RED + "Illegal item found. This incident will be reported");
+        player.sendMessage(Config.prefix + ChatColor.RED + "Illegal item found. This incident will be reported");
     }
 
     public static void notifyPlayerAboutOSI(Player player){
-        player.sendMessage(Config.instance.prefix + ChatColor.RED + "Overstacked item found. The stack has been trimmed");
+        player.sendMessage(Config.prefix+ ChatColor.RED + "Overstacked item found. The stack has been trimmed");
     }
 
     public static boolean isSpawnEgg(ItemStack item){
