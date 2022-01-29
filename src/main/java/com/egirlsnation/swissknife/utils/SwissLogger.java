@@ -26,6 +26,8 @@ import java.util.logging.Logger;
 public final class SwissLogger extends Logger {
     private String pluginName;
 
+    //TODO: Fix prefix and prefix color
+
     public SwissLogger(@NotNull Plugin plugin) {
         super(plugin.getClass().getCanonicalName(), (String)null);
         String prefix = plugin.getDescription().getPrefix();

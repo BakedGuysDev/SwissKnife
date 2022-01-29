@@ -14,7 +14,6 @@ package com.egirlsnation.swissknife.systems.modules.world;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -28,7 +27,7 @@ public class EndermenGrief extends Module {
     @EventHandler
     private void EntityChangeBlock(EntityChangeBlockEvent e){
         if(!isEnabled()) return;
-        if(!OldConfig.instance.disableEndermanGrief) return;
+
         if(!e.getEntity().getType().equals(EntityType.ENDERMAN)) return;
         if(!e.getBlock().getLocation().getWorld().getEnvironment().equals(World.Environment.THE_END)) return;
         e.setCancelled(true);

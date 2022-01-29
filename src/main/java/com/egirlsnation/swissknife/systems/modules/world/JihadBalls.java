@@ -12,9 +12,12 @@
 
 package com.egirlsnation.swissknife.systems.modules.world;
 
+import com.egirlsnation.swissknife.settings.BoolSetting;
+import com.egirlsnation.swissknife.settings.IntSetting;
+import com.egirlsnation.swissknife.settings.Setting;
+import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.LocationUtil;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -25,15 +28,54 @@ public class JihadBalls extends Module {
         super(Categories.World, "jihad-balls", "Makes snowballs explode");
     }
 
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Boolean> limitRadius = sgGeneral.add(new BoolSetting.Builder()
+            .name("limit-radius")
+            .description("If jihad balls should be limited by spawn radius")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Integer> radius = sgGeneral.add(new IntSetting.Builder()
+            .name("radius")
+            .description("Radius from spawn to allow use of jihads in")
+            .defaultValue(100)
+            .build()
+    );
+
+    private final Setting<Integer> strength = sgGeneral.add(new IntSetting.Builder()
+            .name("explosion-strength")
+            .description("How strong will the explosion be. (Be careful with this)")
+            .defaultValue(6)
+            .min(1)
+            .build()
+    );
+
+    private final Setting<Boolean> fire = sgGeneral.add(new BoolSetting.Builder()
+            .name("fire")
+            .description("If the explosion should set blocks on fire")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Boolean> breakBlocks = sgGeneral.add(new BoolSetting.Builder()
+            .name("break-blocks")
+            .description("If the explosion should break blocks or only deal damage")
+            .defaultValue(true)
+            .build()
+    );
+
     @EventHandler
     private void ProjectileHit(ProjectileHitEvent e) {
         if(!isEnabled()) return;
+
         if (e.getEntityType().equals(EntityType.SNOWBALL)) {
-            if (!OldConfig.instance.jihadsEnabled) return;
-            if (!LocationUtil.isInSpawnRadius(e.getEntity().getLocation().getX(), e.getEntity().getLocation().getZ(), OldConfig.instance.jihadsRadius) && OldConfig.instance.limitJihadRadius) {
+
+            if (!LocationUtil.isInSpawnRadius(e.getEntity().getLocation().getX(), e.getEntity().getLocation().getZ(), radius.get()) && limitRadius.get()) {
                 return;
             }
-            e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), (float) OldConfig.instance.jihadsPower, true, true, e.getEntity());
+            e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), (float) strength.get(), fire.get(), breakBlocks.get(), e.getEntity());
         }
     }
 }

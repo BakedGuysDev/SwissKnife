@@ -33,7 +33,7 @@ import java.util.Map;
 
 public class IllegalEnchants extends Module {
     public IllegalEnchants() {
-        super(Categories.Illegals, "illegal-enchants", "Removes items with way too high enchant levels");
+        super(Categories.Illegals, "illegal-enchants", "Removes items with way too high enchant levels or fixes them");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();

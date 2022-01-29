@@ -14,7 +14,6 @@ package com.egirlsnation.swissknife.systems.modules.misc;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -28,7 +27,7 @@ public class ShulkerStackHandler extends Module {
     @EventHandler
     private void InventoryClose(InventoryCloseEvent e){
         if(!isEnabled()) return;
-        if(!OldConfig.instance.unstackInShulks) return;
+
         if(e.getInventory().getType() != InventoryType.SHULKER_BOX) return;
 
         for(ItemStack item : e.getInventory().getContents()){

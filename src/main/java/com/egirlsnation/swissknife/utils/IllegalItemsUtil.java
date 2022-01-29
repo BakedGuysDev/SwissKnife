@@ -45,16 +45,6 @@ public class IllegalItemsUtil {
         return false;
     }
 
-
-
-    public static void notifyPlayerAboutOEI(Player player){
-        player.sendMessage(Config.prefix + ChatColor.RED + "Over-enchanted item found. This incident will be reported");
-    }
-
-    public static void notifyPlayerAboutIllegal(Player player){
-        player.sendMessage(Config.prefix + ChatColor.RED + "Illegal item found. This incident will be reported");
-    }
-
     public static void notifyPlayerAboutOSI(Player player){
         player.sendMessage(Config.prefix+ ChatColor.RED + "Overstacked item found. The stack has been trimmed");
     }

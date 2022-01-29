@@ -15,7 +15,6 @@
 package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.utils.OldConfig;
-import com.egirlsnation.swissknife.utils.SwissLogger;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -42,7 +41,7 @@ public class onPlayerMove implements Listener {
             Location l = e.getTo();
             if (!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
             if (l.getY() >= OldConfig.instance.netherRoofHeight) {
-                SwissLogger.info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
+                //SwissLogger.info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
                 e.setCancelled(true);
                 if (OldConfig.instance.teleportPlayersDown) {
                     e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
@@ -59,6 +58,6 @@ public class onPlayerMove implements Listener {
             e.getPlayer().getWorld().getBlockAt(e.getTo().getBlockX(), 0, e.getTo().getBlockZ()).setType(Material.BEDROCK);
         }
         e.setTo(e.getFrom().add(0, 2, 0));
-        SwissLogger.info("Player " + e.getPlayer().getName() + " attempted to go bellow the bedrock floor");
+        //SwissLogger.info("Player " + e.getPlayer().getName() + " attempted to go bellow the bedrock floor");
     }
 }

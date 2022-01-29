@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems;
 
+import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.hooks.Hooks;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.utils.SwissLogger;
@@ -44,22 +45,22 @@ public class Systems {
 
     public static void save(){
         long start = java.lang.System.currentTimeMillis();
-        SwissLogger.info("Saving configurations...");
+        SwissKnife.swissLogger.info("Saving configurations...");
 
         for(System<?> system : systems.values()) system.save();
 
         long end = java.lang.System.currentTimeMillis() - start;
-        SwissLogger.info("Saved in " +  end + " milliseconds.");
+        SwissKnife.swissLogger.info("Saved in " +  end + " milliseconds.");
     }
 
     public static void load(){
         long start = java.lang.System.currentTimeMillis();
-        SwissLogger.info("Loading configurations...");
+        SwissKnife.swissLogger.info("Loading configurations...");
 
         for(Runnable task : preLoadTasks) task.run();
         for(System<?> system : systems.values()) system.load();
         long end = java.lang.System.currentTimeMillis() - start;
-        SwissLogger.info("Loaded in " +  end + " milliseconds.");
+        SwissKnife.swissLogger.info("Loaded in " +  end + " milliseconds.");
     }
 
 

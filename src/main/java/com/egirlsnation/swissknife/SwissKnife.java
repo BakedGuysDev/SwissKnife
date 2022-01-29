@@ -215,18 +215,6 @@ public class SwissKnife extends JavaPlugin {
         return pluginManager;
     }
 
-    /*
-    private void initPluginHooks(){
-        //TODO: Startup hooks init
-        if(pluginManager.getPlugin("VotingPlugin") != null){
-            if(pluginManager.getPlugin("VotingPlugin").isEnabled()){
-                if(votingPluginHook.isVotingPluginHookActive()) return;
-                SwissLogger.info("Enabling VotingPlugin hook.");
-                votingPluginHook.initVotingPluginHook();
-            }
-        }
-    }
-     */
 
     private void initTPSnotifyTask() {
         //TODO
@@ -257,8 +245,7 @@ public class SwissKnife extends JavaPlugin {
         }, serverUtil.getTicksFromMinutes(OldConfig.instance.delayAfterLoad), OldConfig.instance.tpsTaskTime);
     }
 
-    private void registerRecipes(){
-        //TODO
+    private void registerRecipes(){ //TODO
         swissLogger.info("Registering recipes");
         if(OldConfig.instance.enablePickaxeCraft){
             swissLogger.info("Registering draconite pickaxe recipe");

@@ -113,7 +113,7 @@ public class ArmorStackLimiter extends Module {
                     e.getEntity().sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
                 }
                 if(log.get()){
-                    info("Trimmed armor stack picked up by " + e.getEntity().getName() + " at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));
+                    info("Trimmed armor stack to be picked up by " + e.getEntity().getName() + " at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));
                 }
             }
         }

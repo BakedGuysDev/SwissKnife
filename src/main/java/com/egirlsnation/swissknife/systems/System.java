@@ -13,7 +13,6 @@
 package com.egirlsnation.swissknife.systems;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.utils.SwissLogger;
 import org.apache.commons.lang.StringUtils;
 import org.simpleyaml.configuration.file.YamlFile;
 import org.simpleyaml.exceptions.InvalidConfigurationException;
@@ -54,7 +53,7 @@ public abstract class System<T>{
                 file.loadWithComments();
                 readFromConfig();
             }else{
-                SwissLogger.info(StringUtils.capitalize(getName()) +" config doesn't exist. Creating default one.");
+                SwissKnife.swissLogger.info(StringUtils.capitalize(getName()) +" config doesn't exist. Creating default one.");
                 writeToConfig();
             }
         } catch (InvalidConfigurationException | IOException e) {

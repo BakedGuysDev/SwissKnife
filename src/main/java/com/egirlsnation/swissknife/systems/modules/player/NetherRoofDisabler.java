@@ -12,10 +12,11 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
+import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.OldConfig;
-import com.egirlsnation.swissknife.utils.SwissLogger;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -26,64 +27,141 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
 public class NetherRoofDisabler extends Module {
-    public NetherRoofDisabler() {
+    public NetherRoofDisabler(){
         super(Categories.Player, "nether-roof-disabler", "Prevents players from going onto the nether roof");
     }
 
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Integer> roofHeight = sgGeneral.add(new IntSetting.Builder()
+            .name("roof-height")
+            .description("The Y coordinate of the highest bedrock block of the nether roof")
+            .defaultValue(127)
+            .build()
+    );
+
+    private final Setting<Boolean> teleportDown = sgGeneral.add(new BoolSetting.Builder()
+            .name("teleport-down")
+            .description("If players should be teleported down")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Boolean> damagePlayer = sgGeneral.add(new BoolSetting.Builder()
+            .name("deal-damage")
+            .description("If players should get damaged when they're on the roof")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Integer> damage = sgGeneral.add(new IntSetting.Builder()
+            .name("damage")
+            .description("How much damage should the player get (ignores armor)")
+            .defaultValue(1)
+            .build()
+    );
+
+    private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
+            .name("alert-players")
+            .description("If the plugin should tell the player he can't go on the nether roof")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<String> message = sgGeneral.add(new StringSetting.Builder()
+            .name("message")
+            .description("The message to send (supports color codes)")
+            .defaultValue(ChatColor.RED + "You cannot go on the nether roof")
+            .build()
+    );
+
+    private final Setting<Boolean> log = sgGeneral.add(new BoolSetting.Builder()
+            .name("log")
+            .description("If the plugin should log when player attempts to go on the nether roof")
+            .defaultValue(true)
+            .build()
+    );
+
+
     @EventHandler
-    public void PlayerMove(PlayerMoveEvent e) {
+    public void PlayerMove(PlayerMoveEvent e){
         if(!isEnabled()) return;
-        if (OldConfig.instance.preventPlayersOnNether) {
-            Location l = e.getTo();
-            if (!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if (l.getY() >= OldConfig.instance.netherRoofHeight) {
-                SwissLogger.info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
-                e.setCancelled(true);
-                if (OldConfig.instance.teleportPlayersDown) {
-                    e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
-                }
-                if (OldConfig.instance.dmgPlayersOnNether) {
-                    e.getPlayer().damage(OldConfig.instance.dmgToDealNether);
-                }
+
+        Location l = e.getTo();
+        if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
+
+        if(l.getY() >= roofHeight.get()){
+            e.setCancelled(true);
+
+            if(log.get()) info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
+
+            if(teleportDown.get()){
+                e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
+            }
+            if(damagePlayer.get()){
+                e.getPlayer().setHealth(e.getPlayer().getHealth() - damage.get());
             }
         }
+
     }
 
     @EventHandler
     public void PlayerTeleport(PlayerTeleportEvent e){
         if(!isEnabled()) return;
-        if(OldConfig.instance.preventPlayersOnNether){
-            Location l = e.getTo();
-            if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if(l.getBlockY() >= OldConfig.instance.netherRoofHeight){
-                SwissLogger.info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
-                e.setCancelled(true);
+
+
+        Location l = e.getTo();
+        if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
+
+        if(l.getBlockY() >= roofHeight.get()){
+            e.setCancelled(true);
+
+            if(log.get()) info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
+
+            if(teleportDown.get()){
+                e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
+            }
+            if(damagePlayer.get()){
+                e.getPlayer().setHealth(e.getPlayer().getHealth() - damage.get());
             }
         }
     }
 
     @EventHandler
     public void VehicleEnter(VehicleEnterEvent e){
-        if(OldConfig.instance.preventPlayersOnNether && e.getEntered() instanceof Player){
+        if(e.getEntered() instanceof Player){
             Location l = e.getVehicle().getLocation();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if(l.getBlockY() >= OldConfig.instance.netherRoofHeight && !e.getEntered().isOp()){
+
+            if(l.getBlockY() >= roofHeight.get()){
                 e.setCancelled(true);
-                SwissLogger.info("Player " + e.getEntered().getName() + " attempted to go above the nether roof");
                 e.getVehicle().remove();
+
+                if(log.get()) info("Player " + e.getEntered().getName() + " attempted to go above the nether roof");
+
+                if(damagePlayer.get()){
+                    Player player = (Player) e.getEntered();
+                    player.setHealth(player.getHealth() - damage.get());
+                }
             }
         }
     }
 
     @EventHandler
     public void VehicleExit(VehicleExitEvent e){
-        if(OldConfig.instance.preventPlayersOnNether && e.getExited() instanceof Player){
+        if(e.getExited() instanceof Player){
             Location l = e.getVehicle().getLocation();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
-            if(l.getBlockY() >= OldConfig.instance.netherRoofHeight && !e.getExited().isOp()){
+
+            if(l.getBlockY() >= OldConfig.instance.netherRoofHeight){
                 e.setCancelled(true);
-                SwissLogger.info("Player " + e.getExited().getName() + " attempted to go above the nether roof");
                 e.getVehicle().remove();
+
+                if(log.get()) info("Player " + e.getExited().getName() + " attempted to go above the nether roof");
+
+                if(damagePlayer.get()){
+                    e.getExited().setHealth(e.getExited().getHealth() - damage.get());
+                }
             }
         }
     }

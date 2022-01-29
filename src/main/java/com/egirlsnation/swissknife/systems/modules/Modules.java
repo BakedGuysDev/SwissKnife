@@ -22,13 +22,9 @@ import com.egirlsnation.swissknife.systems.modules.entity.*;
 import com.egirlsnation.swissknife.systems.modules.illegals.*;
 import com.egirlsnation.swissknife.systems.modules.misc.ChatTweaks;
 import com.egirlsnation.swissknife.systems.modules.misc.ShulkerStackHandler;
-import com.egirlsnation.swissknife.systems.modules.player.CombatCheck;
-import com.egirlsnation.swissknife.systems.modules.player.CrystalSpeedLimiter;
-import com.egirlsnation.swissknife.systems.modules.player.NetherRoofDisabler;
-import com.egirlsnation.swissknife.systems.modules.player.RestrictedCreativeAddon;
+import com.egirlsnation.swissknife.systems.modules.player.*;
 import com.egirlsnation.swissknife.systems.modules.world.EndermenGrief;
 import com.egirlsnation.swissknife.systems.modules.world.JihadBalls;
-import com.egirlsnation.swissknife.utils.SwissLogger;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.simpleyaml.configuration.ConfigurationSection;
@@ -148,10 +144,13 @@ public class Modules extends System<Module> {
         add(new IllegalBlocks());
         add(new IllegalEnchants());
         add(new IllegalLores());
+        add(new TotemStackLimiter());
     }
 
     private void initPlayer() {
+        add(new BedrockFloorDisabler());
         add(new CombatCheck());
+        add(new CrystalKillTracker());
         add(new CrystalSpeedLimiter());
         add(new NetherRoofDisabler());
         add(new RestrictedCreativeAddon());
@@ -175,7 +174,6 @@ public class Modules extends System<Module> {
     public void writeToConfig() {
         for(Category category : CATEGORIES){
             for(Module module : groups.get(category)){
-                SwissLogger.debug("    - " + module.name);
                 ConfigurationSection section = getFile().createSection(module.name);
 
                 getFile().setComment(module.name, module.description, CommentType.SIDE);
@@ -192,7 +190,7 @@ public class Modules extends System<Module> {
 
             if(category.equals(Categories.EgirlsNation)){
                 getFile().setComment(groups.get(category).get(0).name, "\n" + StringUtils.capitalize(category.name) + " category\n"
-                        + "Modules meant for play.egirlsnation.com\nEnabling them is not recommended unless you know what you're doing.\n" , CommentType.BLOCK);
+                        + "Modules meant for play.egirlsnation.com\nEnabling them is not recommended unless you know exactly what you're doing!\n" , CommentType.BLOCK);
             }else{
                 getFile().setComment(groups.get(category).get(0).name, "\n" + StringUtils.capitalize(category.name) + " category" + "\n", CommentType.BLOCK);
             }
@@ -207,7 +205,6 @@ public class Modules extends System<Module> {
 
     @Override
     public void readFromConfig() {
-        SwissLogger.debug("Reading from modules config");
         for (Module module : modules) {
             ConfigurationSection section = getFile().getConfigurationSection(module.name);
             boolean enabled = section.getBoolean("enabled");
@@ -219,7 +216,6 @@ public class Modules extends System<Module> {
                 if (section != null) {
                     for (Setting<Object> setting : sg) {
                         setting.set(section.get(setting.name));
-                        SwissLogger.debug("Value: " + setting.get().toString());
                     }
                 }
             }

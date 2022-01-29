@@ -29,6 +29,8 @@ public class AntiSpawnEggs extends Module {
         super(Categories.Illegals,"anti-spawn-eggs", "Prevents players from using spawn eggs");
     }
 
+    //TODO: Replace op check with permission check
+
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Boolean> opBypass = sgGeneral.add(new BoolSetting.Builder()
@@ -40,7 +42,7 @@ public class AntiSpawnEggs extends Module {
 
     private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
             .name("alert-players")
-            .description("Illegal item found. This incident will be reported")
+            .description("If the plugin should alert player when they try to use a spawn egg")
             .defaultValue(false)
             .build()
     );

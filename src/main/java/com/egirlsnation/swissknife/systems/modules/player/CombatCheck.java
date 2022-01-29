@@ -12,10 +12,10 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
+import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.OldConfig;
-import com.egirlsnation.swissknife.utils.SwissLogger;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -42,6 +42,8 @@ public class CombatCheck extends Module {
     private static final Map<UUID, Long> elytraMap = new HashMap<>();
 
 
+    //TODO: Config options
+
 
     @EventHandler
     private void onEntityDamageByBlockEvent(EntityDamageByBlockEvent e){
@@ -51,7 +53,7 @@ public class CombatCheck extends Module {
         EntityDamageEvent.DamageCause cause = e.getCause();
 
         if(e.getDamager() == null){
-            SwissLogger.debug("Damager null");
+            SwissKnife.swissLogger.debug("Damager null");
             return;
         }
 

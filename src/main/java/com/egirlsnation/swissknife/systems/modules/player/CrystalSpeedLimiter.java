@@ -12,9 +12,11 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
+import com.egirlsnation.swissknife.settings.IntSetting;
+import com.egirlsnation.swissknife.settings.Setting;
+import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,9 +29,18 @@ import java.util.UUID;
 
 public class CrystalSpeedLimiter extends Module {
 
-    public CrystalSpeedLimiter() {
+    public CrystalSpeedLimiter(){
         super(Categories.Player, "crystal-speed-limiter", "Limits how many crystals can player break per second");
     }
+
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Integer> delay = sgGeneral.add(new IntSetting.Builder()
+            .name("delay")
+            .description("How many miliseconds before breaking another")
+            .defaultValue(200)
+            .build()
+    );
 
     private final static Map<UUID, Long> crystalMap = new HashMap<>();
 
@@ -40,17 +51,15 @@ public class CrystalSpeedLimiter extends Module {
         if(!(e.getDamager() instanceof Player)) return;
         Player player = (Player) e.getDamager();
 
-        if(OldConfig.instance.limitCrystalPlacementSpeed){
-            UUID uuid = player.getUniqueId();
-            if(!crystalMap.containsKey(uuid)){
-                crystalMap.put(uuid, System.currentTimeMillis());
+        UUID uuid = player.getUniqueId();
+        if(!crystalMap.containsKey(uuid)){
+            crystalMap.put(uuid, System.currentTimeMillis());
+        }else{
+            long timeLeft = System.currentTimeMillis() - crystalMap.get(uuid);
+            if(timeLeft < delay.get()){
+                e.setCancelled(true);
             }else{
-                long timeLeft = System.currentTimeMillis() - crystalMap.get(uuid);
-                if(timeLeft < OldConfig.instance.crystalDelay){
-                    e.setCancelled(true);
-                }else{
-                    crystalMap.put(uuid, System.currentTimeMillis());
-                }
+                crystalMap.put(uuid, System.currentTimeMillis());
             }
         }
     }

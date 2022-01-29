@@ -57,7 +57,7 @@ public class onPlayerChat implements Listener {
         }
 
         if(OldConfig.instance.coordsEnabled){
-            e.setMessage(e.getMessage().replaceAll(OldConfig.instance.coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
+            //e.setMessage(e.getMessage().replaceAll(OldConfig.instance.coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
         }
     }
 

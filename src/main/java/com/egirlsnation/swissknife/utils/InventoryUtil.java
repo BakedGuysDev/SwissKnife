@@ -12,20 +12,8 @@
 
 package com.egirlsnation.swissknife.utils;
 
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
 public class InventoryUtil {
 
-    public static boolean scanAndTrimTotemStack(Inventory inv){
-        boolean found = false;
-        for(ItemStack item : inv.getContents()){
-            if(ItemUtil.isArmorPiece(item) && item.getAmount() > OldConfig.instance.maxArmorStack){
-                item.setAmount(OldConfig.instance.maxArmorStack);
-                found = true;
-            }
-        }
-        return found;
-    }
+
 
 }

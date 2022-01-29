@@ -58,5 +58,7 @@ permissions:
     default: op
   swissknife.chat.greentext:
     description: Allows user to prefix message with > to change color of the message to green
+  swissknife.chat.coords:
+    description: Allows user to use the [coords] placeholder to display their position
   swissknife.heads.nodrop:
     description: Prevents player from dropping head

@@ -49,6 +49,13 @@ public class WitherSpawnLimiter extends Module {
             .build()
     );
 
+    private final Setting<Boolean> log = sgGeneral.add(new BoolSetting.Builder()
+            .name("logging")
+            .description("If the plugin should log cancelled wither spawn attempts")
+            .defaultValue(false)
+            .build()
+    );
+
     @EventHandler
     private void EntitySpawn(CreatureSpawnEvent e){
         if(!isEnabled()) return;
@@ -61,6 +68,9 @@ public class WitherSpawnLimiter extends Module {
                     if(entity instanceof Player){
                         entity.sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
                     }
+                }
+                if(log.get()){
+                    info("Cancelled wither spawn at: " + LocationUtil.getLocationString(e.getLocation()));
                 }
             }
         }

@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.utils.player;
 
-import com.egirlsnation.swissknife.utils.SwissLogger;
+import com.egirlsnation.swissknife.SwissKnife;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,9 +31,9 @@ public class GamemodeUtil {
         if(player.getItemOnCursor().getType().equals(Material.AIR)) return;
         ItemStack clickedItem = player.getItemOnCursor();
         if(clickedItem.getItemMeta() == null){
-            SwissLogger.info(player.getCustomName() + " tried to bring a " + clickedItem.getType() + " out of creative. (Possibly illegal?)" );
+            SwissKnife.swissLogger.info(player.getCustomName() + " tried to bring a " + clickedItem.getType() + " out of creative. (Possibly illegal?)" );
         }else{
-            SwissLogger.info(player.getCustomName() + " tried to bring a " + clickedItem.getItemMeta().displayName() + "( " + clickedItem.getType() + ") out of creative. (Possibly illegal?)" );
+            SwissKnife.swissLogger.info(player.getCustomName() + " tried to bring a " + clickedItem.getItemMeta().displayName() + "( " + clickedItem.getType() + ") out of creative. (Possibly illegal?)" );
         }
         player.setItemOnCursor(null);
     }

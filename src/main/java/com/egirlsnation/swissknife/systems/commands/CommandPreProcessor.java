@@ -123,7 +123,7 @@ public class CommandPreProcessor  implements Listener {
         if(OldConfig.instance.coordsCommandsEnabled){
             for(String command : OldConfig.instance.coordsCommands){
                 if(e.getMessage().toLowerCase().startsWith(command)){
-                    e.setMessage(e.getMessage().replaceAll(OldConfig.instance.coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
+                    //e.setMessage(e.getMessage().replaceAll(OldConfig.instance.coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
                     break;
                 }
             }

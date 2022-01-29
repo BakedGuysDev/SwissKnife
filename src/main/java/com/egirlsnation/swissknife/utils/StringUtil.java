@@ -15,7 +15,6 @@ package com.egirlsnation.swissknife.utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -44,17 +43,6 @@ public class StringUtil {
         int z = (int) loc.getZ();
 
         return "X: " + x + " Y: " + y + " Z: " + z;
-    }
-
-    public static String getCoordsPlaceholderFormatted(Player player){
-
-        String res = ChatColor.translateAlternateColorCodes('&', OldConfig.instance.coordsReplace.replaceAll("%player_world%", player.getWorld().getName())
-                .replaceAll("%player_x%", (int) player.getLocation().getX() + "")
-                .replaceAll("%player_y%", (int) player.getLocation().getY() + "")
-                .replaceAll("%player_z%", (int) player.getLocation().getZ() + "")
-        );
-
-        return res;
     }
 
     public static String nameToTitle(String name){
