@@ -22,13 +22,12 @@ import com.egirlsnation.swissknife.listeners.inventory.onInventoryOpen;
 import com.egirlsnation.swissknife.listeners.player.*;
 import com.egirlsnation.swissknife.systems.Systems;
 import com.egirlsnation.swissknife.systems.commands.*;
+import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Modules;
-import com.egirlsnation.swissknife.utils.DiscordUtil;
-import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
-import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.systems.sql.SqlQuery;
+import com.egirlsnation.swissknife.utils.DiscordUtil;
 import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.ServerUtil;
 import com.egirlsnation.swissknife.utils.SwissLogger;
@@ -63,7 +62,6 @@ public class SwissKnife extends JavaPlugin {
     private final ServerUtil serverUtil = new ServerUtil();
     private final RankUtil rankUtil = new RankUtil();
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
-    private final VotingPluginHook votingPluginHook = new VotingPluginHook();
 
     @Override
     public void onEnable() {
@@ -170,7 +168,7 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onPlayerChat(this), this);
     }
 
-    private void registerCommands() {
+    private void registerCommands() { //TODO
         swissLogger.info("Registering commands.");
         Objects.requireNonNull(this.getCommand("kill")).setExecutor(new KillCommand(this));
         Objects.requireNonNull(this.getCommand("ping")).setExecutor(new PingCommand());
@@ -185,7 +183,7 @@ public class SwissKnife extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("toggleitemability")).setExecutor(new ToggleItemAbilityCommand());
     }
 
-    private void initSQL() {
+    private void initSQL() { //TODO
         swissLogger.info("Starting up SQL driver.");
 
         this.SQL = new MySQL();
@@ -216,7 +214,7 @@ public class SwissKnife extends JavaPlugin {
     }
 
 
-    private void initTPSnotifyTask() {
+    private void initTPSnotifyTask() { //TODO
         //TODO
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             List<Double> tps = serverUtil.getTPS();

@@ -88,14 +88,15 @@ public class TotemStackLimiter extends Module {
     private void onInventoryClick(InventoryClickEvent e){
         if(!isEnabled()) return;
         if(e.getClickedInventory() == null) return;
-        if(scanAndTrimTotemStack(e.getInventory()) && e.getWhoClicked() instanceof Player){
+        if(scanAndTrimTotemStack(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
+            e.setCancelled(true);
             if(alertPlayers.get()){
                 alertPlayer(e.getWhoClicked());
             }
 
             if(log.get()){
-                if(e.getInventory().getLocation() != null){
-                    info("Trimmed totem stack in inventory clicked by " + e.getWhoClicked().getName() + " at: " + LocationUtil.getLocationString(e.getInventory().getLocation()));
+                if(e.getClickedInventory().getLocation() != null){
+                    info("Trimmed totem stack in inventory clicked by " + e.getWhoClicked().getName() + " at: " + LocationUtil.getLocationString(e.getClickedInventory().getLocation()));
                 }else{
                     info("Trimmed totem stack in inventory clicked by " + e.getWhoClicked().getName());
                 }
@@ -112,7 +113,9 @@ public class TotemStackLimiter extends Module {
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
         if(e.getItem().getItemStack().getType().equals(Material.TOTEM_OF_UNDYING) && e.getItem().getItemStack().getAmount() > maxTotemStack.get()){
-            e.getItem().getItemStack().setAmount(maxTotemStack.get());
+            ItemStack is = e.getItem().getItemStack();
+            is.setAmount(maxTotemStack.get());
+            e.getItem().setItemStack(is);
 
             if(alertPlayers.get()){
                 alertPlayer(e.getEntity());
@@ -162,7 +165,7 @@ public class TotemStackLimiter extends Module {
     }
 
     private void alertPlayer(Entity entity){
-        entity.sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+        entity.sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
     }
 
     public boolean scanAndTrimTotemStack(Inventory inv){

@@ -68,11 +68,12 @@ public class IllegalBlocks extends Module {
         String materialString1 = String.valueOf(illegalBlocks.get().stream().filter(materialString -> e.getBlock().getType().equals(Material.getMaterial(materialString))).findFirst());
 
         if(materialString1 != null){
+            info("Test");
             //Additional check if the block was held to allow filling out end portals
             if(e.getItemInHand().getType().equals(Material.getMaterial(materialString1))){
                 e.setCancelled(true);
                 if(alertPlayers.get()){
-                    e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+                    e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
                 }
                 if(log.get()){
                     info("Prevented " + e.getPlayer().getName() + " from placing an illegal block ( " + materialString1 + " )" );

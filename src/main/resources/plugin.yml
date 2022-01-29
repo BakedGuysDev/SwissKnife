@@ -56,9 +56,15 @@ permissions:
   swissknife.bypass.creative:
     description: Allows user to bypass all creative checks (includes swissknife.bypass.fly)
     default: op
+  swissknife.bypass.illegals:
+    description: Allows user to bypass all illegal checks
+    default: op
   swissknife.chat.greentext:
     description: Allows user to prefix message with > to change color of the message to green
+    default: op
   swissknife.chat.coords:
     description: Allows user to use the [coords] placeholder to display their position
+    default: op
   swissknife.heads.nodrop:
     description: Prevents player from dropping head
+    default: op

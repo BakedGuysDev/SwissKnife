@@ -12,14 +12,10 @@
 
 package com.egirlsnation.swissknife.systems.modules.entity;
 
-import com.egirlsnation.swissknife.settings.BoolSetting;
-import com.egirlsnation.swissknife.settings.Setting;
-import com.egirlsnation.swissknife.settings.SettingGroup;
-import com.egirlsnation.swissknife.settings.StringSetting;
+import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.LocationUtil;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -34,6 +30,13 @@ public class WitherSpawnLimiter extends Module {
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Integer> radius = sgGeneral.add(new IntSetting.Builder()
+            .name("radius")
+            .description("The spawn radius in which players can't spawn withers")
+            .defaultValue(3000)
+            .build()
+    );
 
     private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
             .name("alert-players")
@@ -61,12 +64,12 @@ public class WitherSpawnLimiter extends Module {
         if(!isEnabled()) return;
 
         if(e.getEntityType() == EntityType.WITHER){
-            if(LocationUtil.isInSpawnRadius(e.getLocation().getX(),e.getLocation().getZ(), OldConfig.instance.spawnRadius)){
+            if(LocationUtil.isInSpawnRadius(e.getLocation().getX(),e.getLocation().getZ(), radius.get())){
                 e.setCancelled(true);
                 if(!alertPlayers.get()) return;
                 for(Entity entity : e.getEntity().getNearbyEntities(e.getLocation().getX(), e.getLocation().getY(), e.getLocation().getZ())){
                     if(entity instanceof Player){
-                        entity.sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+                        entity.sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
                     }
                 }
                 if(log.get()){

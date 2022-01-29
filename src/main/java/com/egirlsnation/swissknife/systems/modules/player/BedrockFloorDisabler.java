@@ -131,7 +131,7 @@ public class BedrockFloorDisabler extends Module {
             }
             e.setTo(e.getFrom().add(0, 2, 0));
             if(owAlertPlayers.get()){
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', owMessage.get()));
+                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', owMessage.get()));
             }
             if(owLog.get()){
                 info("Player " + e.getPlayer().getName() + " attempted to go bellow the overworld bedrock at: " + LocationUtil.getLocationString(e.getFrom()));
@@ -145,7 +145,7 @@ public class BedrockFloorDisabler extends Module {
             }
             e.setTo(e.getFrom().add(0, 2, 0));
             if(netherAlertPlayers.get()){
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', netherMessage.get()));
+                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', netherMessage.get()));
             }
             if(netherLog.get()){
                 info("Player " + e.getPlayer().getName() + " attempted to go bellow the nether bedrock at: " + LocationUtil.getLocationString(e.getFrom()));

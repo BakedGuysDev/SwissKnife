@@ -70,8 +70,9 @@ public class IllegalLores extends Module {
     private void onInventoryOpen(InventoryOpenEvent e){
         if(!isEnabled()) return;
         if(scanAndRemoveFromInv(e.getInventory()) && e.getPlayer() instanceof Player){
+            e.setCancelled(true);
             if(alertPlayers.get()){
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
                 if(e.getInventory().getLocation() == null){
@@ -87,15 +88,16 @@ public class IllegalLores extends Module {
     private void onInventoryClick(InventoryClickEvent e){
         if(!isEnabled()) return;
         if(e.getClickedInventory() == null) return;
-        if(scanAndRemoveFromInv(e.getInventory()) && e.getWhoClicked() instanceof Player){
+        if(scanAndRemoveFromInv(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
+            e.setCancelled(true);
             if(alertPlayers.get()){
-                e.getWhoClicked().sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+                e.getWhoClicked().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
-                if(e.getInventory().getLocation() == null){
+                if(e.getClickedInventory().getLocation() == null){
                     info("Found item with illegal lore clicked by " + e.getWhoClicked().getName() + " in inventory");
                 }else{
-                    info("Found item with illegal lore clicked by " + e.getWhoClicked().getName() + " in inventory at: " + LocationUtil.getLocationString(e.getInventory().getLocation()));
+                    info("Found item with illegal lore clicked by " + e.getWhoClicked().getName() + " in inventory at: " + LocationUtil.getLocationString(e.getClickedInventory().getLocation()));
                 }
             }
         }
@@ -123,7 +125,7 @@ public class IllegalLores extends Module {
             e.setCancelled(true);
 
             if(alertPlayers.get()){
-                e.getEntity().sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+                e.getEntity().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
                 info("Removed item with illegal lore being picked up by " + e.getEntity().getName() + " at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));

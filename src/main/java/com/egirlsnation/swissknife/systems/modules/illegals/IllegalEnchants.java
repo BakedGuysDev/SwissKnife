@@ -28,7 +28,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class IllegalEnchants extends Module {
@@ -123,30 +125,33 @@ public class IllegalEnchants extends Module {
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e){
         if(!isEnabled()) return;
+        if(e.getClickedInventory() == null) return;
         if(fixValues.get()){
-            if(scanAndFixEnchants(e.getInventory())){
+            if(scanAndFixEnchants(e.getClickedInventory())){
+                e.setCancelled(true);
                 if(alertPlayers.get()){
                     alertPlayer(e.getWhoClicked());
                 }
                 if(log.get()){
-                    if(e.getInventory().getLocation() == null){
+                    if(e.getClickedInventory().getLocation() == null){
                         info("Fixed over-enchanted item in inventory opened by " + e.getWhoClicked().getName());
                     }else{
-                        info("Fixed over-enchanted item in inventory at: " + LocationUtil.getLocationString(e.getInventory().getLocation()) + " opened by " + e.getWhoClicked().getName());
+                        info("Fixed over-enchanted item in inventory at: " + LocationUtil.getLocationString(e.getClickedInventory().getLocation()) + " opened by " + e.getWhoClicked().getName());
                     }
 
                 }
             }
         }else{
-            if(scanAndRemoveFromInv(e.getInventory())){
+            if(scanAndRemoveFromInv(e.getClickedInventory())){
+                e.setCancelled(true);
                 if(alertPlayers.get()){
                     alertPlayer(e.getWhoClicked());
                 }
                 if(log.get()){
-                    if(e.getInventory().getLocation() == null){
+                    if(e.getClickedInventory().getLocation() == null){
                         info("Removed over-enchanted item in inventory opened by " + e.getWhoClicked().getName());
                     }else{
-                        info("Removed over-enchanted item in inventory at: " + LocationUtil.getLocationString(e.getInventory().getLocation()) + " opened by " + e.getWhoClicked().getName());
+                        info("Removed over-enchanted item in inventory at: " + LocationUtil.getLocationString(e.getClickedInventory().getLocation()) + " opened by " + e.getWhoClicked().getName());
                     }
                 }
             }
@@ -170,13 +175,18 @@ public class IllegalEnchants extends Module {
         boolean found = false;
         for(ItemStack item : inv.getContents()){
             if(IllegalItemsUtil.hasEnchants(item)){
+                Map<Enchantment, Integer> enchantMap = new HashMap<>();
                 for(Map.Entry<Enchantment, Integer> entry : item.getItemMeta().getEnchants().entrySet()){
                     if(entry.getValue() > entry.getKey().getMaxLevel()){
-                        entry.setValue(entry.getKey().getMaxLevel());
+                        item.removeEnchantment(entry.getKey());
+                        enchantMap.put(entry.getKey(), entry.getKey().getMaxLevel());
+                        found = true;
                     }
                 }
 
-                found = true;
+                if(found){
+                    item.addUnsafeEnchantments(enchantMap);
+                }
             }
         }
         return found;
@@ -190,13 +200,18 @@ public class IllegalEnchants extends Module {
         if(fixValues.get()){ //TODO: Test
             boolean found = false;
             if(IllegalItemsUtil.hasEnchants(e.getItem().getItemStack())){
+                ItemMeta meta = e.getItem().getItemStack().getItemMeta();
+                Map<Enchantment, Integer> enchantMap = new HashMap<>();
                 for(Map.Entry<Enchantment, Integer> entry : e.getItem().getItemStack().getItemMeta().getEnchants().entrySet()){
                     if(entry.getValue() > entry.getKey().getMaxLevel()){
-                        entry.setValue(entry.getKey().getMaxLevel());
+                        //entry.setValue(entry.getKey().getMaxLevel()); //UnsupportedOperationException: null
+                        meta.removeEnchant(entry.getKey());
+                        enchantMap.put(entry.getKey(), entry.getKey().getMaxLevel());
                         found = true;
                     }
                 }
                 if(found){
+                    e.getItem().getItemStack().addUnsafeEnchantments(enchantMap);
                     if(alertPlayers.get()){
                         alertPlayer(e.getEntity());
                     }
@@ -221,7 +236,7 @@ public class IllegalEnchants extends Module {
     }
 
     private void alertPlayer(Entity entity){
-        entity.sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+        entity.sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
     }
 
 

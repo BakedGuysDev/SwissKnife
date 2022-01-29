@@ -29,16 +29,9 @@ public class AntiSpawnEggs extends Module {
         super(Categories.Illegals,"anti-spawn-eggs", "Prevents players from using spawn eggs");
     }
 
-    //TODO: Replace op check with permission check
-
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
-    private final Setting<Boolean> opBypass = sgGeneral.add(new BoolSetting.Builder()
-            .name("op-bypass")
-            .description("Whether to allow operators to bypass the module checks")
-            .defaultValue(false)
-            .build()
-    );
+    //TODO: Bypass permission checks for all illegal modules
 
     private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
             .name("alert-players")
@@ -76,7 +69,7 @@ public class AntiSpawnEggs extends Module {
             e.getItem().setAmount(0);
             e.setCancelled(true);
             if(alertPlayers.get()){
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
                 info("Prevented " + e.getPlayer().getName() + " from using a spawn egg");

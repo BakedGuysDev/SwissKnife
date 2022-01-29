@@ -61,15 +61,15 @@ public abstract class Module implements Listener, Comparable<Module> {
     }
 
     public void info(String message){
-        SwissKnife.swissLogger.log(Level.INFO, message, ChatColor.AQUA + "[ SwissKnife | " + name + " ]");
+        SwissKnife.swissLogger.log(Level.INFO, message, ChatColor.AQUA + "[SwissKnife|" + name + "] ");
     }
 
     public void warn(String message){
-        SwissKnife.swissLogger.log(Level.WARNING, message, ChatColor.YELLOW + "[ SwissKnife | " + name + " ]");
+        SwissKnife.swissLogger.log(Level.WARNING, message, ChatColor.YELLOW + "[SwissKnife|" + name + "] ");
     }
 
     public void error(String message){
-        SwissKnife.swissLogger.log(Level.SEVERE, message, ChatColor.RED + "[ SwissKnife | " + name + " ]");
+        SwissKnife.swissLogger.log(Level.SEVERE, message, ChatColor.RED + "[SwissKnife|" + name + "] ");
     }
 
 

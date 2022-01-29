@@ -68,7 +68,7 @@ public class ArmorStackLimiter extends Module {
         if(!isEnabled()) return;
         if(scanAndTrimArmorStacks(e.getInventory()) && e.getPlayer() instanceof Player){
             if(alertPlayers.get()){
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
                 if(e.getInventory().getLocation() != null){
@@ -85,13 +85,14 @@ public class ArmorStackLimiter extends Module {
     private void onInventoryClick(InventoryClickEvent e){
         if(!isEnabled()) return;
         if(e.getClickedInventory() == null) return;
-        if(scanAndTrimArmorStacks(e.getInventory()) && e.getWhoClicked() instanceof Player){
+        if(scanAndTrimArmorStacks(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
+            e.setCancelled(true);
             if(alertPlayers.get()){
-                e.getWhoClicked().sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+                e.getWhoClicked().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
-                if(e.getInventory().getLocation() != null){
-                    info("Trimmed armor stack in inventory clicked by " + e.getWhoClicked().getName() + " at: " + LocationUtil.getLocationString(e.getInventory().getLocation()));
+                if(e.getClickedInventory().getLocation() != null){
+                    info("Trimmed armor stack in inventory clicked by " + e.getWhoClicked().getName() + " at: " + LocationUtil.getLocationString(e.getClickedInventory().getLocation()));
                 }else{
                     info("Trimmed armor stack in inventory clicked by " + e.getWhoClicked().getName());
                 }
@@ -106,11 +107,13 @@ public class ArmorStackLimiter extends Module {
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
         if(ItemUtil.isArmorPiece(e.getItem().getItemStack()) && e.getItem().getItemStack().getAmount() > maxArmorStack.get()){
-            e.getItem().getItemStack().setAmount(maxArmorStack.get());
+            ItemStack is = e.getItem().getItemStack();
+            is.setAmount(maxArmorStack.get());
+            e.getItem().setItemStack(is);
 
             if(e.getEntity() instanceof Player){
                 if(alertPlayers.get()){
-                    e.getEntity().sendMessage(ChatColor.translateAlternateColorCodes('&', message.get()));
+                    e.getEntity().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
                 }
                 if(log.get()){
                     info("Trimmed armor stack to be picked up by " + e.getEntity().getName() + " at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));
