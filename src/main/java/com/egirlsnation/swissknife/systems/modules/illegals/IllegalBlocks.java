@@ -39,7 +39,7 @@ public class IllegalBlocks extends Module {
 
     private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
             .name("alert-players")
-            .description("Illegal item found. This incident will be reported")
+            .description("If the plugin should alert players when placing illegal block")
             .defaultValue(false)
             .build()
     );

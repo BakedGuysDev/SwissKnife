@@ -13,8 +13,6 @@
 package com.egirlsnation.swissknife.utils;
 
 import com.egirlsnation.swissknife.systems.config.Config;
-import com.egirlsnation.swissknife.systems.modules.Modules;
-import com.egirlsnation.swissknife.systems.modules.illegals.IllegalEnchants;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -27,7 +25,14 @@ import java.util.Map;
 
 public class IllegalItemsUtil {
 
-    public static boolean isOverEnchanted(@Nullable ItemStack item){
+    public static boolean hasEnchants(@Nullable ItemStack item){
+        if(item == null) return false;
+        if(item.getItemMeta() == null) return false;
+        ItemMeta meta = item.getItemMeta();
+        return meta.hasEnchants();
+    }
+
+    public static boolean isOverEnchanted(@Nullable ItemStack item, int maxEnchantLevel){
         if(item == null) return false;
         if(item.getItemMeta() == null) return false;
         ItemMeta meta = item.getItemMeta();
@@ -35,25 +40,15 @@ public class IllegalItemsUtil {
 
         Map<Enchantment, Integer> enchantMap = meta.getEnchants();
         for(Map.Entry<Enchantment, Integer> enchant: enchantMap.entrySet()){
-            //TODO: Max enchant value
-            if(enchant.getValue() > Modules.get().get(IllegalEnchants.class) ) return true;
+            if(enchant.getValue() > maxEnchantLevel) return true;
         }
         return false;
     }
 
+
+
     public static void notifyPlayerAboutOEI(Player player){
         player.sendMessage(Config.prefix + ChatColor.RED + "Over-enchanted item found. This incident will be reported");
-    }
-
-    public static boolean hasIllegalLore(@Nullable ItemStack item){
-        if(item == null) return false;
-        if(item.getItemMeta() == null) return false;
-        ItemMeta meta = item.getItemMeta();
-
-        if(!meta.hasLore()) return false;
-        if(meta.lore() == null) return false;
-
-        return meta.lore().stream().anyMatch(element -> OldConfig.instance.illegalLoreList.contains(element));
     }
 
     public static void notifyPlayerAboutIllegal(Player player){
