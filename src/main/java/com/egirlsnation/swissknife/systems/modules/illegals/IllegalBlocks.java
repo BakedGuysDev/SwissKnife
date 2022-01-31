@@ -15,6 +15,7 @@ package com.egirlsnation.swissknife.systems.modules.illegals;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.LocationUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -63,34 +64,22 @@ public class IllegalBlocks extends Module {
     private void onBlockPlace(BlockPlaceEvent e){
         if(!isEnabled()) return;
 
-        //TODO: Check if this rewrite actually works
         //TODO: Check if it allows a bypass with spoofing a different block being held
-        String materialString1 = String.valueOf(illegalBlocks.get().stream().filter(materialString -> e.getBlock().getType().equals(Material.getMaterial(materialString))).findFirst());
 
-        if(materialString1 != null){
-            info("Test");
-            //Additional check if the block was held to allow filling out end portals
-            if(e.getItemInHand().getType().equals(Material.getMaterial(materialString1))){
-                e.setCancelled(true);
-                if(alertPlayers.get()){
-                    e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
-                }
-                if(log.get()){
-                    info("Prevented " + e.getPlayer().getName() + " from placing an illegal block ( " + materialString1 + " )" );
+        for(String string : illegalBlocks.get()){
+            if(e.getBlock().getType().equals(Material.getMaterial(string))){
+                if(e.getItemInHand().getType().equals(Material.getMaterial(string))){
+                    e.setCancelled(true);
+                    e.getItemInHand().setAmount(0);
+                    if(alertPlayers.get()){
+                        e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                    }
+                    if(log.get()){
+                        info("Prevented " + e.getPlayer().getName() + " from placing an illegal block ( " + string + " ) at: " + LocationUtil.getLocationString(e.getBlock().getLocation()));
+                    }
                 }
             }
         }
 
-        /*
-        OldConfig.instance.illegalBlockList.forEach(block -> {
-            if(e.getBlock().getType().equals(Material.getMaterial(block))){
-
-                if(e.getItemInHand().getType().equals(Material.getMaterial(block))){
-                    e.setCancelled(true);
-
-                }
-            }
-        });
-        */
     }
 }

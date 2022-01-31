@@ -108,7 +108,7 @@ public class IllegalLores extends Module {
         boolean found = false;
         for(ItemStack item : inv.getContents()){
             if(hasIllegalLore(item)){
-                item.setAmount(0);
+                inv.remove(item);
                 found = true;
             }
         }

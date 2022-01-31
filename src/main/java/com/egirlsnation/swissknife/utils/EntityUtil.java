@@ -42,6 +42,16 @@ public class EntityUtil {
         return vehicles;
     }
 
+    public static List<Entity> filterEntityType(Entity[] entities, EntityType typeToFilter){
+        List<Entity> filtered = new ArrayList<>();
+        for(Entity entity : entities){
+            if(entity.getType().equals(typeToFilter)){
+                filtered.add(entity);
+            }
+        }
+        return filtered;
+    }
+
     public static int countEntities(EntityType entityType, Entity[] entities){
         int count = 0;
         for(Entity entity : entities){

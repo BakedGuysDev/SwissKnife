@@ -34,6 +34,8 @@ public class RestrictedCreativeAddon extends Module {
         super(Categories.Player, "restricted-creative-addon", "Additional checks for RestrictedCreative to make it safe-ish");
     }
 
+    //TODO: Config options
+
     @EventHandler
     private void onJoin(PlayerJoinEvent e){
         if(!e.getPlayer().isOp() && e.getPlayer().getGameMode().equals(GameMode.CREATIVE)){

@@ -17,6 +17,7 @@ import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -98,8 +99,15 @@ public class NetherRoofDisabler extends Module {
             if(teleportDown.get()){
                 e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
             }
+
+            if(alertPlayers.get()){
+                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+            }
+
             if(damagePlayer.get()){
-                e.getPlayer().setHealth(e.getPlayer().getHealth() - damage.get());
+                if(!e.getPlayer().getGameMode().equals(GameMode.CREATIVE)){
+                    e.getPlayer().setHealth(e.getPlayer().getHealth() - damage.get());
+                }
             }
         }
 
@@ -121,8 +129,15 @@ public class NetherRoofDisabler extends Module {
             if(teleportDown.get()){
                 e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
             }
+
+            if(alertPlayers.get()){
+                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+            }
+
             if(damagePlayer.get()){
-                e.getPlayer().setHealth(e.getPlayer().getHealth() - damage.get());
+                if(!e.getPlayer().getGameMode().equals(GameMode.CREATIVE)){
+                    e.getPlayer().setHealth(e.getPlayer().getHealth() - damage.get());
+                }
             }
         }
     }
@@ -137,11 +152,17 @@ public class NetherRoofDisabler extends Module {
                 e.setCancelled(true);
                 e.getVehicle().remove();
 
+                if(alertPlayers.get()){
+                    e.getEntered().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                }
+
                 if(log.get()) info("Player " + e.getEntered().getName() + " attempted to go above the nether roof");
 
                 if(damagePlayer.get()){
                     Player player = (Player) e.getEntered();
-                    player.setHealth(player.getHealth() - damage.get());
+                    if(!player.getGameMode().equals(GameMode.CREATIVE)){
+                        player.setHealth(player.getHealth() - damage.get());
+                    }
                 }
             }
         }
@@ -157,10 +178,16 @@ public class NetherRoofDisabler extends Module {
                 e.setCancelled(true);
                 e.getVehicle().remove();
 
+                if(alertPlayers.get()){
+                    e.getExited().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                }
+
                 if(log.get()) info("Player " + e.getExited().getName() + " attempted to go above the nether roof");
 
                 if(damagePlayer.get()){
-                    e.getExited().setHealth(e.getExited().getHealth() - damage.get());
+                    if(!((Player) e.getExited()).getGameMode().equals(GameMode.CREATIVE)){
+                        e.getExited().setHealth(e.getExited().getHealth() - damage.get());
+                    }
                 }
             }
         }

@@ -20,9 +20,13 @@ import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.EntityUtil;
 import com.egirlsnation.swissknife.utils.LocationUtil;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ExpBottleEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+
+import java.util.List;
 
 public class XpBottleLimiter extends Module {
     public XpBottleLimiter() {
@@ -55,6 +59,34 @@ public class XpBottleLimiter extends Module {
             e.getEntity().remove();
             if(log.get()){
                 info("Removed xp bottle over limit at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));
+            }
+        }
+    }
+
+    @EventHandler
+    public void projectileLaunchListener(ProjectileLaunchEvent e){
+        if(!isEnabled()) return;
+        if(e.getEntity().getType().equals(EntityType.THROWN_EXP_BOTTLE)){
+            List<Entity> entities = EntityUtil.filterEntityType(e.getEntity().getChunk().getEntities(), EntityType.THROWN_EXP_BOTTLE);
+            if(entities.size() > xpBottleCount.get()){
+                removeExcessBottles(entities);
+                if(log.get()){
+                    info("Removed xp bottles over limit at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));
+                }
+            }
+        }
+    }
+
+    private void removeExcessBottles(List<Entity> bottles){
+        if(bottles.isEmpty() || bottles.size() < xpBottleCount.get()){
+            return;
+        }
+
+        int i = bottles.size();
+        for(Entity bottle : bottles){
+            if(i > xpBottleCount.get()){
+                bottle.remove();
+                i--;
             }
         }
     }

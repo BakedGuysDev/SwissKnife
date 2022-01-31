@@ -163,7 +163,7 @@ public class IllegalEnchants extends Module {
         boolean found = false;
         for(ItemStack item : inv.getContents()){
             if(IllegalItemsUtil.isOverEnchanted(item, maxValue.get())){
-                item.setAmount(0);
+                inv.remove(item);
                 found = true;
             }
         }
