@@ -17,11 +17,15 @@ import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.System;
 import com.egirlsnation.swissknife.systems.Systems;
+import com.egirlsnation.swissknife.systems.modules.database.PlayerStats;
+import com.egirlsnation.swissknife.systems.modules.database.Shitlist;
 import com.egirlsnation.swissknife.systems.modules.egirls.Ranks;
 import com.egirlsnation.swissknife.systems.modules.entity.*;
 import com.egirlsnation.swissknife.systems.modules.illegals.*;
 import com.egirlsnation.swissknife.systems.modules.misc.ChatTweaks;
 import com.egirlsnation.swissknife.systems.modules.misc.ShulkerStackHandler;
+import com.egirlsnation.swissknife.systems.modules.misc.SmallFixes;
+import com.egirlsnation.swissknife.systems.modules.misc.SpawnCommands;
 import com.egirlsnation.swissknife.systems.modules.player.*;
 import com.egirlsnation.swissknife.systems.modules.world.EndermenGrief;
 import com.egirlsnation.swissknife.systems.modules.world.JihadBalls;
@@ -58,6 +62,7 @@ public class Modules extends System<Module> {
         initIllegals();
         initPlayer();
         initWorld();
+        initDatabase();
         initMisc();
         initEgirls();
     }
@@ -141,6 +146,7 @@ public class Modules extends System<Module> {
     private void initIllegals() {
         add(new AntiSpawnEggs());
         add(new ArmorStackLimiter());
+        add(new HighDamagePrevention());
         add(new IllegalBlocks());
         add(new IllegalEnchants());
         add(new IllegalLores());
@@ -148,6 +154,7 @@ public class Modules extends System<Module> {
     }
 
     private void initPlayer() {
+        add(new AntiOffhandCrash());
         add(new BedrockFloorDisabler());
         add(new CombatCheck());
         add(new CrystalKillTracker());
@@ -164,6 +171,13 @@ public class Modules extends System<Module> {
     private void initMisc() {
         add(new ChatTweaks());
         add(new ShulkerStackHandler());
+        add(new SmallFixes());
+        add(new SpawnCommands());
+    }
+
+    private void initDatabase(){
+        add(new PlayerStats());
+        add(new Shitlist());
     }
 
     private void initEgirls() {
@@ -208,9 +222,6 @@ public class Modules extends System<Module> {
         for (Module module : modules) {
             ConfigurationSection section = getFile().getConfigurationSection(module.name);
             boolean enabled = section.getBoolean("enabled");
-            if (enabled && !module.isEnabled()) {
-                module.toggle();
-            }
             for (SettingGroup sg : module.settings) {
                 section = getFile().getConfigurationSection(module.name + "." + sg.name);
                 if (section != null) {
@@ -218,6 +229,9 @@ public class Modules extends System<Module> {
                         setting.set(section.get(setting.name));
                     }
                 }
+            }
+            if (enabled && !module.isEnabled()) {
+                module.toggle();
             }
         }
         try {

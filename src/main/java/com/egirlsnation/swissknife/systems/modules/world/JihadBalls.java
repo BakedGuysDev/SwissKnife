@@ -19,6 +19,7 @@ import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.LocationUtil;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -41,6 +42,13 @@ public class JihadBalls extends Module {
             .name("radius")
             .description("Radius from spawn to allow use of jihads in")
             .defaultValue(100)
+            .build()
+    );
+
+    private final Setting<Boolean> invertRadius = sgGeneral.add(new BoolSetting.Builder()
+            .name("invert-radius")
+            .description("Instead of allowing jihads to be used in spawn radius they will be allowed outside")
+            .defaultValue(false)
             .build()
     );
 
@@ -72,10 +80,21 @@ public class JihadBalls extends Module {
 
         if (e.getEntityType().equals(EntityType.SNOWBALL)) {
 
-            if (!LocationUtil.isInSpawnRadius(e.getEntity().getLocation().getX(), e.getEntity().getLocation().getZ(), radius.get()) && limitRadius.get()) {
-                return;
+            if(limitRadius.get()){
+                double x = e.getEntity().getLocation().getX();
+                double z = e.getEntity().getLocation().getZ();
+                if(invertRadius.get() && !LocationUtil.isInSpawnRadius(x, z, radius.get())){
+                    explodeJihad(e.getEntity());
+                }else if(!invertRadius.get() && LocationUtil.isInSpawnRadius(x, z, radius.get())){
+                    explodeJihad(e.getEntity());
+                }
+            }else{
+                explodeJihad(e.getEntity());
             }
-            e.getEntity().getWorld().createExplosion(e.getEntity().getLocation(), (float) strength.get(), fire.get(), breakBlocks.get(), e.getEntity());
         }
+    }
+
+    private void explodeJihad(Entity entity){
+        entity.getWorld().createExplosion(entity.getLocation(), (float) strength.get(), fire.get(), breakBlocks.get(), entity);
     }
 }

@@ -72,12 +72,11 @@ public class IllegalItemHandler {
         if(meta.getLore().contains("§6Ancient weapon") || meta.getLore().contains("§6Ancient tool")) {
             Multimap<Attribute, AttributeModifier> modifierMap = meta.getAttributeModifiers();
 
-            // If modifier map is empty the item has stock modifiers
             if (modifierMap == null) return null;
             modifierMap = null;
 
             meta.setAttributeModifiers(modifierMap);
-            //Return the new meta
+
             return meta;
         }
 

@@ -22,6 +22,7 @@ public class Categories {
     public static final Category World = new Category("world", new ItemStack(Material.GRASS_BLOCK));
     public static final Category Misc = new Category("misc", new ItemStack(Material.POPPY));
     public static final Category EgirlsNation = new Category("egirls-nation", new ItemStack(Material.BLAZE_POWDER));
+    public static final Category Database = new Category("database", new ItemStack(Material.PAPER));
 
     public static boolean REGISTERING;
 
@@ -33,6 +34,7 @@ public class Categories {
         Modules.registerCategory(Entity);
         Modules.registerCategory(Player);
         Modules.registerCategory(World);
+        Modules.registerCategory(Database);
         Modules.registerCategory(Misc);
         Modules.registerCategory(EgirlsNation);
 

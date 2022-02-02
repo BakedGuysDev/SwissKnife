@@ -19,4 +19,18 @@ public class Config {
 
     //TODO: General config option for all module player alters to use the systemPrefix
     public static String systemPrefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife | %system%" + ChatColor.GOLD + "]" + ChatColor.RESET;
+
+    public static boolean useDatabase = false;
+
+    public static String databaseHost = "172.18.0.1";
+
+    public static String databasePort = "3306";
+
+    public static String databaseName = "name";
+
+    public static String databaseUsername = "username";
+
+    public static String databasePassword = "password";
+
+    //TODO: Config loading
 }

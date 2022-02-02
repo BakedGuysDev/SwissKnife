@@ -12,15 +12,11 @@
 
 package com.egirlsnation.swissknife.utils.player;
 
-import com.egirlsnation.swissknife.systems.sql.MySQL;
-import com.egirlsnation.swissknife.systems.sql.SqlQuery;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PingUtil {
 
@@ -43,6 +39,7 @@ public class PingUtil {
         return 0;
     }
 
+    /*
     public Map<PlayerInfo, Integer> getAllPings(){
         Map<PlayerInfo, Integer> pingMap = new HashMap<>();
         for (Player p : Bukkit.getOnlinePlayers()){
@@ -50,7 +47,9 @@ public class PingUtil {
         }
         return pingMap;
     }
+     */
 
+    /*
     public void uploadPingMap(Map<PlayerInfo, Integer> pingMap, MySQL SQL, SqlQuery sqlQuery){
 
         if(pingMap.isEmpty()) return;
@@ -64,5 +63,6 @@ public class PingUtil {
             sqlQuery.addPingRecord(entry.getKey(), entry.getValue());
         }
     }
+     */
 
 }

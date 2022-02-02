@@ -22,6 +22,7 @@ import com.egirlsnation.swissknife.listeners.inventory.onInventoryOpen;
 import com.egirlsnation.swissknife.listeners.player.*;
 import com.egirlsnation.swissknife.systems.Systems;
 import com.egirlsnation.swissknife.systems.commands.*;
+import com.egirlsnation.swissknife.systems.config.Config;
 import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Modules;
@@ -48,20 +49,24 @@ import java.util.Objects;
 
 public class SwissKnife extends JavaPlugin {
 
+    //TODO: Kick message override like in AEF
+
     public static SwissKnife INSTANCE;
     public static SwissLogger swissLogger;
 
-
-    private final PluginManager pluginManager = Bukkit.getPluginManager();
-
     public MySQL SQL;
     public SqlQuery sqlQuery;
+
+
+    //Old code
+    private final PluginManager pluginManager = Bukkit.getPluginManager();
 
     private final PingUtil pingUtil = new PingUtil();
     private final DiscordUtil discordUtil = new DiscordUtil();
     private final ServerUtil serverUtil = new ServerUtil();
     private final RankUtil rankUtil = new RankUtil();
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    //Old code end
 
     @Override
     public void onEnable() {
@@ -74,6 +79,8 @@ public class SwissKnife extends JavaPlugin {
         }
 
         swissLogger.info("Initializing SwissKnife");
+
+        initSQL();
 
         Categories.init();
 
@@ -183,22 +190,24 @@ public class SwissKnife extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("toggleitemability")).setExecutor(new ToggleItemAbilityCommand());
     }
 
-    private void initSQL() { //TODO
+    private void initSQL() { //TODO: New config
+        if(!Config.useDatabase) return;
+
         swissLogger.info("Starting up SQL driver.");
 
         this.SQL = new MySQL();
         this.sqlQuery = new SqlQuery(this);
 
-        if (OldConfig.instance.databaseName.equals("name") && OldConfig.instance.databaseUsername.equals("username") && OldConfig.instance.databasePassword.equals("password")) {
+        if (Config.databaseName.equals("name") && Config.databaseUsername.equals("username") && Config.databasePassword.equals("password")) {
             swissLogger.warning("Default SQL config values detected. SQL driver won't be initiated.");
             return;
         }
 
         try {
             SQL.connect();
-        } catch (SQLException | ClassNotFoundException throwables) {
+        } catch (SQLException | ClassNotFoundException ex) {
             swissLogger.severe("Something went wrong while initiating SQL\nStack trace will follow.");
-            throwables.printStackTrace();
+            ex.printStackTrace();
         }
 
         if (SQL.isConnected()) {

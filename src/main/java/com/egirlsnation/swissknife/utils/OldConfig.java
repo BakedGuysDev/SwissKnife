@@ -21,8 +21,6 @@ import org.bukkit.entity.EntityType;
 import java.util.Arrays;
 import java.util.List;
 
-//TODO: Better config system to work integrate with the new codebase
-
 @ConfigFile("Config.instance.yml")
 public class OldConfig {
     public static OldConfig instance = null;
@@ -52,7 +50,7 @@ public class OldConfig {
     @ConfigValue("illegals.maxEnchant") // Done
     public int maxEnchantLevel = 100;
 
-    @ConfigValue("illegals.checkLores")
+    @ConfigValue("illegals.checkLores") //Done
     public List<String> illegalLoreList = Arrays.asList("§9§lBig Dick Energy X", "§cCurse of Simping");
 
     @ConfigValue("illegals.maxTotemStack")
@@ -61,43 +59,43 @@ public class OldConfig {
     @ConfigValue("illegals.illegalBlockList") // Done
     public List<String> illegalBlockList = Arrays.asList("BEDROCK", "END_PORTAL_FRAME", "BARRIER", "STRUCTURE_BLOCK", "STRUCTURE_VOID");
 
-    @ConfigValue("illegals.enable1kPicks")
+    @ConfigValue("illegals.enable1kPicks") //Dropped
     public boolean enable1kPicks = false;
 
-    @ConfigValue("illegals.unstackOverstackedInShulkers")
+    @ConfigValue("illegals.unstackOverstackedInShulkers") //Done
     public boolean unstackInShulks = true;
 
-    @ConfigValue("illegals.maxArmorStack")
+    @ConfigValue("illegals.maxArmorStack") //Done
     public int maxArmorStack = 2;
 
     /*
      * Patches config options
      */
 
-    @ConfigValue("patches.limitVehiclesInChunk")
+    @ConfigValue("patches.limitVehiclesInChunk") //Done - tested
     public boolean limitVehicles = true;
 
-    @ConfigValue("patches.maxVehicleInChunk")
+    @ConfigValue("patches.maxVehicleInChunk") //Done - tested
     public int vehicleLimitChunk = 26;
 
-    @ConfigValue("patches.limitCrystalPlacementSpeed")
+    @ConfigValue("patches.limitCrystalPlacementSpeed") //Done - replaced with crystal break
     public boolean limitCrystalPlacementSpeed = false;
 
-    @ConfigValue("patches.msBetweenCrystals")
+    @ConfigValue("patches.msBetweenCrystals") //Done - tested
     public int crystalDelay = 200;
 
     /*
      * Throwables speed limit config options
      */
 
-    @ConfigValue("patches.limitThrowablesSpeed.enabled")
+    @ConfigValue("patches.limitThrowablesSpeed.enabled") //Dropped
     public boolean limitThrowables = true;
 
-    @ConfigValue("patches.limitThrowablesSpeed.delayMs")
+    @ConfigValue("patches.limitThrowablesSpeed.delayMs") //Dropped
     public int throwablesDelay = 250;
 
     /*
-     * High damage prevention config options
+     * High damage prevention config options //Done
      */
 
     @ConfigValue("preventions.highDamage.prevent")
@@ -116,24 +114,24 @@ public class OldConfig {
      * Wither spawning at spawn config options
      */
 
-    @ConfigValue("preventions.preventWitherSpawningAtSpawn.enabled")
+    @ConfigValue("preventions.preventWitherSpawningAtSpawn.enabled") //Done - Tested
     public boolean preventWithersAtSpawn = false;
 
-    @ConfigValue("preventions.preventWitherSpawningAtSpawn.spawnRadius")
+    @ConfigValue("preventions.preventWitherSpawningAtSpawn.spawnRadius") //Done - Tested
     public int spawnRadius = 2000;
 
     /*
      * XP bottle lag prevention config options
      */
 
-    @ConfigValue("preventions.preventXpBottleLag.enabled")
+    @ConfigValue("preventions.preventXpBottleLag.enabled") //Done - Tested
     public boolean preventXpBottleLag = true;
 
-    @ConfigValue("preventions.preventXpBottleLag.xpBottleLimit")
+    @ConfigValue("preventions.preventXpBottleLag.xpBottleLimit") //Done - Tested
     public int xpBottleLimit = 64;
 
     /*
-     * Hand switch lag prevention config options
+     * Hand switch lag prevention config options //Done
      */
 
     @ConfigValue("preventions.handSwitchCrash.prevent")
@@ -149,53 +147,53 @@ public class OldConfig {
      * Nether roof prevention config options
      */
 
-    @ConfigValue("preventions.preventPlayersOnNetherRoof.enabled")
+    @ConfigValue("preventions.preventPlayersOnNetherRoof.enabled") //Done - Tested
     public boolean preventPlayersOnNether = true;
 
-    @ConfigValue("preventions.preventPlayersOnNetherRoof.teleportDown")
+    @ConfigValue("preventions.preventPlayersOnNetherRoof.teleportDown") //Done - Tested
     public boolean teleportPlayersDown = true;
 
-    @ConfigValue("preventions.preventPlayersOnNetherRoof.dealDamage")
+    @ConfigValue("preventions.preventPlayersOnNetherRoof.dealDamage") //Done - Tested
     public boolean dmgPlayersOnNether = false;
 
-    @ConfigValue("preventions.preventPlayersOnNetherRoof.damage")
+    @ConfigValue("preventions.preventPlayersOnNetherRoof.damage") //Done - Tested
     public int dmgToDealNether = 9999;
 
-    @ConfigValue("preventions.preventPlayersOnNetherRoof.roofHeight")
+    @ConfigValue("preventions.preventPlayersOnNetherRoof.roofHeight") //Done - Tested
     public int netherRoofHeight = 127;
 
     /*
      * Entity portal teleportation config options
      */
 
-    @ConfigValue("preventions.disableEntityPortalTP.enabled")
+    @ConfigValue("preventions.disableEntityPortalTP.enabled") //Done - Tested
     public boolean disableEntityPortal = true;
 
-    @ConfigValue("preventions.disableEntityPortalTP.entityList")
+    @ConfigValue("preventions.disableEntityPortalTP.entityList") //Done - Tested
     public List<String> entityTypeDisablePortal = Arrays.asList(EntityType.BEE.name(), EntityType.ENDER_CRYSTAL.name());
 
     /*
      * Nether floor prevention config options
      */
 
-    @ConfigValue("preventions.preventPlayersBellowBedrock.enabledOverworld")
+    @ConfigValue("preventions.preventPlayersBellowBedrock.enabledOverworld") //Done - Tested
     public boolean preventPlayerBellowOw = true;
 
-    @ConfigValue("preventions.preventPlayersBellowBedrock.enabledNether")
+    @ConfigValue("preventions.preventPlayersBellowBedrock.enabledNether") //Done - Tested
     public boolean preventPlayerBellowNether = true;
 
-    @ConfigValue("preventions.preventPlayersBellowBedrock.repairFloor")
+    @ConfigValue("preventions.preventPlayersBellowBedrock.repairFloor") //Done - Tested
     public boolean placeBedrockBellow = true;
 
-    @ConfigValue("preventions.preventPlayersBellowBedrock.dealDmg")
+    @ConfigValue("preventions.preventPlayersBellowBedrock.dealDmg") //Done - Tested
     public boolean dealDmgBellow = false;
 
-    @ConfigValue("preventions.preventPlayersBellowBedrock.damage")
+    @ConfigValue("preventions.preventPlayersBellowBedrock.damage") //Done - Tested
     public int dmgToDealBellow = 9999;
 
 
     /*
-     * SQL config options
+     * SQL config options //TODO: Test and migrate database (possibly in code)
      */
 
     @ConfigValue("sql.host")
@@ -214,7 +212,7 @@ public class OldConfig {
     public String databasePassword = "password";
 
     /*
-     * Combat check config options
+     * Combat check config options //TODO: Config options & finish
      */
 
     @ConfigValue("combatCheck.timeout")
@@ -224,7 +222,7 @@ public class OldConfig {
     public long elytraTimeout = 5000;
 
     /*
-     * Jihads config options
+     * Jihads config options //TODO: Test
      */
 
     @ConfigValue("jihads.enabled")
@@ -241,7 +239,7 @@ public class OldConfig {
 
 
     /*
-     * Disable Commands at spawn config options
+     * Disable Commands at spawn config options //TODO
      */
 
     @ConfigValue("disableCommandsAtSpawn.enabled")
@@ -254,7 +252,7 @@ public class OldConfig {
     public List<String> radiusLimitedCmds = Arrays.asList("tpa", "tpahere", "tpayes", "tpaccept", "tpaaccept", "tpno", "tpano", "tpdeny", "tpadeny", "tpyes");
 
     /*
-     * Discord TPS Notifier config options
+     * Discord TPS Notifier config options //TODO
      */
 
     @ConfigValue("discordTPSnotifier.webhookURL")
@@ -297,7 +295,7 @@ public class OldConfig {
     public int lowPtThreshold = 30;
 
     /*
-     * Shitlist config options
+     * Shitlist config options //Done //TODO: Test
      */
 
     @ConfigValue("shitlist.enable")
@@ -319,7 +317,7 @@ public class OldConfig {
     public int replaceChance = 50;
 
     /*
-     * Command cooldowns options
+     * Command cooldowns options //TODO
      */
     @ConfigValue("commandCooldowns.enable")
     public boolean enableCooldowns = true;
@@ -341,7 +339,7 @@ public class OldConfig {
 
 
     /*
-     * Draconite Items config options
+     * Draconite Items config options //TODO
      */
 
     @ConfigValue("draconiteItems.pickaxe.enable")
@@ -363,22 +361,22 @@ public class OldConfig {
     public int hasteLevel = 4;
 
     /*
-     * Chat config options
+     * Chat config options //Done
      */
 
-    @ConfigValue("chat.greentext.enabled")
+    @ConfigValue("chat.greentext.enabled")  //Done - Tested
     public boolean greentext = true;
 
-    @ConfigValue("chat.coords.enabled")
+    @ConfigValue("chat.coords.enabled") //Done - Tested
     public boolean coordsEnabled = true;
 
-    @ConfigValue("chat.coords.placeholderRegex")
+    @ConfigValue("chat.coords.placeholderRegex") //Done  - Tested
     public String coordsPlaceholder = "(?i)(\\[coords\\])";
 
-    @ConfigValue("chat.coords.replaceWith")
+    @ConfigValue("chat.coords.replaceWith") //Done  - Tested
     public String coordsReplace = "&bWorld: &f%player_world% &eX:&f%player_x% &eY:&f%player_y% &eZ:&f%player_z%";
 
-    @ConfigValue("chat.coords.replaceInCommands")
+    @ConfigValue("chat.coords.replaceInCommands") //TODO: Test in commands
     public boolean coordsCommandsEnabled = true;
 
     @ConfigValue("chat.coords.commands")
@@ -398,26 +396,26 @@ public class OldConfig {
     @ConfigValue("misc.endWorldName")
     public String endWorldName = "world_the_end";
 
-    @ConfigValue("misc.petsUseTotems")
+    @ConfigValue("misc.petsUseTotems") //Done - tested
     public boolean petsUseTotems = false;
 
-    @ConfigValue("misc.maxItemNameLength")
+    @ConfigValue("misc.maxItemNameLength") //TODO
     public int maxItemNameLength = 50;
 
-    @ConfigValue("misc.disableEndermenGriefInEnd")
+    @ConfigValue("misc.disableEndermenGriefInEnd") //Done
     public boolean disableEndermanGrief = false;
 
     /*
      * EgirlsNation config options
      */
 
-    @ConfigValue("egirlsnation.enableAnniversaryItems")
+    @ConfigValue("egirlsnation.enableAnniversaryItems") //TODO: Or drop?
     public boolean anniversaryItems = false;
 
-    @ConfigValue("egirlsnation.ranksEnabled")
+    @ConfigValue("egirlsnation.ranksEnabled") //TODO: Configurable hours and votes
     public boolean ranksEnabled = false;
 
-    @ConfigValue("egirlsnation.refreshrankCmdCooldown")
+    @ConfigValue("egirlsnation.refreshrankCmdCooldown") //TODO
     public int REFRESHRANK_COOLDOWN = 60;
 
     @ConfigValue("egirlsnation.newfagHours")
@@ -441,9 +439,9 @@ public class OldConfig {
     @ConfigValue("egirlsnation.boomerfagVotes")
     public int boomerfagVotes = 300;
 
-    @ConfigValue("egirlsnation.fixDragonDeath.enabled")
+    @ConfigValue("egirlsnation.fixDragonDeath.enabled") //Done
     public boolean fixDragonDeath = false;
 
-    @ConfigValue("egirlsnation.fixDragonDeath.health")
+    @ConfigValue("egirlsnation.fixDragonDeath.health") //TODO: Configurable health
     public int dragonHealth = 100;
 }
