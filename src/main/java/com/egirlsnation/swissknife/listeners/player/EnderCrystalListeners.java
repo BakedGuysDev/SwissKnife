@@ -1,17 +1,13 @@
 /*
  * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
- * Copyright (c) 2021 Meteor Development
+ * Copyright (c) 2022 Egirls Nation Development
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the MIT License, however this file
- * is licensed under the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * it under the terms of the GPL-3.0 License.
  *
- * You should have received a copy of the MIT and GNU General Public
+ * You should have received a copy of the GPL-3.0
  * License along with this program.  If not, see
- * <https://opensource.org/licenses/MIT>
- * and <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * <https://opensource.org/licenses/GPL-3.0>.
  */
 
 package com.egirlsnation.swissknife.listeners.player;

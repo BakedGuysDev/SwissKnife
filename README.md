@@ -22,6 +22,10 @@ It was stripped and modified to work with the Bukkit event system and Yaml based
 - Exploding snowballs!
 - And more... And more yet to come!
 
+## License
+All builds since version 0.1.0 to version 1.0.0 are licensed under the MIT license.  
+Builds since version 1.0.0 are licensed under the GPL 3.0 license.
+
 ## Downloads
 
 Stable releases can be found in the [releases](https://github.com/EgirlsNationDev/SwissKnife/releases) tab.  
