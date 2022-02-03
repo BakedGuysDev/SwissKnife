@@ -47,13 +47,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
-            <!-- <classifier>remapped-mojang</classifier> Comment this out for regular Spigot mappings -->
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.github.haq.keeper</groupId>
             <artifactId>spigot</artifactId>
             <version>2.0</version>
