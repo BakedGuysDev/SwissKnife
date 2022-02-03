@@ -68,3 +68,26 @@ permissions:
   swissknife.heads.nodrop:
     description: Prevents player from dropping head
     default: op
+  swissknife.heads.chance.100:
+    description: Player with this permission will have 100% chance of dropping their head
+    default: not op
+  swissknife.heads.chance.90:
+    description: Player with this permission will have 90% chance of dropping their head
+  swissknife.heads.chance.80:
+    description: Player with this permission will have 80% chance of dropping their head
+  swissknife.heads.chance.70:
+    description: Player with this permission will have 70% chance of dropping their head
+  swissknife.heads.chance.60:
+    description: Player with this permission will have 60% chance of dropping their head
+  swissknife.heads.chance.50:
+    description: Player with this permission will have 50% chance of dropping their head
+  swissknife.heads.chance.40:
+    description: Player with this permission will have 40% chance of dropping their head
+  swissknife.heads.chance.30:
+    description: Player with this permission will have 30% chance of dropping their head
+  swissknife.heads.chance.20:
+    description: Player with this permission will have 20% chance of dropping their head
+  swissknife.heads.chance.10:
+    description: Player with this permission will have 10% chance of dropping their head
+  swissknife.heads.chance.05:
+    description: Player with this permission will have 5% chance of dropping their head

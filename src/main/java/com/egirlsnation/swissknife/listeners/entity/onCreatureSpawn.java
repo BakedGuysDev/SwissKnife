@@ -13,8 +13,8 @@
 package com.egirlsnation.swissknife.listeners.entity;
 
 import com.egirlsnation.swissknife.utils.OldConfig;
-import com.egirlsnation.swissknife.utils.EntityUtil;
-import com.egirlsnation.swissknife.utils.LocationUtil;
+import com.egirlsnation.swissknife.utils.entity.EntityUtil;
+import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

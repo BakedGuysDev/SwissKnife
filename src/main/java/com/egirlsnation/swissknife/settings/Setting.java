@@ -12,8 +12,12 @@
 
 package com.egirlsnation.swissknife.settings;
 
+import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import com.egirlsnation.swissknife.utils.misc.IGetter;
+import org.simpleyaml.configuration.ConfigurationSection;
+import org.simpleyaml.configuration.comments.CommentType;
+import org.simpleyaml.configuration.file.YamlFile;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -87,6 +91,11 @@ public abstract class Setting<Object> implements IGetter<Object> {
     protected abstract  Object parseImpl(String str);
 
     protected abstract boolean isValueValid(Object value);
+
+    public void writeToConfig(YamlFile file, Module module, SettingGroup sg, ConfigurationSection section){
+        section.set(name, get());
+        file.setComment( module.category.name + "." + module.name + "." + sg.name + "." + name, description, CommentType.SIDE);
+    }
 
     @Override
     public String toString() {

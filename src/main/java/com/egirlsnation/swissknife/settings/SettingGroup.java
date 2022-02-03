@@ -12,6 +12,10 @@
 
 package com.egirlsnation.swissknife.settings;
 
+import com.egirlsnation.swissknife.systems.modules.Module;
+import org.simpleyaml.configuration.ConfigurationSection;
+import org.simpleyaml.configuration.file.YamlFile;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +39,13 @@ public class SettingGroup implements Iterable<Setting<Object>> {
     public <T> Setting<T> add(Setting<T> setting){
         settings.add((Setting<Object>) setting);
         return setting;
+    }
+
+    public void writeToConfig(YamlFile file, Module module){
+        ConfigurationSection section = file.createSection( module.category.name + "." + module.name + "." + name);
+        for (Setting<Object> setting : settings) {
+            setting.writeToConfig(file, module, this, section);
+        }
     }
 
 

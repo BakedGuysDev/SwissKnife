@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.commands;
 
-import com.egirlsnation.swissknife.utils.player.PingUtil;
+import com.egirlsnation.swissknife.utils.entity.player.PingUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

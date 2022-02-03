@@ -47,12 +47,14 @@ public class CrystalKillTracker extends Module {
 
     @EventHandler
     private void onEntityDamage(EntityDamageEvent e){
+        if(!isEnabled()) return;
         if(!(e.getEntity() instanceof  Player)) return;
         lastDmgCause.put((Player) e.getEntity(), e.getCause());
     }
 
     @EventHandler
     private void onEntityDamageByEntity(EntityDamageByEntityEvent e){
+        if(!isEnabled()) return;
         if(e.getEntity() instanceof EnderCrystal && e.getDamager() instanceof Player){
             crystalExploder.put((EnderCrystal) e.getEntity(), (Player) e.getDamager());
         }
@@ -97,6 +99,7 @@ public class CrystalKillTracker extends Module {
 
     @EventHandler
     private void onPlayerDeath(PlayerDeathEvent e){
+        if(!isEnabled()) return;
         Player player = e.getEntity();
 
         EntityDamageEvent.DamageCause cause = lastDmgCause.get(player);

@@ -102,6 +102,7 @@ public class ChatTweaks extends Module {
 
     @EventHandler
     private void commandPreProcessor(PlayerCommandPreprocessEvent e){
+        if(!isEnabled()) return;
         if(enableCoordCommands.get()){
             for(String command : coordsCommands.get()){
                 if(e.getMessage().toLowerCase().startsWith("/" + command)){

@@ -16,7 +16,7 @@ import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CommandType;
 import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CooldownHandler;
 import com.egirlsnation.swissknife.utils.OldConfig;
-import com.egirlsnation.swissknife.utils.LocationUtil;
+import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

@@ -144,6 +144,8 @@ public class NetherRoofDisabler extends Module {
 
     @EventHandler
     public void VehicleEnter(VehicleEnterEvent e){
+        if(!isEnabled()) return;
+
         if(e.getEntered() instanceof Player){
             Location l = e.getVehicle().getLocation();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
@@ -170,6 +172,8 @@ public class NetherRoofDisabler extends Module {
 
     @EventHandler
     public void VehicleExit(VehicleExitEvent e){
+        if(!isEnabled()) return;
+
         if(e.getExited() instanceof Player){
             Location l = e.getVehicle().getLocation();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;

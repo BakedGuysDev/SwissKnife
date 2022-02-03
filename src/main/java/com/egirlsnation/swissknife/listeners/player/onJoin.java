@@ -14,8 +14,8 @@ package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.api.IllegalItemHandler;
-import com.egirlsnation.swissknife.utils.player.GamemodeUtil;
-import com.egirlsnation.swissknife.utils.player.RankUtil;
+import com.egirlsnation.swissknife.utils.entity.player.GamemodeUtil;
+import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

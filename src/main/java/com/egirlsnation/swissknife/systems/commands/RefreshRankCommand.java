@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.commands;
 
-import com.egirlsnation.swissknife.utils.player.RankUtil;
+import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

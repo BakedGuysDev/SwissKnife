@@ -10,23 +10,13 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.systems.modules.egirls;
+package com.egirlsnation.swissknife.systems.modules.misc;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerJoinEvent;
 
-public class Ranks extends Module {
-    public Ranks() {
-        super(Categories.EgirlsNation, "ranks", "Egirls Nation rank system");
-    }
-
-    @EventHandler
-    private void onJoin(PlayerJoinEvent e){
-        if(!isEnabled()) return;
-        if(!e.getPlayer().hasPlayedBefore()) return;
-        RankUtil.promoteIfEligible(e.getPlayer());
+public class DiscordLagNotifier extends Module {
+    public DiscordLagNotifier(){ //TODO
+        super(Categories.Misc, "discord-lag-notifier", "Uses discord webhooks to notify you about lag");
     }
 }

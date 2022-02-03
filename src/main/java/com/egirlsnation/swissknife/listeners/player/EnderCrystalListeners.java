@@ -18,7 +18,7 @@ package com.egirlsnation.swissknife.listeners.player;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.systems.heads.HeadsHandler;
+import com.egirlsnation.swissknife.utils.entity.player.HeadsUtil;
 import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
@@ -51,7 +51,7 @@ public class EnderCrystalListeners implements Listener {
     private final Map<EnderCrystal, Player> crystalExploder = new HashMap<>();
 
     // SwissKnife start
-    private final HeadsHandler headsHandler = new HeadsHandler();
+    private final HeadsUtil headsUtil = new HeadsUtil();
     private final CombatCheckHandler combatCheckHandler = new CombatCheckHandler();
     // SwissKnife end
 
@@ -144,7 +144,7 @@ public class EnderCrystalListeners implements Listener {
 
                 if(attacker.getCustomName() == null) return;
                 if(attacker.getCustomName().equals("Draconite Crystal")){
-                    headsHandler.dropHeadIfLucky(player, exploder);
+                    headsUtil.dropHeadIfLucky(player, exploder);
                 }
                 //SwissKnife end
             }

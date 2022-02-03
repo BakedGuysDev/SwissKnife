@@ -18,7 +18,7 @@ import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.LocationUtil;
+import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;

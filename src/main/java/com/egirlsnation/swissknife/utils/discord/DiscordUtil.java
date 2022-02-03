@@ -10,9 +10,9 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.utils;
+package com.egirlsnation.swissknife.utils.discord;
 
-import com.egirlsnation.swissknife.systems.modules.misc.discord.DiscordWebhook;
+import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 

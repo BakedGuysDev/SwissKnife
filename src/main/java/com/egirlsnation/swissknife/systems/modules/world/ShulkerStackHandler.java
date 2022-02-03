@@ -10,7 +10,7 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.systems.modules.misc;
+package com.egirlsnation.swissknife.systems.modules.world;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
@@ -21,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ShulkerStackHandler extends Module {
     public ShulkerStackHandler() {
-        super(Categories.Misc, "stacks-in-shulkers", "Sets itemstacks to their max stack size when closing a shulker to prevent NBT bans and kicks (might not be needed on some versions)");
+        super(Categories.World, "stacks-in-shulkers", "Sets itemstacks to their max stack size when closing a shulker to prevent NBT bans and kicks (might not be needed on some versions)");
     }
 
     @EventHandler

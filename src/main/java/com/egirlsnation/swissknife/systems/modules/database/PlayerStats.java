@@ -19,7 +19,7 @@ import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.player.PlayerInfo;
+import com.egirlsnation.swissknife.utils.entity.player.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

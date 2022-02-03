@@ -15,7 +15,7 @@ package com.egirlsnation.swissknife.systems.modules.entity;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.LocationUtil;
+import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;

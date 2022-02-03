@@ -17,7 +17,7 @@ import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.modules.Modules;
-import com.egirlsnation.swissknife.utils.player.GamemodeUtil;
+import com.egirlsnation.swissknife.utils.entity.player.GamemodeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -38,6 +38,7 @@ public class RestrictedCreativeAddon extends Module {
 
     @EventHandler
     private void onJoin(PlayerJoinEvent e){
+        if(!isEnabled()) return;
         if(!e.getPlayer().isOp() && e.getPlayer().getGameMode().equals(GameMode.CREATIVE)){
             e.getPlayer().setGameMode(GameMode.SURVIVAL);
         }
@@ -45,6 +46,7 @@ public class RestrictedCreativeAddon extends Module {
 
     @EventHandler
     private void onPlayerInteract(PlayerInteractEvent e){
+        if(!isEnabled()) return;
         if(!Action.RIGHT_CLICK_BLOCK.equals(e.getAction())) return;
         if(e.getMaterial().equals(Material.TNT_MINECART) && e.getPlayer().getGameMode().equals(GameMode.CREATIVE) && !e.getPlayer().hasPermission("swissknife.bypass.creative")){
             e.setCancelled(true);

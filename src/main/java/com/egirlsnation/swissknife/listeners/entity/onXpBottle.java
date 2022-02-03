@@ -15,7 +15,7 @@
 package com.egirlsnation.swissknife.listeners.entity;
 
 import com.egirlsnation.swissknife.utils.OldConfig;
-import com.egirlsnation.swissknife.utils.EntityUtil;
+import com.egirlsnation.swissknife.utils.entity.EntityUtil;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

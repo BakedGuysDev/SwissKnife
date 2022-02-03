@@ -15,7 +15,7 @@ package com.egirlsnation.swissknife.systems.commands;
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CooldownHandler;
 import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CommandType;
-import com.egirlsnation.swissknife.utils.player.HealthUtil;
+import com.egirlsnation.swissknife.utils.entity.player.HealthUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

@@ -10,7 +10,7 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.utils;
+package com.egirlsnation.swissknife.utils.server;
 
 public class InventoryUtil {
 

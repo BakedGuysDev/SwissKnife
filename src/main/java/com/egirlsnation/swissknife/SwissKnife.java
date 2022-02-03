@@ -28,12 +28,12 @@ import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.systems.sql.SqlQuery;
-import com.egirlsnation.swissknife.utils.DiscordUtil;
+import com.egirlsnation.swissknife.utils.discord.DiscordUtil;
 import com.egirlsnation.swissknife.utils.OldConfig;
-import com.egirlsnation.swissknife.utils.ServerUtil;
+import com.egirlsnation.swissknife.utils.server.ServerUtil;
 import com.egirlsnation.swissknife.utils.SwissLogger;
-import com.egirlsnation.swissknife.utils.player.PingUtil;
-import com.egirlsnation.swissknife.utils.player.RankUtil;
+import com.egirlsnation.swissknife.utils.entity.player.PingUtil;
+import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -224,7 +224,6 @@ public class SwissKnife extends JavaPlugin {
 
 
     private void initTPSnotifyTask() { //TODO
-        //TODO
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             List<Double> tps = serverUtil.getTPS();
             if (discordUtil.shouldPostAlert(tps)) {

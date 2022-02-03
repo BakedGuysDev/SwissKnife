@@ -13,7 +13,7 @@
 package com.egirlsnation.swissknife.systems.sql;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.utils.player.PlayerInfo;
+import com.egirlsnation.swissknife.utils.entity.player.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 

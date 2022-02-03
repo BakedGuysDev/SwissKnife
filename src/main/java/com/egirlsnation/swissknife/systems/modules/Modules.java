@@ -23,12 +23,12 @@ import com.egirlsnation.swissknife.systems.modules.egirls.Ranks;
 import com.egirlsnation.swissknife.systems.modules.entity.*;
 import com.egirlsnation.swissknife.systems.modules.illegals.*;
 import com.egirlsnation.swissknife.systems.modules.misc.ChatTweaks;
-import com.egirlsnation.swissknife.systems.modules.misc.ShulkerStackHandler;
 import com.egirlsnation.swissknife.systems.modules.misc.SmallFixes;
-import com.egirlsnation.swissknife.systems.modules.misc.SpawnCommands;
 import com.egirlsnation.swissknife.systems.modules.player.*;
 import com.egirlsnation.swissknife.systems.modules.world.EndermenGrief;
 import com.egirlsnation.swissknife.systems.modules.world.JihadBalls;
+import com.egirlsnation.swissknife.systems.modules.world.ShulkerStackHandler;
+import com.egirlsnation.swissknife.systems.modules.world.SpawnCommands;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.simpleyaml.configuration.ConfigurationSection;
@@ -166,13 +166,13 @@ public class Modules extends System<Module> {
     private void initWorld() {
         add(new EndermenGrief());
         add(new JihadBalls());
+        add(new ShulkerStackHandler());
+        add(new SpawnCommands());
     }
 
     private void initMisc() {
         add(new ChatTweaks());
-        add(new ShulkerStackHandler());
         add(new SmallFixes());
-        add(new SpawnCommands());
     }
 
     private void initDatabase(){
@@ -188,25 +188,14 @@ public class Modules extends System<Module> {
     public void writeToConfig() {
         for(Category category : CATEGORIES){
             for(Module module : groups.get(category)){
-                ConfigurationSection section = getFile().createSection(module.name);
-
-                getFile().setComment(module.name, module.description, CommentType.SIDE);
-                section.set("enabled", module.isEnabled());
-
-                for (SettingGroup sg : module.settings) {
-                    section = getFile().createSection(module.name + "." + sg.name);
-                    for (Setting<Object> setting : sg) {
-                        section.set(setting.name, setting.get());
-                        getFile().setComment(module.name + "." + sg.name + "." + setting.name, setting.description, CommentType.SIDE);
-                    }
-                }
+                module.writeToConfig(getFile());
             }
 
             if(category.equals(Categories.EgirlsNation)){
-                getFile().setComment(groups.get(category).get(0).name, "\n" + StringUtils.capitalize(category.name) + " category\n"
+                getFile().setComment(category.name, "\n" + StringUtils.capitalize(category.name) + " category\n"
                         + "Modules meant for play.egirlsnation.com\nEnabling them is not recommended unless you know exactly what you're doing!\n" , CommentType.BLOCK);
             }else{
-                getFile().setComment(groups.get(category).get(0).name, "\n" + StringUtils.capitalize(category.name) + " category" + "\n", CommentType.BLOCK);
+                getFile().setComment(category.name, "\n" + StringUtils.capitalize(category.name) + " category" + "\n", CommentType.BLOCK);
             }
         }
 
@@ -220,19 +209,33 @@ public class Modules extends System<Module> {
     @Override
     public void readFromConfig() {
         for (Module module : modules) {
-            ConfigurationSection section = getFile().getConfigurationSection(module.name);
+            ConfigurationSection section = getFile().getConfigurationSection(module.category.name + "." + module.name);
+            if(section == null){
+                module.writeToConfig(getFile());
+                continue;
+            }
             boolean enabled = section.getBoolean("enabled");
+
             for (SettingGroup sg : module.settings) {
-                section = getFile().getConfigurationSection(module.name + "." + sg.name);
+                section = getFile().getConfigurationSection(module.category.name + "." + module.name + "." + sg.name);
                 if (section != null) {
                     for (Setting<Object> setting : sg) {
-                        setting.set(section.get(setting.name));
+                        Object settingVal = section.get(setting.name);
+                        if(settingVal == null){
+                            setting.writeToConfig(getFile(), module, sg, section);
+                        }else{
+                            setting.set(section.get(setting.name));
+                        }
                     }
+                }else{
+                    sg.writeToConfig(getFile(), module);
                 }
             }
+
             if (enabled && !module.isEnabled()) {
                 module.toggle();
             }
+
         }
         try {
             getFile().save();

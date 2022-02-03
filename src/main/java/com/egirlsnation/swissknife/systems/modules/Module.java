@@ -13,11 +13,15 @@
 package com.egirlsnation.swissknife.systems.modules;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.settings.Settings;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
+import org.simpleyaml.configuration.ConfigurationSection;
+import org.simpleyaml.configuration.comments.CommentType;
+import org.simpleyaml.configuration.file.YamlFile;
 
 import java.util.Objects;
 import java.util.logging.Level;
@@ -70,6 +74,17 @@ public abstract class Module implements Listener, Comparable<Module> {
 
     public void error(String message){
         SwissKnife.swissLogger.log(Level.SEVERE, message, ChatColor.RED + "[SwissKnife|" + name + "] ");
+    }
+
+    public void writeToConfig(YamlFile file){
+        ConfigurationSection section = file.createSection(category.name + "." + name);
+
+        file.setComment(category.name + "." + name, description, CommentType.SIDE);
+        section.set("enabled", isEnabled());
+
+        for (SettingGroup sg : settings) {
+            sg.writeToConfig(file, this);
+        }
     }
 
 

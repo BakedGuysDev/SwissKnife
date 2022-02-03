@@ -10,7 +10,7 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.systems.modules.misc.discord;
+package com.egirlsnation.swissknife.utils.discord;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;

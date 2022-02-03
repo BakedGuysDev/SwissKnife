@@ -14,7 +14,7 @@ package com.egirlsnation.swissknife.systems.handlers.customItems;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.utils.OldConfig;
-import com.egirlsnation.swissknife.utils.player.ExpUtil;
+import com.egirlsnation.swissknife.utils.entity.player.ExpUtil;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;

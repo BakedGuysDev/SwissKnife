@@ -20,6 +20,7 @@ import com.egirlsnation.swissknife.systems.modules.Module;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 
 public class SmallFixes extends Module {
     public SmallFixes(){
@@ -37,11 +38,25 @@ public class SmallFixes extends Module {
 
     @EventHandler
     private void entityDamageEntity(EntityDamageByEntityEvent e){
+        if(!isEnabled()) return;
         if (e.getDamager() instanceof Player){
             Player player = (Player) e.getDamager();
             if(e.getEntity().getPassengers().contains(player)){
                 e.setCancelled(true);
             }
         }
+    }
+
+    private final Setting<Boolean> disableShulkerSpill = sgGeneral.add(new BoolSetting.Builder()
+            .name("disable-shulker-spill")
+            .description("Prevents items from shulkers being dropped to the ground when shulker is destroyed")
+            .defaultValue(true)
+            .build()
+    );
+
+    @EventHandler
+    private void entityDeath(EntityDeathEvent e){ //TODO
+        if(!isEnabled()) return;
+        info(e.getEntity().getName() + " died");
     }
 }

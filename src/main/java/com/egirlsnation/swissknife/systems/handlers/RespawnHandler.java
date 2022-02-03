@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.handlers;
 
-import com.egirlsnation.swissknife.utils.LocationUtil;
+import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;

@@ -10,12 +10,12 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.systems.modules.misc;
+package com.egirlsnation.swissknife.systems.modules.world;
 
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.LocationUtil;
+import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class SpawnCommands extends Module {
     public SpawnCommands(){
-        super(Categories.Misc, "spawn-commands", "Restricts the usage of configured commands at spawn");
+        super(Categories.World, "spawn-commands", "Restricts the usage of configured commands at spawn");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();

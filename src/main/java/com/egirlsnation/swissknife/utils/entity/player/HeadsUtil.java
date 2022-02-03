@@ -1,6 +1,6 @@
 /*
  * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
- * Copyright (c) 2021 Egirls Nation Development
+ * Copyright (c) 2022 Egirls Nation Development
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the MIT License.
@@ -10,7 +10,7 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.systems.heads;
+package com.egirlsnation.swissknife.utils.entity.player;
 
 import com.egirlsnation.swissknife.events.PlayerHeadDropEvent;
 import org.bukkit.Bukkit;
@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-public class HeadsHandler {
+public class HeadsUtil {
 
     private static final Random r = new Random();
 
@@ -52,7 +52,7 @@ public class HeadsHandler {
     public List<String> getLore(Player holder, Player killer){
         return Arrays.asList(ChatColor.GOLD + "Skull of " + holder.getDisplayName() + ChatColor.GOLD + " (" + holder.getName() + ")",
                 ChatColor.GOLD + "Gotten by " + killer.getDisplayName() + ChatColor.GOLD + " (" + killer.getName() + ")",
-                ChatColor.GOLD + "On " + ChatColor.AQUA + new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
+                ChatColor.GOLD + "On " + ChatColor.AQUA + new SimpleDateFormat("dd.MMM.yyyy").format(new Date()));
     }
 
     public boolean isAncientOrDraconite(@Nullable ItemStack item){

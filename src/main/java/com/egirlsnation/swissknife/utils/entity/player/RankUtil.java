@@ -1,6 +1,6 @@
 /*
  * This file is part of the SwissKnife plugin distribution  (https://github.com/EgirlsNationDev/SwissKnife).
- * Copyright (c) 2021 Egirls Nation Development
+ * Copyright (c) 2022 Egirls Nation Development
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the MIT License.
@@ -10,7 +10,7 @@
  * <https://opensource.org/licenses/MIT>.
  */
 
-package com.egirlsnation.swissknife.utils.player;
+package com.egirlsnation.swissknife.utils.entity.player;
 
 import com.egirlsnation.swissknife.systems.hooks.Hooks;
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
