@@ -160,6 +160,7 @@ public class Modules extends System<Module> {
         add(new CrystalKillTracker());
         add(new CrystalSpeedLimiter());
         add(new NetherRoofDisabler());
+        add(new PlayerHeads());
         add(new RestrictedCreativeAddon());
     }
 

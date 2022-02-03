@@ -47,7 +47,7 @@ public class PlayerHeads extends Module {
     private final Setting<List<String>> nameBlacklist = sgGeneral.add(new StringListSetting.Builder()
             .name("name-bypass")
             .description("List of names that won't drop head at all")
-            .defaultValue("Lerbiq, killmlana")
+            .defaultValue("Lerbiq", "killmlana")
             .build()
     );
 
@@ -135,7 +135,7 @@ public class PlayerHeads extends Module {
 
     private final Setting<String> dateFormat = sgLore.add(new StringSetting.Builder()
             .name("simple-date-format")
-            .description("Allows you to set the simple date format that will be used for the date.\nhttps://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html")
+            .description("Allows you to set the simple date format that will be used for the date. https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html")
             .defaultValue("dd.MMM.yyyy")
             .build()
     );
@@ -152,7 +152,7 @@ public class PlayerHeads extends Module {
     private final Setting<String> msgBroadcast = sgMessages.add(new StringSetting.Builder()
             .name("broadcast-msg")
             .description("The message that will be broadcasted to everyone")
-            .defaultValue("%killer%" + ChatColor.RED +  " established their presence over %player%" + ChatColor.RED + " and got their head.")
+            .defaultValue("%killer% " + ChatColor.RED + "established their presence over %player% " + ChatColor.RED + "and got their head.")
             .build()
     );
 

@@ -53,17 +53,10 @@ public class ChatTweaks extends Module {
             .build()
     );
 
-    private final Setting<Boolean> coordsPermission = sgCoords.add(new BoolSetting.Builder()
-            .name("use-permission")
-            .description("If users need to have permission to use [coords] placeholder (swissknife.chat.coords)")
-            .defaultValue(false)
-            .build()
-    );
-
     private final Setting<String> coordsReplace = sgCoords.add(new StringSetting.Builder()
             .name("replace-string")
-            .description("What to replace [coords] with (supports color codes)")
-            .defaultValue("&bWorld: &f%player_world% &eX:&f%player_x% &eY:&f%player_y% &eZ:&f%player_z%")
+            .description("What to replace the placeholder with (supports color codes)")
+            .defaultValue("§f%player_world% §eX:§f%player_x% §eY:§f%player_y% §eZ:&f%player_z%")
             .build()
     );
 
@@ -78,6 +71,13 @@ public class ChatTweaks extends Module {
             .name("commands")
             .description("In which commands to replace [coords] (type without slash)")
             .defaultValue(Arrays.asList("w", "whisper", "msg", "r", "message", "reply"))
+            .build()
+    );
+
+    private final Setting<Boolean> coordsPermission = sgCoords.add(new BoolSetting.Builder()
+            .name("use-permission")
+            .description("If users need to have permission to use [coords] placeholder (swissknife.chat.coords)")
+            .defaultValue(false)
             .build()
     );
 

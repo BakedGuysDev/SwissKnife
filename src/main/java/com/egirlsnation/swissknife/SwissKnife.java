@@ -28,12 +28,12 @@ import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.systems.sql.SqlQuery;
-import com.egirlsnation.swissknife.utils.discord.DiscordUtil;
 import com.egirlsnation.swissknife.utils.OldConfig;
-import com.egirlsnation.swissknife.utils.server.ServerUtil;
 import com.egirlsnation.swissknife.utils.SwissLogger;
+import com.egirlsnation.swissknife.utils.discord.DiscordUtil;
 import com.egirlsnation.swissknife.utils.entity.player.PingUtil;
 import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
+import com.egirlsnation.swissknife.utils.server.ServerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -49,7 +49,8 @@ import java.util.Objects;
 
 public class SwissKnife extends JavaPlugin {
 
-    //TODO: Kick message override like in AEF
+    //TODO: Kick message override like in AEF with optional overriding the override from Swissknife
+    //TODO: Redstone TPS check like in AEF
 
     public static SwissKnife INSTANCE;
     public static SwissLogger swissLogger;
@@ -75,7 +76,7 @@ public class SwissKnife extends JavaPlugin {
         }
 
         if(swissLogger == null){
-            swissLogger = new SwissLogger(INSTANCE);
+            swissLogger = new SwissLogger();
         }
 
         swissLogger.info("Initializing SwissKnife");

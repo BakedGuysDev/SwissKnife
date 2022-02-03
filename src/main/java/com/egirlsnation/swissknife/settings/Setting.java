@@ -94,7 +94,15 @@ public abstract class Setting<Object> implements IGetter<Object> {
 
     public void writeToConfig(YamlFile file, Module module, SettingGroup sg, ConfigurationSection section){
         section.set(name, get());
-        file.setComment( module.category.name + "." + module.name + "." + sg.name + "." + name, description, CommentType.SIDE);
+
+        String path = module.category.name + "." + module.name + "." + sg.name + "." + name;
+        //TODO: Either better way or fix comment overspill in simpleyaml lib
+        //Very very very very bad way of preventing comments overspilling into values
+        if((name+ ": " + get()).length() >= 76){
+            file.setComment(path, description, CommentType.BLOCK);
+        }else{
+            file.setComment(path, description, CommentType.SIDE);
+        }
     }
 
     @Override
