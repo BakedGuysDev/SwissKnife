@@ -1,25 +1,21 @@
-# SwissKnife - Scuffed but working
+# SwissKnife
 
-A paper based plugin dedicated to patching illegal items, exploits and that players have encountered on the Egirls Nation server, plus adding all kinds of new features to the game... It's a bit scuffed, but it works.  
+Unique Paper based plugin dedicated to patching illegal items, exploits and bugs on anarchy servers, plus adding all kinds of new features to the game.  
 
-The plugin was made just for one server which is Egirls Nation. You can use it on other servers, however some features may not work correctly or at all.
+The plugin started as a way for me to patch things on the Egirls Nation server, but as of the new codebase rewrite in version 1.0.0 it's usable on any server.
+ 
+Pull requests are of course welcome!  
 
-> As of 12. Aug. 2021 adding config options to almost everything is in progress, so if you want to use the plugin, but with some features disabled, there is a big chance you'll get a config option soon. Of course you can always make an issue to nudge us in the right direction.  
-  
-Pull requests are welcome!  
+## What makes it unique?
 
-## Disclaimer
-  
-If someone will want to use it on their server I or any of the contributors don't take responsibility for broken servers, dead SDD drives, thermonuclear war, or you loosing your sleep because it didn't work and you had to fix it.  
+The idea of using codebase of a utility client for a plugin that's meant to patch exploits.
 
-Please do some research, if you have any concerns about features included in this plugin before using it!  
-YOU are choosing to make these modifications to your server, and if you point the finger at us for messing up your server, we will laugh at you.  
+The plugin uses codebase from the [Meteor Client](https://github.com/MeteorDevelopment/meteor-client).  
+It was stripped and modified to work with the Bukkit event system and Yaml based config system.
 
-Thank you.  
-
-## Main Feaures
-- Multiple checks for removing illegal items
-- Lag preventions
+## Main Features
+- Multiple modules for removing illegal items
+- Lag prevention modules
 - Discord Webhook based lag alert
 - MySQL database for statistics
 - Custom items with abilities
@@ -28,11 +24,8 @@ Thank you.
 
 ## Downloads
 
-There are no public downloads of stable versions.    
-There may be some in the future however.  
-If that will be the case you'll find them in the releases tab.  
-
-If you still want to download the plugin you can do so in the actions tab.  
+Stable releases can be found in the [releases](https://github.com/EgirlsNationDev/SwissKnife/releases) tab.  
+If you want a sneak peek of what's currently being done you can download the development builds in the [actions](https://github.com/EgirlsNationDev/SwissKnife/actions/workflows/maven.yml) tab.
 
 ## EgirlsNation links
 - [Website](https://egirlsnation.com/)
@@ -46,3 +39,14 @@ Maven is the recommended way to build the project.
 - Clone the project with `git clone https://github.com/EgirlsNationDev/SwissKnife.git`.  
 - Use `mvn clean package` in the main project directory to build the project.  
 - The jar will be located at `/target/SwissKnife-version-Full.jar` (The full jar has some dependencies, for example keeper, included).
+
+## Disclaimer
+
+Although I think the plugin releases are stable and safe to use I want to say this to prevent being blamed for things.
+
+If someone decides to use the plugin I or any of the contributors don't take responsibility for broken servers, dead SDD drives, thermonuclear war, or you loosing your sleep because it didn't work, and you had to fix it.
+
+Please do some research, if you have any concerns about features included in this plugin before using it!  
+YOU are choosing to make these modifications to your server, and if you point the finger at us for messing up your server, we will laugh at you.
+
+Thank you. 
