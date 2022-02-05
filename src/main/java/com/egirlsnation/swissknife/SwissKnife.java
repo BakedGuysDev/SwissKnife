@@ -31,7 +31,6 @@ import com.egirlsnation.swissknife.systems.sql.SqlQuery;
 import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.SwissLogger;
 import com.egirlsnation.swissknife.utils.discord.DiscordUtil;
-import com.egirlsnation.swissknife.utils.entity.player.PingUtil;
 import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
 import com.egirlsnation.swissknife.utils.server.ServerUtil;
 import org.bukkit.Bukkit;
@@ -63,7 +62,6 @@ public class SwissKnife extends JavaPlugin {
     //Old code
     private final PluginManager pluginManager = Bukkit.getPluginManager();
 
-    private final PingUtil pingUtil = new PingUtil();
     private final DiscordUtil discordUtil = new DiscordUtil();
     private final ServerUtil serverUtil = new ServerUtil();
     private final RankUtil rankUtil = new RankUtil();

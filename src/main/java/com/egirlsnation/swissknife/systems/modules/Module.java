@@ -16,6 +16,7 @@ import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.settings.Settings;
 import com.egirlsnation.swissknife.utils.StringUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.ConfigurationSection;
@@ -64,7 +65,7 @@ public abstract class Module implements Listener, Comparable<Module> {
     }
 
     public void info(String message){
-        SwissKnife.swissLogger.log(Level.INFO, message, "SwissKnife|" + name);
+        SwissKnife.swissLogger.log(Level.INFO, ChatColor.AQUA + message, "SwissKnife|" + name);
     }
 
     public void warn(String message){

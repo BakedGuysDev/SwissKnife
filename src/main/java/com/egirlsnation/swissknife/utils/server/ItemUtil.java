@@ -29,9 +29,15 @@ public class ItemUtil {
                 || itemTypeString.endsWith("_BOOTS");
     }
 
-    public boolean isSpawnEgg(@Nullable ItemStack item){
+    public static boolean isSpawnEgg(@Nullable ItemStack item){
         if(item == null) return false;
         return item.getType().toString().matches("[A-Z]*?_?[A-Z]*_SPAWN_EGG");
+    }
+
+    public static boolean isShulkerBox(@Nullable ItemStack item){
+        if(item == null) return false;
+        final String itemTypeString = item.getType().name();
+        return itemTypeString.endsWith("SHULKER_BOX");
     }
 
     public boolean hasTooLongName(@Nullable ItemStack item){

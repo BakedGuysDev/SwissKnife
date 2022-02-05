@@ -17,10 +17,12 @@ import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.server.ItemUtil;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 public class SmallFixes extends Module {
     public SmallFixes(){
@@ -36,10 +38,12 @@ public class SmallFixes extends Module {
             .build()
     );
 
+
     @EventHandler
     private void entityDamageEntity(EntityDamageByEntityEvent e){
         if(!isEnabled()) return;
-        if (e.getDamager() instanceof Player){
+        if(!ownVehicleDamage.get()) return;
+        if(e.getDamager() instanceof Player){
             Player player = (Player) e.getDamager();
             if(e.getEntity().getPassengers().contains(player)){
                 e.setCancelled(true);
@@ -55,8 +59,14 @@ public class SmallFixes extends Module {
     );
 
     @EventHandler
-    private void entityDeath(EntityDeathEvent e){ //TODO
+    private void entityDeath(EntityDamageEvent e){ //TODO: Disable shulker destruction
         if(!isEnabled()) return;
-        info(e.getEntity().getName() + " died");
+        if(!disableShulkerSpill.get()) return;
+        if(e.getEntity() instanceof Item){
+            Item item = (Item) e.getEntity();
+            if(ItemUtil.isShulkerBox(item.getItemStack())){
+                item.remove();
+            }
+        }
     }
 }

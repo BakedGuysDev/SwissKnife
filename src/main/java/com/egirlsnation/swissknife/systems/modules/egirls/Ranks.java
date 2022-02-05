@@ -12,15 +12,51 @@
 
 package com.egirlsnation.swissknife.systems.modules.egirls;
 
+import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.settings.BoolSetting;
+import com.egirlsnation.swissknife.settings.IntSetting;
+import com.egirlsnation.swissknife.settings.Setting;
+import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class Ranks extends Module {
     public Ranks() {
         super(Categories.EgirlsNation, "ranks", "Egirls Nation rank system");
+    }
+
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Boolean> checkPeriodically = sgGeneral.add(new BoolSetting.Builder()
+            .name("periodic-check")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Integer> period = sgGeneral.add(new IntSetting.Builder()
+            .name("period")
+            .defaultValue(10)
+            .range(5,120)
+            .build()
+    );
+
+    @Override
+    public void onEnable(){
+        if(!isEnabled()) return;
+        if(!checkPeriodically.get()) return;
+
+        Bukkit.getScheduler().runTaskTimer(SwissKnife.INSTANCE, () -> {
+            for(Player p : Bukkit.getOnlinePlayers()){
+                if(p.hasPlayedBefore()){
+                    RankUtil.promoteIfEligible(p);
+                }
+            }
+        }, 6000, period.get() * 60 * 20);
     }
 
     @EventHandler
