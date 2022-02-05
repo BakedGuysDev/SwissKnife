@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.bencodez:advancedcore:master-ee9b348093-1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/bencodez/advancedcore/master-ee9b348093-1/advancedcore-master-ee9b348093-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/bencodez/advancedcore/master-ee9b348093-1/advancedcore-master-ee9b348093-1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/bencodez/advancedcore/master-ee9b348093-1/advancedcore-master-ee9b348093-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
