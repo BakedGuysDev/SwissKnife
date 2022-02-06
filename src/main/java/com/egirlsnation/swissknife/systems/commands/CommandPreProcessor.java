@@ -111,6 +111,18 @@ public class CommandPreProcessor  implements Listener {
         }
 
 
+        if(e.getMessage().toLowerCase().startsWith("/pay")){
+            Player player = e.getPlayer();
+
+            if(player.hasPermission("egirls.rank.newfag")){
+                return;
+            }
+
+            e.setCancelled(true);
+            player.sendMessage(ChatColor.RED + "You need to be NewFag to execute this command");
+            return;
+        }
+
         if(Config.instance.disableCommandsAtSpawn && radiusManager.isInRadius(e.getPlayer().getLocation().getX(), e.getPlayer().getLocation().getZ(), Config.instance.disableCommandsRadius)){
             for(String command : Config.instance.radiusLimitedCmds){
                 if(e.getMessage().toLowerCase().startsWith("/" + command.toLowerCase())){

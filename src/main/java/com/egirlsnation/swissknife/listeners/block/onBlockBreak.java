@@ -17,6 +17,7 @@ import org.bukkit.block.ShulkerBox;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class onBlockBreak implements Listener {
 
@@ -24,6 +25,9 @@ public class onBlockBreak implements Listener {
     private void blockBreak(BlockBreakEvent e){
         if(e.getBlock().getState() instanceof ShulkerBox){
             if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.DEBUG_STICK)){
+                for(ItemStack item : e.getBlock().getDrops()){
+                    e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), item);
+                }
                 e.getBlock().breakNaturally();
             }
         }
