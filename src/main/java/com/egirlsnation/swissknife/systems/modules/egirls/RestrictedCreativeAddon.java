@@ -10,13 +10,14 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.systems.modules.player;
+package com.egirlsnation.swissknife.systems.modules.egirls;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.modules.player.CombatCheck;
 import com.egirlsnation.swissknife.utils.entity.player.GamemodeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,7 +32,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class RestrictedCreativeAddon extends Module {
     public RestrictedCreativeAddon() {
-        super(Categories.Player, "restricted-creative-addon", "Additional checks for RestrictedCreative to make it safe-ish");
+        super(Categories.EgirlsNation, "restricted-creative-addon", "Additional checks for RestrictedCreative to make it safe-ish");
     }
 
     //TODO: Config options

@@ -442,6 +442,6 @@ public class OldConfig {
     @ConfigValue("egirlsnation.fixDragonDeath.enabled") //Done
     public boolean fixDragonDeath = false;
 
-    @ConfigValue("egirlsnation.fixDragonDeath.health") //TODO: Configurable health
+    @ConfigValue("egirlsnation.fixDragonDeath.health") //Done
     public int dragonHealth = 100;
 }

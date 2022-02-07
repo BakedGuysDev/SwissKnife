@@ -10,11 +10,13 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.systems.modules.entity;
+package com.egirlsnation.swissknife.systems.modules.egirls;
 
+import com.egirlsnation.swissknife.settings.IntSetting;
+import com.egirlsnation.swissknife.settings.Setting;
+import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -25,13 +27,21 @@ public class DragonSlayerAddon extends Module {
         super(Categories.Entity,"dragonslayer-addon", "Implements some fixes for the dragonslayer plugin");
     }
 
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Integer> health = sgGeneral.add(new IntSetting.Builder()
+            .name("health")
+            .defaultValue(100)
+            .build()
+    );
+
     @EventHandler
     private void onEntityDamage(EntityDamageEvent e){
         if(!isEnabled()) return;
         if(e.getEntity().getType().equals(EntityType.ENDER_DRAGON)){
             if((e.getCause().equals(EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) || e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION))){
                 LivingEntity dragon = (LivingEntity) e.getEntity();
-                if(dragon.getHealth() > OldConfig.instance.dragonHealth) return;
+                if(dragon.getHealth() > health.get()) return;
                 e.setCancelled(true);
             }
         }

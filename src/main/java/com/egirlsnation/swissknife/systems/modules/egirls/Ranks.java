@@ -45,6 +45,50 @@ public class Ranks extends Module {
             .build()
     );
 
+    private final SettingGroup sgRequirements = settings.createGroup("requirements");
+
+    public final Setting<Integer> newfagHours = sgRequirements.add(new IntSetting.Builder()
+            .name("newfag-hours")
+            .defaultValue(48)
+            .build()
+    );
+
+    public final Setting<Integer> midfagHours = sgRequirements.add(new IntSetting.Builder()
+            .name("midfag-hours")
+            .defaultValue(168)
+            .build()
+    );
+
+    public final Setting<Integer> oldfagHours = sgRequirements.add(new IntSetting.Builder()
+            .name("oldfag-hours")
+            .defaultValue(432)
+            .build()
+    );
+
+    public final Setting<Integer> elderfagHours = sgRequirements.add(new IntSetting.Builder()
+            .name("elderfag-hours")
+            .defaultValue(1200)
+            .build()
+    );
+
+    public final Setting<Integer> elderfagVotes = sgRequirements.add(new IntSetting.Builder()
+            .name("elderfag-votes")
+            .defaultValue(100)
+            .build()
+    );
+
+    public final Setting<Integer> boomerfagHours = sgRequirements.add(new IntSetting.Builder()
+            .name("boomerfag-hours")
+            .defaultValue(2400)
+            .build()
+    );
+
+    public final Setting<Integer> boomerfagVotes = sgRequirements.add(new IntSetting.Builder()
+            .name("boomerfag-votes")
+            .defaultValue(300)
+            .build()
+    );
+
     @Override
     public void onEnable(){
         if(!isEnabled()) return;

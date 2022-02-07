@@ -15,7 +15,8 @@ package com.egirlsnation.swissknife.utils.entity.player;
 import com.egirlsnation.swissknife.systems.hooks.Hooks;
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
 import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VpUserManager;
-import com.egirlsnation.swissknife.utils.OldConfig;
+import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.modules.egirls.Ranks;
 import org.bukkit.*;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -29,27 +30,22 @@ public class RankUtil {
     private static final VotingPluginHook votingPluginHook = new VotingPluginHook();
 
     public static void promoteIfEligible(@NotNull Player player){
-
-        if(!OldConfig.instance.ranksEnabled) return;
-
-        if(!player.hasPlayedBefore()) return;
-
         //Name "PLAY_ONE_MINUTE" is missleading. It's actually in ticks.
         int pt = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
         final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
-        if(pt >= getTicksFromHours(OldConfig.instance.newfagHours) && !player.hasPermission("egirls.rank.newfag")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).newfagHours.get()) && !player.hasPermission("egirls.rank.newfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add newfag";
             Bukkit.dispatchCommand(console, command);
         }
 
-        if(pt >= getTicksFromHours(OldConfig.instance.midfagHours) && !player.hasPermission("egirls.rank.vet")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).midfagHours.get()) && !player.hasPermission("egirls.rank.vet")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add veteran";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GREEN + " reached " + ChatColor.YELLOW + "MidFag" + ChatColor.GREEN + "!");
         }
 
-        if(pt >= getTicksFromHours(OldConfig.instance.oldfagHours) && !player.hasPermission("egirls.rank.oldfag")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).oldfagHours.get()) && !player.hasPermission("egirls.rank.oldfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add oldfag";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GREEN + " reached " + ChatColor.RED + "OldFag" + ChatColor.GREEN + "!");
@@ -57,7 +53,7 @@ public class RankUtil {
         }
 
         if(!Hooks.get().isActive(VotingPluginHook.class)) return;
-        if(pt >= getTicksFromHours(OldConfig.instance.elderfagHours) && VpUserManager.getVotes(player) >= OldConfig.instance.elderfagVotes && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).elderfagHours.get()) && VpUserManager.getVotes(player) >= Modules.get().get(Ranks.class).elderfagVotes.get() && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add legend";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.DARK_AQUA + "ElderFag" + ChatColor.GOLD + "!");
@@ -66,7 +62,7 @@ public class RankUtil {
             }
         }
 
-        if(pt >= getTicksFromHours(OldConfig.instance.boomerfagHours) && VpUserManager.getVotes(player) >= OldConfig.instance.boomerfagVotes && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).boomerfagHours.get()) && VpUserManager.getVotes(player) >= Modules.get().get(Ranks.class).boomerfagHours.get() && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add boomerfag";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.AQUA + "BoomerFag" + ChatColor.GOLD + "!");
