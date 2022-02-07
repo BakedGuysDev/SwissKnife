@@ -27,9 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class CrystalSpeedLimiter extends Module {
+public class CpvpSpeedLimiter extends Module {
 
-    public CrystalSpeedLimiter(){
+    //TODO: Add anchors and beds
+
+    public CpvpSpeedLimiter(){
         super(Categories.Player, "crystal-speed-limiter", "Limits how many crystals can player break per second");
     }
 

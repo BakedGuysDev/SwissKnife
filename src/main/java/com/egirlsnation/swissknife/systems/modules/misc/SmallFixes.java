@@ -59,7 +59,7 @@ public class SmallFixes extends Module {
     );
 
     @EventHandler
-    private void entityDeath(EntityDamageEvent e){ //TODO: Disable shulker destruction
+    private void entityDeath(EntityDamageEvent e){
         if(!isEnabled()) return;
         if(!disableShulkerSpill.get()) return;
         if(e.getEntity() instanceof Item){

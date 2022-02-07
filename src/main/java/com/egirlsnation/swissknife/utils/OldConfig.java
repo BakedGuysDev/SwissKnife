@@ -399,7 +399,7 @@ public class OldConfig {
     @ConfigValue("misc.petsUseTotems") //Done - tested
     public boolean petsUseTotems = false;
 
-    @ConfigValue("misc.maxItemNameLength") //TODO
+    @ConfigValue("misc.maxItemNameLength")
     public int maxItemNameLength = 50;
 
     @ConfigValue("misc.disableEndermenGriefInEnd") //Done
@@ -409,7 +409,7 @@ public class OldConfig {
      * EgirlsNation config options
      */
 
-    @ConfigValue("egirlsnation.enableAnniversaryItems") //TODO: Or drop?
+    @ConfigValue("egirlsnation.enableAnniversaryItems") //Dropped
     public boolean anniversaryItems = false;
 
     @ConfigValue("egirlsnation.ranksEnabled") //TODO: Configurable hours and votes

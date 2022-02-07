@@ -160,7 +160,7 @@ public class Modules extends System<Module> {
         add(new BedrockFloorDisabler());
         add(new CombatCheck());
         add(new CrystalKillTracker());
-        add(new CrystalSpeedLimiter());
+        add(new CpvpSpeedLimiter());
         add(new NetherRoofDisabler());
         add(new PlayerHeads());
         add(new RestrictedCreativeAddon());
