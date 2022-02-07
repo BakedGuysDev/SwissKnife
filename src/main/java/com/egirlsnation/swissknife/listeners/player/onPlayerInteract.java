@@ -30,8 +30,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -77,11 +75,6 @@ public class onPlayerInteract implements Listener {
                 customItemHandler.handleCrystalAbility(e.getPlayer(), e.getHand(), plugin);
                 return;
             }
-        }
-
-        if(e.getAction().equals(Action.LEFT_CLICK_BLOCK) && e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.DEBUG_STICK)){
-            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 10 * 20, 0));
-
         }
 
         if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){

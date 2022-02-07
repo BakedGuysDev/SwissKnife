@@ -428,4 +428,7 @@ public class Config {
 
     @ConfigValue("egirlsnation.fixDragonDeath.health")
     public int dragonHealth = 100;
+
+    @ConfigValue("egirlsnation.debugStickDupe.enabled")
+    public boolean debugStickDupe = false;
 }

@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife;
 
-import com.egirlsnation.swissknife.listeners.block.onBlockBreak;
+import com.egirlsnation.swissknife.listeners.DebugStickDupe;
 import com.egirlsnation.swissknife.listeners.block.onBlockDispense;
 import com.egirlsnation.swissknife.listeners.block.onBlockPlace;
 import com.egirlsnation.swissknife.listeners.entity.*;
@@ -139,7 +139,7 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onCraftItemEvent(), this);
         pluginManager.registerEvents(new onProjectileLaunch(), this);
         pluginManager.registerEvents(new onPlayerChat(this), this);
-        pluginManager.registerEvents(new onBlockBreak(), this);
+        pluginManager.registerEvents(new DebugStickDupe(), this);
     }
 
     private void registerCommands() {
