@@ -35,14 +35,14 @@ import java.util.concurrent.TimeUnit;
 
 public class CombatCheck extends Module {
     public CombatCheck() {
-        super(Categories.Player, "combat-check", "Combat check for various situations");
+        super(Categories.Player, "combat-check", "Provides combat check for various modules and commands");
     }
 
     private static final Map<UUID, Long> combatMap = new HashMap<>();
     private static final Map<UUID, Long> elytraMap = new HashMap<>();
 
 
-    //TODO: Config options
+    //TODO: Config options, custom events for better checks
 
 
     @EventHandler

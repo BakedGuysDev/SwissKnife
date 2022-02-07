@@ -117,7 +117,7 @@ public class CrystalKillTracker extends Module {
 
                 if(attacker.getCustomName() == null) return;
                 if(attacker.getCustomName().equals("Draconite Crystal")){
-                    //TODO: Head dropping
+                    //TODO: Head dropping with custom PlayerCrystalKillEvent event
                     //headsHandler.dropHeadIfLucky(player, exploder);
                 }
             }

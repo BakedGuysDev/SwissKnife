@@ -239,7 +239,7 @@ public class OldConfig {
 
 
     /*
-     * Disable Commands at spawn config options //TODO
+     * Disable Commands at spawn config options //Done
      */
 
     @ConfigValue("disableCommandsAtSpawn.enabled")
@@ -412,7 +412,7 @@ public class OldConfig {
     @ConfigValue("egirlsnation.enableAnniversaryItems") //Dropped
     public boolean anniversaryItems = false;
 
-    @ConfigValue("egirlsnation.ranksEnabled") //TODO: Configurable hours and votes
+    @ConfigValue("egirlsnation.ranksEnabled") //Done
     public boolean ranksEnabled = false;
 
     @ConfigValue("egirlsnation.refreshrankCmdCooldown") //TODO
