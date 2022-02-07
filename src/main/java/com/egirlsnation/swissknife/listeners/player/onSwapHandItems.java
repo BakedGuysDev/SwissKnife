@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.utils.OldConfig;
+import com.egirlsnation.swissknife.utils.entity.player.PlayerUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -50,7 +51,7 @@ public class onSwapHandItems implements Listener {
             if(System.currentTimeMillis() < handSwapDelay.get(e.getPlayer())){
                 e.setCancelled(true);
                 if(OldConfig.instance.kickOnHandSwitchCrash){
-                    e.getPlayer().kickPlayer("Lost connection to the server");
+                    PlayerUtil.kickPlayer(e.getPlayer());
                 }
             }else{
                 handSwapDelay.put(e.getPlayer(), System.currentTimeMillis() + OldConfig.instance.handSwitchDelay);

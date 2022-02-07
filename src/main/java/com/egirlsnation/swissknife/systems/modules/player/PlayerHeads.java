@@ -231,7 +231,7 @@ public class PlayerHeads extends Module {
         }
     }
 
-    //TODO: I know this is a terrible way to do it, but I was tired tired :/
+    //I know this is a terrible way to do it, but I was tired tired :/
     private int getChance(Player player){
         int chance = 0;
         if(player.hasPermission("swissknife.heads.chance.100")){

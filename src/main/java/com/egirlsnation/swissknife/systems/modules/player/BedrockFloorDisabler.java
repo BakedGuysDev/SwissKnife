@@ -27,7 +27,6 @@ public class BedrockFloorDisabler extends Module {
         super(Categories.Player, "bedrock-floor-disabler", "Prevents players going bellow the bedrock floor");
     }
 
-    //TODO: Dealing damage?
 
     private final SettingGroup sgOverworld = settings.createGroup("overworld");
 

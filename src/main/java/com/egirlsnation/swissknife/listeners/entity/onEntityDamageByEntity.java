@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.listeners.entity;
 
 import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
 import com.egirlsnation.swissknife.utils.OldConfig;
+import com.egirlsnation.swissknife.utils.entity.player.PlayerUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -43,7 +44,7 @@ public class onEntityDamageByEntity implements Listener {
                         player.damage(e.getDamage());
                     }
                     if(OldConfig.instance.kickOnHighDamage){
-                        player.kickPlayer("Oi cunt, what the bloody hell");
+                        PlayerUtil.kickPlayer(player, "Oi cunt, what the bloody hell");
                     }
                 }
             }

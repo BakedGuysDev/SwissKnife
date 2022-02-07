@@ -15,6 +15,7 @@ package com.egirlsnation.swissknife.systems.modules.player;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.PlayerUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -62,7 +63,8 @@ public class AntiOffhandCrash extends Module {
         if(System.currentTimeMillis() < handSwapDelay.get(e.getPlayer())){
             e.setCancelled(true);
             if(kick.get()){
-                e.getPlayer().kickPlayer(ChatColor.translateAlternateColorCodes('§', kickMessage.get()));
+                PlayerUtil.kickPlayer(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', kickMessage.get()));
+
             }
         }else{
             handSwapDelay.put(e.getPlayer(), System.currentTimeMillis() + delay.get());

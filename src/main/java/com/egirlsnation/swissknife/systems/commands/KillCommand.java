@@ -13,9 +13,9 @@
 package com.egirlsnation.swissknife.systems.commands;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CooldownHandler;
 import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CommandType;
-import com.egirlsnation.swissknife.utils.entity.player.HealthUtil;
+import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CooldownHandler;
+import com.egirlsnation.swissknife.utils.entity.player.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -31,8 +31,6 @@ public class KillCommand implements CommandExecutor {
     private final SwissKnife swissKnife;
 
     public KillCommand(SwissKnife swissKnife){ this.swissKnife = swissKnife; }
-
-    private final HealthUtil healthUtil = new HealthUtil();
 
     private final CommandType killCommand = CommandType.KILL;
     private final CooldownHandler cooldownHandler = new CooldownHandler();
@@ -52,7 +50,7 @@ public class KillCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "That player isn't online.");
                 return true;
             }
-            healthUtil.killPlayer(player, swissKnife);
+            PlayerUtil.killPlayer(player);
             sender.sendMessage(ChatColor.GREEN + "Killed " + player.getDisplayName());
             return true;
         }
@@ -65,11 +63,11 @@ public class KillCommand implements CommandExecutor {
             long timeLeft = System.currentTimeMillis() - cooldownHandler.getCommandInfo(player.getUniqueId(), killCommand).getCooldown();
 
             if(player.hasPermission("swissknife.bypass.cooldown")){
-                healthUtil.killPlayer(player, swissKnife);
+                PlayerUtil.killPlayer(player);
                 return true;
             }else if(TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= CooldownHandler.DEFAULT_COOLDOWN){
                 cooldownHandler.setCooldown(player.getUniqueId(), System.currentTimeMillis(), killCommand);
-                healthUtil.killPlayer(player, swissKnife);
+                PlayerUtil.killPlayer(player);
                 return true;
             }
             player.sendMessage(ChatColor.RED + "You gotta wait before doing that m8");
@@ -84,7 +82,7 @@ public class KillCommand implements CommandExecutor {
                 cmdSender.sendMessage(ChatColor.RED + "That player isn't online");
                 return true;
             }
-            healthUtil.killPlayer(player, swissKnife);
+            PlayerUtil.killPlayer(player);
             cmdSender.sendMessage(ChatColor.GREEN + "Killed " + player.getDisplayName());
             return true;
         }

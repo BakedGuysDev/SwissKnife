@@ -23,6 +23,7 @@ import com.egirlsnation.swissknife.systems.modules.egirls.Ranks;
 import com.egirlsnation.swissknife.systems.modules.entity.*;
 import com.egirlsnation.swissknife.systems.modules.illegals.*;
 import com.egirlsnation.swissknife.systems.modules.misc.ChatTweaks;
+import com.egirlsnation.swissknife.systems.modules.misc.KickMessageMasking;
 import com.egirlsnation.swissknife.systems.modules.misc.SmallFixes;
 import com.egirlsnation.swissknife.systems.modules.player.*;
 import com.egirlsnation.swissknife.systems.modules.world.EndermenGrief;
@@ -173,6 +174,7 @@ public class Modules extends System<Module> {
 
     private void initMisc() {
         add(new ChatTweaks());
+        add(new KickMessageMasking());
         add(new SmallFixes());
     }
 

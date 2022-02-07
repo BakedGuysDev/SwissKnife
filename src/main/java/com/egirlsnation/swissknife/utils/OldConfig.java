@@ -222,7 +222,7 @@ public class OldConfig {
     public long elytraTimeout = 5000;
 
     /*
-     * Jihads config options //TODO: Test
+     * Jihads config options //TODO: Test new out of spawn radius
      */
 
     @ConfigValue("jihads.enabled")

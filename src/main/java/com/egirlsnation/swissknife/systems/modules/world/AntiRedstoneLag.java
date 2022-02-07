@@ -10,9 +10,7 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.utils.entity.player;
+package com.egirlsnation.swissknife.systems.modules.world;
 
-public class HealthUtil {
-
-
+public class AntiRedstoneLag { //TODO
 }

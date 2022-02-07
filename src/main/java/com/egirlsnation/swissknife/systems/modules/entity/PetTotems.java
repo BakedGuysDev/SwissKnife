@@ -34,7 +34,7 @@ public class PetTotems extends Module {
         super(Categories.Entity, "pet-totems", "Allows pets to use totems of their owner");
     }
 
-    private final List<UUID> disabledPlayers =  new ArrayList<>(); //TODO: Command to disable
+    private final List<UUID> disabledPlayers =  new ArrayList<>();
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent e){

@@ -15,6 +15,7 @@ package com.egirlsnation.swissknife.systems.modules.illegals;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.PlayerUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -75,7 +76,7 @@ public class HighDamagePrevention extends Module {
                     player.damage(e.getDamage());
                 }
                 if(kick.get()){
-                    player.kickPlayer(ChatColor.translateAlternateColorCodes('§', kickMessage.get()));
+                    PlayerUtil.kickPlayer(player, ChatColor.translateAlternateColorCodes('§', kickMessage.get()));
                 }
                 if(log.get()){
                     info("Player " + player.getName() + " dealt damage over threshold");

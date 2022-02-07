@@ -48,10 +48,6 @@ import java.util.Objects;
 
 public class SwissKnife extends JavaPlugin {
 
-    //TODO: Kick message override like in AEF with optional overriding the override from Swissknife
-    //TODO: Redstone TPS check like in AEF
-    //TODO: Change license headers
-
     public static SwissKnife INSTANCE;
     public static SwissLogger swissLogger;
 

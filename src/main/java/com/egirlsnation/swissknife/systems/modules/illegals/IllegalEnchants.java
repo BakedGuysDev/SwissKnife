@@ -84,9 +84,6 @@ public class IllegalEnchants extends Module {
     );
 
 
-
-    //TODO: Configurable max values for each enchant
-
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
         if(!isEnabled()) return;
@@ -170,7 +167,6 @@ public class IllegalEnchants extends Module {
         return found;
     }
 
-    //TODO: Test
     private boolean scanAndFixEnchants(Inventory inv){
         boolean found = false;
         for(ItemStack item : inv.getContents()){
@@ -197,7 +193,7 @@ public class IllegalEnchants extends Module {
         if(!isEnabled()) return;
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
-        if(fixValues.get()){ //TODO: Test
+        if(fixValues.get()){
             boolean found = false;
             if(IllegalItemsUtil.hasEnchants(e.getItem().getItemStack())){
                 ItemMeta meta = e.getItem().getItemStack().getItemMeta();
@@ -240,7 +236,6 @@ public class IllegalEnchants extends Module {
     }
 
 
-    //TODO: Finish block dispense check
     @EventHandler
     private void onBlockDispenseEvent(BlockDispenseEvent e){
         if(!isEnabled()) return;
