@@ -13,12 +13,56 @@
 package com.egirlsnation.swissknife.utils.server;
 
 import com.egirlsnation.swissknife.utils.OldConfig;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.Map;
+
 public class ItemUtil {
+
+    private static final List<PotionEffectType> nonPotionList = ImmutableList.<PotionEffectType>builder().add(
+            PotionEffectType.ABSORPTION,
+            PotionEffectType.BAD_OMEN,
+            PotionEffectType.BLINDNESS,
+            PotionEffectType.CONDUIT_POWER,
+            PotionEffectType.CONFUSION,
+            PotionEffectType.DOLPHINS_GRACE,
+            PotionEffectType.FAST_DIGGING,
+            PotionEffectType.GLOWING,
+            PotionEffectType.HEALTH_BOOST,
+            PotionEffectType.HERO_OF_THE_VILLAGE,
+            PotionEffectType.HUNGER,
+            PotionEffectType.LEVITATION,
+            PotionEffectType.SATURATION,
+            PotionEffectType.SLOW_DIGGING,
+            PotionEffectType.UNLUCK,
+            PotionEffectType.WITHER
+    ).build();
+
+    private static final Map<PotionEffectType, Integer> potionMaxAmplifierMap = ImmutableMap.<PotionEffectType, Integer>builder()
+            .put(PotionEffectType.DAMAGE_RESISTANCE, 3)
+            .put(PotionEffectType.FIRE_RESISTANCE, 0)
+            .put(PotionEffectType.HARM, 1)
+            .put(PotionEffectType.HEAL, 1)
+            .put(PotionEffectType.INCREASE_DAMAGE, 1)
+            .put(PotionEffectType.INVISIBILITY, 0)
+            .put(PotionEffectType.JUMP, 1)
+            .put(PotionEffectType.LUCK, 0)
+            .put(PotionEffectType.NIGHT_VISION, 0)
+            .put(PotionEffectType.POISON, 1)
+            .put(PotionEffectType.REGENERATION, 1)
+            .put(PotionEffectType.SLOW, 5)
+            .put(PotionEffectType.SLOW_FALLING, 0)
+            .put(PotionEffectType.SPEED, 1)
+            .put(PotionEffectType.WATER_BREATHING, 0)
+            .put(PotionEffectType.WEAKNESS, 0)
+            .build();
 
     public static boolean isArmorPiece(@Nullable ItemStack item){
         if(item == null) return false;
@@ -67,6 +111,14 @@ public class ItemUtil {
             return true;
         }
         return false;
+    }
+
+    public static int getMaxPotionAmplifier(PotionEffectType effectType){
+        return potionMaxAmplifierMap.get(effectType);
+    }
+
+    public static boolean isLegitPotionEffect(PotionEffectType effectType){
+        return !nonPotionList.contains(effectType);
     }
 
 }

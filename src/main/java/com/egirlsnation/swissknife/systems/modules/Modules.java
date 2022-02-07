@@ -145,6 +145,7 @@ public class Modules extends System<Module> {
     }
 
     private void initIllegals() {
+        add(new AntiIllegalPotion());
         add(new AntiSpawnEggs());
         add(new ArmorStackLimiter());
         add(new HighDamagePrevention());
