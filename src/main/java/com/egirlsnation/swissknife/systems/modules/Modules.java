@@ -19,6 +19,7 @@ import com.egirlsnation.swissknife.systems.System;
 import com.egirlsnation.swissknife.systems.Systems;
 import com.egirlsnation.swissknife.systems.modules.database.PlayerStats;
 import com.egirlsnation.swissknife.systems.modules.database.Shitlist;
+import com.egirlsnation.swissknife.systems.modules.egirls.DebugStickDupe;
 import com.egirlsnation.swissknife.systems.modules.egirls.DragonSlayerAddon;
 import com.egirlsnation.swissknife.systems.modules.egirls.Ranks;
 import com.egirlsnation.swissknife.systems.modules.egirls.RestrictedCreativeAddon;
@@ -28,10 +29,7 @@ import com.egirlsnation.swissknife.systems.modules.misc.ChatTweaks;
 import com.egirlsnation.swissknife.systems.modules.misc.KickMessageMasking;
 import com.egirlsnation.swissknife.systems.modules.misc.SmallFixes;
 import com.egirlsnation.swissknife.systems.modules.player.*;
-import com.egirlsnation.swissknife.systems.modules.world.EndermenGrief;
-import com.egirlsnation.swissknife.systems.modules.world.JihadBalls;
-import com.egirlsnation.swissknife.systems.modules.world.ShulkerStackHandler;
-import com.egirlsnation.swissknife.systems.modules.world.SpawnCommands;
+import com.egirlsnation.swissknife.systems.modules.world.*;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.simpleyaml.configuration.ConfigurationSection;
@@ -139,7 +137,6 @@ public class Modules extends System<Module> {
 
     private void initEntity() {
         add(new DisableEntityPortals());
-        add(new DragonSlayerAddon());
         add(new PetTotems());
         add(new VehicleLimiter());
         add(new WitherSpawnLimiter());
@@ -165,10 +162,10 @@ public class Modules extends System<Module> {
         add(new CpvpSpeedLimiter());
         add(new NetherRoofDisabler());
         add(new PlayerHeads());
-        add(new RestrictedCreativeAddon());
     }
 
     private void initWorld() {
+        add(new AntiRedstoneLag());
         add(new EndermenGrief());
         add(new JihadBalls());
         add(new ShulkerStackHandler());
@@ -187,7 +184,10 @@ public class Modules extends System<Module> {
     }
 
     private void initEgirls() {
+        add(new DebugStickDupe());
+        add(new DragonSlayerAddon());
         add(new Ranks());
+        add(new RestrictedCreativeAddon());
     }
 
     @Override
