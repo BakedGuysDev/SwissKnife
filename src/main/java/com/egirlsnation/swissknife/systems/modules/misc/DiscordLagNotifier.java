@@ -12,12 +12,26 @@
 
 package com.egirlsnation.swissknife.systems.modules.misc;
 
+import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.OldConfig;
+import com.egirlsnation.swissknife.utils.discord.DiscordWebhook;
+import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
+import com.egirlsnation.swissknife.utils.server.ServerUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class DiscordLagNotifier extends Module {
     public DiscordLagNotifier(){
@@ -110,7 +124,107 @@ public class DiscordLagNotifier extends Module {
             .build()
     );
 
-    
+    private BukkitTask tpsCheck = null;
+
+
+    @Override
+    public void onEnable(){
+        tpsCheck = Bukkit.getScheduler().runTaskTimer(SwissKnife.INSTANCE, () -> {
+            if(ServerUtil.getTps()[0] <= tpsThreshold.get()){
+                Bukkit.getScheduler().runTaskLater(SwissKnife.INSTANCE, () -> {
+                    double[] tps = ServerUtil.getTps();
+                    if(tps[0] <= tpsThreshold.get()){
+                        //Notify
+                    }
+                }, recheckDelay.get());
+            }
+        }, loadDelay.get(), repeatTime.get());
+    }
+
+    @Override
+    public void onDisable(){
+        if(tpsCheck != null){
+            tpsCheck.cancel();
+        }
+    }
+
+    private void tpsNotify(double[] tps){
+        Collection<? extends Player> onlinePlayers = null;
+        if(listOnlinePlayers.get()){
+            onlinePlayers = Bukkit.getOnlinePlayers();
+        }
+
+        List<String> namesUnderPt = null;
+        if(listLowPtPlayers.get()){
+            namesUnderPt = RankUtil.getOnlinePlayerNamesUnderPlaytime(lowPtThreshold.get());
+        }
+
+        int playercount = Bukkit.getServer().getOnlinePlayers().size();
+        int maxSlots = Bukkit.getServer().getMaxPlayers();
+        List<String> finalNamesUnderPt = namesUnderPt;
+        Collection<? extends Player> finalOnlinePlayers = onlinePlayers;
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+            try {
+                postNotif(tps, playercount, maxSlots, finalOnlinePlayers, finalNamesUnderPt);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void postNotif(double[] tps, int playercount, int maxSlots, Collection<? extends Player> onlinePlayers, List<String> lowPtNames) throws IOException{
+        DiscordWebhook webhook = new DiscordWebhook(webhookUrl.get());
+        if(webhookName.get().isBlank()){
+            webhook.setUsername(webhookName.getDefaultValue());
+        }else{
+            webhook.setUsername(webhookName.get());
+        }
+
+        if(!webhookAvatarUrl.get().isBlank()){
+            webhook.setAvatarUrl(OldConfig.instance.webhookAvatarURL);
+        }
+        if(!roleIds.get().isEmpty()){
+            String pings = "";
+            for(String id : roleIds.get()){
+                pings = pings + " <@&" + id +">";
+            }
+            webhook.setContent(pings);
+        }
+
+        String tpsString = Arrays.toString(tps);
+        tpsString = tpsString.substring(1, tpsString.length() - 1);
+
+        DiscordWebhook.EmbedObject embed = new DiscordWebhook.EmbedObject()
+                .setTitle(":warning: Low TPS")
+                .setDescription("Please keep in mind that this feature is still in testing.")
+                .addField("Players online", playercount + "/" + maxSlots, false);
+        if(tps.length == 3){
+            embed.addField("TPS (1m, 5m, 15m)", tpsString, false );
+        }else if(tps.length == 4){
+            embed.addField("TPS (5s, 1m, 5m, 15m)", tpsString, false);
+        }else{
+            embed.addField("TPS (unknown time intervals)", tpsString, false);
+        }
+
+        if(onlinePlayers != null){
+            if(onlinePlayers.isEmpty()){
+                embed.addField("Players", "No players online", false);
+            }else{
+                embed.addField("Players", onlinePlayers.stream().map(HumanEntity::getName).collect(Collectors.joining(", ")), false );
+            }
+        }
+        if(lowPtNames != null){
+            if(lowPtNames.isEmpty()){
+                embed.addField("Low Playtime Players", "No low playtime players online", true);
+            }else{
+                embed.addField("Low Playtime Players", lowPtNames.stream().map(Objects::toString).collect(Collectors.joining(", ")), false );
+            }
+        }
+        embed.setColor(Color.red);
+        webhook.addEmbed(embed);
+        webhook.execute();
+    }
+
 
 
 

@@ -76,6 +76,8 @@ public class SwissKnife extends JavaPlugin {
 
         swissLogger.info("Initializing SwissKnife");
 
+        ServerUtil.init();
+
         initSQL();
 
         Categories.init();
