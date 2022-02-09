@@ -26,13 +26,10 @@ import java.util.UUID;
 
 public class SqlQuery {
 
-    private final SwissKnife plugin;
-    public SqlQuery(SwissKnife plugin){ this.plugin = plugin; }
-
     public void createStatsTable(){
         PreparedStatement ps;
         try{
-            ps = plugin.SQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerStats "
+            ps = MySQL.get().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerStats "
                     + "(username VARCHAR(32)," +
                     "uuid CHAR(36)," +
                     "playtime BIGINT(19)," +
@@ -63,7 +60,7 @@ public class SqlQuery {
         String playerName = player.getName();
         long firstPlayed = player.getFirstPlayed();
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
            createPlayer(playerUUID, playerName, firstPlayed, 0, shitlisted);
         });
 
@@ -75,14 +72,14 @@ public class SqlQuery {
         long firstPlayed = playerInfo.getFirstplayed();
         boolean shitlisted = playerInfo.isShitlisted();
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
            createPlayer(playerUUID, playerName, firstPlayed, 0, shitlisted);
         });
     }
 
     public void createPlayer(UUID playerUUID, String playerName, long firstPlayed, long playtime, boolean shitlisted){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
             ps.setString(1, playerUUID.toString());
             ResultSet resultSet = ps.executeQuery();
             resultSet.next();
@@ -92,7 +89,7 @@ public class SqlQuery {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                 String firstPlayedS = sdf.format(date);
 
-                PreparedStatement ps2 = plugin.SQL.getConnection().prepareStatement("INSERT IGNORE INTO playerStats"
+                PreparedStatement ps2 = MySQL.get().getConnection().prepareStatement("INSERT IGNORE INTO playerStats"
                         + " (username,uuid,playtime," +
                         "kills,deaths,mobkills" +
                         ",shitlisted,firstplayed,obsidianmined" +
@@ -128,7 +125,7 @@ public class SqlQuery {
 
     public boolean exists(UUID uuid){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
             ps.setString(1, uuid.toString());
 
             ResultSet resultSet = ps.executeQuery();
@@ -141,7 +138,7 @@ public class SqlQuery {
 
     public boolean exists(String playerName){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("SELECT * FROM playerStats WHERE Name =?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT * FROM playerStats WHERE Name =?");
             ps.setString(1, playerName);
 
             ResultSet resultSet = ps.executeQuery();
@@ -155,7 +152,7 @@ public class SqlQuery {
     public void updateValues(Player player){
         PlayerInfo playerInfo = new PlayerInfo(player);
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
            updateValues(playerInfo);
         });
     }
@@ -166,7 +163,7 @@ public class SqlQuery {
                 createPlayer(playerInfo);
             }
 
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("UPDATE playerStats SET" +
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET" +
                     " playtime=?,kills=?,deaths=?" +
                     ",mobkills=?,obsidianmined=?,distanceland=?" +
                     ",distanceair=?,timeSinceDeath=?" +
@@ -193,7 +190,7 @@ public class SqlQuery {
 
     public long getPlaytime(String playerName){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("SELECT playtime FROM playerStats WHERE name=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT playtime FROM playerStats WHERE name=?");
             ps.setString(1, playerName);
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -210,7 +207,7 @@ public class SqlQuery {
 
     public String addToShitlist(PlayerInfo info){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
             ps.setInt(1, 1);
             ps.setString(2, info.getUuid().toString());
             if (!exists(info.getUuid())) {
@@ -229,7 +226,7 @@ public class SqlQuery {
 
     public String removeFromShitlist(PlayerInfo info){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
             ps.setInt(1, 0);
             ps.setString(2, info.getUuid().toString());
             if (!exists(info.getUuid())) {
@@ -247,7 +244,7 @@ public class SqlQuery {
 
     public String addToShitlist(String name){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
             ps.setInt(1, 1);
             ps.setString(2, name);
             if (!exists(name)) {
@@ -264,7 +261,7 @@ public class SqlQuery {
 
     public String removeFromShitlist(String name){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
             ps.setInt(1, 0);
             ps.setString(2, name);
             if (!exists(name)) {
@@ -281,7 +278,7 @@ public class SqlQuery {
 
     public boolean isShitlisted(String name){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("SELECT shitlisted FROM playerStats WHERE name=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT shitlisted FROM playerStats WHERE name=?");
             ps.setString(1, name);
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -298,7 +295,7 @@ public class SqlQuery {
 
     public boolean isShitlisted(UUID uuid){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("SELECT shitlisted FROM playerStats WHERE uuid=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT shitlisted FROM playerStats WHERE uuid=?");
             ps.setString(1, uuid.toString());
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -316,7 +313,7 @@ public class SqlQuery {
     @Deprecated
     public boolean isShitlisted(Player player){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("SELECT shitlisted FROM playerStats WHERE uuid=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT shitlisted FROM playerStats WHERE uuid=?");
             ps.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -333,7 +330,7 @@ public class SqlQuery {
 
     public void increaseCombatLog(UUID uuid){
         try{
-            PreparedStatement ps = plugin.SQL.getConnection().prepareStatement("UPDATE playerStats SET combatlog = combatlog + 1 WHERE uuid=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET combatlog = combatlog + 1 WHERE uuid=?");
             ps.setString(1, uuid.toString());
         }catch(SQLException e){
             e.printStackTrace();

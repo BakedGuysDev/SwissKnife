@@ -31,10 +31,21 @@ public abstract class System<T>{
         }
     }
 
+    public System(String name, boolean hasConfig){
+        this.name = name;
+
+        if(hasConfig){
+            if(name != null){
+                this.file = new YamlFile(SwissKnife.INSTANCE.getDataFolder() + "/" + name + ".yml");
+            }
+        }
+    }
+
     public void init(){}
 
     public void save(){
         YamlFile file  = getFile();
+        onSave();
         if(file == null) return;
 
         try{
@@ -42,6 +53,10 @@ public abstract class System<T>{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onSave(){
+
     }
 
     public void load(){

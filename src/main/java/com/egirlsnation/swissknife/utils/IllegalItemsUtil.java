@@ -12,11 +12,9 @@
 
 package com.egirlsnation.swissknife.utils;
 
-import com.egirlsnation.swissknife.systems.config.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -43,10 +41,6 @@ public class IllegalItemsUtil {
             if(enchant.getValue() > maxEnchantLevel) return true;
         }
         return false;
-    }
-
-    public static void notifyPlayerAboutOSI(Player player){
-        player.sendMessage(Config.prefix+ ChatColor.RED + "Overstacked item found. The stack has been trimmed");
     }
 
     public static boolean isSpawnEgg(ItemStack item){

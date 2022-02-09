@@ -13,9 +13,10 @@
 package com.egirlsnation.swissknife.systems;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.systems.config.Config;
 import com.egirlsnation.swissknife.systems.hooks.Hooks;
 import com.egirlsnation.swissknife.systems.modules.Modules;
-import com.egirlsnation.swissknife.utils.SwissLogger;
+import com.egirlsnation.swissknife.systems.sql.MySQL;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,12 +27,19 @@ public class Systems {
     @SuppressWarnings("rawtypes")
     private static final Map<Class<? extends System>, System<?>> systems = new HashMap<>();
     private static final List<Runnable> preLoadTasks = new ArrayList<>(1);
+    private static final List<Runnable> postLoadTasks = new ArrayList<>(1);
 
     public static void addPreLoadTask(Runnable task){
         preLoadTasks.add(task);
     }
 
+    public static void addPostLoadTask(Runnable task){
+        postLoadTasks.add(task);
+    }
+
     public static void init(){
+        add(new Config());
+        add(new MySQL());
         add(new Modules());
         add(new Hooks());
     }
@@ -59,6 +67,7 @@ public class Systems {
 
         for(Runnable task : preLoadTasks) task.run();
         for(System<?> system : systems.values()) system.load();
+        for(Runnable task : postLoadTasks) task.run();
         long end = java.lang.System.currentTimeMillis() - start;
         SwissKnife.swissLogger.info("Loaded in " +  end + " milliseconds.");
     }

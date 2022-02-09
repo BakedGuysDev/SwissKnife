@@ -22,7 +22,6 @@ import com.egirlsnation.swissknife.listeners.inventory.onInventoryOpen;
 import com.egirlsnation.swissknife.listeners.player.*;
 import com.egirlsnation.swissknife.systems.Systems;
 import com.egirlsnation.swissknife.systems.commands.*;
-import com.egirlsnation.swissknife.systems.config.Config;
 import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Modules;
@@ -30,20 +29,14 @@ import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.systems.sql.SqlQuery;
 import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.SwissLogger;
-import com.egirlsnation.swissknife.utils.discord.DiscordUtil;
-import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
 import com.egirlsnation.swissknife.utils.server.ServerUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.Objects;
 
 public class SwissKnife extends JavaPlugin {
@@ -57,10 +50,6 @@ public class SwissKnife extends JavaPlugin {
 
     //Old code
     private final PluginManager pluginManager = Bukkit.getPluginManager();
-
-    private final DiscordUtil discordUtil = new DiscordUtil();
-    private final ServerUtil serverUtil = new ServerUtil();
-    private final RankUtil rankUtil = new RankUtil();
     private final CustomItemHandler customItemHandler = new CustomItemHandler();
     //Old code end
 
@@ -77,8 +66,6 @@ public class SwissKnife extends JavaPlugin {
         swissLogger.info("Initializing SwissKnife");
 
         ServerUtil.init();
-
-        initSQL();
 
         Categories.init();
 
@@ -119,13 +106,6 @@ public class SwissKnife extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        /*
-        if(SQL != null) {
-            if (SQL.isConnected()) {
-                SQL.disconnect();
-            }
-        }
-        */
         Systems.save();
         swissLogger.info("Swiss Knife plugin disabled.");
     }
@@ -188,65 +168,8 @@ public class SwissKnife extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("toggleitemability")).setExecutor(new ToggleItemAbilityCommand());
     }
 
-    private void initSQL() { //TODO: New config
-        if(!Config.useDatabase) return;
-
-        swissLogger.info("Starting up SQL driver.");
-
-        this.SQL = new MySQL();
-        this.sqlQuery = new SqlQuery(this);
-
-        if (Config.databaseName.equals("name") && Config.databaseUsername.equals("username") && Config.databasePassword.equals("password")) {
-            swissLogger.warning("Default SQL config values detected. SQL driver won't be initiated.");
-            return;
-        }
-
-        try {
-            SQL.connect();
-        } catch (SQLException | ClassNotFoundException ex) {
-            swissLogger.severe("Something went wrong while initiating SQL\nStack trace will follow.");
-            ex.printStackTrace();
-        }
-
-        if (SQL.isConnected()) {
-            swissLogger.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
-            sqlQuery.createStatsTable();
-            //sqlQuery.createPingTable();
-            swissLogger.info(ChatColor.GREEN + "Finished SQL initialization.");
-        }
-    }
-
     public PluginManager getPluginManager() {
         return pluginManager;
-    }
-
-
-    private void initTPSnotifyTask() { //TODO
-        Bukkit.getScheduler().runTaskTimer(this, () -> {
-            List<Double> tps = serverUtil.getTPS();
-            if (discordUtil.shouldPostAlert(tps)) {
-                List<String> rankNames = null;
-                if(OldConfig.instance.listOnlinePlayers){
-                    rankNames = rankUtil.getOnlinePlayerRankList();
-                }
-                List<String> namesUnderPt = null;
-                if(OldConfig.instance.listLowPtPlayers){
-                    namesUnderPt = rankUtil.getOnlinePlayerNamesUnderPlaytime(OldConfig.instance.lowPtThreshold);
-                }
-
-                List<String> finalRankNames = rankNames;
-                List<String> finalNamesUnderPt = namesUnderPt;
-                int playercount = Bukkit.getServer().getOnlinePlayers().size();
-                int maxSlots = Bukkit.getServer().getMaxPlayers();
-                Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-                    try {
-                        discordUtil.postDiscordTPSNotif(tps, playercount, maxSlots, finalRankNames, finalNamesUnderPt);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
-        }, serverUtil.getTicksFromMinutes(OldConfig.instance.delayAfterLoad), OldConfig.instance.tpsTaskTime);
     }
 
     private void registerRecipes(){ //TODO

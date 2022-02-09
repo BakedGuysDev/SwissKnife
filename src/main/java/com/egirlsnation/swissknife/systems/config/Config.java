@@ -12,25 +12,59 @@
 
 package com.egirlsnation.swissknife.systems.config;
 
+import com.egirlsnation.swissknife.systems.System;
+import com.egirlsnation.swissknife.systems.Systems;
 import org.bukkit.ChatColor;
+import org.simpleyaml.configuration.ConfigurationSection;
+import org.simpleyaml.configuration.comments.CommentType;
+import org.simpleyaml.configuration.file.YamlFile;
 
-public class Config {
-    public static String prefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife" + ChatColor.GOLD + "]" + ChatColor.RESET;
+import java.io.IOException;
+
+public class Config extends System<Config> {
+
+    //TODO: Use prefix when sending message in commands
+    public String prefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife" + ChatColor.GOLD + "]" + ChatColor.RESET;
 
     //TODO: General config option for all module player alters to use the systemPrefix
-    public static String systemPrefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife | %system%" + ChatColor.GOLD + "]" + ChatColor.RESET;
+    public boolean useModulePrefix = true;
+    public String modulePrefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife | %module%" + ChatColor.GOLD + "]" + ChatColor.RESET;
 
-    public static boolean useDatabase = false;
+    public Config(){
+        super("config");
+    }
 
-    public static String databaseHost = "172.18.0.1";
+    public static Config get(){
+        return Systems.get(Config.class);
+    }
 
-    public static String databasePort = "3306";
+    @Override
+    public void writeToConfig(){
+        YamlFile file = getFile();
+        ConfigurationSection section = file.createSection("config");
 
-    public static String databaseName = "name";
+        file.setComment("config", "\nGeneral config options\n", CommentType.BLOCK);
+        section.set("prefix", prefix);
+        section.set("use-prefix", useModulePrefix);
+        file.setComment("config.use-prefix", "If plugin should use module prefix when alerting players");
 
-    public static String databaseUsername = "username";
+        try {
+            getFile().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    public static String databasePassword = "password";
+    @Override
+    public void readFromConfig(){
+        YamlFile file = getFile();
+        ConfigurationSection section = file.getConfigurationSection("config");
+        if(section == null){
+            writeToConfig();
+            return;
+        }
 
-    //TODO: Config loading
+        prefix = section.getString("prefix");
+        useModulePrefix = section.getBoolean("use-prefix");
+    }
 }

@@ -39,7 +39,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Modules extends System<Module> {
+public class Modules extends System<Modules> {
     private static final List<Category> CATEGORIES = new ArrayList<>();
 
     private final List<Module> modules = new ArrayList<>();

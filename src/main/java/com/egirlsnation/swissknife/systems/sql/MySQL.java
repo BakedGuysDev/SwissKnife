@@ -12,23 +12,50 @@
 
 package com.egirlsnation.swissknife.systems.sql;
 
-import com.egirlsnation.swissknife.utils.OldConfig;
+import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.systems.System;
+import com.egirlsnation.swissknife.systems.Systems;
+import org.bukkit.ChatColor;
+import org.simpleyaml.configuration.ConfigurationSection;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class MySQL {
+public class MySQL extends System<MySQL> {
+
+    public boolean useDatabase = false;
+
+    public String databaseHost = "172.18.0.1";
+
+    public String databasePort = "3306";
+
+    public String databaseName = "name";
+
+    public String databaseUsername = "username";
+
+    public String databasePassword = "password";
 
     private Connection connection;
 
-    public boolean isConnected(){
-        return (connection == null ? false : true);
+    private SqlQuery sql = null;
+
+    public MySQL(){
+        super("mysql");
     }
 
-    public void connect() throws ClassNotFoundException, SQLException{
+    public static MySQL get(){
+        return Systems.get(MySQL.class);
+    }
+
+    public boolean isConnected(){
+        return (connection != null);
+    }
+
+    private void connect() throws ClassNotFoundException, SQLException{
         if(!isConnected()){
-            connection = DriverManager.getConnection("jdbc:mysql://" + OldConfig.instance.databaseHost + ":" + OldConfig.instance.databasePort + "/" + OldConfig.instance.databaseName + "?useSSL=false", OldConfig.instance.databaseUsername, OldConfig.instance.databasePassword);
+            connection = DriverManager.getConnection("jdbc:mysql://" + databaseHost + ":" + databasePort + "/" + databaseName + "?useSSL=false", databaseUsername, databasePassword);
         }
     }
 
@@ -37,12 +64,81 @@ public class MySQL {
     }
 
 
-    public void disconnect(){
+    private void disconnect(){
         if(!isConnected()) return;
         try{
             connection.close();
-        }catch (SQLException e){
+        }catch(SQLException e){
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void writeToConfig(){
+        ConfigurationSection section = getFile().createSection("mysql");
+
+        getFile().setComment("mysql", "\nMySQL config options\n");
+        section.set("use-mysql", useDatabase);
+        getFile().setComment("mysql.use-mysql", "If mysql db will be used. Some modules depend on it");
+        section.set("host", databaseHost);
+        section.set("port", databasePort);
+        section.set("db-name", databaseName);
+        section.set("db-username", databaseUsername);
+        section.set("db-password", databasePassword);
+
+        try {
+            getFile().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void readFromConfig(){
+        ConfigurationSection section = getFile().getConfigurationSection("config.mysql");
+        if(section == null){
+            writeToConfig();
+            return;
+        }
+
+        useDatabase = section.getBoolean("use-mysql");
+        databaseHost = section.getString("host");
+        databasePort = section.getString("port");
+        databaseName = section.getString("db-name");
+        databaseUsername = section.getString("db-username");
+        databasePassword = section.getString("db-password");
+    }
+
+    @Override
+    public void init(){
+        if(useDatabase) return;
+
+        SwissKnife.swissLogger.info("Initializing up SQL driver.");
+
+        if(databaseName.equals("name") && databaseUsername.equals("username") && databasePassword.equals("password")){
+            SwissKnife.swissLogger.warning("Default SQL config values detected. SQL driver won't be initiated.");
+            return;
+        }
+
+        try{
+            connect();
+        }catch(SQLException | ClassNotFoundException ex){
+            SwissKnife.swissLogger.severe("Something went wrong while initiating SQL\nStack trace will follow.");
+            ex.printStackTrace();
+        }
+
+        if(isConnected()){
+            SwissKnife.swissLogger.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
+            sql = new SqlQuery();
+            sql.createStatsTable();
+            SwissKnife.swissLogger.info(ChatColor.GREEN + "Finished SQL initialization.");
+        }
+    }
+
+    @Override
+    public void onSave(){
+        if(isConnected()){
+            disconnect();
         }
     }
 }
