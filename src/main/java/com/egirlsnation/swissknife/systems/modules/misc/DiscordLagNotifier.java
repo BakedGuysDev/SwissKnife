@@ -134,7 +134,7 @@ public class DiscordLagNotifier extends Module {
                 Bukkit.getScheduler().runTaskLater(SwissKnife.INSTANCE, () -> {
                     double[] tps = ServerUtil.getTps();
                     if(tps[0] <= tpsThreshold.get()){
-                        //Notify
+                        tpsNotify(tps);
                     }
                 }, recheckDelay.get());
             }

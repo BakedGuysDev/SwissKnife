@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.egirls;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.event.EventHandler;
@@ -38,6 +39,8 @@ public class DebugStickDupe extends Module {
     @EventHandler
     private void blockBreak(BlockBreakEvent e){
         if(!isEnabled()) return;
+        if(e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) return;
+
         if(e.getBlock().getState() instanceof ShulkerBox){
             if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.DEBUG_STICK)){
                 Long cooldown = cooldownMap.get(e.getPlayer().getUniqueId());
@@ -62,6 +65,8 @@ public class DebugStickDupe extends Module {
     @EventHandler
     private void blockStartMining(BlockDamageEvent e){
         if(!isEnabled()) return;
+        if(e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) return;
+
         if(e.getItemInHand().getType().equals(Material.DEBUG_STICK)){
             e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 10 * 20, 0));
         }
