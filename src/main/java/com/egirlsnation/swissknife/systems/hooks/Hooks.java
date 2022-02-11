@@ -73,7 +73,7 @@ public class Hooks extends System<Hook> {
         }
     }
 
-    public void sortModules(){
+    public void sortHooks(){
         hooks.sort(Comparator.comparing(o -> o.title));
     }
 

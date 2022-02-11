@@ -10,7 +10,7 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.systems.handlers.customItems;
+package com.egirlsnation.swissknife.utils.handlers.customItems;
 
 import org.bukkit.entity.Player;
 
@@ -21,15 +21,15 @@ import java.util.concurrent.TimeUnit;
 
 public class AbilityCooldownHandler {
 
-    private static final Map<UUID, Long> swordCooldowns = new HashMap<>();
-    private static final Map<UUID, Long> axeCooldowns = new HashMap<>();
-    private static final Map<UUID, Long> crystalCooldowns = new HashMap<>();
-    private static final Map<UUID, Long> pickaxeCooldowns = new HashMap<>();
+    private final Map<UUID, Long> swordCooldowns = new HashMap<>();
+    private final Map<UUID, Long> axeCooldowns = new HashMap<>();
+    private final Map<UUID, Long> crystalCooldowns = new HashMap<>();
+    private final Map<UUID, Long> pickaxeCooldowns = new HashMap<>();
 
-    public static final int DEFAULT_AXE_COOLDOWN = 10;
-    public static final int DEFAULT_SWORD_COOLDOWN = 15;
-    public static final int DEFAULT_CRYSTAL_COOLDOWN = 300;
-    public static final int DEFAULT_PICKAXE_COOLDOWN = 30;
+    public final int DEFAULT_AXE_COOLDOWN = 10;
+    public final int DEFAULT_SWORD_COOLDOWN = 15;
+    public final int DEFAULT_CRYSTAL_COOLDOWN = 300;
+    public final int DEFAULT_PICKAXE_COOLDOWN = 30;
 
     public void setAxeCooldown(UUID identifier, long time){
         if(time < 1){
@@ -45,6 +45,11 @@ public class AbilityCooldownHandler {
 
     public void removeAxeCooldown(Player player){
         axeCooldowns.remove(player.getUniqueId());
+    }
+
+    public boolean isOnAxeCooldown(Player player){
+        long timeLeft = System.currentTimeMillis() - getAxeCooldown(player.getUniqueId());
+        return TimeUnit.MILLISECONDS.toSeconds(timeLeft) < DEFAULT_AXE_COOLDOWN;
     }
 
     public long getAxeRemainingTime(Player player){
@@ -63,6 +68,11 @@ public class AbilityCooldownHandler {
         }else{
             swordCooldowns.put(identifier, time);
         }
+    }
+
+    public boolean isOnSwordCooldown(Player player){
+        long timeLeft = System.currentTimeMillis() - getSwordCooldown(player.getUniqueId());
+        return TimeUnit.MILLISECONDS.toSeconds(timeLeft) < DEFAULT_SWORD_COOLDOWN;
     }
 
     public long getSwordCooldown(UUID identifier){
@@ -96,6 +106,11 @@ public class AbilityCooldownHandler {
         return crystalCooldowns.getOrDefault(identifier, 0L);
     }
 
+    public boolean isOnCrystalCooldown(Player player){
+        long timeLeft = System.currentTimeMillis() - getCrystalCooldown(player.getUniqueId());
+        return TimeUnit.MILLISECONDS.toSeconds(timeLeft) < DEFAULT_CRYSTAL_COOLDOWN;
+    }
+
     public void removeCrystalCooldown(Player player){
         crystalCooldowns.remove(player.getUniqueId());
     }
@@ -122,6 +137,11 @@ public class AbilityCooldownHandler {
         }
     }
 
+    public boolean isOnPickaxeCooldown(Player player){
+        long timeLeft = System.currentTimeMillis() - getPickaxeCooldown(player.getUniqueId());
+        return TimeUnit.MILLISECONDS.toSeconds(timeLeft) < DEFAULT_PICKAXE_COOLDOWN;
+    }
+
     public long getPickaxeRemainingTime(Player player){
         UUID playerUUID = player.getUniqueId();
         if(!crystalCooldowns.containsKey(playerUUID)) return 0;
@@ -134,5 +154,12 @@ public class AbilityCooldownHandler {
 
     public String getCooldownMessage(long remainingTime){
         return remainingTime + " seconds before you can use the ability again.";
+    }
+
+    public void removeAllCooldowns(Player player){
+        swordCooldowns.remove(player.getUniqueId());
+        axeCooldowns.remove(player.getUniqueId());
+        crystalCooldowns.remove(player.getUniqueId());
+        pickaxeCooldowns.remove(player.getUniqueId());
     }
 }

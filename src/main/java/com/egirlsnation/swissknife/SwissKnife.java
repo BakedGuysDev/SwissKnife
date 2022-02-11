@@ -22,18 +22,16 @@ import com.egirlsnation.swissknife.listeners.inventory.onInventoryOpen;
 import com.egirlsnation.swissknife.listeners.player.*;
 import com.egirlsnation.swissknife.systems.Systems;
 import com.egirlsnation.swissknife.systems.commands.*;
-import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.modules.egirls.DraconiteItems;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.systems.sql.SqlQuery;
 import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.SwissLogger;
+import com.egirlsnation.swissknife.utils.handlers.customItems.DraconiteAbilityHandler;
 import com.egirlsnation.swissknife.utils.server.ServerUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,7 +48,7 @@ public class SwissKnife extends JavaPlugin {
 
     //Old code
     private final PluginManager pluginManager = Bukkit.getPluginManager();
-    private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    private final DraconiteAbilityHandler draconiteAbilityHandler = new DraconiteAbilityHandler();
     //Old code end
 
     @Override
@@ -65,6 +63,11 @@ public class SwissKnife extends JavaPlugin {
 
         swissLogger.info("Initializing SwissKnife");
 
+        Systems.addPostLoadTask(() -> {
+            MySQL.get().initDatabase();
+            Modules.get().get(DraconiteItems.class).registerRecipes();
+        });
+
         ServerUtil.init();
 
         Categories.init();
@@ -74,34 +77,6 @@ public class SwissKnife extends JavaPlugin {
         Modules.get().sortModules();
 
         Systems.load();
-
-        /*
-        SwissLogger.info("Loading config handler.");
-        Config.init(this);
-
-        if (!Config.instance.webhookURL.isBlank()) {
-            if (Bukkit.getServer().getTPS().length == 3) {
-                discordUtil.setWebhookURL(Config.instance.webhookURL);
-                discordUtil.setTpsArrSize(3);
-                initTPSnotifyTask();
-            } else if (Bukkit.getServer().getTPS().length == 4) {
-                discordUtil.setWebhookURL(Config.instance.webhookURL);
-                discordUtil.setTpsArrSize(4);
-                initTPSnotifyTask();
-            } else {
-                SwissLogger.warning("You're running server software that's modifiying TPS results that's not supported by this plugin.\nTPS Notifications won't be sent.\nSupported server software for this feature is Spigot, PaperMC, Tuinity, Airplane, Purpur and Pufferfish");
-            }
-        }
-
-        correctConfigValues();
-
-        registerEvents();
-        registerCommands();
-        registerRecipes();
-
-        initPluginHooks();
-        initSQL();
-         */
     }
 
     @Override
@@ -172,27 +147,4 @@ public class SwissKnife extends JavaPlugin {
         return pluginManager;
     }
 
-    private void registerRecipes(){ //TODO
-        swissLogger.info("Registering recipes");
-        if(OldConfig.instance.enablePickaxeCraft){
-            swissLogger.info("Registering draconite pickaxe recipe");
-            NamespacedKey draconitePickKey = new NamespacedKey(this, "draconite_pickaxe");
-            ShapedRecipe draconitePick = new ShapedRecipe(draconitePickKey, customItemHandler.getDraconitePickaxe())
-                    .shape("GHG", " S ", " S ");
-            if(OldConfig.instance.useDraconiteGems){
-                draconitePick.setIngredient('G', Material.PLAYER_HEAD).setIngredient('H', Material.END_CRYSTAL);
-            }else{
-                draconitePick.setIngredient('G', Material.END_CRYSTAL).setIngredient('H', Material.DRAGON_HEAD);
-            }
-            if(OldConfig.instance.useBedrockSticks){
-                draconitePick.setIngredient('S', Material.BEDROCK);
-            }else{
-                draconitePick.setIngredient('S', Material.STICK);
-            }
-            if(Bukkit.getRecipe(draconitePickKey) != null){
-                Bukkit.removeRecipe(draconitePickKey);
-            }
-            Bukkit.addRecipe(draconitePick);
-        }
-    }
 }

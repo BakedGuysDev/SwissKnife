@@ -10,23 +10,13 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.systems.handlers.commandCooldown;
+package com.egirlsnation.swissknife.utils.handlers.commandCooldown;
 
-public class CommandInfo {
-    private final CommandType command;
-    private final long cooldown;
-
-    public CommandInfo(long cd, CommandType cmd) {
-        cooldown = cd;
-        command = cmd;
-    }
-
-
-    public CommandType getCommand() {
-        return command;
-    }
-
-    public long getCooldown(){
-        return cooldown;
-    }
+public enum CommandType {
+    KILL,
+    ME,
+    PLAYTIME,
+    AFK,
+    PING,
+    REFRESHRANK
 }

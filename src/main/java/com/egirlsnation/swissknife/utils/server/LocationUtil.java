@@ -12,9 +12,12 @@
 
 package com.egirlsnation.swissknife.utils.server;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.awt.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LocationUtil {
 
@@ -25,6 +28,35 @@ public class LocationUtil {
         return p2.distance(p1) < radius;
     }
 
+    public static Location getRandomSpawnLocation(World world, int radius, int minY, int maxY){
+        int x = generateInt(-radius, radius);
+        int z = generateInt(-radius, radius);
+        int y = minY;
+
+        Location loc = new Location(world, x, y, z);
+        Chunk chunk = loc.getChunk();
+
+        int randomY = generateInt(0, 50);
+
+        for(int i = randomY; i <= maxY; i++){
+            if(world.getBlockAt(x, i, z).isEmpty() && world.getBlockAt(x, i+1, z).isEmpty() && !world.getBlockAt(x, i-1, z).isEmpty()){
+                loc.setY(i);
+                y = i;
+            }
+        }
+
+        if(y == minY || ((randomY + 1) < 25 && isInSpawnRadius(x, z, 250))){
+            loc.setY(world.getHighestBlockYAt(loc));
+        }
+
+        return loc;
+    }
+
+    private static int generateInt(int min, int max){
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
+    }
+
+    @Deprecated
     public boolean isInRadius(double LocX, double LocZ, int radius){
         if (LocX < 0){
             //Negative x

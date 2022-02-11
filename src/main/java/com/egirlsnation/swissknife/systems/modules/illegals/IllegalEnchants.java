@@ -15,7 +15,7 @@ package com.egirlsnation.swissknife.systems.modules.illegals;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
+import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
@@ -159,7 +159,7 @@ public class IllegalEnchants extends Module {
     private boolean scanAndRemoveFromInv(Inventory inv){
         boolean found = false;
         for(ItemStack item : inv.getContents()){
-            if(IllegalItemsUtil.isOverEnchanted(item, maxValue.get())){
+            if(ItemUtil.isOverEnchanted(item, maxValue.get())){
                 inv.remove(item);
                 found = true;
             }
@@ -170,7 +170,7 @@ public class IllegalEnchants extends Module {
     private boolean scanAndFixEnchants(Inventory inv){
         boolean found = false;
         for(ItemStack item : inv.getContents()){
-            if(IllegalItemsUtil.hasEnchants(item)){
+            if(ItemUtil.hasEnchants(item)){
                 Map<Enchantment, Integer> enchantMap = new HashMap<>();
                 for(Map.Entry<Enchantment, Integer> entry : item.getItemMeta().getEnchants().entrySet()){
                     if(entry.getValue() > entry.getKey().getMaxLevel()){
@@ -195,7 +195,7 @@ public class IllegalEnchants extends Module {
 
         if(fixValues.get()){
             boolean found = false;
-            if(IllegalItemsUtil.hasEnchants(e.getItem().getItemStack())){
+            if(ItemUtil.hasEnchants(e.getItem().getItemStack())){
                 ItemMeta meta = e.getItem().getItemStack().getItemMeta();
                 Map<Enchantment, Integer> enchantMap = new HashMap<>();
                 for(Map.Entry<Enchantment, Integer> entry : e.getItem().getItemStack().getItemMeta().getEnchants().entrySet()){
@@ -217,7 +217,7 @@ public class IllegalEnchants extends Module {
                 }
             }
         }else{
-            if(IllegalItemsUtil.isOverEnchanted(e.getItem().getItemStack(), maxValue.get())){
+            if(ItemUtil.isOverEnchanted(e.getItem().getItemStack(), maxValue.get())){
                 e.getItem().remove();
                 e.setCancelled(true);
 
@@ -240,8 +240,8 @@ public class IllegalEnchants extends Module {
     private void onBlockDispenseEvent(BlockDispenseEvent e){
         if(!isEnabled()) return;
         if(!dispenserCheck.get()) return;
-        if(IllegalItemsUtil.isOverEnchanted(e.getItem(), maxValue.get())) {
-            e.setItem(IllegalItemsUtil.getReplacementItem());
+        if(ItemUtil.isOverEnchanted(e.getItem(), maxValue.get())) {
+            e.setItem(ItemUtil.getReplacementItem());
         }
     }
 

@@ -193,7 +193,7 @@ public class OldConfig {
 
 
     /*
-     * SQL config options //TODO: Test and migrate database (possibly in code)
+     * SQL config options
      */
 
     @ConfigValue("sql.host")
@@ -212,7 +212,7 @@ public class OldConfig {
     public String databasePassword = "password";
 
     /*
-     * Combat check config options //TODO: Config options & finish
+     * Combat check config options
      */
 
     @ConfigValue("combatCheck.timeout")
@@ -252,7 +252,7 @@ public class OldConfig {
     public List<String> radiusLimitedCmds = Arrays.asList("tpa", "tpahere", "tpayes", "tpaccept", "tpaaccept", "tpno", "tpano", "tpdeny", "tpadeny", "tpyes");
 
     /*
-     * Discord TPS Notifier config options //TODO
+     * Discord TPS Notifier config options
      */
 
     @ConfigValue("discordTPSnotifier.webhookURL")
@@ -339,7 +339,7 @@ public class OldConfig {
 
 
     /*
-     * Draconite Items config options //TODO
+     * Draconite Items config options
      */
 
     @ConfigValue("draconiteItems.pickaxe.enable")

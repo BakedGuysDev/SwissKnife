@@ -15,7 +15,7 @@ package com.egirlsnation.swissknife.listeners.player;
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.utils.entity.player.HeadsUtil;
-import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
+import com.egirlsnation.swissknife.utils.handlers.CombatCheckHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EnderCrystal;

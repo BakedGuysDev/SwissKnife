@@ -19,10 +19,7 @@ import com.egirlsnation.swissknife.systems.System;
 import com.egirlsnation.swissknife.systems.Systems;
 import com.egirlsnation.swissknife.systems.modules.database.PlayerStats;
 import com.egirlsnation.swissknife.systems.modules.database.Shitlist;
-import com.egirlsnation.swissknife.systems.modules.egirls.DebugStickDupe;
-import com.egirlsnation.swissknife.systems.modules.egirls.DragonSlayerAddon;
-import com.egirlsnation.swissknife.systems.modules.egirls.Ranks;
-import com.egirlsnation.swissknife.systems.modules.egirls.RestrictedCreativeAddon;
+import com.egirlsnation.swissknife.systems.modules.egirls.*;
 import com.egirlsnation.swissknife.systems.modules.entity.*;
 import com.egirlsnation.swissknife.systems.modules.illegals.*;
 import com.egirlsnation.swissknife.systems.modules.misc.ChatTweaks;
@@ -185,6 +182,7 @@ public class Modules extends System<Modules> {
 
     private void initEgirls() {
         add(new DebugStickDupe());
+        add(new DraconiteItems());
         add(new DragonSlayerAddon());
         add(new Ranks());
         add(new RestrictedCreativeAddon());

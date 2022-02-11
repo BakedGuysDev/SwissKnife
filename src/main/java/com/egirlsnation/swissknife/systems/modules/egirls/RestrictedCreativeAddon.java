@@ -13,7 +13,7 @@
 package com.egirlsnation.swissknife.systems.modules.egirls;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
+import com.egirlsnation.swissknife.utils.handlers.CombatCheckHandler;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.modules.Modules;
@@ -34,8 +34,6 @@ public class RestrictedCreativeAddon extends Module {
     public RestrictedCreativeAddon() {
         super(Categories.EgirlsNation, "restricted-creative-addon", "Additional checks for RestrictedCreative to make it safe-ish");
     }
-
-    //TODO: Config options
 
     @EventHandler
     private void onJoin(PlayerJoinEvent e){

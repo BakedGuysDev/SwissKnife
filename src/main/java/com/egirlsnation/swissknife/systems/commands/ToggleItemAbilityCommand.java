@@ -12,7 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.commands;
 
-import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
+import com.egirlsnation.swissknife.utils.handlers.customItems.DraconiteAbilityHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ToggleItemAbilityCommand implements CommandExecutor {
 
-    private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    private final DraconiteAbilityHandler draconiteAbilityHandler = new DraconiteAbilityHandler();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
@@ -33,12 +33,12 @@ public class ToggleItemAbilityCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        if(customItemHandler.getDisabledPlayersList().contains(player.getUniqueId())){
+        if(draconiteAbilityHandler.getDisabledPlayersList().contains(player.getUniqueId())){
             player.sendMessage(ChatColor.GOLD + "Draconite item abilities " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "enabled");
-            customItemHandler.getDisabledPlayersList().remove(player.getUniqueId());
+            draconiteAbilityHandler.getDisabledPlayersList().remove(player.getUniqueId());
         }else{
             player.sendMessage(ChatColor.GOLD + "Draconite item abilities " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "disabled");
-            customItemHandler.getDisabledPlayersList().add(player.getUniqueId());
+            draconiteAbilityHandler.getDisabledPlayersList().add(player.getUniqueId());
         }
 
         return true;

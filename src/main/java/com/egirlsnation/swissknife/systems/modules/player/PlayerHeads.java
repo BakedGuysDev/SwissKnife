@@ -12,10 +12,13 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
+import com.egirlsnation.swissknife.events.PlayerCrystalKillEvent;
 import com.egirlsnation.swissknife.events.PlayerHeadDropEvent;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.modules.egirls.DraconiteItems;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +31,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerHeads extends Module {
     public PlayerHeads() {
@@ -36,6 +43,20 @@ public class PlayerHeads extends Module {
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Boolean> useLores = sgGeneral.add(new BoolSetting.Builder()
+            .name("use-lores")
+            .description("If only weapons with lores bellow will be able to drop heads")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<List<String>> weaponLores = sgGeneral.add(new StringListSetting.Builder()
+            .name("weapon-lore")
+            .description("Lores on weapons that can behead players")
+            .defaultValue(Arrays.asList("§4Executioners axe", "§4Executioners sword"))
+            .build()
+    );
 
     private final Setting<String> itemName = sgGeneral.add(new StringSetting.Builder()
             .name("item-name")
@@ -175,18 +196,42 @@ public class PlayerHeads extends Module {
         if(!isEnabled()) return;
 
         if(e.getEntity().getKiller() == null) return;
-        if(!ItemUtil.isAncientOrDraconite(e.getEntity().getKiller().getInventory().getItemInMainHand())) return;
+        if(Modules.get().isActive(DraconiteItems.class) && Modules.get().get(DraconiteItems.class).draconiteItemsBehead.get()){
+            if(!ItemUtil.isAncientOrDraconiteWeapon(e.getEntity().getKiller().getInventory().getItemInMainHand())) return;
+        }else{
+            if(useLores.get() && !isCapableOfBeheading(e.getEntity().getKiller().getInventory().getItemInMainHand())){
+                return;
+            }
+        }
+
         Player killer = e.getEntity().getKiller();
         Player victim = e.getEntity();
 
+        handleHeads(victim, killer);
 
+    }
+
+    @EventHandler
+    private void playerCrystalKill(PlayerCrystalKillEvent e){
+        if(!isEnabled()) return;
+
+        if(Modules.get().isActive(DraconiteItems.class) && Modules.get().get(DraconiteItems.class).draconiteCrystalsBehead.get()){
+            if(e.getEndCrystal().getCustomName() == null) return;
+
+            if(e.getEndCrystal().getCustomName().equals("Draconite Crystal")){
+                handleHeads(e.getVictim(), e.getKiller());
+            }
+        }
+    }
+
+    public void handleHeads(Player victim, Player killer){
         if(victim.hasPermission("swissknife.heads.nodrop") || nameBlacklist.get().contains(victim.getName())){
             if(sendMessages.get()) killer.sendMessage(ChatColor.translateAlternateColorCodes('§', msgNoDrop.get()));
             return;
         }
 
-        if((Math.random() * 100) < getChance(victim)){
-            List<String> lore = getLore(victim, killer);
+        if(ThreadLocalRandom.current().nextInt(1, 101) < getHeadDropChance(victim)){
+            List<String> lore = getHeadLore(victim, killer);
             ItemStack head = getHead(victim, lore);
 
             String broadcast = null;
@@ -197,6 +242,14 @@ public class PlayerHeads extends Module {
                     broadcast = msgBroadcast.get().replaceAll("%killer%", killer.getName()).replaceAll("%player%", victim.getName());
                 }
             }
+
+            PlayerHeadDropEvent event = new PlayerHeadDropEvent(killer, victim, head, lore, broadcast);
+            Bukkit.getPluginManager().callEvent(event);
+            if(event.isCancelled()){
+                return;
+            }
+
+            if(broadcast != null) Bukkit.getServer().broadcastMessage(broadcast);
 
             victim.getWorld().dropItemNaturally(victim.getLocation(), head);
             if(tellKiller.get()){
@@ -218,21 +271,11 @@ public class PlayerHeads extends Module {
             if(playSound.get()){
                 killer.playSound(killer.getLocation(), Sound.ENTITY_VILLAGER_HURT, 100, 0);
             }
-
-            if(this.broadcast.get()){
-                PlayerHeadDropEvent event = new PlayerHeadDropEvent(killer, victim, head, lore, broadcast);
-                Bukkit.getPluginManager().callEvent(event);
-                if(broadcast != null) Bukkit.getServer().broadcastMessage(broadcast);
-                return;
-            }
-
-            PlayerHeadDropEvent event = new PlayerHeadDropEvent(killer, victim, head, lore, null);
-            Bukkit.getPluginManager().callEvent(event);
         }
     }
 
     //I know this is a terrible way to do it, but I was tired tired :/
-    private int getChance(Player player){
+    public int getHeadDropChance(Player player){
         int chance = 0;
         if(player.hasPermission("swissknife.heads.chance.100")){
             chance = 100;
@@ -270,7 +313,7 @@ public class PlayerHeads extends Module {
         return chance;
     }
 
-    private ItemStack getHead(Player victim, List<String> lore){
+    public ItemStack getHead(Player victim, List<String> lore){
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta= (SkullMeta) Bukkit.getItemFactory().getItemMeta(Material.PLAYER_HEAD);
         meta.setOwningPlayer(victim);
@@ -282,7 +325,7 @@ public class PlayerHeads extends Module {
         return skull;
     }
 
-    private List<String> getLore(Player victim, Player killer){
+    public List<String> getHeadLore(Player victim, Player killer){
         List<String> lore = new ArrayList<>();
         if(useDisplayNames.get()){
             lore.add(ChatColor.translateAlternateColorCodes('§',
@@ -307,5 +350,20 @@ public class PlayerHeads extends Module {
         return lore;
     }
 
+
+    public boolean isCapableOfBeheading(ItemStack item){
+        if(item == null) return false;
+        if(item.getItemMeta() == null) return false;
+        if(!item.getItemMeta().hasLore()) return false;
+        if(item.getItemMeta().getLore() == null) return false;
+
+        for(String lore : weaponLores.get()){
+            if(item.getItemMeta().getLore().contains(lore)){
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }

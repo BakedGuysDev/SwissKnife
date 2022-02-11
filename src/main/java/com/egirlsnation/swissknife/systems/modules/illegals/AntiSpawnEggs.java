@@ -18,7 +18,7 @@ import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.settings.StringSetting;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.IllegalItemsUtil;
+import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockDispenseEvent;
@@ -57,15 +57,15 @@ public class AntiSpawnEggs extends Module {
     @EventHandler
     private void onBlockDispenseEvent(BlockDispenseEvent e){
         if(!isEnabled()) return;
-        if(IllegalItemsUtil.isSpawnEgg(e.getItem())){
-            e.setItem(IllegalItemsUtil.getReplacementItem());
+        if(ItemUtil.isSpawnEgg(e.getItem())){
+            e.setItem(ItemUtil.getReplacementItem());
         }
     }
 
     @EventHandler
     private void onPlayerInteractEvent(PlayerInteractEvent e) {
         if(!isEnabled()) return;
-        if (e.getClickedBlock() != null && IllegalItemsUtil.isSpawnEgg(e.getItem())) {
+        if (e.getClickedBlock() != null && ItemUtil.isSpawnEgg(e.getItem())) {
             e.getItem().setAmount(0);
             e.setCancelled(true);
             if(alertPlayers.get()){

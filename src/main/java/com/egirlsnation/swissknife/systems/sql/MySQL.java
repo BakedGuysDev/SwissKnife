@@ -109,8 +109,9 @@ public class MySQL extends System<MySQL> {
         databasePassword = section.getString("db-password");
     }
 
-    @Override
-    public void init(){
+    //TODO: Test and migrate database (possibly in code)
+
+    public void initDatabase(){
         if(useDatabase) return;
 
         SwissKnife.swissLogger.info("Initializing up SQL driver.");

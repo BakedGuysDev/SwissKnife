@@ -24,7 +24,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 public class DragonSlayerAddon extends Module {
     public DragonSlayerAddon() {
-        super(Categories.Entity,"dragonslayer-addon", "Implements some fixes for the dragonslayer plugin");
+        super(Categories.Entity,"dragon-slayer-addon", "Implements some fixes for the dragonslayer plugin");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();

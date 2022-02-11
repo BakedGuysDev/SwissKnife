@@ -13,8 +13,8 @@
 package com.egirlsnation.swissknife.systems.commands;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CommandType;
-import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CooldownHandler;
+import com.egirlsnation.swissknife.utils.handlers.commandCooldown.CommandType;
+import com.egirlsnation.swissknife.utils.handlers.commandCooldown.CooldownHandler;
 import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import com.egirlsnation.swissknife.utils.StringUtil;

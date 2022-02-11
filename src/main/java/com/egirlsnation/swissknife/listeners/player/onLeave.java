@@ -13,9 +13,9 @@
 package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
-import com.egirlsnation.swissknife.systems.handlers.commandCooldown.CooldownHandler;
-import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
+import com.egirlsnation.swissknife.utils.handlers.CombatCheckHandler;
+import com.egirlsnation.swissknife.utils.handlers.commandCooldown.CooldownHandler;
+import com.egirlsnation.swissknife.utils.handlers.customItems.DraconiteAbilityHandler;
 import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.Bukkit;
@@ -30,7 +30,7 @@ public class onLeave implements Listener {
 
     private final CooldownHandler cooldownHandler = new CooldownHandler();
     private final CombatCheckHandler combatCheckHandler = new CombatCheckHandler();
-    private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    private final DraconiteAbilityHandler draconiteAbilityHandler = new DraconiteAbilityHandler();
     private final StringUtil stringUtils = new StringUtil();
 
     private final SwissKnife plugin;
@@ -59,8 +59,6 @@ public class onLeave implements Listener {
         }
 
         combatCheckHandler.getElytraMap().remove(e.getPlayer().getUniqueId());
-        customItemHandler.getCrystalEnabledList().remove(e.getPlayer().getUniqueId());
-        customItemHandler.getDisabledPlayersList().remove(e.getPlayer().getUniqueId());
         combatCheckHandler.removePlayer(e.getPlayer());
 
     }

@@ -12,8 +12,8 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
-import com.egirlsnation.swissknife.systems.handlers.customItems.AnniversaryItemHanlder;
-import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
+import com.egirlsnation.swissknife.utils.handlers.customItems.AnniversaryItemHanlder;
+import com.egirlsnation.swissknife.utils.handlers.customItems.DraconiteAbilityHandler;
 import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,7 +28,7 @@ import java.util.Random;
 
 public class onEntityDeath implements Listener {
 
-    private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    private final DraconiteAbilityHandler draconiteAbilityHandler = new DraconiteAbilityHandler();
     private final AnniversaryItemHanlder anniversaryItemHanlder = new AnniversaryItemHanlder();
 
     @EventHandler
@@ -82,7 +82,7 @@ public class onEntityDeath implements Listener {
 
     private void handleEndermanDrops(Entity entity, Player player, int chance){
         if(chance > 3) return;
-        entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteCrystal());
+        entity.getWorld().dropItemNaturally(entity.getLocation(), draconiteAbilityHandler.getDraconiteCrystal());
         if(player == null) return;
         if(OldConfig.instance.anniversaryItems){
             broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Crystal");
@@ -130,7 +130,7 @@ public class onEntityDeath implements Listener {
 
     private void handleEvokerDrops(Entity entity, Player player, int chance){
         if(chance >= 3) return;
-        entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getPopbobTotem());
+        entity.getWorld().dropItemNaturally(entity.getLocation(), draconiteAbilityHandler.getPopbobTotem());
         if(player == null) return;
         if(OldConfig.instance.anniversaryItems){
             broadcastFoundMessage(player, "the " + ChatColor.RED + "Totem of Popbob");
@@ -141,13 +141,13 @@ public class onEntityDeath implements Listener {
     private void handleShulkerDrops(Entity entity, Player player, int chance){
         if(chance > 5) return;
         if(chance > 3){
-            entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteAxe());
+            entity.getWorld().dropItemNaturally(entity.getLocation(), draconiteAbilityHandler.getDraconiteAxe());
             if(player == null) return;
             if(OldConfig.instance.anniversaryItems){
                 broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Axe");
             }
         }else{
-            entity.getWorld().dropItemNaturally(entity.getLocation(), customItemHandler.getDraconiteSword());
+            entity.getWorld().dropItemNaturally(entity.getLocation(), draconiteAbilityHandler.getDraconiteSword());
             if(player == null) return;
             if(OldConfig.instance.anniversaryItems){
                 broadcastFoundMessage(player, "a " + ChatColor.RED + "Draconite Sword");

@@ -15,11 +15,12 @@ package com.egirlsnation.swissknife.events;
 import org.bukkit.Location;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-public class PlayerPlaceCrystalEvent extends Event {
+public class PlayerPlaceCrystalEvent extends Event implements Cancellable {
 
     private final Player player;
     private final EnderCrystal enderCrystal;
@@ -59,11 +60,13 @@ public class PlayerPlaceCrystalEvent extends Event {
         return enderCrystal.getLocation();
     }
 
+    @Override
     public boolean isCancelled(){
         return cancelled;
     }
 
-    public void setCancelled(boolean shouldCancel){
-        cancelled = shouldCancel;
+    @Override
+    public void setCancelled(boolean cancel){
+        cancelled = cancel;
     }
 }

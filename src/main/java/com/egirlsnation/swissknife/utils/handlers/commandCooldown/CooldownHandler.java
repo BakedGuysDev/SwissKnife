@@ -10,7 +10,7 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.systems.handlers.commandCooldown;
+package com.egirlsnation.swissknife.utils.handlers.commandCooldown;
 
 import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.entity.Player;

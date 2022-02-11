@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
+import com.egirlsnation.swissknife.settings.BoolSetting;
 import com.egirlsnation.swissknife.settings.IntSetting;
 import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
@@ -35,12 +36,19 @@ public class CpvpSpeedLimiter extends Module {
         super(Categories.Player, "crystal-speed-limiter", "Limits how many crystals can player break per second");
     }
 
-    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+    private final SettingGroup sgCrystal = settings.createGroup("crystals");
 
-    private final Setting<Integer> delay = sgGeneral.add(new IntSetting.Builder()
+    private final Setting<Integer> delay = sgCrystal.add(new IntSetting.Builder()
             .name("delay")
             .description("How many miliseconds before breaking another")
             .defaultValue(200)
+            .build()
+    );
+
+    private final Setting<Boolean> preventInstaBreak = sgCrystal.add(new BoolSetting.Builder()
+            .name("prevent-insta-break")
+            .description("Prevents placing and destroying crystals at the same tick")
+            .defaultValue(true)
             .build()
     );
 
@@ -51,6 +59,10 @@ public class CpvpSpeedLimiter extends Module {
         if(!isEnabled()) return;
         if(!e.getEntity().getType().equals(EntityType.ENDER_CRYSTAL)) return;
         if(!(e.getDamager() instanceof Player)) return;
+        if(preventInstaBreak.get() && e.getEntity().getTicksLived() < 1){
+            e.setCancelled(true);
+            return;
+        }
         Player player = (Player) e.getDamager();
 
         UUID uuid = player.getUniqueId();

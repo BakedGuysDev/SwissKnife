@@ -12,24 +12,13 @@
 
 package com.egirlsnation.swissknife.listeners.entity;
 
-import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
-import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
+import com.egirlsnation.swissknife.utils.handlers.CombatCheckHandler;
+import com.egirlsnation.swissknife.utils.handlers.customItems.DraconiteAbilityHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
 
 public class onEntityToggleGlide implements Listener {
 
-    private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    private final DraconiteAbilityHandler draconiteAbilityHandler = new DraconiteAbilityHandler();
     private final CombatCheckHandler combatCheckHandler = new CombatCheckHandler();
 
-    @EventHandler
-    public void EntityToggleGlide(EntityToggleGlideEvent e){
-        if(!(e.getEntity() instanceof Player)) return;
-        Player player = (Player) e.getEntity();
-        if(customItemHandler.getCrystalEnabledList().contains(player.getUniqueId()) || combatCheckHandler.getElytraMap().containsKey(player.getUniqueId())){
-            e.setCancelled(true);
-        }
-    }
 }

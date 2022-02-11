@@ -12,19 +12,12 @@
 
 package com.egirlsnation.swissknife.listeners.player;
 
-import com.egirlsnation.swissknife.events.PlayerPlaceCrystalEvent;
-import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
-import org.bukkit.event.EventHandler;
+import com.egirlsnation.swissknife.utils.handlers.customItems.DraconiteAbilityHandler;
 import org.bukkit.event.Listener;
 
 public class onPlayerPlaceCrystal implements Listener {
 
-    private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    private final DraconiteAbilityHandler draconiteAbilityHandler = new DraconiteAbilityHandler();
 
-    @EventHandler
-    private void PlayerPlaceCrystal(PlayerPlaceCrystalEvent e){
-        if(customItemHandler.isDraconiteCrystal(e.getCrystalItem())) {
-            e.getCrystal().setCustomName("Draconite Crystal");
-        }
-    }
+
 }

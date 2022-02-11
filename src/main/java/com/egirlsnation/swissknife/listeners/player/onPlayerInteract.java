@@ -14,25 +14,16 @@ package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.api.IllegalItemHandler;
-import com.egirlsnation.swissknife.events.PlayerPlaceCrystalEvent;
-import com.egirlsnation.swissknife.systems.handlers.customItems.CustomItemHandler;
-import com.egirlsnation.swissknife.utils.OldConfig;
-import org.bukkit.Bukkit;
+import com.egirlsnation.swissknife.utils.handlers.customItems.DraconiteAbilityHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.EnderCrystal;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -42,7 +33,7 @@ public class onPlayerInteract implements Listener {
     public onPlayerInteract(SwissKnife plugin){ this.plugin = plugin; }
 
     private final IllegalItemHandler illegalItemHandler = new IllegalItemHandler();
-    private final CustomItemHandler customItemHandler = new CustomItemHandler();
+    private final DraconiteAbilityHandler draconiteAbilityHandler = new DraconiteAbilityHandler();
 
     private final static Map<UUID, Long> crystalMap = new HashMap<>();
 
@@ -55,77 +46,13 @@ public class onPlayerInteract implements Listener {
             e.setCancelled(true);
         }
 
-        if(e.getAction().equals(Action.RIGHT_CLICK_AIR)){
-            if(customItemHandler.isDraconiteSword(e.getItem())){
-                if(customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())){
-                    return;
-                }
-                customItemHandler.handleSwordAbility(e.getPlayer(), e.getHand());
-                return;
-            }else if(customItemHandler.isDraconiteAxe(e.getItem())){
-                if(customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())){
-                    return;
-                }
-                customItemHandler.handleAxeAbility(e.getPlayer(), e.getHand(), plugin);
-                return;
-            }else if(customItemHandler.isDraconiteCrystal(e.getItem())){
-                if(customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())){
-                    return;
-                }
-                customItemHandler.handleCrystalAbility(e.getPlayer(), e.getHand(), plugin);
-                return;
-            }
-        }
 
-        if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){
-            if(customItemHandler.isDraconitePickaxe(e.getItem()) && OldConfig.instance.enablePickaxe) {
-                if (customItemHandler.getDisabledPlayersList().contains(e.getPlayer().getUniqueId())) {
-                    return;
-                }
-                customItemHandler.handlePickaxeAbility(e.getPlayer(), e.getHand(), plugin);
-                return;
-            }
-        }
 
         if(!Action.RIGHT_CLICK_BLOCK.equals(e.getAction())) return;
         if(e.getMaterial().equals(Material.TNT_MINECART) && e.getPlayer().getGameMode().equals(GameMode.CREATIVE) && !e.getPlayer().hasPermission("swissknife.bypass.creative")){
             e.setCancelled(true);
             return;
         }
-        if(e.getClickedBlock().getType().equals(Material.OBSIDIAN) || e.getClickedBlock().getType().equals(Material.BEDROCK) || e.getClickedBlock().getType().equals(Material.CRYING_OBSIDIAN)){
-            if(e.getMaterial().equals(Material.END_CRYSTAL)){
 
-                if(OldConfig.instance.limitCrystalPlacementSpeed){
-                    UUID uuid = e.getPlayer().getUniqueId();
-                    if(!crystalMap.containsKey(uuid)){
-                        crystalMap.put(uuid, System.currentTimeMillis());
-                    }else{
-                        long timeLeft = System.currentTimeMillis() - crystalMap.get(uuid);
-                        if(timeLeft < OldConfig.instance.crystalDelay){
-                            e.setCancelled(true);
-                            return;
-                        }else{
-                            crystalMap.put(uuid, System.currentTimeMillis());
-                        }
-                    }
-                }
-
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                    List<Entity> entities = e.getPlayer().getNearbyEntities(3, 3, 3);
-
-                    for(Entity entity : entities){
-                        if(EntityType.ENDER_CRYSTAL.equals(entity.getType())){
-                            EnderCrystal crystal = (EnderCrystal) entity;
-                            Block belowCrystal = crystal.getLocation().getBlock().getRelative(BlockFace.DOWN);
-
-                            if(e.getClickedBlock().equals(belowCrystal)){
-                                Bukkit.getPluginManager().callEvent(new PlayerPlaceCrystalEvent(e.getPlayer(), crystal, e.getItem()));
-                                break;
-                            }
-                        }
-                    }
-                });
-            }
-        }
     }
 }

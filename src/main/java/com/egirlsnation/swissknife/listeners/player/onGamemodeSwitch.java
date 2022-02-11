@@ -13,7 +13,7 @@
 package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.systems.handlers.CombatCheckHandler;
+import com.egirlsnation.swissknife.utils.handlers.CombatCheckHandler;
 import com.egirlsnation.swissknife.utils.entity.player.GamemodeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

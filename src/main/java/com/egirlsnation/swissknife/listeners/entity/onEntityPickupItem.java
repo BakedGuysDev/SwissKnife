@@ -13,7 +13,7 @@
 package com.egirlsnation.swissknife.listeners.entity;
 
 import com.egirlsnation.swissknife.api.IllegalItemHandler;
-import com.egirlsnation.swissknife.systems.handlers.customItems.AnniversaryItemHanlder;
+import com.egirlsnation.swissknife.utils.handlers.customItems.AnniversaryItemHanlder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

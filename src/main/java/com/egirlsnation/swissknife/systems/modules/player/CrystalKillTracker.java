@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.systems.modules.player;
 
 import com.destroystokyo.paper.event.server.ServerTickEndEvent;
+import com.egirlsnation.swissknife.events.PlayerCrystalKillEvent;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import org.bukkit.Statistic;
@@ -66,8 +67,6 @@ public class CrystalKillTracker extends Module {
         lastDmgCause.put(player, e.getCause());
         lastAttacker.put(player, e.getDamager());
 
-
-        //TODO: Flyfag protection?
         /*
         if(e.getCause().equals(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION)){
 
@@ -115,11 +114,7 @@ public class CrystalKillTracker extends Module {
             if(exploder != null){
                 exploder.setStatistic(Statistic.PLAYER_KILLS, (exploder.getStatistic(Statistic.PLAYER_KILLS) + 1));
 
-                if(attacker.getCustomName() == null) return;
-                if(attacker.getCustomName().equals("Draconite Crystal")){
-                    //TODO: Head dropping with custom PlayerCrystalKillEvent event
-                    //headsHandler.dropHeadIfLucky(player, exploder);
-                }
+                PlayerCrystalKillEvent event = new PlayerCrystalKillEvent(exploder, player, attacker);
             }
         }
     }

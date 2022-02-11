@@ -10,7 +10,7 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.systems.handlers.customItems;
+package com.egirlsnation.swissknife.utils.handlers.customItems;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
