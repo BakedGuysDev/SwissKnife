@@ -19,6 +19,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -287,4 +288,13 @@ public class ItemUtil {
         return paper;
     }
 
+    public static boolean isBed(@Nullable Block block){
+        if(block == null) return false;
+        return block.getType().toString().matches("[A-Z]*?_?[A-Z]*_BED");
+    }
+
+    public static boolean isBed(@Nullable ItemStack item){
+        if(item == null) return false;
+        return item.getType().toString().matches("[A-Z]*?_?[A-Z]*_BED");
+    }
 }
