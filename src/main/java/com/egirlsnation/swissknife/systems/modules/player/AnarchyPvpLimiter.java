@@ -36,6 +36,8 @@ import java.util.UUID;
 
 public class AnarchyPvpLimiter extends Module {
 
+    //TODO: Test
+
     public AnarchyPvpLimiter(){
         super(Categories.Player, "anarchy-pvp-limiter", "Applies limits to certain anarchy pvp mechanics");
     }
@@ -175,7 +177,6 @@ public class AnarchyPvpLimiter extends Module {
 
     @EventHandler
     private void onPlayerQuit(PlayerQuitEvent e){
-        if(!isEnabled()) return;
         crystalMap.remove(e.getPlayer().getUniqueId());
         anchorMap.remove(e.getPlayer().getUniqueId());
         bedMap.remove(e.getPlayer().getUniqueId());

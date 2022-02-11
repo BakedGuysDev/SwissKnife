@@ -59,6 +59,7 @@ public class AntiRedstoneLag extends Module {
 
     @EventHandler
     private void redstoneEvent(BlockRedstoneEvent e){
+        if(!isEnabled()) return;
         if(ServerUtil.getTps()[0] < tpsThreshold.get()){
             if(e.getBlock().getType().equals(Material.OBSERVER)){
                 e.setNewCurrent(0);
@@ -76,6 +77,7 @@ public class AntiRedstoneLag extends Module {
 
     @EventHandler
     private void pistonExtend(BlockPistonExtendEvent e){
+        if(!isEnabled()) return;
         if(ServerUtil.getTps()[0] < tpsThreshold.get()){
             e.setCancelled(true);
         }
@@ -83,6 +85,7 @@ public class AntiRedstoneLag extends Module {
 
     @EventHandler
     private void pistonExtend(BlockPistonRetractEvent e){
+        if(!isEnabled()) return;
         if(ServerUtil.getTps()[0] < tpsThreshold.get()){
             e.setCancelled(true);
         }

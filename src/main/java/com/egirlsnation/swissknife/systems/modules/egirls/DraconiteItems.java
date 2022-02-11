@@ -114,6 +114,7 @@ public class DraconiteItems extends Module {
 
     @EventHandler
     private void playerInteract(PlayerInteractEvent e){
+        if(!isEnabled()) return;
         if(e.getAction().equals(Action.RIGHT_CLICK_AIR)){
             if(ItemUtil.isDraconiteSword(e.getItem())){
                 if(disabledAbilitiesCache.contains(e.getPlayer().getUniqueId())){
@@ -171,6 +172,7 @@ public class DraconiteItems extends Module {
 
     @EventHandler
     private void PlayerPlaceCrystal(PlayerPlaceCrystalEvent e){
+        if(!isEnabled()) return;
         if(ItemUtil.isDraconiteCrystal(e.getCrystalItem())){
             e.getCrystal().setCustomName("Draconite Crystal");
         }
@@ -178,6 +180,7 @@ public class DraconiteItems extends Module {
 
     @EventHandler
     private void PlayerInteractAtEntity(PlayerInteractEntityEvent e){
+        if(!isEnabled()) return;
         if(e.getRightClicked().getType().equals(EntityType.ENDER_CRYSTAL)){
             if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.NAME_TAG)){
                 e.setCancelled(true);
@@ -191,6 +194,7 @@ public class DraconiteItems extends Module {
 
     @EventHandler
     private void enytityToggleGlide(EntityToggleGlideEvent e){
+        if(!isEnabled()) return;
         if(!(e.getEntity() instanceof Player)) return;
         if(abilityHandler.hasCrystalAbilityOn((Player) e.getEntity())){
             e.setCancelled(true);
@@ -206,6 +210,7 @@ public class DraconiteItems extends Module {
 
     @EventHandler
     private void entityDeath(EntityDeathEvent e){
+        if(!isEnabled()) return;
         final Random random = new Random();
 
         int chance = random.nextInt(100) + 1;
@@ -226,6 +231,7 @@ public class DraconiteItems extends Module {
 
     @EventHandler
     public void CraftItem(CraftItemEvent e) {
+        if(!isEnabled()) return;
         if(e.getInventory().getResult() == null) return;
         if (!(e.getView().getPlayer() instanceof Player)) return;
         if (!ItemUtil.isDraconitePickaxe(e.getInventory().getResult())) return;

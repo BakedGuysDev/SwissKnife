@@ -66,6 +66,8 @@ public class AntiIllegalPotion extends Module {
             .build()
     );
 
+    //TODO: Dispenser??
+
 
     @EventHandler
     private void playerInteract(PlayerInteractEvent e){

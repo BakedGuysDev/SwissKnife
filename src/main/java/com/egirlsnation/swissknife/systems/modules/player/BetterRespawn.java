@@ -60,6 +60,7 @@ public class BetterRespawn extends Module {
 
     @EventHandler
     private void playerRespawn(PlayerRespawnEvent e){
+        if(!isEnabled()) return;
         if(e.getPlayer().getBedSpawnLocation() != null) return;
         e.setRespawnLocation(LocationUtil.getRandomSpawnLocation(Bukkit.getWorld(worldName.get()), spawnRadius.get(), worldDepth.get(), worldHeight.get()));
     }

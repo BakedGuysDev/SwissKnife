@@ -39,7 +39,6 @@ public class CrystalKillTracker extends Module {
     private final Map<Player, Entity> lastAttacker = new HashMap<>();
     private final Map<EnderCrystal, Player> crystalExploder = new HashMap<>();
 
-    //private final HeadsHandler headsHandler = new HeadsHandler();
 
     @EventHandler
     private void onTick(ServerTickEndEvent e){

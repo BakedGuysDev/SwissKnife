@@ -224,13 +224,4 @@ public class DiscordLagNotifier extends Module {
         webhook.addEmbed(embed);
         webhook.execute();
     }
-
-
-
-
-
-
-
-
-
 }
