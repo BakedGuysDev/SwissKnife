@@ -32,7 +32,7 @@ public class ToggleItemAbilityCommand implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
-
+        /*
         if(draconiteAbilityHandler.getDisabledPlayersList().contains(player.getUniqueId())){
             player.sendMessage(ChatColor.GOLD + "Draconite item abilities " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "enabled");
             draconiteAbilityHandler.getDisabledPlayersList().remove(player.getUniqueId());
@@ -40,6 +40,7 @@ public class ToggleItemAbilityCommand implements CommandExecutor {
             player.sendMessage(ChatColor.GOLD + "Draconite item abilities " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "disabled");
             draconiteAbilityHandler.getDisabledPlayersList().add(player.getUniqueId());
         }
+        */
 
         return true;
     }

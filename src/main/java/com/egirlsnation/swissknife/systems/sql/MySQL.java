@@ -114,7 +114,7 @@ public class MySQL extends System<MySQL> {
     public void initDatabase(){
         if(useDatabase) return;
 
-        SwissKnife.swissLogger.info("Initializing up SQL driver.");
+        SwissKnife.swissLogger.info("Initializing SQL driver.");
 
         if(databaseName.equals("name") && databaseUsername.equals("username") && databasePassword.equals("password")){
             SwissKnife.swissLogger.warning("Default SQL config values detected. SQL driver won't be initiated.");
@@ -132,8 +132,13 @@ public class MySQL extends System<MySQL> {
             SwissKnife.swissLogger.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
             sql = new SqlQuery();
             sql.createStatsTable();
+            sql.createPlayerDataTable();
             SwissKnife.swissLogger.info(ChatColor.GREEN + "Finished SQL initialization.");
         }
+    }
+
+    public SqlQuery getSqlQuery(){
+        return sql;
     }
 
     @Override

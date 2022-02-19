@@ -45,6 +45,13 @@ public class IllegalLores extends Module {
             .build()
     );
 
+    private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
+            .name("bypass")
+            .description("If the check can be bypassed by permissions")
+            .defaultValue(false)
+            .build()
+    );
+
     private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
             .name("alert-players")
             .description("If the plugin should alert players when it detects item with illegal lore")
@@ -69,6 +76,11 @@ public class IllegalLores extends Module {
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
         if(!isEnabled()) return;
+
+        if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
+
         if(scanAndRemoveFromInv(e.getInventory()) && e.getPlayer() instanceof Player){
             e.setCancelled(true);
             if(alertPlayers.get()){
@@ -87,6 +99,11 @@ public class IllegalLores extends Module {
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e){
         if(!isEnabled()) return;
+
+        if(e.getWhoClicked().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
+
         if(e.getClickedInventory() == null) return;
         if(scanAndRemoveFromInv(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
             e.setCancelled(true);
@@ -118,6 +135,11 @@ public class IllegalLores extends Module {
     @EventHandler
     private void onPlayerPickup(EntityPickupItemEvent e){
         if(!isEnabled()) return;
+
+        if(e.getEntity().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
+
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
         if(hasIllegalLore(e.getItem().getItemStack())){

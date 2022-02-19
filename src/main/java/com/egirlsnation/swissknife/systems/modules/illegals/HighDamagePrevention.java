@@ -57,6 +57,13 @@ public class HighDamagePrevention extends Module {
             .build()
     );
 
+    private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
+            .name("bypass")
+            .description("If the check can be bypassed by permissions")
+            .defaultValue(false)
+            .build()
+    );
+
     private final Setting<Boolean> log = sgGeneral.add(new BoolSetting.Builder()
             .name("logging")
             .description("If the plugin should log when player deals damage over the threshold")
@@ -68,6 +75,10 @@ public class HighDamagePrevention extends Module {
     private void onEntityDamageByEntity(EntityDamageByEntityEvent e){
         if(!isEnabled()) return;
         if(e.getDamager() instanceof Player){
+            if(e.getDamager().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+                return;
+            }
+
             Player player = (Player) e.getDamager();
 
             if(e.getDamage() > threshold.get()){

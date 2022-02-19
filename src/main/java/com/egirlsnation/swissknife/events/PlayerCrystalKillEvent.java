@@ -16,23 +16,19 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayerCrystalKillEvent extends Event {
     private final Player killer;
     private final Player victim;
     private final Entity endCrystal;
 
-    private static final HandlerList HANDLERS = new HandlerList();
+    private final static HandlerList HANDLERS = new HandlerList();
 
     public PlayerCrystalKillEvent(Player killer, Player victim, Entity endCrystal){
         this.killer = killer;
         this.victim = victim;
         this.endCrystal = endCrystal;
-    }
-
-    @Override
-    public HandlerList getHandlers(){
-        return HANDLERS;
     }
 
     public Player getKiller(){
@@ -45,5 +41,14 @@ public class PlayerCrystalKillEvent extends Event {
 
     public Entity getEndCrystal(){
         return endCrystal;
+    }
+
+    @Override
+    public @NotNull HandlerList getHandlers(){
+        return HANDLERS;
+    }
+
+    public static HandlerList getHandlerList(){
+        return HANDLERS;
     }
 }

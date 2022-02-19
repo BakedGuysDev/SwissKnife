@@ -31,7 +31,12 @@ public class AntiSpawnEggs extends Module {
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
-    //TODO: Bypass permission checks for all illegal modules
+    private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
+            .name("bypass")
+            .description("If the check can be bypassed by permissions")
+            .defaultValue(false)
+            .build()
+    );
 
     private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
             .name("alert-players")
@@ -66,6 +71,9 @@ public class AntiSpawnEggs extends Module {
     private void onPlayerInteractEvent(PlayerInteractEvent e) {
         if(!isEnabled()) return;
         if (e.getClickedBlock() != null && ItemUtil.isSpawnEgg(e.getItem())) {
+            if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+                return;
+            }
             e.getItem().setAmount(0);
             e.setCancelled(true);
             if(alertPlayers.get()){

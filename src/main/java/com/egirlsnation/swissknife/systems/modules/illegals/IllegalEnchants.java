@@ -62,6 +62,13 @@ public class IllegalEnchants extends Module {
             .build()
     );
 
+    private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
+            .name("bypass")
+            .description("If the check can be bypassed by permissions")
+            .defaultValue(false)
+            .build()
+    );
+
     private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
             .name("alert-players")
             .description("If the plugin should alert players when it fixes/removes over-enchanted items")
@@ -87,6 +94,11 @@ public class IllegalEnchants extends Module {
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
         if(!isEnabled()) return;
+
+        if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
+
         if(fixValues.get()){
             if(scanAndFixEnchants(e.getInventory())){
                 if(alertPlayers.get()){
@@ -122,6 +134,11 @@ public class IllegalEnchants extends Module {
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e){
         if(!isEnabled()) return;
+
+        if(e.getWhoClicked().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
+
         if(e.getClickedInventory() == null) return;
         if(fixValues.get()){
             if(scanAndFixEnchants(e.getClickedInventory())){
@@ -192,6 +209,10 @@ public class IllegalEnchants extends Module {
     private void onPlayerPickup(EntityPickupItemEvent e){
         if(!isEnabled()) return;
         if(!(e.getEntity() instanceof HumanEntity)) return;
+
+        if(e.getEntity().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
 
         if(fixValues.get()){
             boolean found = false;

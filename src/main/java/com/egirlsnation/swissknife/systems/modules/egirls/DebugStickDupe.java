@@ -19,11 +19,8 @@ import org.bukkit.Material;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +42,7 @@ public class DebugStickDupe extends Module {
             if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.DEBUG_STICK)){
                 Long cooldown = cooldownMap.get(e.getPlayer().getUniqueId());
                 if(cooldown != null){
-                    if((cooldown + 9500) > System.currentTimeMillis()){
+                    if((cooldown + 8500) > System.currentTimeMillis()){
                         e.setCancelled(true);
                         return;
                     }
@@ -59,18 +56,6 @@ public class DebugStickDupe extends Module {
                 cooldownMap.put(e.getPlayer().getUniqueId(), System.currentTimeMillis());
             }
         }
-    }
-
-
-    @EventHandler
-    private void blockStartMining(BlockDamageEvent e){
-        if(!isEnabled()) return;
-        if(e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) return;
-
-        if(e.getItemInHand().getType().equals(Material.DEBUG_STICK)){
-            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 10 * 20, 0));
-        }
-
     }
 
     @EventHandler

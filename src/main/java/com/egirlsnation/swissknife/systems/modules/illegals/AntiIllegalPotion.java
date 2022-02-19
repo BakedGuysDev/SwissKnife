@@ -39,9 +39,16 @@ public class AntiIllegalPotion extends Module {
 
     private final Setting<Integer> maxDuration = sgGeneral.add(new IntSetting.Builder()
             .name("max-duration")
-            .description("Maximum duration in minutes before the potion gets fixed")
+            .description("Maximum duration of potions")
             .min(1)
             .defaultValue(10)
+            .build()
+    );
+
+    private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
+            .name("bypass")
+            .description("If the check can be bypassed by permissions")
+            .defaultValue(false)
             .build()
     );
 
@@ -74,6 +81,9 @@ public class AntiIllegalPotion extends Module {
         if(!isEnabled()) return;
         if(e.getItem() == null) return;
         if(e.getItem().getType().equals(Material.POTION) || e.getItem().getType().equals(Material.SPLASH_POTION) || e.getItem().getType().equals(Material.LINGERING_POTION)){
+            if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+                return;
+            }
             PotionMeta meta = (PotionMeta) e.getItem().getItemMeta();
 
             if(meta.hasCustomEffects()){

@@ -38,6 +38,13 @@ public class IllegalBlocks extends Module {
             .build()
     );
 
+    private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
+            .name("bypass")
+            .description("If the check can be bypassed by permissions")
+            .defaultValue(false)
+            .build()
+    );
+
     private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
             .name("alert-players")
             .description("If the plugin should alert players when placing illegal block")
@@ -64,6 +71,9 @@ public class IllegalBlocks extends Module {
     private void onBlockPlace(BlockPlaceEvent e){
         if(!isEnabled()) return;
 
+        if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
         //TODO: Check if it allows a bypass with spoofing a different block being held
 
         for(String string : illegalBlocks.get()){

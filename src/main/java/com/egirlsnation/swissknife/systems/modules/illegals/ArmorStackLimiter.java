@@ -42,6 +42,13 @@ public class ArmorStackLimiter extends Module {
             .build()
     );
 
+    private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
+            .name("bypass")
+            .description("If the check can be bypassed by permissions")
+            .defaultValue(false)
+            .build()
+    );
+
     private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
             .name("alert-players")
             .description("If the plugin should alert player when trimming armor stacks")
@@ -66,6 +73,9 @@ public class ArmorStackLimiter extends Module {
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
         if(!isEnabled()) return;
+        if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
         if(scanAndTrimArmorStacks(e.getInventory()) && e.getPlayer() instanceof Player){
             if(alertPlayers.get()){
                 e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
@@ -85,6 +95,9 @@ public class ArmorStackLimiter extends Module {
     private void onInventoryClick(InventoryClickEvent e){
         if(!isEnabled()) return;
         if(e.getClickedInventory() == null) return;
+        if(e.getWhoClicked().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
         if(scanAndTrimArmorStacks(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
             e.setCancelled(true);
             if(alertPlayers.get()){
@@ -105,6 +118,10 @@ public class ArmorStackLimiter extends Module {
     private void onPlayerPickup(EntityPickupItemEvent e){
         if(!isEnabled()) return;
         if(!(e.getEntity() instanceof HumanEntity)) return;
+
+        if(e.getEntity().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
 
         if(ItemUtil.isArmorPiece(e.getItem().getItemStack()) && e.getItem().getItemStack().getAmount() > maxArmorStack.get()){
             ItemStack is = e.getItem().getItemStack();

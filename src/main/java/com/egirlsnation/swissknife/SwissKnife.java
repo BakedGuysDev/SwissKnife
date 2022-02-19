@@ -22,6 +22,7 @@ import com.egirlsnation.swissknife.listeners.inventory.onInventoryOpen;
 import com.egirlsnation.swissknife.listeners.player.*;
 import com.egirlsnation.swissknife.systems.Systems;
 import com.egirlsnation.swissknife.systems.commands.*;
+import com.egirlsnation.swissknife.systems.internal.SwissPlayerRegistry;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.systems.modules.egirls.DraconiteItems;
@@ -63,6 +64,10 @@ public class SwissKnife extends JavaPlugin {
 
         swissLogger.info("Initializing SwissKnife");
 
+        Systems.addPreLoadTask(() -> {
+            Bukkit.getPluginManager().registerEvents(new SwissPlayerRegistry(), this);
+        });
+
         Systems.addPostLoadTask(() -> {
             MySQL.get().initDatabase();
             Modules.get().get(DraconiteItems.class).registerRecipes();
@@ -97,7 +102,6 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onEntityDamage(), this);
         pluginManager.registerEvents(new onEntityDamageByBlock(), this);
         pluginManager.registerEvents(new onEntityDamageByEntity(), this);
-        pluginManager.registerEvents(new onEntityDeath(), this);
         pluginManager.registerEvents(new onEntityPickupItem(), this);
         pluginManager.registerEvents(new onEntityPortalTeleport(), this);
         pluginManager.registerEvents(new onCreatureSpawn(), this);

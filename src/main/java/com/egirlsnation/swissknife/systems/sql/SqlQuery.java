@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.systems.sql;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.utils.entity.player.PlayerInfo;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -25,6 +26,8 @@ import java.util.Date;
 import java.util.UUID;
 
 public class SqlQuery {
+
+    //TODO: Change tinyint to bit
 
     public void createStatsTable(){
         PreparedStatement ps;
@@ -48,6 +51,91 @@ public class SqlQuery {
         }catch (SQLException e){
             e.printStackTrace();
         }
+    }
+
+    public void createPlayerDataTable(){
+        PreparedStatement ps;
+        try{
+            ps = MySQL.get().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS swissPlayerData "
+                    + "(uuid CHAR(36)," +
+                    "petTotems TINYINT(1)," +
+                    "draconiteAbilities TINYINT(1)," +
+                    " PRIMARY KEY (uuid))");
+            ps.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void createPlayerData(SwissPlayer player){
+        try{
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT * FROM swissPlayerData WHERE UUID=?");
+            ps.setString(1, player.getUuid().toString());
+            ResultSet resultSet = ps.executeQuery();
+            if(!resultSet.next()){
+
+                PreparedStatement ps2 = MySQL.get().getConnection().prepareStatement("INSERT IGNORE INTO swissPlayerData"
+                        + " (uuid,petTotems,draconiteAbilities)" +
+                        " VALUES (?,?,?)");
+                ps2.setString(1, player.getUuid().toString());
+                if(player.hasFeatureEnabled(SwissPlayer.SwissFeature.PET_TOTEMS)){
+                    ps2.setInt(2, 1);
+                }else{
+                    ps2.setInt(2, 0);
+                }
+                if(player.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES)){
+                    ps2.setInt(3, 1);
+                }else{
+                    ps2.setInt(3, 0);
+                }
+
+                ps2.executeUpdate();
+
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void updatePlayerData(SwissPlayer player){
+        try{
+            if (!hasPlayerDataEntry(player.getUuid())) {
+                createPlayerData(player);
+            }
+
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE swissPlayerData SET" +
+                    " petTotems=?,draconiteAbilities=?" +
+                    " WHERE uuid=?");
+            if(player.hasFeatureEnabled(SwissPlayer.SwissFeature.PET_TOTEMS)){
+                ps.setInt(1, 1);
+            }else{
+                ps.setInt(1, 0);
+            }
+            if(player.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES)){
+                ps.setInt(2, 1);
+            }else{
+                ps.setInt(2, 0);
+            }
+
+            ps.executeUpdate();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public boolean hasPlayerDataEntry(UUID uuid){
+        try{
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT * FROM swissPlayerData WHERE UUID=?");
+            ps.setString(1, uuid.toString());
+
+            ResultSet resultSet = ps.executeQuery();
+            return resultSet.next();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
@@ -161,6 +249,7 @@ public class SqlQuery {
         try{
             if (!exists(playerInfo.getUuid())) {
                 createPlayer(playerInfo);
+                //TODO: Handle it better so the update query doesn't run before player is created
             }
 
             PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET" +

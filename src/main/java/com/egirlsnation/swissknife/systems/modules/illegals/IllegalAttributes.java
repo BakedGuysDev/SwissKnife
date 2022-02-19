@@ -27,7 +27,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +39,13 @@ public class IllegalAttributes extends Module {
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
+    private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
+            .name("bypass")
+            .description("If the check can be bypassed by permissions")
+            .defaultValue(false)
+            .build()
+    );
+
     private final Setting<Boolean> removeSlotAttributes = sgGeneral.add(new BoolSetting.Builder()
             .name("remove-slot-attributes")
             .description("Removes slot based attributes")
@@ -47,7 +53,7 @@ public class IllegalAttributes extends Module {
             .build()
     );
 
-    //TODO: Other events, vanilla attribute matching, logging, player alerts
+    //TODO: Other events, vanilla attribute matching, logging, player alerts, testing
 
     @EventHandler
     private void inventoryClick(InventoryClickEvent e){
@@ -69,8 +75,9 @@ public class IllegalAttributes extends Module {
     @EventHandler
     private void inventoryOpen(InventoryOpenEvent e){
         if(!isEnabled()) return;
-        if(e.getInventory() == null) return;
-
+        if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
         for(ItemStack item : e.getInventory()){
             if(item.getItemMeta() != null && item.getItemMeta().hasAttributeModifiers()){
                 List<Attribute> attributes = getSlotAttributes(item);
@@ -86,6 +93,10 @@ public class IllegalAttributes extends Module {
         if(!isEnabled()) return;
         if(!(e.getEntity() instanceof Player)) return;
 
+        if(e.getEntity().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
+
         ItemStack item = e.getItem().getItemStack();
 
         if(item.getItemMeta() != null && item.getItemMeta().hasAttributeModifiers()){
@@ -98,7 +109,6 @@ public class IllegalAttributes extends Module {
         e.getItem().setItemStack(item); //IDK if it's necessary
     }
 
-    @Nullable
     public List<Attribute> getSlotAttributes(ItemStack item){
         List<Attribute> attributes = new ArrayList<>(1);
         for(EquipmentSlot slot : EquipmentSlot.values()){

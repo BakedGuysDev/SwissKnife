@@ -44,6 +44,13 @@ public class TotemStackLimiter extends Module {
             .build()
     );
 
+    private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
+            .name("bypass")
+            .description("If the check can be bypassed by permissions")
+            .defaultValue(false)
+            .build()
+    );
+
     private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
             .name("alert-players")
             .description("If the plugin should alert player when trimming totem stacks")
@@ -68,6 +75,11 @@ public class TotemStackLimiter extends Module {
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
         if(!isEnabled()) return;
+
+        if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
+
         if(scanAndTrimTotemStack(e.getInventory()) && e.getPlayer() instanceof Player){
             if(alertPlayers.get()){
                 alertPlayer(e.getPlayer());
@@ -87,6 +99,11 @@ public class TotemStackLimiter extends Module {
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e){
         if(!isEnabled()) return;
+
+        if(e.getWhoClicked().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
+
         if(e.getClickedInventory() == null) return;
         if(scanAndTrimTotemStack(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
             e.setCancelled(true);
@@ -110,6 +127,11 @@ public class TotemStackLimiter extends Module {
     @EventHandler
     private void onPlayerPickup(EntityPickupItemEvent e){
         if(!isEnabled()) return;
+
+        if(e.getEntity().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
+
         if(!(e.getEntity() instanceof HumanEntity)) return;
 
         if(e.getItem().getItemStack().getType().equals(Material.TOTEM_OF_UNDYING) && e.getItem().getItemStack().getAmount() > maxTotemStack.get()){
@@ -130,6 +152,10 @@ public class TotemStackLimiter extends Module {
     @EventHandler
     private void SwapHandItems(PlayerSwapHandItemsEvent e) {
         if(!isEnabled()) return;
+
+        if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+            return;
+        }
 
         if (e.getOffHandItem() != null) {
             if (e.getOffHandItem().getType().equals(Material.TOTEM_OF_UNDYING)) {
