@@ -12,14 +12,16 @@
 
 package com.egirlsnation.swissknife.systems.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
-public class MonkeyCommand implements CommandExecutor {
+public class MonkeyCommand extends Command {
+
+    public MonkeyCommand(){
+        super("monkey");
+    }
+
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        return false;
+    public void handleCommand(CommandSender sender, String[] args){
+        sendMessage(sender, "https://www.youtube.com/watch?v=8CemskuOg2g");
     }
 }

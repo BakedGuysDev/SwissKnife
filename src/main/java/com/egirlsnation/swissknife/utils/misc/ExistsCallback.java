@@ -10,18 +10,8 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.systems.commands;
+package com.egirlsnation.swissknife.utils.misc;
 
-import org.bukkit.command.CommandSender;
-
-public class TpsAlertTestCommand extends Command {
-
-    public TpsAlertTestCommand(){
-        super("tps-altert-test");
-    }
-
-    @Override
-    public void handleCommand(CommandSender sender, String[] args){
-        //TODO
-    }
+public interface ExistsCallback {
+    public void onQueryDone(boolean exists);
 }

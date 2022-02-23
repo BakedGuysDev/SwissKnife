@@ -30,7 +30,7 @@ commands:
     usage: /refreshrank
   monkey:
     description: Monkey
-    usage: https://www.youtube.com/watch?v=5tQLFon8Yhk
+    usage: /monkey
   tpsalerttest:
     description: Test command for tps alert
     usage: /tpsalerttest

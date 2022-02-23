@@ -15,6 +15,7 @@ package com.egirlsnation.swissknife.systems.sql;
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.utils.entity.player.PlayerInfo;
 import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
+import com.egirlsnation.swissknife.utils.misc.ExistsCallback;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -139,11 +140,11 @@ public class SqlQuery {
     }
 
 
-    public void createPlayer(Player player){
-        createPlayer(player, false);
+    public void createPlayerAsync(Player player){
+        createPlayerAsync(player, false);
     }
 
-    public void createPlayer(Player player, boolean shitlisted){
+    public void createPlayerAsync(Player player, boolean shitlisted){
         UUID playerUUID = player.getUniqueId();
         String playerName = player.getName();
         long firstPlayed = player.getFirstPlayed();
@@ -154,7 +155,7 @@ public class SqlQuery {
 
     }
 
-    public void createPlayer(PlayerInfo playerInfo){
+    public void createPlayerAsync(PlayerInfo playerInfo){
         UUID playerUUID = playerInfo.getUuid();
         String playerName = playerInfo.getName();
         long firstPlayed = playerInfo.getFirstplayed();
@@ -163,6 +164,15 @@ public class SqlQuery {
         Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
            createPlayer(playerUUID, playerName, firstPlayed, 0, shitlisted);
         });
+    }
+
+    public void createPlayer(PlayerInfo playerInfo){
+        UUID playerUUID = playerInfo.getUuid();
+        String playerName = playerInfo.getName();
+        long firstPlayed = playerInfo.getFirstplayed();
+        boolean shitlisted = playerInfo.isShitlisted();
+
+        createPlayer(playerUUID, playerName, firstPlayed, 0, shitlisted);
     }
 
     public void createPlayer(UUID playerUUID, String playerName, long firstPlayed, long playtime, boolean shitlisted){
@@ -237,7 +247,16 @@ public class SqlQuery {
         return false;
     }
 
-    public void updateValues(Player player){
+    public void existsAsync(String playerName, ExistsCallback callback){
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+           boolean exists = exists(playerName);
+           Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
+              callback.onQueryDone(exists);
+           });
+        });
+    }
+
+    public void updateValuesAsync(Player player){
         PlayerInfo playerInfo = new PlayerInfo(player);
 
         Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
@@ -245,11 +264,16 @@ public class SqlQuery {
         });
     }
 
+    public void updateValuesAsync(PlayerInfo playerInfo){
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+            updateValues(playerInfo);
+        });
+    }
+
     public void updateValues(PlayerInfo playerInfo){
         try{
             if (!exists(playerInfo.getUuid())) {
                 createPlayer(playerInfo);
-                //TODO: Handle it better so the update query doesn't run before player is created
             }
 
             PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET" +
@@ -300,7 +324,7 @@ public class SqlQuery {
             ps.setInt(1, 1);
             ps.setString(2, info.getUuid().toString());
             if (!exists(info.getUuid())) {
-                createPlayer(info);
+                createPlayerAsync(info);
                 return "Player didn't have database record. Created one and shitlisted them";
             }
             ps.executeUpdate();
@@ -319,7 +343,7 @@ public class SqlQuery {
             ps.setInt(1, 0);
             ps.setString(2, info.getUuid().toString());
             if (!exists(info.getUuid())) {
-                createPlayer(info);
+                createPlayerAsync(info);
                 return "Player" + info.getName() + " didn't have a database record. Created one and unshitlisted them";
             }
             ps.executeUpdate();
@@ -329,6 +353,13 @@ public class SqlQuery {
             e.printStackTrace();
             return "Error occurred while unshitlisting player " + info.getName();
         }
+    }
+
+    public void addToShitlistAsync(Player player){
+        String name = player.getName();
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+           addToShitlist(name);
+        });
     }
 
     public String addToShitlist(String name){
@@ -346,6 +377,13 @@ public class SqlQuery {
             e.printStackTrace();
             return "Error occurred while shitlisting player " + name;
         }
+    }
+
+    public void removeFromShitlistAsync(Player player){
+        String name = player.getName();
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+           removeFromShitlist(name);
+        });
     }
 
     public String removeFromShitlist(String name){

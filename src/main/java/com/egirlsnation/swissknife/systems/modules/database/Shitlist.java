@@ -16,11 +16,13 @@ import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -174,6 +176,33 @@ public class Shitlist extends Module {
             e.setMessage(sb.toString());
         }
 
+    }
+
+    public void addToShitlist(Player player){
+        onlineShitlist.add(player.getUniqueId());
+        final boolean[] playerExists = {false};
+        MySQL.get().getSqlQuery().existsAsync(player.getName(), exists -> playerExists[0] = exists);
+        if(!playerExists[0]){
+            MySQL.get().getSqlQuery().createPlayerAsync(player, true);
+        }else{
+            MySQL.get().getSqlQuery().addToShitlistAsync(player);
+        }
+        //SwissKnife.swissLogger.debug("addToShitlist: Shitlisted player");
+    }
+
+    public boolean removeFromShitlist(Player player){
+        if(!onlineShitlist.contains(player.getUniqueId())){
+            return false;
+        }
+        onlineShitlist.remove(player.getUniqueId());
+        final boolean[] playerExists = {false};
+        MySQL.get().getSqlQuery().existsAsync(player.getName(), exists -> playerExists[0] = exists);
+        if(!playerExists[0]){
+            MySQL.get().getSqlQuery().createPlayerAsync(player, false);
+        }else{
+            MySQL.get().getSqlQuery().removeFromShitlistAsync(player);
+        }
+        return true;
     }
 
 }

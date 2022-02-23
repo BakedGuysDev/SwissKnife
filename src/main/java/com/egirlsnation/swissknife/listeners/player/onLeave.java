@@ -43,7 +43,7 @@ public class onLeave implements Listener {
             if(e.getReason().equals(PlayerQuitEvent.QuitReason.DISCONNECTED) && combatCheckHandler.isInCombat(e.getPlayer())){
                 plugin.sqlQuery.increaseCombatLog(e.getPlayer().getUniqueId());
             }
-            plugin.sqlQuery.updateValues(e.getPlayer());
+            plugin.sqlQuery.updateValuesAsync(e.getPlayer());
 
             if(OldConfig.instance.leakCoords && OldConfig.instance.enableShitlist && plugin.sqlQuery.isShitlisted(e.getPlayer())){
                 Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "The coords of " + e.getPlayer().getDisplayName() + ChatColor.GREEN + " are " + stringUtils.getFormattedCoords(e.getPlayer().getLocation())),40);

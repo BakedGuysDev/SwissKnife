@@ -13,63 +13,92 @@
 package com.egirlsnation.swissknife.systems.commands;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.utils.OldConfig;
+import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.modules.database.Shitlist;
+import com.egirlsnation.swissknife.systems.sql.MySQL;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.entity.Player;
 
-public class ShitListCommand implements CommandExecutor {
+public class ShitListCommand extends Command {
 
-    private final SwissKnife plugin;
-    public ShitListCommand(SwissKnife plugin){ this.plugin = plugin; }
+    public ShitListCommand(){
+        super("shitlist");
+    }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public void onRegister(){
+        if(!SwissKnife.INSTANCE.SQL.isConnected()){
+            warn("Disabling... This command depends on the MySQL database, which is not connected.");
+            toggle();
+        }
+    }
+
+    @Override
+    public void handleCommand(CommandSender sender, String[] args){
         if(!sender.isOp()){
-            sender.sendMessage(ChatColor.RED + "Go fuck yourself. You don't have enough permissions");
-            return true;
-        }
-
-        if(!OldConfig.instance.enableShitlist){
-            sender.sendMessage(ChatColor.RED + "This command is disabled.");
-        }
-
-        if(!plugin.SQL.isConnected()){
-            sender.sendMessage(ChatColor.RED + "Not connected to the database. This command won't work.");
-            return true;
+            sendMessage(sender, ChatColor.RED + "Nice try, but you don't have enough permissions :)");
+            return;
         }
 
         if(args.length == 0){
-            sender.sendMessage(ChatColor.RED + "You need to provide some arguments. (add|remove)");
-            return true;
+            sendMessage(sender, ChatColor.RED + "You need to provide some arguments. (add|remove)");
+            return;
         }
 
         if(args.length == 1){
-            sender.sendMessage(ChatColor.RED + "You need to provide a playername.");
-            return true;
+            sendMessage(sender, ChatColor.RED + "You need to provide a playername.");
+            return;
         }
 
         if(args[0].equalsIgnoreCase("add")){
-            if(plugin.sqlQuery.exists(args[1])){
-                plugin.sqlQuery.addToShitlist(args[1]);
-                sender.sendMessage(ChatColor.GREEN + "Successfully added " + args[1] + " to the shitlist.");
+            Player player = Bukkit.getPlayer(args[1]);
+            if(player != null){
+                Modules.get().get(Shitlist.class).addToShitlist(player);
+                sendMessage(sender, ChatColor.GREEN + "Shitlisted player " + args[1]);
             }else{
-                sender.sendMessage(ChatColor.RED + args[1] + " couldn't be shitlisted, because he isn't in the database.");
+                Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+                    if(MySQL.get().getSqlQuery().exists(args[1])){
+                        MySQL.get().getSqlQuery().addToShitlist(args[1]);
+                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
+                            sendMessage(sender, ChatColor.GREEN + "Successfully added " + args[1] + " to the shitlist.");
+                        });
+                    }else{
+                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
+                            sendMessage(sender, ChatColor.RED + args[1] + " couldn't be shitlisted, because he isn't in the database and isn't online either.");
+                        });
+                    }
+                });
             }
-            return true;
+            return;
         }
 
         if(args[0].equalsIgnoreCase("remove")){
-            if(plugin.sqlQuery.exists(args[1])){
-                plugin.sqlQuery.removeFromShitlist(args[1]);
-                sender.sendMessage(ChatColor.GREEN + "Successfully removed " + args[1] + " from the shitlist.");
+            Player player = Bukkit.getPlayer(args[1]);
+            if(player != null){
+                boolean wasOnShitlist = Modules.get().get(Shitlist.class).removeFromShitlist(player);
+                if(wasOnShitlist){
+                    sendMessage(sender, ChatColor.GREEN + "Unshitlisted player " + args[1]);
+                }else{
+                    sendMessage(sender, ChatColor.RED + "Unable to unshitlist player " + args[1] + " since he wasn't on the shitlist in the first place");
+                }
             }else{
-                sender.sendMessage(ChatColor.RED + args[1] + " couldn't be removed from the shitlist, because he isn't in the database.");
+                Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+                    if(MySQL.get().getSqlQuery().exists(args[1])){
+                        MySQL.get().getSqlQuery().removeFromShitlist(args[1]);
+                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
+                            sendMessage(sender, ChatColor.GREEN + "Successfully removed " + args[1] + " from the shitlist.");
+                        });
+                    }else{
+                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
+                            sendMessage(sender, ChatColor.RED + args[1] + " couldn't be unshitlisted, because he isn't in the database and isn't online either.");
+                        });
+                    }
+                });
             }
         }
-
-        return true;
     }
+
+
 }

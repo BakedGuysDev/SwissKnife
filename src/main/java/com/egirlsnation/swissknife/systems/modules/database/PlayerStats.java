@@ -70,7 +70,7 @@ public class PlayerStats extends Module {
                 }
                 Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
                     for(PlayerInfo info : playerInfoList){
-                        SwissKnife.INSTANCE.sqlQuery.updateValues(info);
+                        SwissKnife.INSTANCE.sqlQuery.updateValuesAsync(info);
                     }
                 });
             }
@@ -89,7 +89,7 @@ public class PlayerStats extends Module {
         if(!isEnabled()) return;
         if(e.getPlayer().hasPlayedBefore()) return;
         if(SwissKnife.INSTANCE.SQL.isConnected()){
-            SwissKnife.INSTANCE.sqlQuery.createPlayer(e.getPlayer());
+            SwissKnife.INSTANCE.sqlQuery.createPlayerAsync(e.getPlayer());
         }
     }
 
@@ -97,7 +97,7 @@ public class PlayerStats extends Module {
     private void playerLeave(PlayerQuitEvent e){
         if(!isEnabled()) return;
         if(SwissKnife.INSTANCE.SQL.isConnected()){
-            SwissKnife.INSTANCE.sqlQuery.updateValues(e.getPlayer());
+            SwissKnife.INSTANCE.sqlQuery.updateValuesAsync(e.getPlayer());
         }
     }
 }

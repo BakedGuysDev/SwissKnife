@@ -14,27 +14,22 @@ package com.egirlsnation.swissknife.systems.commands;
 
 import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class RefreshRankCommand implements CommandExecutor {
+public class RefreshRankCommand extends Command {
 
-    private final RankUtil rankUtil = new RankUtil();
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
-        // Console with no args
-        if(!(sender instanceof Player)){
-            sender.sendMessage(ChatColor.RED + "You can't do this command m8.");
-            return true;
-        }
-
-        Player player = (Player) sender;
-        rankUtil.promoteIfEligible(player);
-        return true;
+    public RefreshRankCommand(){
+        super("refresh-rank");
     }
 
+    @Override
+    public void handleCommand(CommandSender sender, String[] args){
+        if(!(sender instanceof Player)){
+            sendMessage(sender, ChatColor.RED + "You can't do this command m8.");
+            return;
+        }
+        RankUtil.promoteIfEligible((Player) sender);
+    }
 }

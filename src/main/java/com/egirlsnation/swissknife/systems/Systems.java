@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.systems;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.systems.commands.Commands;
 import com.egirlsnation.swissknife.systems.config.Config;
 import com.egirlsnation.swissknife.systems.hooks.Hooks;
 import com.egirlsnation.swissknife.systems.modules.Modules;
@@ -40,8 +41,9 @@ public class Systems {
     public static void init(){
         add(new Config());
         add(new MySQL());
-        add(new Modules());
         add(new Hooks());
+        add(new Modules());
+        add(new Commands());
     }
 
     private static System<?> add(System<?> system){

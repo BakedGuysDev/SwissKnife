@@ -12,35 +12,24 @@
 
 package com.egirlsnation.swissknife.systems.commands;
 
-import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.utils.handlers.commandCooldown.CommandType;
-import com.egirlsnation.swissknife.utils.handlers.commandCooldown.CooldownHandler;
 import com.egirlsnation.swissknife.utils.entity.player.PlayerUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.TimeUnit;
+public class KillCommand extends Command {
 
-public class KillCommand implements CommandExecutor {
-
-    private final SwissKnife swissKnife;
-
-    public KillCommand(SwissKnife swissKnife){ this.swissKnife = swissKnife; }
-
-    private final CommandType killCommand = CommandType.KILL;
-    private final CooldownHandler cooldownHandler = new CooldownHandler();
+    public KillCommand(){
+        super("kill");
+    }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
+    public void handleCommand(CommandSender sender, String[] args){
         // Console with no args
         if(args.length == 0 && !(sender instanceof Player)){
             sender.sendMessage(ChatColor.RED + "You can't kill yourself m8.");
-            return true;
+            return;
         }
 
         // Console with arguments
@@ -48,48 +37,33 @@ public class KillCommand implements CommandExecutor {
             Player player = Bukkit.getPlayer(args[0]);
             if(player == null){
                 sender.sendMessage(ChatColor.RED + "That player isn't online.");
-                return true;
+                return;
             }
             PlayerUtil.killPlayer(player);
             sender.sendMessage(ChatColor.GREEN + "Killed " + player.getDisplayName());
-            return true;
+            return;
         }
 
         // Player with no args
         if(args.length == 0){
             Player player = (Player) sender;
 
-            // Getting time left for this player for this command
-            long timeLeft = System.currentTimeMillis() - cooldownHandler.getCommandInfo(player.getUniqueId(), killCommand).getCooldown();
-
-            if(player.hasPermission("swissknife.bypass.cooldown")){
-                PlayerUtil.killPlayer(player);
-                return true;
-            }else if(TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= CooldownHandler.DEFAULT_COOLDOWN){
-                cooldownHandler.setCooldown(player.getUniqueId(), System.currentTimeMillis(), killCommand);
-                PlayerUtil.killPlayer(player);
-                return true;
-            }
-            player.sendMessage(ChatColor.RED + "You gotta wait before doing that m8");
-            return true;
+            PlayerUtil.killPlayer(player);
+            return;
         }
 
         // Player with args (with permission only)
         Player cmdSender = (Player) sender;
         if(cmdSender.hasPermission("swissknife.kill.others")){
             Player player = Bukkit.getPlayer(args[0]);
-            if (player == null) {
+            if(player == null){
                 cmdSender.sendMessage(ChatColor.RED + "That player isn't online");
-                return true;
+                return;
             }
             PlayerUtil.killPlayer(player);
             cmdSender.sendMessage(ChatColor.GREEN + "Killed " + player.getDisplayName());
-            return true;
+            return;
         }
         sender.sendMessage(ChatColor.RED + "You do not have enough permissions.");
-        return true;
     }
-
-
-
 }
