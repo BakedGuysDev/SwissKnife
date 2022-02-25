@@ -14,11 +14,11 @@ package com.egirlsnation.swissknife.systems.sql;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.utils.entity.player.PlayerInfo;
-import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import com.egirlsnation.swissknife.utils.misc.ExistsCallback;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,12 +26,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class SqlQuery {
+public class PlayerStatsDriver {
+    
+    private final Connection connection;
+    
+    public PlayerStatsDriver(Connection connection){
+        this.connection = connection;
+    }
 
     public void createStatsTable(){
         PreparedStatement ps;
         try{
-            ps = MySQL.get().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS playerStats "
+            ps = connection.prepareStatement("CREATE TABLE IF NOT EXISTS playerStats "
                     + "(username VARCHAR(32)," +
                     "uuid CHAR(36)," +
                     "playtime BIGINT(19)," +
@@ -52,91 +58,6 @@ public class SqlQuery {
         }
     }
 
-    public void createPlayerDataTable(){
-        PreparedStatement ps;
-        try{
-            ps = MySQL.get().getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS swissPlayerData "
-                    + "(uuid CHAR(36)," +
-                    "petTotems TINYINT(1)," +
-                    "draconiteAbilities TINYINT(1)," +
-                    " PRIMARY KEY (uuid))");
-            ps.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    public void createPlayerData(SwissPlayer player){
-        try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT * FROM swissPlayerData WHERE UUID=?");
-            ps.setString(1, player.getUuid().toString());
-            ResultSet resultSet = ps.executeQuery();
-            if(!resultSet.next()){
-
-                PreparedStatement ps2 = MySQL.get().getConnection().prepareStatement("INSERT IGNORE INTO swissPlayerData"
-                        + " (uuid,petTotems,draconiteAbilities)" +
-                        " VALUES (?,?,?)");
-                ps2.setString(1, player.getUuid().toString());
-                if(player.hasFeatureEnabled(SwissPlayer.SwissFeature.PET_TOTEMS)){
-                    ps2.setInt(2, 1);
-                }else{
-                    ps2.setInt(2, 0);
-                }
-                if(player.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES)){
-                    ps2.setInt(3, 1);
-                }else{
-                    ps2.setInt(3, 0);
-                }
-
-                ps2.executeUpdate();
-
-            }
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    public void updatePlayerData(SwissPlayer player){
-        try{
-            if (!hasPlayerDataEntry(player.getUuid())) {
-                createPlayerData(player);
-            }
-
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE swissPlayerData SET" +
-                    " petTotems=?,draconiteAbilities=?" +
-                    " WHERE uuid=?");
-            if(player.hasFeatureEnabled(SwissPlayer.SwissFeature.PET_TOTEMS)){
-                ps.setInt(1, 1);
-            }else{
-                ps.setInt(1, 0);
-            }
-            if(player.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES)){
-                ps.setInt(2, 1);
-            }else{
-                ps.setInt(2, 0);
-            }
-
-            ps.executeUpdate();
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    public boolean hasPlayerDataEntry(UUID uuid){
-        try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT * FROM swissPlayerData WHERE UUID=?");
-            ps.setString(1, uuid.toString());
-
-            ResultSet resultSet = ps.executeQuery();
-            return resultSet.next();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return false;
-    }
-
 
     public void createPlayerAsync(Player player){
         createPlayerAsync(player, false);
@@ -147,9 +68,7 @@ public class SqlQuery {
         String playerName = player.getName();
         long firstPlayed = player.getFirstPlayed();
 
-        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-           createPlayer(playerUUID, playerName, firstPlayed, 0, shitlisted);
-        });
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> createPlayer(playerUUID, playerName, firstPlayed, 0, shitlisted));
 
     }
 
@@ -159,9 +78,7 @@ public class SqlQuery {
         long firstPlayed = playerInfo.getFirstplayed();
         boolean shitlisted = playerInfo.isShitlisted();
 
-        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-           createPlayer(playerUUID, playerName, firstPlayed, 0, shitlisted);
-        });
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> createPlayer(playerUUID, playerName, firstPlayed, 0, shitlisted));
     }
 
     public void createPlayer(PlayerInfo playerInfo){
@@ -175,7 +92,7 @@ public class SqlQuery {
 
     public void createPlayer(UUID playerUUID, String playerName, long firstPlayed, long playtime, boolean shitlisted){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
             ps.setString(1, playerUUID.toString());
             ResultSet resultSet = ps.executeQuery();
             resultSet.next();
@@ -185,7 +102,7 @@ public class SqlQuery {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
                 String firstPlayedS = sdf.format(date);
 
-                PreparedStatement ps2 = MySQL.get().getConnection().prepareStatement("INSERT IGNORE INTO playerStats"
+                PreparedStatement ps2 = connection.prepareStatement("INSERT IGNORE INTO playerStats"
                         + " (username,uuid,playtime," +
                         "kills,deaths,mobkills" +
                         ",shitlisted,firstplayed,obsidianmined" +
@@ -217,7 +134,7 @@ public class SqlQuery {
 
     public boolean exists(UUID uuid){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
             ps.setString(1, uuid.toString());
 
             ResultSet resultSet = ps.executeQuery();
@@ -230,7 +147,7 @@ public class SqlQuery {
 
     public boolean exists(String playerName){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT * FROM playerStats WHERE Name =?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM playerStats WHERE Name =?");
             ps.setString(1, playerName);
 
             ResultSet resultSet = ps.executeQuery();
@@ -244,24 +161,18 @@ public class SqlQuery {
     public void existsAsync(String playerName, ExistsCallback callback){
         Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
            boolean exists = exists(playerName);
-           Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
-              callback.onQueryDone(exists);
-           });
+           Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> callback.onQueryDone(exists));
         });
     }
 
     public void updateValuesAsync(Player player){
         PlayerInfo playerInfo = new PlayerInfo(player);
 
-        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-           updateValues(playerInfo);
-        });
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> updateValues(playerInfo));
     }
 
     public void updateValuesAsync(PlayerInfo playerInfo){
-        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-            updateValues(playerInfo);
-        });
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> updateValues(playerInfo));
     }
 
     public void updateValues(PlayerInfo playerInfo){
@@ -270,7 +181,7 @@ public class SqlQuery {
                 createPlayer(playerInfo);
             }
 
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET" +
+            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET" +
                     " playtime=?,kills=?,deaths=?" +
                     ",mobkills=?,obsidianmined=?,distanceland=?" +
                     ",distanceair=?,timeSinceDeath=?" +
@@ -297,7 +208,7 @@ public class SqlQuery {
 
     public long getPlaytime(String playerName){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT playtime FROM playerStats WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT playtime FROM playerStats WHERE name=?");
             ps.setString(1, playerName);
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -314,7 +225,7 @@ public class SqlQuery {
 
     public String addToShitlist(PlayerInfo info){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
             ps.setBoolean(1, true);
             ps.setString(2, info.getUuid().toString());
             if (!exists(info.getUuid())) {
@@ -333,7 +244,7 @@ public class SqlQuery {
 
     public String removeFromShitlist(PlayerInfo info){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
             ps.setBoolean(1, false);
             ps.setString(2, info.getUuid().toString());
             if (!exists(info.getUuid())) {
@@ -351,14 +262,12 @@ public class SqlQuery {
 
     public void addToShitlistAsync(Player player){
         String name = player.getName();
-        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-           addToShitlist(name);
-        });
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> addToShitlist(name));
     }
 
     public String addToShitlist(String name){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
             ps.setBoolean(1, true);
             ps.setString(2, name);
             if (!exists(name)) {
@@ -375,14 +284,12 @@ public class SqlQuery {
 
     public void removeFromShitlistAsync(Player player){
         String name = player.getName();
-        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-           removeFromShitlist(name);
-        });
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> removeFromShitlist(name));
     }
 
     public String removeFromShitlist(String name){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
             ps.setBoolean(1, false);
             ps.setString(2, name);
             if (!exists(name)) {
@@ -399,7 +306,7 @@ public class SqlQuery {
 
     public boolean isShitlisted(String name){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT shitlisted FROM playerStats WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM playerStats WHERE name=?");
             ps.setString(1, name);
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -415,7 +322,7 @@ public class SqlQuery {
 
     public boolean isShitlisted(UUID uuid){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT shitlisted FROM playerStats WHERE uuid=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM playerStats WHERE uuid=?");
             ps.setString(1, uuid.toString());
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -432,7 +339,7 @@ public class SqlQuery {
     @Deprecated
     public boolean isShitlisted(Player player){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("SELECT shitlisted FROM playerStats WHERE uuid=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM playerStats WHERE uuid=?");
             ps.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -446,9 +353,13 @@ public class SqlQuery {
         return false;
     }
 
+    public void increaseCombatLogAsync(UUID uuid){
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> increaseCombatLog(uuid));
+    }
+
     public void increaseCombatLog(UUID uuid){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET combatlogs = combatlogs + 1 WHERE uuid=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET combatlogs = combatlogs + 1 WHERE uuid=?");
             ps.setString(1, uuid.toString());
         }catch(SQLException e){
             e.printStackTrace();

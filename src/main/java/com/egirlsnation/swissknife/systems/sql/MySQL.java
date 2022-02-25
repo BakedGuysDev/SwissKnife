@@ -39,7 +39,9 @@ public class MySQL extends System<MySQL> {
 
     private Connection connection;
 
-    private SqlQuery sql = null;
+    private PlayerStatsDriver playerStatsDriver = null;
+
+    private PlayerDataDriver playerDataDriver = null;
 
     public MySQL(){
         super("mysql");
@@ -57,10 +59,6 @@ public class MySQL extends System<MySQL> {
         if(!isConnected()){
             connection = DriverManager.getConnection("jdbc:mysql://" + databaseHost + ":" + databasePort + "/" + databaseName + "?useSSL=false", databaseUsername, databasePassword);
         }
-    }
-
-    public Connection getConnection(){
-        return connection;
     }
 
 
@@ -130,15 +128,20 @@ public class MySQL extends System<MySQL> {
 
         if(isConnected()){
             SwissKnife.swissLogger.info(ChatColor.GREEN + "Sucessfully connected to SwissKnife database.");
-            sql = new SqlQuery();
-            sql.createStatsTable();
-            sql.createPlayerDataTable();
+            playerStatsDriver = new PlayerStatsDriver(connection);
+            playerDataDriver = new PlayerDataDriver(connection);
+            playerStatsDriver.createStatsTable();
+            playerDataDriver.createPlayerDataTable();
             SwissKnife.swissLogger.info(ChatColor.GREEN + "Finished SQL initialization.");
         }
     }
 
-    public SqlQuery getSqlQuery(){
-        return sql;
+    public PlayerStatsDriver getPlayerStatsDriver(){
+        return playerStatsDriver;
+    }
+
+    public PlayerDataDriver getPlayerDataDriver(){
+        return playerDataDriver;
     }
 
     @Override

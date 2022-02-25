@@ -41,8 +41,8 @@ public class SwissPlayer {
         }
 
         Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-            //TODO: Load feature states from database
-
+            Map<SwissFeature, Boolean> sqlFeatureMap = MySQL.get().getPlayerDataDriver().getFeatureMap(uuid);
+            featureStates.putAll(sqlFeatureMap);
             loadedFeatureData = true;
         });
     }
@@ -73,13 +73,8 @@ public class SwissPlayer {
         return featureStates.get(feature);
     }
 
-    public boolean setFeature(SwissFeature feature, boolean enabled){
-        if(!loadedFeatureData){
-            return false;
-        }else{
-            featureStates.put(feature, enabled);
-            return true;
-        }
+    public void setFeature(SwissFeature feature, boolean enabled){
+        featureStates.put(feature, enabled);
     }
 
     public void toggleFeature(SwissFeature feature){
@@ -108,7 +103,7 @@ public class SwissPlayer {
 
     private void save(){
         if(MySQL.get().isConnected()){
-            MySQL.get().getSqlQuery().updatePlayerData(this);
+            MySQL.get().getPlayerDataDriver().updatePlayerData(this);
         }
     }
 

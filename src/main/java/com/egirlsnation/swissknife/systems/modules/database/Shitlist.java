@@ -111,7 +111,7 @@ public class Shitlist extends Module {
 
     @Override
     public void onEnable(){
-        if(!SwissKnife.INSTANCE.SQL.isConnected()){
+        if(!MySQL.get().isConnected()){
             warn("Disabling... This module depends on the MySQL database, which is not connected.");
             toggle();
         }
@@ -122,7 +122,7 @@ public class Shitlist extends Module {
         if(!isEnabled()) return;
         UUID uuid = e.getPlayer().getUniqueId();
         Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-           if(SwissKnife.INSTANCE.sqlQuery.isShitlisted(uuid)){
+           if(MySQL.get().getPlayerStatsDriver().isShitlisted(uuid)){
                onlineShitlist.add(uuid);
            }
         });
@@ -181,11 +181,11 @@ public class Shitlist extends Module {
     public void addToShitlist(Player player){
         onlineShitlist.add(player.getUniqueId());
         final boolean[] playerExists = {false};
-        MySQL.get().getSqlQuery().existsAsync(player.getName(), exists -> playerExists[0] = exists);
+        MySQL.get().getPlayerStatsDriver().existsAsync(player.getName(), exists -> playerExists[0] = exists);
         if(!playerExists[0]){
-            MySQL.get().getSqlQuery().createPlayerAsync(player, true);
+            MySQL.get().getPlayerStatsDriver().createPlayerAsync(player, true);
         }else{
-            MySQL.get().getSqlQuery().addToShitlistAsync(player);
+            MySQL.get().getPlayerStatsDriver().addToShitlistAsync(player);
         }
         //SwissKnife.swissLogger.debug("addToShitlist: Shitlisted player");
     }
@@ -196,11 +196,11 @@ public class Shitlist extends Module {
         }
         onlineShitlist.remove(player.getUniqueId());
         final boolean[] playerExists = {false};
-        MySQL.get().getSqlQuery().existsAsync(player.getName(), exists -> playerExists[0] = exists); //TODO: Test
+        MySQL.get().getPlayerStatsDriver().existsAsync(player.getName(), exists -> playerExists[0] = exists); //TODO: Test
         if(!playerExists[0]){
-            MySQL.get().getSqlQuery().createPlayerAsync(player, false);
+            MySQL.get().getPlayerStatsDriver().createPlayerAsync(player, false);
         }else{
-            MySQL.get().getSqlQuery().removeFromShitlistAsync(player);
+            MySQL.get().getPlayerStatsDriver().removeFromShitlistAsync(player);
         }
         return true;
     }

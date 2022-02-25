@@ -19,6 +19,9 @@ import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.modules.player.CombatCheck;
+import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.utils.entity.player.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -57,7 +60,7 @@ public class PlayerStats extends Module {
     @Override
     public void onEnable(){
         if(!periodicalUpdate.get()) return;
-        if(!SwissKnife.INSTANCE.SQL.isConnected()){
+        if(!MySQL.get().isConnected()){
             warn("Disabling... This module depends on the MySQL database, which is not connected.");
             toggle();
             return;
@@ -70,7 +73,7 @@ public class PlayerStats extends Module {
                 }
                 Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
                     for(PlayerInfo info : playerInfoList){
-                        SwissKnife.INSTANCE.sqlQuery.updateValuesAsync(info);
+                        MySQL.get().getPlayerStatsDriver().updateValuesAsync(info);
                     }
                 });
             }
@@ -88,16 +91,19 @@ public class PlayerStats extends Module {
     private void playerJoin(PlayerJoinEvent e){
         if(!isEnabled()) return;
         if(e.getPlayer().hasPlayedBefore()) return;
-        if(SwissKnife.INSTANCE.SQL.isConnected()){
-            SwissKnife.INSTANCE.sqlQuery.createPlayerAsync(e.getPlayer());
+        if(MySQL.get().isConnected()){
+            MySQL.get().getPlayerStatsDriver().createPlayerAsync(e.getPlayer());
         }
     }
 
     @EventHandler
     private void playerLeave(PlayerQuitEvent e){
         if(!isEnabled()) return;
-        if(SwissKnife.INSTANCE.SQL.isConnected()){
-            SwissKnife.INSTANCE.sqlQuery.updateValuesAsync(e.getPlayer());
+        if(MySQL.get().isConnected()){
+            MySQL.get().getPlayerStatsDriver().updateValuesAsync(e.getPlayer());
+            if(Modules.get().isActive(CombatCheck.class) && Modules.get().get(CombatCheck.class).isInCombat(e.getPlayer()) && e.getReason().equals(PlayerQuitEvent.QuitReason.DISCONNECTED)){
+                MySQL.get().getPlayerStatsDriver().increaseCombatLogAsync(e.getPlayer().getUniqueId());
+            }
         }
     }
 }

@@ -12,42 +12,21 @@
 
 package com.egirlsnation.swissknife;
 
-import com.egirlsnation.swissknife.listeners.block.onBlockDispense;
-import com.egirlsnation.swissknife.listeners.block.onBlockPlace;
-import com.egirlsnation.swissknife.listeners.entity.*;
-import com.egirlsnation.swissknife.listeners.inventory.onCraftItemEvent;
-import com.egirlsnation.swissknife.listeners.inventory.onInventoryClick;
-import com.egirlsnation.swissknife.listeners.inventory.onInventoryClose;
-import com.egirlsnation.swissknife.listeners.inventory.onInventoryOpen;
-import com.egirlsnation.swissknife.listeners.player.*;
 import com.egirlsnation.swissknife.systems.Systems;
-import com.egirlsnation.swissknife.systems.commands.CommandPreProcessor;
 import com.egirlsnation.swissknife.systems.internal.SwissPlayerRegistry;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.systems.modules.egirls.DraconiteItems;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
-import com.egirlsnation.swissknife.systems.sql.SqlQuery;
 import com.egirlsnation.swissknife.utils.SwissLogger;
-import com.egirlsnation.swissknife.utils.handlers.customItems.DraconiteAbilityHandler;
 import com.egirlsnation.swissknife.utils.server.ServerUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SwissKnife extends JavaPlugin {
 
     public static SwissKnife INSTANCE;
     public static SwissLogger swissLogger;
-
-    public MySQL SQL;
-    public SqlQuery sqlQuery;
-
-
-    //Old code
-    private final PluginManager pluginManager = Bukkit.getPluginManager();
-    private final DraconiteAbilityHandler draconiteAbilityHandler = new DraconiteAbilityHandler();
-    //Old code end
 
     @Override
     public void onEnable() {
@@ -87,6 +66,7 @@ public class SwissKnife extends JavaPlugin {
         swissLogger.info("Swiss Knife plugin disabled.");
     }
 
+    /*
     private void registerEvents() {
         pluginManager.registerEvents(new CommandPreProcessor(this), this);
         swissLogger.info("Registering block events");
@@ -129,7 +109,6 @@ public class SwissKnife extends JavaPlugin {
         pluginManager.registerEvents(new onPlayerChat(this), this);
     }
 
-    /*
     private void registerCommands() {
         swissLogger.info("Registering commands.");
         Objects.requireNonNull(this.getCommand("kill")).setExecutor(new KillCommand(this));
@@ -144,10 +123,10 @@ public class SwissKnife extends JavaPlugin {
         Objects.requireNonNull(this.getCommand("tpsalerttest")).setExecutor(new TpsAlertTestCommand(this));
         Objects.requireNonNull(this.getCommand("toggleitemability")).setExecutor(new ToggleItemAbilityCommand());
     }
-    */
 
     public PluginManager getPluginManager() {
         return pluginManager;
     }
+    */
 
 }

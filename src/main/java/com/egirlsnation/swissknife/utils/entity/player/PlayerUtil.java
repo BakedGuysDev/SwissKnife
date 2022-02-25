@@ -12,9 +12,9 @@
 
 package com.egirlsnation.swissknife.utils.entity.player;
 
-import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.systems.modules.misc.KickMessageMasking;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -24,7 +24,7 @@ public class PlayerUtil {
     public static void killPlayer(Player player){
         final EntityDamageEvent ede = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.SUICIDE, Float.MAX_VALUE);
         ede.getEntity().setLastDamageCause(ede);
-        SwissKnife.INSTANCE.getPluginManager().callEvent(ede);
+        Bukkit.getPluginManager().callEvent(ede);
         if(ede.isCancelled()){
             return;
         }

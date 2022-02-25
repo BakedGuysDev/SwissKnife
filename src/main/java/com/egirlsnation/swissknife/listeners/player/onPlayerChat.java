@@ -13,9 +13,7 @@
 package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.StringUtil;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -34,8 +32,9 @@ public class onPlayerChat implements Listener {
 
     @EventHandler
     public void PlayerChat(AsyncPlayerChatEvent e){
+        /*
         if(plugin.SQL.isConnected()){
-            if(OldConfig.instance.enableShitlist && OldConfig.instance.swapWordsRandomly && plugin.sqlQuery.isShitlisted(e.getPlayer())){
+            if(OldConfig.instance.enableShitlist && OldConfig.instance.swapWordsRandomly && plugin.playerStatsDriver.isShitlisted(e.getPlayer())){
                 if((rng.nextInt(100) + 1) > OldConfig.instance.replaceChance) return;
                 String[] words = e.getMessage().split(" ");
                 words[rng.nextInt(words.length)] = OldConfig.instance.replacementWords.get(rng.nextInt(OldConfig.instance.replacementWords.size()));
@@ -57,6 +56,7 @@ public class onPlayerChat implements Listener {
         if(OldConfig.instance.coordsEnabled){
             //e.setMessage(e.getMessage().replaceAll(OldConfig.instance.coordsPlaceholder, stringUtils.getCoordsPlaceholderFormatted(e.getPlayer())));
         }
+         */
     }
 
 

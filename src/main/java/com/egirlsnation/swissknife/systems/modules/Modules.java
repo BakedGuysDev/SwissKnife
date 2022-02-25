@@ -22,9 +22,7 @@ import com.egirlsnation.swissknife.systems.modules.database.Shitlist;
 import com.egirlsnation.swissknife.systems.modules.egirls.*;
 import com.egirlsnation.swissknife.systems.modules.entity.*;
 import com.egirlsnation.swissknife.systems.modules.illegals.*;
-import com.egirlsnation.swissknife.systems.modules.misc.ChatTweaks;
-import com.egirlsnation.swissknife.systems.modules.misc.KickMessageMasking;
-import com.egirlsnation.swissknife.systems.modules.misc.SmallFixes;
+import com.egirlsnation.swissknife.systems.modules.misc.*;
 import com.egirlsnation.swissknife.systems.modules.player.*;
 import com.egirlsnation.swissknife.systems.modules.world.*;
 import org.apache.commons.lang.StringUtils;
@@ -145,6 +143,7 @@ public class Modules extends System<Modules> {
         add(new AntiSpawnEggs());
         add(new ArmorStackLimiter());
         add(new HighDamagePrevention());
+        add(new IllegalAttributes());
         add(new IllegalBlocks());
         add(new IllegalEnchants());
         add(new IllegalLores());
@@ -152,11 +151,11 @@ public class Modules extends System<Modules> {
     }
 
     private void initPlayer() {
+        add(new AnarchyPvpLimiter());
         add(new AntiOffhandCrash());
         add(new BedrockFloorDisabler());
         add(new CombatCheck());
         add(new CrystalKillTracker());
-        add(new AnarchyPvpLimiter());
         add(new NetherRoofDisabler());
         add(new PlayerHeads());
     }
@@ -171,6 +170,9 @@ public class Modules extends System<Modules> {
 
     private void initMisc() {
         add(new ChatTweaks());
+        add(new CommandLimiter());
+        add(new DiscordLagNotifier());
+        add(new ItemNameLimiter());
         add(new KickMessageMasking());
         add(new SmallFixes());
     }
@@ -184,6 +186,7 @@ public class Modules extends System<Modules> {
         add(new DebugStickDupe());
         add(new DraconiteItems());
         add(new DragonSlayerAddon());
+        add(new EgirlsAttributeCorrector());
         add(new Ranks());
         add(new RestrictedCreativeAddon());
     }

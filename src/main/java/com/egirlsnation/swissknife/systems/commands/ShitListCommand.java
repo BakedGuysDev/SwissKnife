@@ -29,7 +29,7 @@ public class ShitListCommand extends Command {
 
     @Override
     public void onRegister(){
-        if(!SwissKnife.INSTANCE.SQL.isConnected()){
+        if(!MySQL.get().isConnected()){
             warn("Disabling... This command depends on the MySQL database, which is not connected.");
             toggle();
         }
@@ -59,15 +59,11 @@ public class ShitListCommand extends Command {
                 sendMessage(sender, ChatColor.GREEN + "Shitlisted player " + args[1]);
             }else{
                 Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-                    if(MySQL.get().getSqlQuery().exists(args[1])){
-                        MySQL.get().getSqlQuery().addToShitlist(args[1]);
-                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
-                            sendMessage(sender, ChatColor.GREEN + "Successfully added " + args[1] + " to the shitlist.");
-                        });
+                    if(MySQL.get().getPlayerStatsDriver().exists(args[1])){
+                        MySQL.get().getPlayerStatsDriver().addToShitlist(args[1]);
+                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> sendMessage(sender, ChatColor.GREEN + "Successfully added " + args[1] + " to the shitlist."));
                     }else{
-                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
-                            sendMessage(sender, ChatColor.RED + args[1] + " couldn't be shitlisted, because he isn't in the database and isn't online either.");
-                        });
+                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> sendMessage(sender, ChatColor.RED + args[1] + " couldn't be shitlisted, because he isn't in the database and isn't online either."));
                     }
                 });
             }
@@ -85,15 +81,11 @@ public class ShitListCommand extends Command {
                 }
             }else{
                 Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-                    if(MySQL.get().getSqlQuery().exists(args[1])){
-                        MySQL.get().getSqlQuery().removeFromShitlist(args[1]);
-                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
-                            sendMessage(sender, ChatColor.GREEN + "Successfully removed " + args[1] + " from the shitlist.");
-                        });
+                    if(MySQL.get().getPlayerStatsDriver().exists(args[1])){
+                        MySQL.get().getPlayerStatsDriver().removeFromShitlist(args[1]);
+                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> sendMessage(sender, ChatColor.GREEN + "Successfully removed " + args[1] + " from the shitlist."));
                     }else{
-                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
-                            sendMessage(sender, ChatColor.RED + args[1] + " couldn't be unshitlisted, because he isn't in the database and isn't online either.");
-                        });
+                        Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> sendMessage(sender, ChatColor.RED + args[1] + " couldn't be unshitlisted, because he isn't in the database and isn't online either."));
                     }
                 });
             }

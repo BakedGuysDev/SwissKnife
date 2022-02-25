@@ -114,6 +114,7 @@ public abstract class Command implements CommandExecutor {
         return TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= cooldown;
     }
 
+    //TODO: Display time remaining
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, org.bukkit.command.@NotNull Command command, @NotNull String label, @NotNull String[] args){

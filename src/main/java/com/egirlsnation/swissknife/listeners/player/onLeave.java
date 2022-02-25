@@ -13,18 +13,13 @@
 package com.egirlsnation.swissknife.listeners.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.utils.StringUtil;
 import com.egirlsnation.swissknife.utils.handlers.CombatCheckHandler;
 import com.egirlsnation.swissknife.utils.handlers.commandCooldown.CooldownHandler;
 import com.egirlsnation.swissknife.utils.handlers.customItems.DraconiteAbilityHandler;
-import com.egirlsnation.swissknife.utils.OldConfig;
-import com.egirlsnation.swissknife.utils.StringUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-
-import static com.egirlsnation.swissknife.listeners.player.onSwapHandItems.handSwapDelay;
 
 public class onLeave implements Listener {
 
@@ -38,14 +33,14 @@ public class onLeave implements Listener {
 
     @EventHandler
     private void onPlayerLeave(PlayerQuitEvent e){
-
+        /*
         if(plugin.SQL.isConnected()){
             if(e.getReason().equals(PlayerQuitEvent.QuitReason.DISCONNECTED) && combatCheckHandler.isInCombat(e.getPlayer())){
-                plugin.sqlQuery.increaseCombatLog(e.getPlayer().getUniqueId());
+                plugin.playerStatsDriver.increaseCombatLog(e.getPlayer().getUniqueId());
             }
-            plugin.sqlQuery.updateValuesAsync(e.getPlayer());
+            plugin.playerStatsDriver.updateValuesAsync(e.getPlayer());
 
-            if(OldConfig.instance.leakCoords && OldConfig.instance.enableShitlist && plugin.sqlQuery.isShitlisted(e.getPlayer())){
+            if(OldConfig.instance.leakCoords && OldConfig.instance.enableShitlist && plugin.playerStatsDriver.isShitlisted(e.getPlayer())){
                 Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().broadcastMessage(ChatColor.GREEN + "The coords of " + e.getPlayer().getDisplayName() + ChatColor.GREEN + " are " + stringUtils.getFormattedCoords(e.getPlayer().getLocation())),40);
             }
         }
@@ -60,7 +55,7 @@ public class onLeave implements Listener {
 
         combatCheckHandler.getElytraMap().remove(e.getPlayer().getUniqueId());
         combatCheckHandler.removePlayer(e.getPlayer());
-
+         */
     }
 
 

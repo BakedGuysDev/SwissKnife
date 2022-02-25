@@ -130,10 +130,11 @@ public class CommandPreProcessor  implements Listener {
 
         }
 
+        /*
         if(!plugin.SQL.isConnected()) return;
         if(!OldConfig.instance.enableShitlist) return;
 
-        if(plugin.sqlQuery.isShitlisted(e.getPlayer())){
+        if(plugin.playerStatsDriver.isShitlisted(e.getPlayer())){
             for(String command : OldConfig.instance.blacklistedCommands){
                 if(e.getMessage().toLowerCase().startsWith("/" + command.toLowerCase())){
                     e.setCancelled(true);
@@ -142,5 +143,6 @@ public class CommandPreProcessor  implements Listener {
                 }
             }
         }
+         */
     }
 }
