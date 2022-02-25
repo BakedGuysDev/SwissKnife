@@ -150,7 +150,7 @@ public class Shitlist extends Module {
                 if(e.getMessage().toLowerCase().startsWith("/" + command.toLowerCase())){
                     e.setCancelled(true);
                     if(cmdAlertPlayers.get()){
-                        e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', cmdMessage.get()));
+                        sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', cmdMessage.get()));
                     }
                     if(cmdLog.get()){
                         info("Shitlisted player " + e.getPlayer().getName() + " tried to execute /" + command);
@@ -196,7 +196,7 @@ public class Shitlist extends Module {
         }
         onlineShitlist.remove(player.getUniqueId());
         final boolean[] playerExists = {false};
-        MySQL.get().getSqlQuery().existsAsync(player.getName(), exists -> playerExists[0] = exists);
+        MySQL.get().getSqlQuery().existsAsync(player.getName(), exists -> playerExists[0] = exists); //TODO: Test
         if(!playerExists[0]){
             MySQL.get().getSqlQuery().createPlayerAsync(player, false);
         }else{

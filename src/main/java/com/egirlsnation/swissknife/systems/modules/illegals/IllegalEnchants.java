@@ -21,6 +21,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -253,7 +254,9 @@ public class IllegalEnchants extends Module {
     }
 
     private void alertPlayer(Entity entity){
-        entity.sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+        if(entity instanceof Player){
+            sendMessage((Player) entity, ChatColor.translateAlternateColorCodes('§', message.get()));
+        }
     }
 
 

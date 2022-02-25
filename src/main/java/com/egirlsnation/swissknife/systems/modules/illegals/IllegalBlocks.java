@@ -82,7 +82,7 @@ public class IllegalBlocks extends Module {
                     e.setCancelled(true);
                     e.getItemInHand().setAmount(0);
                     if(alertPlayers.get()){
-                        e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                        sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
                     }
                     if(log.get()){
                         info("Prevented " + e.getPlayer().getName() + " from placing an illegal block ( " + string + " ) at: " + LocationUtil.getLocationString(e.getBlock().getLocation()));

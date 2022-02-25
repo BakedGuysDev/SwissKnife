@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.entity;
 
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.EntityEffect;
 import org.bukkit.Material;
@@ -21,20 +22,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class PetTotems extends Module {
     public PetTotems(){
         super(Categories.Entity, "pet-totems", "Allows pets to use totems of their owner");
     }
-
-    private final List<UUID> disabledPlayers =  new ArrayList<>();
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent e){
@@ -49,7 +43,8 @@ public class PetTotems extends Module {
         if(pet.getOwner() == null) return;
 
         Player p = (Player) pet.getOwner();
-        if(disabledPlayers.contains(p.getUniqueId())) return;
+        SwissPlayer swissPlayer = SwissPlayer.getSwissPlayer(p);
+        if(!swissPlayer.hasFeatureEnabled(SwissPlayer.SwissFeature.PET_TOTEMS)) return;
         if(!p.getInventory().getItemInOffHand().getType().equals(Material.TOTEM_OF_UNDYING)) return;
         e.setCancelled(true);
 
@@ -63,20 +58,10 @@ public class PetTotems extends Module {
         pet.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 100, 2));
     }
 
-    @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e){
-        disabledPlayers.remove(e.getPlayer().getUniqueId());
-    }
-
     public String getPetName(Tameable pet){
         if(pet.getCustomName() == null){
             return pet.getName();
         }
         return pet.getCustomName();
-    }
-
-    //TODO: Command to disable
-    public List<UUID> getDisabledPlayers(){
-        return disabledPlayers;
     }
 }

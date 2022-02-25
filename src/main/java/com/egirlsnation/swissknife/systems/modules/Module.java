@@ -15,8 +15,10 @@ package com.egirlsnation.swissknife.systems.modules;
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.settings.Settings;
+import com.egirlsnation.swissknife.systems.config.Config;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.ConfigurationSection;
@@ -74,6 +76,14 @@ public abstract class Module implements Listener, Comparable<Module> {
 
     public void error(String message){
         SwissKnife.swissLogger.log(Level.SEVERE, message, "SwissKnife|" + name);
+    }
+
+    public void sendMessage(Player player, String message){
+        if(Config.get().useModulePrefix){
+            player.sendMessage(Config.get().modulePrefix.replaceAll("%module%", name) + " " + message);
+        }else{
+            player.sendMessage(message);
+        }
     }
 
     public void writeToConfig(YamlFile file){

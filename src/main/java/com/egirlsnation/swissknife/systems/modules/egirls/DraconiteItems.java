@@ -20,6 +20,7 @@ import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import com.egirlsnation.swissknife.utils.handlers.customItems.AbilityCooldownHandler;
 import com.egirlsnation.swissknife.utils.handlers.customItems.DraconiteAbilityHandler;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
@@ -43,10 +44,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 public class DraconiteItems extends Module {
     private final AbilityCooldownHandler cooldownHandler;
@@ -110,35 +109,28 @@ public class DraconiteItems extends Module {
             .build()
     );
 
-    private final List<UUID> disabledAbilitiesCache = new ArrayList<>(1);
-
     @EventHandler
     private void playerInteract(PlayerInteractEvent e){
         if(!isEnabled()) return;
+        SwissPlayer swissPlayer = SwissPlayer.getSwissPlayer(e.getPlayer());
         if(e.getAction().equals(Action.RIGHT_CLICK_AIR)){
+            if(!swissPlayer.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES)){
+                return;
+            }
             if(ItemUtil.isDraconiteSword(e.getItem())){
-                if(disabledAbilitiesCache.contains(e.getPlayer().getUniqueId())){
-                    return;
-                }
                 abilityHandler.handleSwordAbility(e.getPlayer(), e.getHand(), cooldownHandler);
                 return;
             }else if(ItemUtil.isDraconiteAxe(e.getItem())){
-                if(disabledAbilitiesCache.contains(e.getPlayer().getUniqueId())){
-                    return;
-                }
                 abilityHandler.handleAxeAbility(e.getPlayer(), e.getHand(), cooldownHandler);
                 return;
             }else if(ItemUtil.isDraconiteCrystal(e.getItem())){
-                if(disabledAbilitiesCache.contains(e.getPlayer().getUniqueId())){
-                    return;
-                }
                 abilityHandler.handleCrystalAbility(e.getPlayer(), e.getHand(), cooldownHandler);
                 return;
             }
         }
 
         if(e.getAction().equals(Action.RIGHT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)){
-            if(disabledAbilitiesCache.contains(e.getPlayer().getUniqueId())){
+            if(!swissPlayer.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES)){
                 return;
             }
             abilityHandler.handlePickaxeAbility(e.getPlayer(), e.getHand(), cooldownHandler, xpToDrain.get(), hasteLevel.get());
@@ -290,17 +282,5 @@ public class DraconiteItems extends Module {
             Bukkit.removeRecipe(draconitePickKey);
         }
         Bukkit.addRecipe(draconitePick);
-    }
-
-    public void removeFromCache(UUID uuid){
-        disabledAbilitiesCache.remove(uuid);
-    }
-
-    public void addToCache(UUID uuid){
-        disabledAbilitiesCache.add(uuid);
-    }
-
-    public boolean isCached(UUID uuid){
-        return disabledAbilitiesCache.contains(uuid);
     }
 }

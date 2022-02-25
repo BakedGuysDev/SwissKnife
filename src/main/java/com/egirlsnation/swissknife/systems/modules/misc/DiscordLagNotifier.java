@@ -148,7 +148,7 @@ public class DiscordLagNotifier extends Module {
         }
     }
 
-    private void tpsNotify(double[] tps){
+    public void tpsNotify(double[] tps){
         Collection<? extends Player> onlinePlayers = null;
         if(listOnlinePlayers.get()){
             onlinePlayers = Bukkit.getOnlinePlayers();

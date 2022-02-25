@@ -78,7 +78,7 @@ public class ArmorStackLimiter extends Module {
         }
         if(scanAndTrimArmorStacks(e.getInventory()) && e.getPlayer() instanceof Player){
             if(alertPlayers.get()){
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                sendMessage((Player) e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
                 if(e.getInventory().getLocation() != null){
@@ -101,7 +101,7 @@ public class ArmorStackLimiter extends Module {
         if(scanAndTrimArmorStacks(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
             e.setCancelled(true);
             if(alertPlayers.get()){
-                e.getWhoClicked().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                sendMessage((Player) e.getWhoClicked(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
                 if(e.getClickedInventory().getLocation() != null){
@@ -130,7 +130,7 @@ public class ArmorStackLimiter extends Module {
 
             if(e.getEntity() instanceof Player){
                 if(alertPlayers.get()){
-                    e.getEntity().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                    sendMessage((Player) e.getEntity(), ChatColor.translateAlternateColorCodes('§', message.get()));
                 }
                 if(log.get()){
                     info("Trimmed armor stack to be picked up by " + e.getEntity().getName() + " at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));

@@ -191,7 +191,9 @@ public class TotemStackLimiter extends Module {
     }
 
     private void alertPlayer(Entity entity){
-        entity.sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+        if(entity instanceof Player){
+            sendMessage((Player) entity, ChatColor.translateAlternateColorCodes('§', message.get()));
+        }
     }
 
     public boolean scanAndTrimTotemStack(Inventory inv){

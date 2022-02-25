@@ -44,6 +44,8 @@ public class Commands extends System<Commands> {
         add(new RefreshRankCommand());
         add(new ShitListCommand());
         add(new ShrugCommand());
+        add(new ToggleItemAbilityCommand());
+        add(new TpsAlertTestCommand());
     }
 
     public void sortCommands(){

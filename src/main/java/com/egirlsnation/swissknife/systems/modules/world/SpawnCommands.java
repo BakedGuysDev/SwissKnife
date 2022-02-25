@@ -67,7 +67,7 @@ public class SpawnCommands extends Module {
                 if(e.getMessage().toLowerCase().startsWith("/" + command.toLowerCase())){
                     e.setCancelled(true);
                     if(alertPlayers.get()){
-                        e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get().replaceAll("%radius%", radius.get().toString())));
+                        sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get().replaceAll("%radius%", radius.get().toString())));
                     }
                 }
             }

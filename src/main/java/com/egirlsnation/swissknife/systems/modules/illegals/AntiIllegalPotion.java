@@ -93,7 +93,7 @@ public class AntiIllegalPotion extends Module {
                             e.setCancelled(true);
                             e.getItem().setAmount(0);
                             if(alertPlayers.get()){
-                                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                                sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
                             }
                             if(log.get()){
                                 info("Player " + e.getPlayer().getName() + " tried to use an illegal potion");
@@ -114,7 +114,7 @@ public class AntiIllegalPotion extends Module {
                             e.setCancelled(true);
                             e.getItem().setAmount(0);
                             if(alertPlayers.get()){
-                                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                                sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
                             }
                             if(log.get()){
                                 info("Player " + e.getPlayer().getName() + " tried to use an illegal potion");
@@ -131,7 +131,7 @@ public class AntiIllegalPotion extends Module {
                             e.setCancelled(true);
                             e.getItem().setAmount(0);
                             if(alertPlayers.get()){
-                                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                                sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
                             }
                             if(log.get()){
                                 info("Player " + e.getPlayer().getName() + " tried to use an illegal potion");
@@ -149,7 +149,7 @@ public class AntiIllegalPotion extends Module {
                 }
                 if(!meta.equals(e.getItem().getItemMeta())){
                     if(alertPlayers.get()){
-                        e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                        sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
                     }
                     if(log.get()){
                         info("Player " + e.getPlayer().getName() + " tried to use an illegal potion");

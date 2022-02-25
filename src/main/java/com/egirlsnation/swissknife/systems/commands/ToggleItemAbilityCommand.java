@@ -12,9 +12,11 @@
 
 package com.egirlsnation.swissknife.systems.commands;
 
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 
 public class ToggleItemAbilityCommand extends Command {
 
@@ -29,6 +31,6 @@ public class ToggleItemAbilityCommand extends Command {
             return;
         }
 
-        //TODO
+        SwissPlayer.getSwissPlayer((Player) sender).toggleFeature(SwissPlayer.SwissFeature.DRACONITE_ABILITIES);
     }
 }

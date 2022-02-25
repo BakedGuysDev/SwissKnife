@@ -22,11 +22,8 @@ import org.simpleyaml.configuration.file.YamlFile;
 import java.io.IOException;
 
 public class Config extends System<Config> {
-
-    //TODO: Use prefix when sending message in commands
     public String prefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife" + ChatColor.GOLD + "]" + ChatColor.RESET;
 
-    //TODO: General config option for all module player alters to use the systemPrefix
     public boolean useModulePrefix = true;
     public String modulePrefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife | %module%" + ChatColor.GOLD + "]" + ChatColor.RESET;
 
@@ -45,8 +42,9 @@ public class Config extends System<Config> {
 
         file.setComment("config", "\nGeneral config options\n", CommentType.BLOCK);
         section.set("prefix", prefix);
-        section.set("use-prefix", useModulePrefix);
+        section.set("use-module-prefix", useModulePrefix);
         file.setComment("config.use-prefix", "If plugin should use module prefix when alerting players");
+        section.set("module-prefix", modulePrefix);
 
         try {
             getFile().save();
@@ -65,6 +63,7 @@ public class Config extends System<Config> {
         }
 
         prefix = section.getString("prefix");
-        useModulePrefix = section.getBoolean("use-prefix");
+        useModulePrefix = section.getBoolean("use-module-prefix");
+        modulePrefix = section.getString("module-prefix");
     }
 }

@@ -28,8 +28,6 @@ import java.util.UUID;
 
 public class SqlQuery {
 
-    //TODO: Change tinyint to bit
-
     public void createStatsTable(){
         PreparedStatement ps;
         try{
@@ -40,7 +38,7 @@ public class SqlQuery {
                     "kills INT(11)," +
                     "deaths INT(11)," +
                     "mobkills INT(11)," +
-                    "shitlisted TINYINT(1)," +
+                    "shitlisted BIT(1)," +
                     "firstplayed VARCHAR(100)," +
                     "obsidianmined INT(11)," +
                     "distanceair BIGINT(19)," +
@@ -200,11 +198,7 @@ public class SqlQuery {
                 ps2.setInt(4, 0);
                 ps2.setInt(5, 0);
                 ps2.setInt(6, 0);
-                if(shitlisted){
-                    ps2.setInt(7, 1);
-                }else{
-                    ps2.setInt(7, 0);
-                }
+                ps2.setBoolean(7, shitlisted);
                 ps2.setString(8, firstPlayedS);
                 ps2.setInt(9, 0);
                 ps2.setInt(10, 0);
@@ -321,7 +315,7 @@ public class SqlQuery {
     public String addToShitlist(PlayerInfo info){
         try{
             PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
-            ps.setInt(1, 1);
+            ps.setBoolean(1, true);
             ps.setString(2, info.getUuid().toString());
             if (!exists(info.getUuid())) {
                 createPlayerAsync(info);
@@ -340,7 +334,7 @@ public class SqlQuery {
     public String removeFromShitlist(PlayerInfo info){
         try{
             PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
-            ps.setInt(1, 0);
+            ps.setBoolean(1, false);
             ps.setString(2, info.getUuid().toString());
             if (!exists(info.getUuid())) {
                 createPlayerAsync(info);
@@ -365,7 +359,7 @@ public class SqlQuery {
     public String addToShitlist(String name){
         try{
             PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
-            ps.setInt(1, 1);
+            ps.setBoolean(1, true);
             ps.setString(2, name);
             if (!exists(name)) {
                 return "Player " + name + " doesn't exist in the database, can't shitlist them.";
@@ -389,7 +383,7 @@ public class SqlQuery {
     public String removeFromShitlist(String name){
         try{
             PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
-            ps.setInt(1, 0);
+            ps.setBoolean(1, false);
             ps.setString(2, name);
             if (!exists(name)) {
                 return "Player " + name + " doesn't exist in the database, can't unshitlist them.";
@@ -409,8 +403,7 @@ public class SqlQuery {
             ps.setString(1, name);
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
-                if(resultSet.getInt("shitlisted") == 1) return true;
-                if(resultSet.getInt("shitlisted") == 0) return false;
+                return resultSet.getBoolean("shitlisted");
             }
             return false;
 
@@ -426,8 +419,7 @@ public class SqlQuery {
             ps.setString(1, uuid.toString());
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
-                if(resultSet.getInt("shitlisted") == 1) return true;
-                if(resultSet.getInt("shitlisted") == 0) return false;
+                return resultSet.getBoolean("shitlisted");
             }
             return false;
 
@@ -444,8 +436,7 @@ public class SqlQuery {
             ps.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
-                if(resultSet.getInt("shitlisted") == 1) return true;
-                if(resultSet.getInt("shitlisted") == 0) return false;
+                return resultSet.getBoolean("shitlisted");
             }
             return false;
 
@@ -457,7 +448,7 @@ public class SqlQuery {
 
     public void increaseCombatLog(UUID uuid){
         try{
-            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET combatlog = combatlog + 1 WHERE uuid=?");
+            PreparedStatement ps = MySQL.get().getConnection().prepareStatement("UPDATE playerStats SET combatlogs = combatlogs + 1 WHERE uuid=?");
             ps.setString(1, uuid.toString());
         }catch(SQLException e){
             e.printStackTrace();

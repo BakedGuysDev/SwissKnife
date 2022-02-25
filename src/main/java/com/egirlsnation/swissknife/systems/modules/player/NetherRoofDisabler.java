@@ -101,7 +101,7 @@ public class NetherRoofDisabler extends Module {
             }
 
             if(alertPlayers.get()){
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
 
             if(damagePlayer.get()){
@@ -131,7 +131,7 @@ public class NetherRoofDisabler extends Module {
             }
 
             if(alertPlayers.get()){
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
 
             if(damagePlayer.get()){
@@ -155,7 +155,9 @@ public class NetherRoofDisabler extends Module {
                 e.getVehicle().remove();
 
                 if(alertPlayers.get()){
-                    e.getEntered().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                    if(e.getEntered() instanceof Player){
+                        sendMessage((Player) e.getEntered(), ChatColor.translateAlternateColorCodes('§', message.get()));
+                    }
                 }
 
                 if(log.get()) info("Player " + e.getEntered().getName() + " attempted to go above the nether roof");
@@ -183,7 +185,9 @@ public class NetherRoofDisabler extends Module {
                 e.getVehicle().remove();
 
                 if(alertPlayers.get()){
-                    e.getExited().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                    if(e.getExited() instanceof Player){
+                        sendMessage((Player) e.getExited(), ChatColor.translateAlternateColorCodes('§', message.get()));
+                    }
                 }
 
                 if(log.get()) info("Player " + e.getExited().getName() + " attempted to go above the nether roof");

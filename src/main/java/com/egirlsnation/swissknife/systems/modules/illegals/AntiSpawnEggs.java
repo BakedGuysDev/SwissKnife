@@ -77,7 +77,7 @@ public class AntiSpawnEggs extends Module {
             e.getItem().setAmount(0);
             e.setCancelled(true);
             if(alertPlayers.get()){
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
                 info("Prevented " + e.getPlayer().getName() + " from using a spawn egg");

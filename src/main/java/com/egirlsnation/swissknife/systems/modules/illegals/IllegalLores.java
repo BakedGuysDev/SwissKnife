@@ -84,7 +84,7 @@ public class IllegalLores extends Module {
         if(scanAndRemoveFromInv(e.getInventory()) && e.getPlayer() instanceof Player){
             e.setCancelled(true);
             if(alertPlayers.get()){
-                e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                sendMessage((Player) e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
                 if(e.getInventory().getLocation() == null){
@@ -108,7 +108,7 @@ public class IllegalLores extends Module {
         if(scanAndRemoveFromInv(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
             e.setCancelled(true);
             if(alertPlayers.get()){
-                e.getWhoClicked().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                sendMessage((Player) e.getWhoClicked(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
                 if(e.getClickedInventory().getLocation() == null){
@@ -147,7 +147,7 @@ public class IllegalLores extends Module {
             e.setCancelled(true);
 
             if(alertPlayers.get()){
-                e.getEntity().sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                sendMessage((Player) e.getEntity(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
                 info("Removed item with illegal lore being picked up by " + e.getEntity().getName() + " at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));

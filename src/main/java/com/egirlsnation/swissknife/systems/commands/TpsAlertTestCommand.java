@@ -12,7 +12,12 @@
 
 package com.egirlsnation.swissknife.systems.commands;
 
+import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.modules.misc.DiscordLagNotifier;
+import com.egirlsnation.swissknife.utils.server.ServerUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class TpsAlertTestCommand extends Command {
 
@@ -22,6 +27,12 @@ public class TpsAlertTestCommand extends Command {
 
     @Override
     public void handleCommand(CommandSender sender, String[] args){
-        //TODO
+        if(sender instanceof Player){
+            Player player = (Player) sender;
+            if(!player.isOp()){
+                sendMessage(sender, ChatColor.RED + "You don't have enough permission to do this command");
+            }
+        }
+        Modules.get().get(DiscordLagNotifier.class).tpsNotify(ServerUtil.getTps());
     }
 }

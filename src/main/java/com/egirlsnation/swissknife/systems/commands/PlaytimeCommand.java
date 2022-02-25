@@ -54,12 +54,14 @@ public class PlaytimeCommand extends Command {
             sendMessage(sender, ChatColor.RED + "Couldn't get playtime of " + targetName + ".\nThis can mean that the player isn't in the database or isn't online.");
             return;
         }
-        if(!MySQL.get().getSqlQuery().exists(targetName)){ //TODO: Async query
-            sendMessage(sender, ChatColor.RED + "Couldn't get playtime of " + targetName + ".\nThis can mean that the player isn't in the database or isn't online.");
-            return;
-        }
 
         Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+            if(!MySQL.get().getSqlQuery().exists(targetName)){
+                Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
+                    sendMessage(sender, ChatColor.RED + "Couldn't get playtime of " + targetName + ".\nThis can mean that the player isn't in the database or isn't online.");
+                });
+                return;
+            }
             String playtime = formatPlayTime(MySQL.get().getSqlQuery().getPlaytime(targetName));
             Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
                 sendMessage(sender, ChatColor.RED + "Playtime of " + targetName + " is " + playtime);

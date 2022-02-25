@@ -73,12 +73,20 @@ public class SwissPlayer {
         return featureStates.get(feature);
     }
 
-    public boolean setFeatureEnabled(SwissFeature feature, boolean enabled){
+    public boolean setFeature(SwissFeature feature, boolean enabled){
         if(!loadedFeatureData){
             return false;
         }else{
             featureStates.put(feature, enabled);
             return true;
+        }
+    }
+
+    public void toggleFeature(SwissFeature feature){
+        if(!featureStates.get(feature)){
+            featureStates.put(feature, true);
+        }else{
+            featureStates.put(feature, false);
         }
     }
 
@@ -99,11 +107,9 @@ public class SwissPlayer {
     }
 
     private void save(){
-        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-            if(MySQL.get().isConnected()){
-                MySQL.get().getSqlQuery().updatePlayerData(this);
-            }
-        });
+        if(MySQL.get().isConnected()){
+            MySQL.get().getSqlQuery().updatePlayerData(this);
+        }
     }
 
     public enum SwissFeature{

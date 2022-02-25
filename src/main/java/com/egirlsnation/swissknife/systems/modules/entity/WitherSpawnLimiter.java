@@ -69,7 +69,7 @@ public class WitherSpawnLimiter extends Module {
                 if(!alertPlayers.get()) return;
                 for(Entity entity : e.getEntity().getNearbyEntities(e.getLocation().getX(), e.getLocation().getY(), e.getLocation().getZ())){
                     if(entity instanceof Player){
-                        entity.sendMessage(ChatColor.translateAlternateColorCodes('§', message.get()));
+                        sendMessage((Player) entity, ChatColor.translateAlternateColorCodes('§', message.get()));
                     }
                 }
                 if(log.get()){
