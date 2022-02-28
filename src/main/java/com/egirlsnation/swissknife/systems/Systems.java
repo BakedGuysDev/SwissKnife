@@ -74,6 +74,16 @@ public class Systems {
         SwissKnife.swissLogger.info("Loaded in " +  end + " milliseconds.");
     }
 
+    public static void reload(){
+        long start = java.lang.System.currentTimeMillis();
+        SwissKnife.swissLogger.info("Reloading configurations...");
+
+        for(System<?> system : systems.values()) system.load();
+        long end = java.lang.System.currentTimeMillis() - start;
+
+        SwissKnife.swissLogger.info("Reloaded in " +  end + " milliseconds.");
+    }
+
 
     @SuppressWarnings("unchecked")
     public static <T extends System<?>> T get(Class<T> klass){

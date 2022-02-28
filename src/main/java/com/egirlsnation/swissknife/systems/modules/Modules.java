@@ -242,6 +242,9 @@ public class Modules extends System<Modules> {
             if (enabled && !module.isEnabled()) {
                 module.toggle();
             }
+            if (!enabled && module.isEnabled()) {
+                module.toggle();
+            }
 
         }
         try {

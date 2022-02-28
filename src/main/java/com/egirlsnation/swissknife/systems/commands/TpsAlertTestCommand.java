@@ -22,8 +22,10 @@ import org.bukkit.entity.Player;
 public class TpsAlertTestCommand extends Command {
 
     public TpsAlertTestCommand(){
-        super("tps-altert-test");
+        super("tps-alert-test");
     }
+
+    //TODO: Improve
 
     @Override
     public void handleCommand(CommandSender sender, String[] args){

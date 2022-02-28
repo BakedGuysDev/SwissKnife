@@ -51,7 +51,7 @@ public class DraconiteItems extends Module {
     private final AbilityCooldownHandler cooldownHandler;
     private final DraconiteAbilityHandler abilityHandler;
 
-    public DraconiteItems(){ //TODO: Test
+    public DraconiteItems(){ //TODO: Fix default attributes
         super(Categories.EgirlsNation, "draconite-items", "Adds various draconite items");
 
         cooldownHandler = new AbilityCooldownHandler();
@@ -133,7 +133,9 @@ public class DraconiteItems extends Module {
             if(!swissPlayer.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES)){
                 return;
             }
-            abilityHandler.handlePickaxeAbility(e.getPlayer(), e.getHand(), cooldownHandler, xpToDrain.get(), hasteLevel.get());
+            if(ItemUtil.isDraconitePickaxe(e.getItem())){
+                abilityHandler.handlePickaxeAbility(e.getPlayer(), e.getHand(), cooldownHandler, xpToDrain.get(), hasteLevel.get());
+            }
         }
 
         if(!e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;

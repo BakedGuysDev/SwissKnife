@@ -44,6 +44,7 @@ public class Commands extends System<Commands> {
         add(new RefreshRankCommand());
         add(new ShitListCommand());
         add(new ShrugCommand());
+        add(new SwissKnifeCommand());
         add(new ToggleItemAbilityCommand());
         add(new TpsAlertTestCommand());
     }
@@ -112,6 +113,10 @@ public class Commands extends System<Commands> {
             if(enabled && !command.isEnabled()){
                 command.toggle();
             }
+            if(!enabled && command.isEnabled()){
+                command.toggle();
+            }
+            command.register();
         }
         try{
             getFile().save();

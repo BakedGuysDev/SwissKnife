@@ -37,6 +37,9 @@ commands:
   toggleitemability:
     description: Allows you to toggle abilities of draconite items
     usage: /toggleitemability
+  swissknife:
+    description: General swissknife command
+    usage: /swissknife reload|info
 
 permissions:
   swissknife.kill.others:

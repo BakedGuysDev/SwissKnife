@@ -43,6 +43,8 @@ public class MySQL extends System<MySQL> {
 
     private PlayerDataDriver playerDataDriver = null;
 
+    private boolean active = false;
+
     public MySQL(){
         super("mysql");
     }
@@ -133,6 +135,7 @@ public class MySQL extends System<MySQL> {
             playerStatsDriver.createStatsTable();
             playerDataDriver.createPlayerDataTable();
             SwissKnife.swissLogger.info(ChatColor.GREEN + "Finished SQL initialization.");
+            active = true;
         }
     }
 
@@ -149,5 +152,10 @@ public class MySQL extends System<MySQL> {
         if(isConnected()){
             disconnect();
         }
+        active = false;
+    }
+
+    public boolean isActive(){
+        return active;
     }
 }

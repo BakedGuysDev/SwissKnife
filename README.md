@@ -2,7 +2,7 @@
 
 Unique Paper based plugin dedicated to patching illegal items, exploits and bugs on anarchy servers, plus adding all kinds of new features to the game.  
 
-The plugin started as a way for me to patch things on the Egirls Nation server, but as of the new codebase rewrite in version 1.0.0 it's usable on any server.
+The plugin started as a way for me to patch things on the Egirls Nation server, but as of the new codebase rewrite in version 1.0.0 it's usable on any server thanks to the extensive configuration options.
  
 Pull requests are of course welcome!  
 

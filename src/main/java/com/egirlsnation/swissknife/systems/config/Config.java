@@ -27,6 +27,9 @@ public class Config extends System<Config> {
     public boolean useModulePrefix = true;
     public String modulePrefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife | %module%" + ChatColor.GOLD + "]" + ChatColor.RESET;
 
+    public boolean useCommandPrefix = true;
+    public String commandPrefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife | %command%" + ChatColor.GOLD + "]" + ChatColor.RESET;
+
     public Config(){
         super("config");
     }
@@ -46,6 +49,10 @@ public class Config extends System<Config> {
         file.setComment("config.use-prefix", "If plugin should use module prefix when alerting players");
         section.set("module-prefix", modulePrefix);
 
+        section.set("use-command-prefix", useCommandPrefix);
+        file.setComment("config.use-prefix", "If plugin should use command prefix when sending messages to players from commands");
+        section.set("command-prefix", commandPrefix);
+
         try {
             getFile().save();
         } catch (IOException e) {
@@ -53,6 +60,7 @@ public class Config extends System<Config> {
         }
     }
 
+    //TODO: Missing config options writing
     @Override
     public void readFromConfig(){
         YamlFile file = getFile();
@@ -65,5 +73,7 @@ public class Config extends System<Config> {
         prefix = section.getString("prefix");
         useModulePrefix = section.getBoolean("use-module-prefix");
         modulePrefix = section.getString("module-prefix");
+        useCommandPrefix = section.getBoolean("use-command-prefix");
+        commandPrefix = section.getString("command-prefix");
     }
 }

@@ -14,7 +14,6 @@ package com.egirlsnation.swissknife.systems.commands;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.config.Config;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,6 +31,8 @@ public abstract class Command implements CommandExecutor {
     public String name;
     private int cooldown = 0;
     private boolean enabled = false;
+
+    //TODO: Unify command for disabling abilities and add petTotems
 
     private final Map<UUID, Long> cooldownMap = new HashMap<>(1);
 
@@ -56,36 +57,38 @@ public abstract class Command implements CommandExecutor {
         }
     }
 
-    private void onEnable(){
+    public void register(){
         PluginCommand command = SwissKnife.INSTANCE.getCommand(name.replaceAll("-", ""));
         if(command != null){
             command.setExecutor(this);
             onRegister();
         }else{
-            error("Couldn't find command named " + name + ". This could mean that command is not defined in plugin.yml");
+            error("Couldn't find command named " + name + " while enabling a command. This could mean that command is not defined in plugin.yml");
         }
     }
 
+    private void onEnable(){
+
+    }
+
     private void onDisable(){
-        PluginCommand command = SwissKnife.INSTANCE.getCommand(name);
-        if(command != null){
-            command.unregister(Bukkit.getCommandMap()); //TODO: Test
-            onUnregister();
-        }else{
-            error("Couldn't find command named " + name + ". This could mean that command is not defined in plugin.yml");
-        }
+
     }
 
     public void onRegister(){
 
     }
 
-    public void onUnregister(){
-
-    }
-
     public void sendMessage(CommandSender sender, String message){
-        sender.sendMessage(Config.get().prefix + " " + message);
+        if(Config.get().useCommandPrefix){
+            if(name.equals("swissknife")){
+                sender.sendMessage(Config.get().prefix + " " + message);
+            }else{
+                sender.sendMessage(Config.get().commandPrefix.replaceAll("%command%", name) + " " + message);
+            }
+        }else{
+            sender.sendMessage(message);
+        }
     }
 
     public void info(String message){
@@ -111,13 +114,17 @@ public abstract class Command implements CommandExecutor {
         if(cooldownMap.get(uuid) == null) return false;
         long timeLeft = System.currentTimeMillis() - cooldownMap.get(uuid);
 
-        return TimeUnit.MILLISECONDS.toSeconds(timeLeft) >= cooldown;
+        return TimeUnit.MILLISECONDS.toSeconds(timeLeft) < cooldown;
     }
 
     //TODO: Display time remaining
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, org.bukkit.command.@NotNull Command command, @NotNull String label, @NotNull String[] args){
+        if(!enabled){
+            sendMessage(sender, ChatColor.RED + "This command is disabled.");
+            return true;
+        }
         if(sender instanceof Player){
             UUID uuid = ((Player) sender).getUniqueId();
 
@@ -125,8 +132,13 @@ public abstract class Command implements CommandExecutor {
                 sendMessage(sender, ChatColor.RED + "You need to wait before doing this command again");
             }else{
                 handleCommand(sender, args);
+                if(sender.hasPermission("swissknife.bypass.cooldown")){
+                    return true;
+                }
                 setCooldown(uuid);
             }
+        }else{
+            handleCommand(sender, args);
         }
         return true;
     }

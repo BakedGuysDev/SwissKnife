@@ -29,7 +29,8 @@ public class RankUtil {
 
     private static final VotingPluginHook votingPluginHook = new VotingPluginHook();
 
-    public static void promoteIfEligible(@NotNull Player player){
+    public static boolean promoteIfEligible(@NotNull Player player){
+        boolean promoted = false;
         //Name "PLAY_ONE_MINUTE" is missleading. It's actually in ticks.
         int pt = player.getStatistic(Statistic.PLAY_ONE_MINUTE);
         final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -37,12 +38,14 @@ public class RankUtil {
         if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).newfagHours.get()) && !player.hasPermission("egirls.rank.newfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add newfag";
             Bukkit.dispatchCommand(console, command);
+            promoted = true;
         }
 
         if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).midfagHours.get()) && !player.hasPermission("egirls.rank.vet")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add veteran";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GREEN + " reached " + ChatColor.YELLOW + "MidFag" + ChatColor.GREEN + "!");
+            promoted = true;
         }
 
         if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).oldfagHours.get()) && !player.hasPermission("egirls.rank.oldfag")){ //Hours to ticks
@@ -50,9 +53,10 @@ public class RankUtil {
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GREEN + " reached " + ChatColor.RED + "OldFag" + ChatColor.GREEN + "!");
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 100, 0);
+            promoted = true;
         }
 
-        if(!Hooks.get().isActive(VotingPluginHook.class)) return;
+        if(!Hooks.get().isActive(VotingPluginHook.class)) return promoted;
         if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).elderfagHours.get()) && VpUserManager.getVotes(player) >= Modules.get().get(Ranks.class).elderfagVotes.get() && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add legend";
             Bukkit.dispatchCommand(console, command);
@@ -60,6 +64,7 @@ public class RankUtil {
             for(Player p : Bukkit.getServer().getOnlinePlayers()){
                 p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 100, 0);
             }
+            promoted = true;
         }
 
         if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).boomerfagHours.get()) && VpUserManager.getVotes(player) >= Modules.get().get(Ranks.class).boomerfagHours.get() && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
@@ -69,7 +74,9 @@ public class RankUtil {
             for(Player p : Bukkit.getServer().getOnlinePlayers()){
                 p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.PLAYERS, 100, 0);
             }
+            promoted = true;
         }
+        return promoted;
     }
 
     public static int getTicksFromHours(int hours){

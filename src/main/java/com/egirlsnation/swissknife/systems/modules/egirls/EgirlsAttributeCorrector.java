@@ -52,7 +52,7 @@ public class EgirlsAttributeCorrector extends Module {
 
     private final SettingGroup sgDraconite = settings.createGroup("draconite-items");
 
-    private final Setting<Boolean> correctDraconite = sgAncient.add(new BoolSetting.Builder()
+    private final Setting<Boolean> correctDraconite = sgDraconite.add(new BoolSetting.Builder()
             .name("correct-draconite-attributes")
             .defaultValue(true)
             .build()

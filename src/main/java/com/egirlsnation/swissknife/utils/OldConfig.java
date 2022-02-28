@@ -222,7 +222,7 @@ public class OldConfig {
     public long elytraTimeout = 5000;
 
     /*
-     * Jihads config options //TODO: Test new out of spawn radius
+     * Jihads config options
      */
 
     @ConfigValue("jihads.enabled")
@@ -376,7 +376,7 @@ public class OldConfig {
     @ConfigValue("chat.coords.replaceWith") //Done  - Tested
     public String coordsReplace = "&bWorld: &f%player_world% &eX:&f%player_x% &eY:&f%player_y% &eZ:&f%player_z%";
 
-    @ConfigValue("chat.coords.replaceInCommands") //TODO: Test in commands
+    @ConfigValue("chat.coords.replaceInCommands")
     public boolean coordsCommandsEnabled = true;
 
     @ConfigValue("chat.coords.commands")
@@ -415,7 +415,7 @@ public class OldConfig {
     @ConfigValue("egirlsnation.ranksEnabled") //Done
     public boolean ranksEnabled = false;
 
-    @ConfigValue("egirlsnation.refreshrankCmdCooldown") //TODO
+    @ConfigValue("egirlsnation.refreshrankCmdCooldown")
     public int REFRESHRANK_COOLDOWN = 60;
 
     @ConfigValue("egirlsnation.newfagHours")

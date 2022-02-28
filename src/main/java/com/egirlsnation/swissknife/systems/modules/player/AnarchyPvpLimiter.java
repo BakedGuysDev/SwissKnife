@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
+import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.BoolSetting;
 import com.egirlsnation.swissknife.settings.IntSetting;
 import com.egirlsnation.swissknife.settings.Setting;
@@ -29,6 +30,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,7 +77,7 @@ public class AnarchyPvpLimiter extends Module {
             .build()
     );
 
-    private final Setting<Integer> anchorDelay = sgCrystal.add(new IntSetting.Builder()
+    private final Setting<Integer> anchorDelay = sgAnchor.add(new IntSetting.Builder()
             .name("delay")
             .description("How many miliseconds before exploding another anchor")
             .defaultValue(200)
@@ -84,14 +86,14 @@ public class AnarchyPvpLimiter extends Module {
 
     private final SettingGroup sgBed = settings.createGroup("beds");
 
-    private final Setting<Boolean> limitBeds = sgCrystal.add(new BoolSetting.Builder()
+    private final Setting<Boolean> limitBeds = sgBed.add(new BoolSetting.Builder()
             .name("enabled")
             .description("If the plugin should limit how fast can player explode beds")
             .defaultValue(true)
             .build()
     );
 
-    private final Setting<Integer> bedDelay = sgCrystal.add(new IntSetting.Builder()
+    private final Setting<Integer> bedDelay = sgBed.add(new IntSetting.Builder()
             .name("delay")
             .description("How many miliseconds before exploding another bed")
             .defaultValue(200)
@@ -133,27 +135,27 @@ public class AnarchyPvpLimiter extends Module {
         if(!isEnabled()) return;
         if(!e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
         if(e.getClickedBlock() == null) return;
-        if(limitAnchors.get()){
-            if(!e.getClickedBlock().getType().equals(Material.RESPAWN_ANCHOR)) return;
-            if(e.getClickedBlock().getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
 
-            Player player = (Player) e.getPlayer();
+        if(limitAnchors.get() && e.getClickedBlock().getType().equals(Material.RESPAWN_ANCHOR) && !e.getClickedBlock().getWorld().getEnvironment().equals(World.Environment.NETHER)){
+            Player player = e.getPlayer();
             UUID uuid = player.getUniqueId();
 
-            RespawnAnchor anchor = (RespawnAnchor) e.getClickedBlock();
-            if((anchor.getMaximumCharges() - 1) == anchor.getCharges()){
+            RespawnAnchor anchor = (RespawnAnchor) e.getClickedBlock().getBlockData();
+            if(canAnchorExplode(anchor, e.getHand(), player)){
                 if(!anchorMap.containsKey(uuid)){
                     anchorMap.put(uuid, System.currentTimeMillis());
                 }else{
                     long timeLeft = System.currentTimeMillis() - anchorMap.get(uuid);
                     if(timeLeft < anchorDelay.get()){
                         e.setCancelled(true);
+                        SwissKnife.swissLogger.debug("prevented anchor");
                     }else{
                         anchorMap.put(uuid, System.currentTimeMillis());
                     }
                 }
             }
         }
+
 
         if(limitBeds.get()){
             if(!ItemUtil.isBed(e.getClickedBlock())) return;
@@ -173,6 +175,13 @@ public class AnarchyPvpLimiter extends Module {
                 }
             }
         }
+    }
+
+    private boolean canAnchorExplode(RespawnAnchor anchor, EquipmentSlot hand, Player player){
+        if(anchor.getCharges() == 0) return false;
+        if(anchor.getCharges() == 4) return true;
+        if(player.getInventory().getItem(hand) == null) return true;
+        return !player.getInventory().getItem(hand).getType().equals(Material.GLOWSTONE);
     }
 
     @EventHandler

@@ -40,11 +40,13 @@ public class SwissPlayer {
             featureStates.put(feature, true);
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
-            Map<SwissFeature, Boolean> sqlFeatureMap = MySQL.get().getPlayerDataDriver().getFeatureMap(uuid);
-            featureStates.putAll(sqlFeatureMap);
-            loadedFeatureData = true;
-        });
+        if(MySQL.get().isConnected()){
+            Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+                Map<SwissFeature, Boolean> sqlFeatureMap = MySQL.get().getPlayerDataDriver().getFeatureMap(uuid);
+                featureStates.putAll(sqlFeatureMap);
+                loadedFeatureData = true;
+            });
+        }
     }
 
     public static SwissPlayer getSwissPlayer(Player player){

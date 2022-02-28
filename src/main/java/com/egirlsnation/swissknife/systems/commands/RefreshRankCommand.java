@@ -30,6 +30,11 @@ public class RefreshRankCommand extends Command {
             sendMessage(sender, ChatColor.RED + "You can't do this command m8.");
             return;
         }
-        RankUtil.promoteIfEligible((Player) sender);
+        boolean promoted = RankUtil.promoteIfEligible((Player) sender);
+        if(promoted){
+            sendMessage(sender, ChatColor.GREEN + "You've been promoted!");
+        }else{
+            sendMessage(sender, ChatColor.GOLD + "Didn't find any rank you could be promoted to.");
+        }
     }
 }

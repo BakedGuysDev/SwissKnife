@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
 public class ToggleItemAbilityCommand extends Command {
 
     public ToggleItemAbilityCommand(){
-        super("toggle-ability-command");
+        super("toggle-item-ability");
     }
 
     @Override
@@ -31,6 +31,13 @@ public class ToggleItemAbilityCommand extends Command {
             return;
         }
 
-        SwissPlayer.getSwissPlayer((Player) sender).toggleFeature(SwissPlayer.SwissFeature.DRACONITE_ABILITIES);
+        SwissPlayer swissPlayer = SwissPlayer.getSwissPlayer((Player) sender);
+        boolean hadEnabled = swissPlayer.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES);
+        swissPlayer.toggleFeature(SwissPlayer.SwissFeature.DRACONITE_ABILITIES);
+        if(hadEnabled){
+            sendMessage(sender, ChatColor.RED + "Disabled your draconite abilities");
+        }else{
+            sendMessage(sender, ChatColor.GREEN + "Enabled your draconite abilities");
+        }
     }
 }
