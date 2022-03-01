@@ -38,7 +38,7 @@ import static org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE;
 import static org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED;
 
 public class EgirlsAttributeCorrector extends Module {
-    public EgirlsAttributeCorrector(){ //TODO: Test
+    public EgirlsAttributeCorrector(){
         super(Categories.EgirlsNation, "egirls-attribute-corrector", "Attribute corrector for Egirls Nation's custom items");
     }
 
@@ -61,16 +61,16 @@ public class EgirlsAttributeCorrector extends Module {
     @EventHandler
     private void onInventoryOpen(InventoryOpenEvent e){
         if(!isEnabled()) return;
+        if(e.getPlayer().isOp()) return;
         scanAndCorrectMetasInInv(e.getInventory());
     }
 
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e){
         if(!isEnabled()) return;
+        if(e.getWhoClicked().isOp()) return;
         if(e.getClickedInventory() == null) return;
-        if(scanAndCorrectMetasInInv(e.getClickedInventory())){
-            e.setCancelled(true);
-        }
+        scanAndCorrectMetasInInv(e.getClickedInventory());
 
     }
 
@@ -108,6 +108,7 @@ public class EgirlsAttributeCorrector extends Module {
     @EventHandler
     private void onPlayerPickup(EntityPickupItemEvent e){
         if(!isEnabled()) return;
+        if(e.getEntity().isOp()) return;
         if(removeAncient.get()){
             if(ItemUtil.isAncientToolOrWeapon(e.getItem().getItemStack())){
                 ItemMeta newMeta = getReducedAncientMeta(e.getItem().getItemStack().getItemMeta());
@@ -126,7 +127,6 @@ public class EgirlsAttributeCorrector extends Module {
             if(ItemUtil.isDraconiteSword(e.getItem().getItemStack())){
                 ItemMeta newMeta = getReducedDraconiteSwordMeta(e.getItem().getItemStack().getItemMeta());
                 setNewMeta(e.getItem(), newMeta);
-
             }
         }
     }

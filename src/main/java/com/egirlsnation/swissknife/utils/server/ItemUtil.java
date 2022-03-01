@@ -251,6 +251,8 @@ public class ItemUtil {
     }
 
     public static boolean isAncientToolOrWeapon(ItemStack item){
+        if(item == null) return false;
+        if(item.getItemMeta() == null) return false;
         ItemMeta meta = item.getItemMeta();
         if(meta == null) return false;
         if(!meta.hasLore()) return false;

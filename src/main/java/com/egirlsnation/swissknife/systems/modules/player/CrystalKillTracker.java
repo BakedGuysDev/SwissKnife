@@ -16,6 +16,8 @@ import com.destroystokyo.paper.event.server.ServerTickEndEvent;
 import com.egirlsnation.swissknife.events.PlayerCrystalKillEvent;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.systems.sql.MySQL;
+import org.bukkit.Bukkit;
 import org.bukkit.Statistic;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
@@ -114,6 +116,11 @@ public class CrystalKillTracker extends Module {
                 exploder.setStatistic(Statistic.PLAYER_KILLS, (exploder.getStatistic(Statistic.PLAYER_KILLS) + 1));
 
                 PlayerCrystalKillEvent event = new PlayerCrystalKillEvent(exploder, player, attacker);
+                Bukkit.getPluginManager().callEvent(event);
+
+                if(MySQL.get().isConnected()){
+                    MySQL.get().getPlayerStatsDriver().increaseCombatLogAsync(exploder.getUniqueId());
+                }
             }
         }
     }

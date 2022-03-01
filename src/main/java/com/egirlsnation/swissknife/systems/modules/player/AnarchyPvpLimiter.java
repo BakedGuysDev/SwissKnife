@@ -12,7 +12,6 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
-import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.BoolSetting;
 import com.egirlsnation.swissknife.settings.IntSetting;
 import com.egirlsnation.swissknife.settings.Setting;
@@ -148,7 +147,6 @@ public class AnarchyPvpLimiter extends Module {
                     long timeLeft = System.currentTimeMillis() - anchorMap.get(uuid);
                     if(timeLeft < anchorDelay.get()){
                         e.setCancelled(true);
-                        SwissKnife.swissLogger.debug("prevented anchor");
                     }else{
                         anchorMap.put(uuid, System.currentTimeMillis());
                     }
@@ -161,7 +159,7 @@ public class AnarchyPvpLimiter extends Module {
             if(!ItemUtil.isBed(e.getClickedBlock())) return;
             if(e.getClickedBlock().getWorld().getEnvironment().equals(World.Environment.NORMAL)) return;
 
-            Player player = (Player) e.getPlayer();
+            Player player = e.getPlayer();
             UUID uuid = player.getUniqueId();
 
             if(!bedMap.containsKey(uuid)){
