@@ -103,9 +103,9 @@ public class DraconiteItems extends Module {
 
     private final SettingGroup sgTotem = settings.createGroup("totem");
 
-    public final Setting<Boolean> ignoreTotemAttribute = sgTotem.add(new BoolSetting.Builder()
-            .name("ignore-totem-attribute")
-            .defaultValue(true)
+    public final Setting<Integer> additionalHp = sgTotem.add(new IntSetting.Builder()
+            .name("hp-amount")
+            .defaultValue(1)
             .build()
     );
 
@@ -252,7 +252,7 @@ public class DraconiteItems extends Module {
 
     private void handleEvokerDrops(Entity entity, Player player, int chance){
         if(chance >= 3) return;
-        entity.getWorld().dropItemNaturally(entity.getLocation(), ItemUtil.getPopbobTotem());
+        entity.getWorld().dropItemNaturally(entity.getLocation(), ItemUtil.getPopbobTotem(additionalHp.get()));
     }
 
     private void handleShulkerDrops(Entity entity, Player player, int chance){

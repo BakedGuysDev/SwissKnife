@@ -80,8 +80,10 @@ public class EgirlsAttributeCorrector extends Module {
             if(removeAncient.get()){
                 if(ItemUtil.isAncientToolOrWeapon(item)){
                     ItemMeta newMeta = getReducedAncientMeta(item.getItemMeta());
-                    item.setItemMeta(newMeta);
-                    found = true;
+                    if(newMeta != null){
+                        item.setItemMeta(newMeta);
+                        found = true;
+                    }
                     break;
                 }
             }
@@ -141,8 +143,11 @@ public class EgirlsAttributeCorrector extends Module {
 
     public ItemMeta getReducedAncientMeta(ItemMeta meta){
         if(meta.getAttributeModifiers() == null) return null;
+        if(meta.getAttributeModifiers().isEmpty()) return null;
 
-        meta.setAttributeModifiers(null);
+        for(Attribute attribute : meta.getAttributeModifiers().keys()){
+            meta.removeAttributeModifier(attribute);
+        }
 
         return meta;
     }

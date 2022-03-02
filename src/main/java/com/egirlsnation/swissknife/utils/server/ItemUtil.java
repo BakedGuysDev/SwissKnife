@@ -152,12 +152,12 @@ public class ItemUtil {
         return meta.getLore().contains("§cDraconite Crystal");
     }
 
-    public static ItemStack getPopbobTotem() {
+    public static ItemStack getPopbobTotem(int hp) {
         ItemStack item = new ItemStack(Material.TOTEM_OF_UNDYING);
         ItemMeta meta = item.getItemMeta();
         meta.setLore(Arrays.asList("", "§cPopbob's Totem", "", "Legends say that Popbob himself shoved this totem up his ass"));
-        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", 2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.OFF_HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", hp, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", hp, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.OFF_HAND));
         meta.setDisplayName(ChatColor.RED + "Totem of Popbob");
         meta.addEnchant(Enchantment.VANISHING_CURSE, 1, true);
         item.setItemMeta(meta);
