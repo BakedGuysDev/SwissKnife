@@ -172,6 +172,7 @@ public class IllegalArmorAttributes extends Module {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void onArmorChange(PlayerArmorChangeEvent e){
+        info("Event fired");
         if(!isEnabled()) return;
         if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()) return;
 
@@ -181,11 +182,30 @@ public class IllegalArmorAttributes extends Module {
         if(!ItemUtil.isArmorPiece(newItem)) return;
 
         if(isArmorWithIllegalAttributes(newItem)){
-            removeArmorAttributes(newItem);
+            ItemStack item = newItem.clone();
+            removeArmorAttributes(item);
             if(customAttributes.get()){
-                addCustomArmorAttributes(newItem);
+                addCustomArmorAttributes(item);
             }
             Player player = e.getPlayer();
+            switch(e.getSlotType()){
+                case FEET:{
+                    player.getInventory().setBoots(item);
+                    break;
+                }
+                case LEGS:{
+                    player.getInventory().setLeggings(item);
+                    break;
+                }
+                case CHEST:{
+                    player.getInventory().setChestplate(item);
+                    break;
+                }
+                case HEAD:{
+                    player.getInventory().setHelmet(item);
+                    break;
+                }
+            }
             if(alertPlayers.get()) sendMessage(player, message.get());
             if(log.get())
                 info("Illegal armor attributes found in an inventory clicked by " + player.getName() + " at: " + LocationUtil.getLocationString(player.getLocation()));
