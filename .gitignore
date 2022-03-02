@@ -26,6 +26,11 @@ hs_err_pid*
 # IntelliJ
 out/
 
+#eclipse
+.classpath
+.project
+.settings
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
