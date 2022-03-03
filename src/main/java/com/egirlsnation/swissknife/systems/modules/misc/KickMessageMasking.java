@@ -38,13 +38,14 @@ public class KickMessageMasking extends Module {
     @EventHandler
     private void playerQuit(PlayerQuitEvent e){
         if(!isEnabled()) return;
-
+        //TODO: Test
         if(e.getReason().equals(PlayerQuitEvent.QuitReason.KICKED)){
-            if(e.getQuitMessage() == null || e.getQuitMessage().isBlank()){
+            if(e.getQuitMessage() != null && !e.getQuitMessage().isBlank()){
                 if(e.getQuitMessage().startsWith("Swissknife ")){
                     e.setQuitMessage(e.getQuitMessage().replaceAll("Swissknife ", ""));
                     return;
                 }
+            }else{
                 e.setQuitMessage(kickMsg.get());
             }
 

@@ -172,7 +172,6 @@ public class IllegalArmorAttributes extends Module {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void onArmorChange(PlayerArmorChangeEvent e){
-        info("Event fired");
         if(!isEnabled()) return;
         if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()) return;
 

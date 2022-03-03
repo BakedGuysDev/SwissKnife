@@ -51,7 +51,7 @@ public class DraconiteItems extends Module {
     private final AbilityCooldownHandler cooldownHandler;
     private final DraconiteAbilityHandler abilityHandler;
 
-    public DraconiteItems(){ //TODO: Fix default attributes
+    public DraconiteItems(){
         super(Categories.EgirlsNation, "draconite-items", "Adds various draconite items");
 
         cooldownHandler = new AbilityCooldownHandler();
@@ -103,7 +103,15 @@ public class DraconiteItems extends Module {
 
     private final SettingGroup sgTotem = settings.createGroup("totem");
 
-    public final Setting<Integer> additionalHp = sgTotem.add(new IntSetting.Builder()
+    public final Setting<Integer> additionalTotemHp = sgTotem.add(new IntSetting.Builder()
+            .name("hp-amount")
+            .defaultValue(1)
+            .build()
+    );
+
+    private final SettingGroup sgCrystal = settings.createGroup("crystal");
+
+    public final Setting<Integer> additionalCrystalHp = sgCrystal.add(new IntSetting.Builder()
             .name("hp-amount")
             .defaultValue(1)
             .build()
@@ -247,12 +255,12 @@ public class DraconiteItems extends Module {
 
     private void handleEndermanDrops(Entity entity, Player player, int chance){
         if(chance > 3) return;
-        entity.getWorld().dropItemNaturally(entity.getLocation(), ItemUtil.getDraconiteCrystal());
+        entity.getWorld().dropItemNaturally(entity.getLocation(), ItemUtil.getDraconiteCrystal(additionalCrystalHp.get()));
     }
 
     private void handleEvokerDrops(Entity entity, Player player, int chance){
         if(chance >= 3) return;
-        entity.getWorld().dropItemNaturally(entity.getLocation(), ItemUtil.getPopbobTotem(additionalHp.get()));
+        entity.getWorld().dropItemNaturally(entity.getLocation(), ItemUtil.getPopbobTotem(additionalTotemHp.get()));
     }
 
     private void handleShulkerDrops(Entity entity, Player player, int chance){

@@ -295,7 +295,7 @@ public class OldConfig {
     public int lowPtThreshold = 30;
 
     /*
-     * Shitlist config options //Done //TODO: Test
+     * Shitlist config options
      */
 
     @ConfigValue("shitlist.enable")
@@ -317,7 +317,7 @@ public class OldConfig {
     public int replaceChance = 50;
 
     /*
-     * Command cooldowns options //TODO
+     * Command cooldowns options
      */
     @ConfigValue("commandCooldowns.enable")
     public boolean enableCooldowns = true;

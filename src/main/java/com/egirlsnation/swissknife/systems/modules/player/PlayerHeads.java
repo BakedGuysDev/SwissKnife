@@ -317,7 +317,7 @@ public class PlayerHeads extends Module {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta= (SkullMeta) Bukkit.getItemFactory().getItemMeta(Material.PLAYER_HEAD);
         meta.setOwningPlayer(victim);
-        meta.setDisplayName(ChatColor.translateAlternateColorCodes('§', itemName.get()));
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('§', itemName.get().replaceAll("%player%", victim.getName())));
 
         meta.setLore(lore);
         skull.setItemMeta(meta);

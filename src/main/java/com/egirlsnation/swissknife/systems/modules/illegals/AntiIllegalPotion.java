@@ -16,6 +16,8 @@ import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
+import com.egirlsnation.swissknife.utils.server.LocationUtil;
+import io.papermc.paper.event.block.BlockPreDispenseEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -31,7 +33,7 @@ public class AntiIllegalPotion extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Boolean> remove = sgGeneral.add(new BoolSetting.Builder()
-            .name("fix")
+            .name("remove")
             .description("If the plugin should remove the potions instead of fixing them")
             .defaultValue(false)
             .build()
@@ -72,9 +74,6 @@ public class AntiIllegalPotion extends Module {
             .defaultValue(false)
             .build()
     );
-
-    //TODO: Dispenser??
-
 
     @EventHandler
     private void playerInteract(PlayerInteractEvent e){
@@ -155,6 +154,76 @@ public class AntiIllegalPotion extends Module {
                         info("Player " + e.getPlayer().getName() + " tried to use an illegal potion");
                     }
                     e.getItem().setItemMeta(meta);
+                }
+            }
+
+        }
+    }
+
+    @EventHandler
+    private void dispenserEvent(BlockPreDispenseEvent e){
+        if(!isEnabled()) return;
+        if(e.getItemStack() == null) return;
+        if(e.getItemStack().getType().equals(Material.POTION) || e.getItemStack().getType().equals(Material.SPLASH_POTION) || e.getItemStack().getType().equals(Material.LINGERING_POTION)){
+            PotionMeta meta = (PotionMeta) e.getItemStack().getItemMeta();
+
+            if(meta.hasCustomEffects()){
+                for(PotionEffect effect : meta.getCustomEffects()){
+                    if(!ItemUtil.isLegitPotionEffect(effect.getType())){
+                        if(remove.get()){
+                            e.setCancelled(true);
+                            e.getItemStack().setAmount(0);
+                            if(log.get()){
+                                info("Dispenser at  " + LocationUtil.getLocationString(e.getBlock().getLocation()) + " tried to dispense an illegal potion");
+                            }
+                            return;
+                        }
+                        meta.removeCustomEffect(effect.getType());
+                        continue;
+                    }
+
+
+                    int duration = effect.getDuration();
+                    int amplifier = effect.getAmplifier();
+                    boolean changed = false;
+
+                    if(effect.getAmplifier() > ItemUtil.getMaxPotionAmplifier(effect.getType())){
+                        if(remove.get()){
+                            e.setCancelled(true);
+                            e.getItemStack().setAmount(0);
+                            if(log.get()){
+                                info("Dispenser at  " + LocationUtil.getLocationString(e.getBlock().getLocation()) + " tried to dispense an illegal potion");
+                            }
+                            return;
+                        }
+                        meta.removeCustomEffect(effect.getType());
+                        amplifier = ItemUtil.getMaxPotionAmplifier(effect.getType());
+                        changed = true;
+                    }
+
+                    if(duration > maxDuration.get() * 60 * 20){
+                        if(remove.get()){
+                            e.setCancelled(true);
+                            e.getItemStack().setAmount(0);
+                            if(log.get()){
+                                info("Dispenser at  " + LocationUtil.getLocationString(e.getBlock().getLocation()) + " tried to dispense an illegal potion");
+                            }
+                            return;
+                        }
+                        duration = maxDuration.get() * 60 * 20;
+                        changed = true;
+                    }
+
+                    if(changed){
+                        PotionEffect potionEffect = new PotionEffect(effect.getType(), duration, amplifier);
+                        meta.addCustomEffect(potionEffect, true);
+                    }
+                }
+                if(!meta.equals(e.getItemStack().getItemMeta())){
+                    if(log.get()){
+                        info("Dispenser at  " + LocationUtil.getLocationString(e.getBlock().getLocation()) + " tried to dispense an illegal potion");
+                    }
+                    e.getItemStack().setItemMeta(meta);
                 }
             }
 

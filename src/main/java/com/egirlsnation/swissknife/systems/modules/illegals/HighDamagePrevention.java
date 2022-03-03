@@ -12,6 +12,7 @@
 
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
+import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
@@ -39,6 +40,13 @@ public class HighDamagePrevention extends Module {
     private final Setting<Boolean> redirect = sgGeneral.add(new BoolSetting.Builder()
             .name("redirect")
             .description("If the plugin should redirect the damage to the player who dealt it")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Boolean> kill = sgGeneral.add(new BoolSetting.Builder()
+            .name("kill")
+            .description("If the player should get killed when he bypasses the damage limit")
             .defaultValue(true)
             .build()
     );
@@ -74,8 +82,10 @@ public class HighDamagePrevention extends Module {
     @EventHandler
     private void onEntityDamageByEntity(EntityDamageByEntityEvent e){
         if(!isEnabled()) return;
+
         if(e.getDamager() instanceof Player){
             if(e.getDamager().hasPermission("swissknife.bypass.illegals") && bypass.get()){
+                SwissKnife.swissLogger.debug("Bypassed");
                 return;
             }
 
@@ -84,7 +94,10 @@ public class HighDamagePrevention extends Module {
             if(e.getDamage() > threshold.get()){
                 e.setCancelled(true);
                 if(redirect.get()){
-                    player.damage(e.getDamage());
+                    player.damage(e.getFinalDamage());
+                }
+                if(kill.get()){
+                    PlayerUtil.killPlayer(player);
                 }
                 if(kick.get()){
                     PlayerUtil.kickPlayer(player, ChatColor.translateAlternateColorCodes('§', kickMessage.get()));

@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED;
+
 public class ItemUtil {
 
     private static final List<PotionEffectType> nonPotionList = ImmutableList.<PotionEffectType>builder().add(
@@ -130,12 +132,12 @@ public class ItemUtil {
         return !nonPotionList.contains(effectType);
     }
 
-    public static ItemStack getDraconiteCrystal() {
+    public static ItemStack getDraconiteCrystal(int health) {
         ItemStack item = new ItemStack(Material.END_CRYSTAL);
         ItemMeta meta = item.getItemMeta();
         meta.setLore(Arrays.asList("", "§cDraconite Crystal", "", "Legends say that it's one of those crystals from the top of the End towers"));
-        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.OFF_HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", health, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", health, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.OFF_HAND));
         meta.setDisplayName(ChatColor.RED + "Draconite Crystal");
         item.setItemMeta(meta);
         return item;
@@ -180,7 +182,8 @@ public class ItemUtil {
         ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
         ItemMeta meta = item.getItemMeta();
         meta.setLore(Arrays.asList("", "§cDraconite Weapon", "", "Legends say that this exact sword was used to kill the first dragon"));
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 11, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "attack_speed", -2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         meta.setDisplayName(ChatColor.RED + "Draconite Sword");
         item.setItemMeta(meta);
 
@@ -202,7 +205,8 @@ public class ItemUtil {
         ItemStack item = new ItemStack(Material.NETHERITE_AXE);
         ItemMeta meta = item.getItemMeta();
         meta.setLore(Arrays.asList("", "§cDraconite Weapon", "", "Legends say that this exact axe was used to decapitate the first dragon"));
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 13, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "attack_speed", -2.5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         meta.setDisplayName(ChatColor.RED + "Draconite Axe");
         item.setItemMeta(meta);
 

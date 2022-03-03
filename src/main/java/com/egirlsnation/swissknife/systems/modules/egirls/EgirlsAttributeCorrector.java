@@ -17,6 +17,7 @@ import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import com.google.common.collect.Multimap;
 import org.bukkit.attribute.Attribute;
@@ -34,13 +35,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Collection;
 import java.util.UUID;
 
-import static org.bukkit.attribute.Attribute.GENERIC_ATTACK_DAMAGE;
-import static org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED;
+import static org.bukkit.attribute.Attribute.*;
 
 public class EgirlsAttributeCorrector extends Module {
     public EgirlsAttributeCorrector(){
         super(Categories.EgirlsNation, "egirls-attribute-corrector", "Attribute corrector for Egirls Nation's custom items");
     }
+
+    //TODO: This is shit. Multimaps suck. Improve.
 
     private final SettingGroup sgAncient = settings.createGroup("ancient-items");
 
@@ -98,6 +100,18 @@ public class EgirlsAttributeCorrector extends Module {
 
                 if(ItemUtil.isDraconiteSword(item)){
                     ItemMeta newMeta = getReducedDraconiteSwordMeta(item.getItemMeta());
+                    item.setItemMeta(newMeta);
+                    found = true;
+                    break;
+                }
+                if(ItemUtil.isDraconiteCrystal(item)){
+                    ItemMeta newMeta = getReducedDraconiteCrystalMeta(item.getItemMeta());
+                    item.setItemMeta(newMeta);
+                    found = true;
+                    break;
+                }
+                if(ItemUtil.isPopbobTotem(item)){
+                    ItemMeta newMeta = getReducedDraconiteTotemMeta(item.getItemMeta());
                     item.setItemMeta(newMeta);
                     found = true;
                     break;
@@ -204,7 +218,7 @@ public class EgirlsAttributeCorrector extends Module {
                 meta.removeAttributeModifier(GENERIC_ATTACK_SPEED);
                 meta.removeAttributeModifier(GENERIC_ATTACK_DAMAGE);
                 meta.addAttributeModifier(GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "attack_speed", -2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-                meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+                meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 3, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
                 return meta;
             }
         }else{
@@ -217,7 +231,52 @@ public class EgirlsAttributeCorrector extends Module {
             meta.removeAttributeModifier(attribute);
         }
         meta.addAttributeModifier(GENERIC_ATTACK_SPEED, new AttributeModifier(UUID.randomUUID(), "attack_speed", -2, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 9, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "attack_damage", 5, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        return meta;
+    }
+
+    private ItemMeta getReducedDraconiteTotemMeta(ItemMeta meta){
+        Multimap<Attribute, AttributeModifier> modifierMap = meta.getAttributeModifiers();
+        if(modifierMap == null) return null;
+
+        if(modifierMap.size() == 2){
+            Multimap<Attribute, AttributeModifier> offHandAttributes = meta.getAttributeModifiers(EquipmentSlot.OFF_HAND);
+            Multimap<Attribute, AttributeModifier> mainHandAttributes = meta.getAttributeModifiers(EquipmentSlot.HAND);
+            if(offHandAttributes == null || mainHandAttributes == null){
+                return getCleanDraconiteTotemMeta(meta, modifierMap);
+            }
+            if(!offHandAttributes.containsKey(GENERIC_MAX_HEALTH) || !mainHandAttributes.containsKey(GENERIC_MAX_HEALTH)){
+                return getCleanDraconiteTotemMeta(meta, modifierMap);
+            }
+            if(offHandAttributes.keys().size() > 1 || mainHandAttributes.keys().size() > 1){
+                return getCleanDraconiteTotemMeta(meta, modifierMap);
+            }else{
+                meta.removeAttributeModifier(GENERIC_MAX_HEALTH);
+                meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", Modules.get().get(DraconiteItems.class).additionalTotemHp.get(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+                meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", Modules.get().get(DraconiteItems.class).additionalTotemHp.get(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.OFF_HAND));
+                return meta;
+            }
+        }else{
+            return getCleanDraconiteSwordMeta(meta, modifierMap);
+        }
+    }
+
+    private ItemMeta getCleanDraconiteTotemMeta(ItemMeta meta, Multimap<Attribute, AttributeModifier> modifierMap){
+        for(Attribute attribute : modifierMap.keys()){
+            meta.removeAttributeModifier(attribute);
+        }
+        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", Modules.get().get(DraconiteItems.class).additionalTotemHp.get(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier(UUID.randomUUID(), "max_health", Modules.get().get(DraconiteItems.class).additionalTotemHp.get(), AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.OFF_HAND));
+        return meta;
+    }
+
+    private ItemMeta getReducedDraconiteCrystalMeta(ItemMeta meta){
+        Multimap<Attribute, AttributeModifier> modifierMap = meta.getAttributeModifiers();
+        if(modifierMap == null) return null;
+        if(modifierMap.isEmpty()) return null;
+        for(Attribute attribute : modifierMap.keys()){
+            meta.removeAttributeModifier(attribute);
+        }
         return meta;
     }
 }

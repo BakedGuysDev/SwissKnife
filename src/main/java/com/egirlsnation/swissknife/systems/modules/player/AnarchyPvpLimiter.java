@@ -37,8 +37,6 @@ import java.util.UUID;
 
 public class AnarchyPvpLimiter extends Module {
 
-    //TODO: Test
-
     public AnarchyPvpLimiter(){
         super(Categories.Player, "anarchy-pvp-limiter", "Applies limits to certain anarchy pvp mechanics");
     }
