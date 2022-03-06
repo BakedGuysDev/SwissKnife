@@ -54,6 +54,7 @@ public class IllegalAttributes extends Module {
     );
 
     //TODO: Other events, vanilla attribute matching, logging, player alerts, testing
+    //TODO: Remove attributes from elytra + other items
 
     @EventHandler
     private void inventoryClick(InventoryClickEvent e){
@@ -61,6 +62,7 @@ public class IllegalAttributes extends Module {
         if(e.getClickedInventory() == null) return;
 
         for(ItemStack item : e.getClickedInventory()){
+            if(item == null) continue;
             if(item.getItemMeta() != null && item.getItemMeta().hasAttributeModifiers()){
                 List<Attribute> attributes = getSlotAttributes(item);
                 for(Attribute attribute : attributes){
@@ -79,6 +81,7 @@ public class IllegalAttributes extends Module {
             return;
         }
         for(ItemStack item : e.getInventory()){
+            if(item == null) continue;
             if(item.getItemMeta() != null && item.getItemMeta().hasAttributeModifiers()){
                 List<Attribute> attributes = getSlotAttributes(item);
                 for(Attribute attribute : attributes){
@@ -99,7 +102,7 @@ public class IllegalAttributes extends Module {
 
         ItemStack item = e.getItem().getItemStack();
 
-        if(item.getItemMeta() != null && item.getItemMeta().hasAttributeModifiers()){
+        if(item.hasItemMeta() && item.getItemMeta() != null && item.getItemMeta().hasAttributeModifiers()){
             List<Attribute> attributes = getSlotAttributes(item);
             for(Attribute attribute : attributes){
                 item.getItemMeta().removeAttributeModifier(attribute);

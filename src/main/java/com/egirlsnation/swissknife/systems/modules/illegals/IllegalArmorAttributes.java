@@ -27,6 +27,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -45,6 +46,20 @@ public class IllegalArmorAttributes extends Module {
     // General settings
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Boolean> removeFlags = sgGeneral.add(new BoolSetting.Builder()
+            .name("remove-item-flags")
+            .description("Removes item flags that hide things like attributes, durability, enchants, ect. This is silent.")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Boolean> removeUnbreakable = sgGeneral.add(new BoolSetting.Builder()
+            .name("remove-unbreakable-tags")
+            .description("Removes the unbreakable tag.")
+            .defaultValue(true)
+            .build()
+    );
 
     private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
             .name("bypass")
@@ -115,7 +130,7 @@ public class IllegalArmorAttributes extends Module {
 
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-    private void onInventoyClick(InventoryClickEvent e){
+    private void onInventoryClick(InventoryClickEvent e){
         if(!isEnabled()) return;
         if(e.getWhoClicked().hasPermission("swissknife.bypass.illegals") && bypass.get()) return;
 
@@ -127,11 +142,19 @@ public class IllegalArmorAttributes extends Module {
         for(ItemStack item : e.getClickedInventory().getContents()){
             if(!ItemUtil.isArmorPiece(item)) continue;
             if(isArmorWithIllegalAttributes(item)){
-                removeArmorAttributes(item);
+                resetToStockAttributes(item);
                 if(customAttributes.get()){
                     addCustomArmorAttributes(item);
                 }
                 found = true;
+            }
+            if(removeFlags.get() && hasItemFlags(item)){
+                item.removeItemFlags(ItemFlag.values());
+            }
+            if(removeUnbreakable.get() && item.hasItemMeta() && item.getItemMeta().isUnbreakable()){
+                ItemMeta meta = item.getItemMeta();
+                meta.setUnbreakable(false);
+                item.setItemMeta(meta);
             }
         }
         if(found){
@@ -157,7 +180,7 @@ public class IllegalArmorAttributes extends Module {
         if(!ItemUtil.isArmorPiece(picked)) return;
 
         if(isArmorWithIllegalAttributes(picked)){
-            removeArmorAttributes(picked);
+            resetToStockAttributes(picked);
             if(customAttributes.get()){
                 addCustomArmorAttributes(picked);
             }
@@ -167,6 +190,16 @@ public class IllegalArmorAttributes extends Module {
                 if(log.get())
                     info("Illegal armor attributes found in an inventory clicked by " + player.getName() + " at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));
             }
+        }
+
+        if(removeFlags.get() && hasItemFlags(picked)){
+            picked.removeItemFlags(ItemFlag.values());
+        }
+
+        if(removeUnbreakable.get() && picked.hasItemMeta() && picked.getItemMeta().isUnbreakable()){
+            ItemMeta meta = picked.getItemMeta();
+            meta.setUnbreakable(false);
+            picked.setItemMeta(meta);
         }
     }
 
@@ -182,33 +215,71 @@ public class IllegalArmorAttributes extends Module {
 
         if(isArmorWithIllegalAttributes(newItem)){
             ItemStack item = newItem.clone();
-            removeArmorAttributes(item);
+            resetToStockAttributes(item);
             if(customAttributes.get()){
                 addCustomArmorAttributes(item);
             }
-            Player player = e.getPlayer();
-            switch(e.getSlotType()){
-                case FEET:{
-                    player.getInventory().setBoots(item);
-                    break;
-                }
-                case LEGS:{
-                    player.getInventory().setLeggings(item);
-                    break;
-                }
-                case CHEST:{
-                    player.getInventory().setChestplate(item);
-                    break;
-                }
-                case HEAD:{
-                    player.getInventory().setHelmet(item);
-                    break;
-                }
+
+            if(removeFlags.get() && hasItemFlags(newItem)){
+                item.removeItemFlags(ItemFlag.values());
             }
+
+            if(removeUnbreakable.get() && item.hasItemMeta() && item.getItemMeta().isUnbreakable()){
+                item.getItemMeta().setUnbreakable(false);
+            }
+
+            Player player = e.getPlayer();
+            setNewArmor(player, item, e.getSlotType());
             if(alertPlayers.get()) sendMessage(player, message.get());
             if(log.get())
                 info("Illegal armor attributes found in an inventory clicked by " + player.getName() + " at: " + LocationUtil.getLocationString(player.getLocation()));
+            return;
         }
+
+        boolean changed = false;
+        ItemStack item = newItem.clone();
+        if(removeUnbreakable.get() && item.hasItemMeta() && item.getItemMeta().isUnbreakable()){
+            ItemMeta meta = item.getItemMeta();
+            meta.setUnbreakable(false);
+            item.setItemMeta(meta);
+            changed = true;
+        }
+        if(removeFlags.get() && hasItemFlags(newItem)){
+            item.removeItemFlags(ItemFlag.values());
+            changed = true;
+        }
+
+        if(changed) setNewArmor(e.getPlayer(), item, e.getSlotType());
+    }
+
+    private void setNewArmor(Player player, ItemStack item, PlayerArmorChangeEvent.SlotType slotType){
+        switch(slotType){
+            case FEET:{
+                player.getInventory().setBoots(item);
+                break;
+            }
+            case LEGS:{
+                player.getInventory().setLeggings(item);
+                break;
+            }
+            case CHEST:{
+                player.getInventory().setChestplate(item);
+                break;
+            }
+            case HEAD:{
+                player.getInventory().setHelmet(item);
+                break;
+            }
+        }
+    }
+
+    private boolean hasItemFlags(ItemStack item){
+        for(ItemFlag flag : ItemFlag.values()){
+            if(item.hasItemFlag(flag)){
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isArmorWithIllegalAttributes(ItemStack item){
@@ -242,11 +313,10 @@ public class IllegalArmorAttributes extends Module {
 
             return illegallyAttributed.get();
         }
-
         return true;
     }
 
-    private void removeArmorAttributes(ItemStack item){
+    private void resetToStockAttributes(ItemStack item){
         ItemMeta itemMeta = item.getItemMeta();
 
         List<Attribute> attributes = getItemAttributes(item);

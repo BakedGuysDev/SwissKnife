@@ -13,9 +13,11 @@
 package com.egirlsnation.swissknife.systems.modules.player;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.settings.IntSetting;
+import com.egirlsnation.swissknife.settings.Setting;
+import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -37,6 +39,16 @@ public class CombatCheck extends Module {
     public CombatCheck() {
         super(Categories.Player, "combat-check", "Provides combat check for various modules and commands");
     }
+
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Integer> combatTimeout = sgGeneral.add(new IntSetting.Builder()
+            .name("timeout")
+            .description("After how long is player not considered in-combat (in ms)")
+            .defaultValue(20000)
+            .min(1000)
+            .build()
+    );
 
     private static final Map<UUID, Long> combatMap = new HashMap<>();
     private static final Map<UUID, Long> elytraMap = new HashMap<>();
@@ -124,7 +136,7 @@ public class CombatCheck extends Module {
         if(!combatMap.containsKey(playerUUID)) return false;
 
         long timeDifference = System.currentTimeMillis() - combatMap.get(playerUUID);
-        if(timeDifference >= OldConfig.instance.combatTimeout){
+        if(timeDifference >= combatTimeout.get()){
             combatMap.remove(playerUUID);
             return false;
         }else{
@@ -132,6 +144,7 @@ public class CombatCheck extends Module {
         }
     }
 
+    /*
     public boolean hasElytraDisabled(Player player){
         UUID playerUUID = player.getUniqueId();
         if(!elytraMap.containsKey(playerUUID)) return false;
@@ -144,17 +157,19 @@ public class CombatCheck extends Module {
             return true;
         }
     }
+     */
 
     public long getRemainingCombatTime(Player player){
         UUID playerUUID = player.getUniqueId();
         if(!combatMap.containsKey(playerUUID)) return 0;
 
         long timeDifference = System.currentTimeMillis() - combatMap.get(playerUUID);
-        if(timeDifference >= OldConfig.instance.combatTimeout) return 0;
+        if(timeDifference >= combatTimeout.get()) return 0;
 
-        return TimeUnit.MILLISECONDS.toSeconds(OldConfig.instance.combatTimeout -timeDifference);
+        return TimeUnit.MILLISECONDS.toSeconds(combatTimeout.get() -timeDifference);
     }
 
+    /*
     public long getRemainingElytraTime(Player player){
         UUID playerUUID = player.getUniqueId();
         if(!elytraMap.containsKey(playerUUID)) return 0;
@@ -164,6 +179,6 @@ public class CombatCheck extends Module {
 
         return TimeUnit.MILLISECONDS.toSeconds(OldConfig.instance.elytraTimeout -timeDifference);
     }
-
+    */
 
 }
