@@ -17,7 +17,11 @@ import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.modules.egirls.EgirlsAttributeCorrector;
+import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import com.google.common.collect.Multimap;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
@@ -53,8 +57,18 @@ public class IllegalAttributes extends Module {
             .build()
     );
 
-    //TODO: Other events, vanilla attribute matching, logging, player alerts, testing
-    //TODO: Remove attributes from elytra + other items
+    private final SettingGroup sgElytra = settings.createGroup("elytra");
+
+    private final Setting<Boolean> elyKeepUnbreakable = sgElytra.add(new BoolSetting.Builder()
+            .name("ignore-unbreakable")
+            .description("Makes the plugin ignore the unbreakable tag on an elytra")
+            .defaultValue(true)
+            .build()
+    );
+
+
+
+    //TODO: logging, player alerts, testing
 
     @EventHandler
     private void inventoryClick(InventoryClickEvent e){
@@ -64,9 +78,17 @@ public class IllegalAttributes extends Module {
         for(ItemStack item : e.getClickedInventory()){
             if(item == null) continue;
             if(item.getItemMeta() != null && item.getItemMeta().hasAttributeModifiers()){
-                List<Attribute> attributes = getSlotAttributes(item);
-                for(Attribute attribute : attributes){
-                    item.getItemMeta().removeAttributeModifier(attribute);
+                if(hasIllegalAttributes(item)){
+                    ItemUtil.removeAttributes(item);
+                }
+                if(removeSlotAttributes.get()){
+                    removeSlotAttributes(item);
+                }
+                if(item.getItemMeta().isUnbreakable()){
+                    if(elyKeepUnbreakable.get() && item.getType().equals(Material.ELYTRA)){
+                        continue;
+                    }
+                    ItemUtil.removeUnbreakableTag(item);
                 }
             }
         }
@@ -83,9 +105,17 @@ public class IllegalAttributes extends Module {
         for(ItemStack item : e.getInventory()){
             if(item == null) continue;
             if(item.getItemMeta() != null && item.getItemMeta().hasAttributeModifiers()){
-                List<Attribute> attributes = getSlotAttributes(item);
-                for(Attribute attribute : attributes){
-                    item.getItemMeta().removeAttributeModifier(attribute);
+                if(hasIllegalAttributes(item)){
+                    ItemUtil.removeAttributes(item);
+                }
+                if(removeSlotAttributes.get()){
+                    removeSlotAttributes(item);
+                }
+                if(item.getItemMeta().isUnbreakable()){
+                    if(elyKeepUnbreakable.get() && item.getType().equals(Material.ELYTRA)){
+                        continue;
+                    }
+                    ItemUtil.removeUnbreakableTag(item);
                 }
             }
         }
@@ -103,13 +133,18 @@ public class IllegalAttributes extends Module {
         ItemStack item = e.getItem().getItemStack();
 
         if(item.hasItemMeta() && item.getItemMeta() != null && item.getItemMeta().hasAttributeModifiers()){
-            List<Attribute> attributes = getSlotAttributes(item);
-            for(Attribute attribute : attributes){
-                item.getItemMeta().removeAttributeModifier(attribute);
+            if(hasIllegalAttributes(item)){
+                ItemUtil.removeAttributes(item);
+            }
+            if(removeSlotAttributes.get()){
+                removeSlotAttributes(item);
+            }
+            if(item.getItemMeta().isUnbreakable()){
+                if(elyKeepUnbreakable.get() && !item.getType().equals(Material.ELYTRA)){
+                    ItemUtil.removeUnbreakableTag(item);
+                }
             }
         }
-
-        e.getItem().setItemStack(item); //IDK if it's necessary
     }
 
     public List<Attribute> getSlotAttributes(ItemStack item){
@@ -123,4 +158,23 @@ public class IllegalAttributes extends Module {
 
         return attributes;
     }
+
+    private void removeSlotAttributes(ItemStack item){
+        List<Attribute> slotAttributes = getSlotAttributes(item);
+        for(Attribute attribute : slotAttributes){
+            item.getItemMeta().removeAttributeModifier(attribute);
+        }
+    }
+
+    private boolean hasIllegalAttributes(ItemStack item){
+        ItemStack clone = item.clone();
+
+        if(Modules.get().get(EgirlsAttributeCorrector.class).isEnabled() && ItemUtil.isDraconiteItem(item)) return false;
+
+        if(clone.hasItemMeta() && item.hasItemMeta()){
+            return item.getItemMeta().hasAttributeModifiers() && !clone.getItemMeta().hasAttributeModifiers();
+        }
+        return false;
+    }
+
 }

@@ -248,6 +248,7 @@ public class ItemUtil {
 
     public static boolean isDraconiteGem(ItemStack item){
         if(item == null) return false;
+        if(!item.getType().equals(Material.PLAYER_HEAD)) return false;
         if(!item.hasItemMeta()) return false;
         if(!item.getItemMeta().hasLore()) return false;
         if(item.getItemMeta().getLore().contains(ChatColor.DARK_PURPLE+"Draconite Gem")) return true;
@@ -302,5 +303,27 @@ public class ItemUtil {
     public static boolean isBed(@Nullable ItemStack item){
         if(item == null) return false;
         return item.getType().toString().matches("[A-Z]*?_?[A-Z]*_BED");
+    }
+
+    public static void removeAttributes(ItemStack item){
+        ItemMeta itemMeta = item.getItemMeta();
+        if(item.getItemMeta() == null) return;
+        if(item.getItemMeta().getAttributeModifiers() == null) return;
+
+        for(Attribute attribute : item.getItemMeta().getAttributeModifiers().keys()){
+            itemMeta.removeAttributeModifier(attribute);
+        }
+
+        item.setItemMeta(itemMeta);
+    }
+
+    public static void removeUnbreakableTag(ItemStack item){
+        ItemMeta meta = item.getItemMeta();
+        meta.setUnbreakable(false);
+        item.setItemMeta(meta);
+    }
+
+    public static boolean isDraconiteItem(ItemStack item){
+        return isPopbobTotem(item) && isDraconiteCrystal(item) && isDraconiteAxe(item) && isDraconiteSword(item) && isDraconiteGem(item) && isDraconitePickaxe(item);
     }
 }

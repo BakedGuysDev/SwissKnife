@@ -31,9 +31,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -142,7 +140,7 @@ public class IllegalArmorAttributes extends Module {
         for(ItemStack item : e.getClickedInventory().getContents()){
             if(!ItemUtil.isArmorPiece(item)) continue;
             if(isArmorWithIllegalAttributes(item)){
-                resetToStockAttributes(item);
+                ItemUtil.removeAttributes(item);
                 if(customAttributes.get()){
                     addCustomArmorAttributes(item);
                 }
@@ -180,7 +178,7 @@ public class IllegalArmorAttributes extends Module {
         if(!ItemUtil.isArmorPiece(picked)) return;
 
         if(isArmorWithIllegalAttributes(picked)){
-            resetToStockAttributes(picked);
+            ItemUtil.removeAttributes(picked);
             if(customAttributes.get()){
                 addCustomArmorAttributes(picked);
             }
@@ -215,7 +213,7 @@ public class IllegalArmorAttributes extends Module {
 
         if(isArmorWithIllegalAttributes(newItem)){
             ItemStack item = newItem.clone();
-            resetToStockAttributes(item);
+            ItemUtil.removeAttributes(item);
             if(customAttributes.get()){
                 addCustomArmorAttributes(item);
             }
@@ -314,31 +312,6 @@ public class IllegalArmorAttributes extends Module {
             return illegallyAttributed.get();
         }
         return true;
-    }
-
-    private void resetToStockAttributes(ItemStack item){
-        ItemMeta itemMeta = item.getItemMeta();
-
-        List<Attribute> attributes = getItemAttributes(item);
-        for(Attribute attribute : attributes){
-            itemMeta.removeAttributeModifier(attribute);
-        }
-
-        item.setItemMeta(itemMeta);
-    }
-
-    public List<Attribute> getItemAttributes(ItemStack item){
-        if(!item.hasItemMeta()) return null;
-
-        List<Attribute> attributes = new ArrayList<>(1);
-        Multimap<Attribute, AttributeModifier> attributeMultiMap = item.getItemMeta().getAttributeModifiers();
-
-        if(attributeMultiMap == null) return null;
-        if(attributeMultiMap.isEmpty()) return null;
-
-        attributes.addAll(attributeMultiMap.keys());
-
-        return attributes;
     }
 
     private void addCustomArmorAttributes(ItemStack item){
