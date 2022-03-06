@@ -37,7 +37,7 @@ public class PlayerStatsDriver {
     public void createStatsTable(){
         PreparedStatement ps;
         try{
-            ps = connection.prepareStatement("CREATE TABLE IF NOT EXISTS playerStats "
+            ps = connection.prepareStatement("CREATE TABLE IF NOT EXISTS swissPlayerStats "
                     + "(username VARCHAR(32)," +
                     "uuid CHAR(36)," +
                     "playtime BIGINT(19)," +
