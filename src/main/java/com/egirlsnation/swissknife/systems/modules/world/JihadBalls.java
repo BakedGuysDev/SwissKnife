@@ -21,6 +21,7 @@ import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Snowman;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.ProjectileHitEvent;
 
@@ -74,11 +75,21 @@ public class JihadBalls extends Module {
             .build()
     );
 
+    private final Setting<Boolean> ignoreSnowmen = sgGeneral.add(new BoolSetting.Builder()
+            .name("ignore-snowmen")
+            .description("If the plugin should ignore snowballs from snowmen")
+            .defaultValue(true)
+            .build()
+    );
+
     @EventHandler
     private void ProjectileHit(ProjectileHitEvent e) {
         if(!isEnabled()) return;
 
         if (e.getEntityType().equals(EntityType.SNOWBALL)) {
+            if(ignoreSnowmen.get() && (e.getEntity().getShooter() instanceof Snowman)){
+                return;
+            }
 
             if(limitRadius.get()){
                 double x = e.getEntity().getLocation().getX();
