@@ -38,19 +38,19 @@ public class PlayerStatsDriver {
         PreparedStatement ps;
         try{
             ps = connection.prepareStatement("CREATE TABLE IF NOT EXISTS swissPlayerStats "
-                    + "(username VARCHAR(32)," +
-                    "uuid CHAR(36)," +
-                    "playtime BIGINT(19)," +
-                    "kills INT(11)," +
-                    "deaths INT(11)," +
-                    "mobkills INT(11)," +
-                    "shitlisted BIT(1)," +
-                    "firstplayed VARCHAR(100)," +
-                    "obsidianmined INT(11)," +
-                    "distanceair BIGINT(19)," +
-                    "distanceland BIGINT(19)," +
-                    "timesincedeath INT(11)," +
-                    "combatlogs INT(11)," +
+                    + "(username VARCHAR(32) NOT NULL," +
+                    "uuid CHAR(36) NOT NULL," +
+                    "playtime BIGINT(19) DEFAULT 0," +
+                    "kills INT(11) DEFAULT 0," +
+                    "deaths INT(11) DEFAULT 0," +
+                    "mobkills INT(11) DEFAULT 0," +
+                    "shitlisted BIT(1) DEFAULT 0," +
+                    "firstplayed VARCHAR(100) DEFAULT 'unknown'," +
+                    "obsidianmined INT(11) DEFAULT 0," +
+                    "distanceair BIGINT(19) DEFAULT 0," +
+                    "distanceland BIGINT(19) DEFAULT 0," +
+                    "timesincedeath INT(11) DEFAULT 0," +
+                    "combatlogs INT(11) DEFAULT 0," +
                     " PRIMARY KEY (uuid))");
             ps.executeUpdate();
         }catch (SQLException e){

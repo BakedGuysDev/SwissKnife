@@ -34,9 +34,9 @@ public class PlayerDataDriver {
         PreparedStatement ps;
         try{
             ps = connection.prepareStatement("CREATE TABLE IF NOT EXISTS swissPlayerData "
-                    + "(uuid CHAR(36)," +
-                    "petTotems BIT(1)," +
-                    "draconiteAbilities BIT(1)," +
+                    + "(uuid CHAR(36) NOT NULL," +
+                    "petTotems BIT(1) DEFAULT 0," +
+                    "draconiteAbilities BIT(1) DEFAULT 0," +
                     " PRIMARY KEY (uuid))");
             ps.executeUpdate();
         }catch (SQLException e){
