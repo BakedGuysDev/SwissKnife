@@ -22,8 +22,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 public class PlayerStatsDriver {
@@ -45,7 +43,7 @@ public class PlayerStatsDriver {
                     "deaths INT(11) DEFAULT 0," +
                     "mobkills INT(11) DEFAULT 0," +
                     "shitlisted BIT(1) DEFAULT 0," +
-                    "firstplayed VARCHAR(100) DEFAULT 'unknown'," +
+                    "firstplayed BIGINT(19) DEFAULT 0," +
                     "obsidianmined INT(11) DEFAULT 0," +
                     "distanceair BIGINT(19) DEFAULT 0," +
                     "distanceland BIGINT(19) DEFAULT 0," +
@@ -92,17 +90,13 @@ public class PlayerStatsDriver {
 
     public void createPlayer(UUID playerUUID, String playerName, long firstPlayed, long playtime, boolean shitlisted){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerStats WHERE UUID=?");
             ps.setString(1, playerUUID.toString());
             ResultSet resultSet = ps.executeQuery();
             resultSet.next();
             if(!exists(playerUUID)){
 
-                Date date = new Date(firstPlayed);
-                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-                String firstPlayedS = sdf.format(date);
-
-                PreparedStatement ps2 = connection.prepareStatement("INSERT IGNORE INTO playerStats"
+                PreparedStatement ps2 = connection.prepareStatement("INSERT IGNORE INTO swissPlayerStats"
                         + " (username,uuid,playtime," +
                         "kills,deaths,mobkills" +
                         ",shitlisted,firstplayed,obsidianmined" +
@@ -116,10 +110,10 @@ public class PlayerStatsDriver {
                 ps2.setInt(5, 0);
                 ps2.setInt(6, 0);
                 ps2.setBoolean(7, shitlisted);
-                ps2.setString(8, firstPlayedS);
+                ps2.setLong(8, firstPlayed);
                 ps2.setInt(9, 0);
-                ps2.setInt(10, 0);
-                ps2.setInt(11, 0);
+                ps2.setLong(10, 0);
+                ps2.setLong(11, 0);
                 ps2.setInt(12,0);
                 ps2.setInt(13, 0);
 
@@ -134,7 +128,7 @@ public class PlayerStatsDriver {
 
     public boolean exists(UUID uuid){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerStats WHERE UUID=?");
             ps.setString(1, uuid.toString());
 
             ResultSet resultSet = ps.executeQuery();
@@ -147,7 +141,7 @@ public class PlayerStatsDriver {
 
     public boolean exists(String playerName){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM playerStats WHERE Name =?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerStats WHERE Name =?");
             ps.setString(1, playerName);
 
             ResultSet resultSet = ps.executeQuery();
@@ -181,7 +175,7 @@ public class PlayerStatsDriver {
                 createPlayer(playerInfo);
             }
 
-            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET" +
+            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET" +
                     " playtime=?,kills=?,deaths=?" +
                     ",mobkills=?,obsidianmined=?,distanceland=?" +
                     ",distanceair=?,timeSinceDeath=?" +
@@ -208,7 +202,7 @@ public class PlayerStatsDriver {
 
     public long getPlaytime(String playerName){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT playtime FROM playerStats WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT playtime FROM swissPlayerStats WHERE name=?");
             ps.setString(1, playerName);
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -225,7 +219,7 @@ public class PlayerStatsDriver {
 
     public String addToShitlist(PlayerInfo info){
         try{
-            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE uuid=?");
             ps.setBoolean(1, true);
             ps.setString(2, info.getUuid().toString());
             if (!exists(info.getUuid())) {
@@ -244,7 +238,7 @@ public class PlayerStatsDriver {
 
     public String removeFromShitlist(PlayerInfo info){
         try{
-            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET shitlisted=? WHERE uuid=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE uuid=?");
             ps.setBoolean(1, false);
             ps.setString(2, info.getUuid().toString());
             if (!exists(info.getUuid())) {
@@ -267,7 +261,7 @@ public class PlayerStatsDriver {
 
     public String addToShitlist(String name){
         try{
-            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE name=?");
             ps.setBoolean(1, true);
             ps.setString(2, name);
             if (!exists(name)) {
@@ -289,7 +283,7 @@ public class PlayerStatsDriver {
 
     public String removeFromShitlist(String name){
         try{
-            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET shitlisted=? WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE name=?");
             ps.setBoolean(1, false);
             ps.setString(2, name);
             if (!exists(name)) {
@@ -306,7 +300,7 @@ public class PlayerStatsDriver {
 
     public boolean isShitlisted(String name){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM playerStats WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM swissPlayerStats WHERE name=?");
             ps.setString(1, name);
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -322,7 +316,7 @@ public class PlayerStatsDriver {
 
     public boolean isShitlisted(UUID uuid){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM playerStats WHERE uuid=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM swissPlayerStats WHERE uuid=?");
             ps.setString(1, uuid.toString());
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -339,7 +333,7 @@ public class PlayerStatsDriver {
     @Deprecated
     public boolean isShitlisted(Player player){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM playerStats WHERE uuid=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM swissPlayerStats WHERE uuid=?");
             ps.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -359,7 +353,7 @@ public class PlayerStatsDriver {
 
     public void increaseCombatLog(UUID uuid){
         try{
-            PreparedStatement ps = connection.prepareStatement("UPDATE playerStats SET combatlogs = combatlogs + 1 WHERE uuid=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET combatlogs = combatlogs + 1 WHERE uuid=?");
             ps.setString(1, uuid.toString());
         }catch(SQLException e){
             e.printStackTrace();

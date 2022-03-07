@@ -14,10 +14,7 @@ package com.egirlsnation.swissknife.systems.sql;
 
 import com.egirlsnation.swissknife.SwissKnife;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,8 +27,9 @@ public class OldDatabaseConverter {
         this.connection = connection;
     }
 
-    private final List<UUID> uuids = new ArrayList<>();
+    private final List<UUID> unfinishedUuids = new ArrayList<>();
     private final List<UUID> failedUuids = new ArrayList<>(1);
+    private final List<UUID> finishedUuids = new ArrayList<>(1);
 
     public boolean hasOldDbVersion(){
         try{
@@ -62,7 +60,7 @@ public class OldDatabaseConverter {
             int i = 1;
             double percentage = 0;
             while(rs.next()){
-                uuids.add(UUID.fromString(rs.getString("UUID")));
+                unfinishedUuids.add(UUID.fromString(rs.getString("UUID")));
                 percentage = ++i * 100 / (double) size;
                 if(Math.toIntExact((long) percentage) % 10 == 0){
                     SwissKnife.swissLogger.info("Getting all UUIDs from the old database... " + Math.toIntExact((long) percentage) + "%");
@@ -78,7 +76,139 @@ public class OldDatabaseConverter {
         }
     }
 
-    public void emptyUuidList(){
-        uuids.clear();
+    public boolean retryFailedUuids(){
+        return convertToNewDatabase(ConvertMode.FAILED) == 0;
+    }
+
+
+    public int convertToNewDatabase(ConvertMode mode){
+        List<UUID> uuids;
+        if(mode.equals(ConvertMode.REGULAR)){
+            uuids = unfinishedUuids;
+        }else if(mode.equals(ConvertMode.FAILED)){
+            uuids = failedUuids;
+        }else{
+            return -1;
+        }
+        int failed = 0;
+        for(UUID uuid : uuids){
+            if(finishedUuids.contains(uuid)){
+                continue;
+            }
+
+            String name = null;
+            boolean shitlisted = false;
+            long playtime = 0;
+            long firstplayed = 0;
+            int kills = 0;
+            int deaths = 0;
+            int mobkills = 0;
+            long distanceland = 0;
+            long distanceair = 0;
+            int timesincedeath = 0;
+            int obsidianMined = 0;
+            int combatlogs = 0;
+
+            // Stage 1
+
+            try{
+                PreparedStatement ps = connection.prepareStatement("SELECT * FROM playerStats WHERE UUID=?");
+                ps.setString(1, uuid.toString());
+
+                ResultSet rs = ps.executeQuery();
+
+                if(rs.next()){
+                    SwissKnife.swissLogger.warning("UUID: " + uuid.toString() + " was gotten from the database but now doesn't exist. Skipping.");
+                    failedUuids.add(uuid);
+                    continue;
+                }
+
+                ResultSetMetaData metaData = rs.getMetaData();
+                metaData.getColumnName(1);
+
+                name = rs.getString("Name");
+                shitlisted = rs.getInt("shitlisted") == 1;
+                playtime = rs.getInt("playTime");
+                firstplayed = rs.getInt("firstPlayed");
+                kills = rs.getInt("kills");
+                deaths = rs.getInt("deaths");
+                mobkills = rs.getInt("mobkills");
+                distanceland = rs.getInt("distanceWalked") + rs.getInt("distanceSprinted");
+                distanceair = rs.getInt("distanceElytra");
+                timesincedeath = rs.getInt("timeSinceDeath");
+                obsidianMined = rs.getInt("blocksMined");
+                combatlogs = rs.getInt("combatLogs");
+
+            }catch(SQLException e){
+                failed++;
+                SwissKnife.swissLogger.warning("Failed to get records for UUID " + uuid.toString() + " from the old database.\n" +
+                        "Failed conversions will repeat at the end.\n" +
+                        " Stacktrace will follow");
+                failedUuids.add(uuid);
+                uuids.remove(uuid);
+                e.printStackTrace();
+                continue;
+            }
+
+            if(MySQL.get().getPlayerStatsDriver().exists(uuid)) continue;
+
+            //Stage 2
+
+            try{
+                    PreparedStatement ps2 = connection.prepareStatement("INSERT IGNORE INTO swissPlayerStats"
+                            + " (username,uuid,playtime," +
+                            "kills,deaths,mobkills" +
+                            ",shitlisted,firstplayed,obsidianmined" +
+                            ",distanceair,distanceland" +
+                            ",timesincedeath,combatlogs)" +
+                            " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                    ps2.setString(1, name);
+                    ps2.setString(2, uuid.toString());
+                    ps2.setLong(3, playtime);
+                    ps2.setInt(4, kills);
+                    ps2.setInt(5, deaths);
+                    ps2.setInt(6, mobkills);
+                    ps2.setBoolean(7, shitlisted);
+                    ps2.setLong(8, firstplayed);
+                    ps2.setInt(9, obsidianMined);
+                    ps2.setLong(10, distanceair);
+                    ps2.setLong(11, distanceland);
+                    ps2.setInt(12,timesincedeath);
+                    ps2.setInt(13, combatlogs);
+
+                    ps2.executeUpdate();
+
+            }catch(SQLException e){
+                failed++;
+                SwissKnife.swissLogger.warning("Failed to convert record for " + uuid.toString() + " to the new database.\n" +
+                        "Failed conversions will repeat at the end.\n" +
+                        " Stacktrace will follow");
+                failedUuids.add(uuid);
+                uuids.remove(uuid);
+                e.printStackTrace();
+                continue;
+            }
+            finishedUuids.add(uuid);
+            uuids.remove(uuid);
+
+        }
+        return failed;
+    }
+
+    public int getFinished(){
+        return finishedUuids.size();
+    }
+
+    public int getUnfinished(){
+        return unfinishedUuids.size();
+    }
+
+    public int getFailed(){
+        return failedUuids.size();
+    }
+
+    public enum ConvertMode{
+        REGULAR,
+        FAILED
     }
 }
