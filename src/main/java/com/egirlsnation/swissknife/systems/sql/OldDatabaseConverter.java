@@ -83,6 +83,7 @@ public class OldDatabaseConverter {
 
     public int convertToNewDatabase(ConvertMode mode){
         List<UUID> uuids;
+        List<String> columnNames = null;
         if(mode.equals(ConvertMode.REGULAR)){
             uuids = unfinishedUuids;
         }else if(mode.equals(ConvertMode.FAILED)){
@@ -123,23 +124,62 @@ public class OldDatabaseConverter {
                     continue;
                 }
 
-                ResultSetMetaData metaData = rs.getMetaData();
-                metaData.getColumnName(1);
+                if(columnNames == null){
 
+                    ResultSetMetaData metaData = rs.getMetaData();
+                    List<String> columnNamesHelp = new ArrayList<>(metaData.getColumnCount());
+                    for(int i = 1; i <= metaData.getColumnCount(); i++){
+                        columnNamesHelp.add(metaData.getColumnName(i));
+                    }
+                    columnNames = columnNamesHelp;
+                }
+
+                if(!columnNames.contains("Name")){
+                    throw new SQLDataException("Old database doesn't contain player names. The conversion can't continue.");
+                }
                 name = rs.getString("Name");
-                shitlisted = rs.getInt("shitlisted") == 1;
-                playtime = rs.getInt("playTime");
-                firstplayed = rs.getInt("firstPlayed");
-                kills = rs.getInt("kills");
-                deaths = rs.getInt("deaths");
-                mobkills = rs.getInt("mobkills");
-                distanceland = rs.getInt("distanceWalked") + rs.getInt("distanceSprinted");
-                distanceair = rs.getInt("distanceElytra");
-                timesincedeath = rs.getInt("timeSinceDeath");
-                obsidianMined = rs.getInt("blocksMined");
-                combatlogs = rs.getInt("combatLogs");
+
+                if(columnNames.contains("shitlisted")){
+                    shitlisted = rs.getInt("shitlisted") == 1;
+                }
+                if(columnNames.contains("playTime")){
+                    playtime = rs.getInt("playTime");
+                }
+                if(columnNames.contains("firstPlayed")){
+                    firstplayed = rs.getInt("firstPlayed");
+                }
+                if(columnNames.contains("kills")){
+                    kills = rs.getInt("kills");
+                }
+                if(columnNames.contains("deaths")){
+                    deaths = rs.getInt("deaths");
+                }
+                if(columnNames.contains("mobKills")){
+                    mobkills = rs.getInt("mobKills");
+                }
+                if(columnNames.contains("distanceWalked") && columnNames.contains("distanceSprinted")){
+                    distanceland = rs.getInt("distanceWalked") + rs.getInt("distanceSprinted");
+                }
+                if(columnNames.contains("distanceElytra")){
+                    distanceair = rs.getInt("distanceElytra");
+                }
+                if(columnNames.contains("timeSinceDeath")){
+                    timesincedeath = rs.getInt("timeSinceDeath");
+                }
+                if(columnNames.contains("blocksMined")){
+                    obsidianMined = rs.getInt("blocksMined");
+                }
+                if(columnNames.contains("combatLogs")){
+                    combatlogs = rs.getInt("combatLogs");
+                }
 
             }catch(SQLException e){
+                if(e instanceof SQLDataException){
+                    e.printStackTrace();
+                    unfinishedUuids.clear();
+                    failedUuids.clear();
+                    return -2;
+                }
                 failed++;
                 SwissKnife.swissLogger.warning("Failed to get records for UUID " + uuid.toString() + " from the old database.\n" +
                         "Failed conversions will repeat at the end.\n" +
@@ -205,6 +245,18 @@ public class OldDatabaseConverter {
 
     public int getFailed(){
         return failedUuids.size();
+    }
+
+    public void clearUnfinished(){
+        unfinishedUuids.clear();
+    }
+
+    public void clearFailed(){
+        failedUuids.clear();
+    }
+
+    public void clearFinished(){
+        finishedUuids.clear();
     }
 
     public enum ConvertMode{

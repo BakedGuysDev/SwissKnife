@@ -12,13 +12,20 @@
 
 package com.egirlsnation.swissknife.systems.commands;
 
+import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.Systems;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Category;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.sql.MySQL;
+import com.egirlsnation.swissknife.utils.entity.player.PlayerInfo;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +38,9 @@ public class SwissKnifeCommand extends Command{
     }
 
     //TODO: Make it less janky
+
+    private boolean fillDbDidCommand = false;
+    private BukkitTask fillDbTask = null;
 
     @Override
     public void handleCommand(CommandSender sender, String[] args){
@@ -59,6 +69,12 @@ public class SwissKnifeCommand extends Command{
                 }
                 handleModules(sender, args);
                 break;
+            }
+            case "filldb":{
+                if(!(sender instanceof ConsoleCommandSender)){
+                    sendMessage(sender, ChatColor.RED + "This command is console only!");
+                }
+                handleFillDb(sender);
             }
             default:{
                 sendMessage(sender, ChatColor.RED + "Incorrect arguments. Valid arguments are: modules, info, reload");
@@ -106,5 +122,37 @@ public class SwissKnifeCommand extends Command{
             sender.sendMessage(sb.toString());
 
         }
+    }
+
+    private void handleFillDb(CommandSender sender){
+        if(!fillDbDidCommand){
+            if(fillDbTask == null){
+                sendMessage(sender, ChatColor.YELLOW + "This task is resource intensive, can't be cancelled and will generally take a long time, depending on how many players joined your server in the past.\n" +
+                        "You shouldn't be doing this without the server being in some form of a maintenance mode!\n" +
+                        "If you're sure you want to run this task do the command again.");
+                fillDbDidCommand = true;
+            }else{
+                sendMessage(sender, ChatColor.RED + "You already have a task for filling the database running!");
+            }
+            return;
+        }
+        if(!MySQL.get().isConnected()){
+            sendMessage(sender, ChatColor.YELLOW + "MySQL database isn't connected. Can't run the task.");
+            return;
+        }
+        fillDbTask = Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
+            OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
+            int processedPlayersCount = 0;
+            long lastUpdate = System.currentTimeMillis();
+            sendMessage(sender, ChatColor.GREEN + "Starting fill database task for " + offlinePlayers.length + " players");
+            for(OfflinePlayer offlinePlayer : offlinePlayers){
+                PlayerInfo info = new PlayerInfo(offlinePlayer);
+                MySQL.get().getPlayerStatsDriver().updateValues(info);
+                processedPlayersCount++;
+                if((System.currentTimeMillis() - lastUpdate) >= 1000){
+                    sendMessage(sender, ChatColor.GREEN + "Processed " + processedPlayersCount + "/" + offlinePlayers.length + " players");
+                }
+            }
+        });
     }
 }

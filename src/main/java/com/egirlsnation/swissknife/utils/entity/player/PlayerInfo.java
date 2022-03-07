@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.utils.entity.player;
 
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
 
@@ -61,6 +62,21 @@ public class PlayerInfo {
         this.distanceland = player.getStatistic(Statistic.WALK_ONE_CM) + player.getStatistic(Statistic.SPRINT_ONE_CM);
         this.timesincedeath = player.getStatistic(Statistic.TIME_SINCE_DEATH);
         this.obsidianMined = player.getStatistic(Statistic.MINE_BLOCK, Material.OBSIDIAN);
+    }
+
+    public PlayerInfo(OfflinePlayer offlinePlayer){
+        this.uuid = offlinePlayer.getUniqueId();
+        this.name = offlinePlayer.getName();
+        this.shitlisted = false;
+        this.playtime = offlinePlayer.getStatistic(Statistic.PLAY_ONE_MINUTE);
+        this.firstplayed = offlinePlayer.getFirstPlayed();
+        this.kills = offlinePlayer.getStatistic(Statistic.PLAYER_KILLS);
+        this.deaths = offlinePlayer.getStatistic(Statistic.DEATHS);
+        this.mobkills = offlinePlayer.getStatistic(Statistic.MOB_KILLS);
+        this.distanceair = offlinePlayer.getStatistic(Statistic.AVIATE_ONE_CM);
+        this.distanceland = offlinePlayer.getStatistic(Statistic.WALK_ONE_CM) + offlinePlayer.getStatistic(Statistic.SPRINT_ONE_CM);
+        this.timesincedeath = offlinePlayer.getStatistic(Statistic.TIME_SINCE_DEATH);
+        this.obsidianMined = offlinePlayer.getStatistic(Statistic.MINE_BLOCK, Material.OBSIDIAN);
     }
 
 
