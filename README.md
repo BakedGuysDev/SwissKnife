@@ -1,4 +1,6 @@
 # SwissKnife - Scuffed but working
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FEgirlsNationDev%2FSwissKnife.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FEgirlsNationDev%2FSwissKnife?ref=badge_shield)
+
 
 A paper based plugin dedicated to patching illegal items, exploits and that players have encountered on the Egirls Nation server, plus adding all kinds of new features to the game... It's a bit scuffed, but it works.  
 
@@ -46,3 +48,7 @@ Maven is the recommended way to build the project.
 - Clone the project with `git clone https://github.com/EgirlsNationDev/SwissKnife.git`.  
 - Use `mvn clean package` in the main project directory to build the project.  
 - The jar will be located at `/target/SwissKnife-version-Full.jar` (The full jar has some dependencies, for example keeper, included).
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FEgirlsNationDev%2FSwissKnife.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FEgirlsNationDev%2FSwissKnife?ref=badge_large)
