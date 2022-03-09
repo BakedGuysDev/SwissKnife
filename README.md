@@ -1,6 +1,10 @@
+<p align="center">
+<img src="https://i.imgur.com/5crVLMe.png" alt="SwissKnife logo" width="30%"/>
+</p>
+
 <h1 align="center">SwissKnife</h1>
 
-<p align="center">The Swiss Army knife for anarchy server owners.</p>
+<p align="center">The Swiss Army knife for anarchy server owners</p>
 
 <div align="center">
     <a href="https://discord.gg/2Z4YT2qKQ2"><img src="https://img.shields.io/discord/825773898796630016?style=for-the-badge&logo=discord" alt="Discord"/></a>
@@ -8,12 +12,12 @@
     <img src="https://img.shields.io/github/last-commit/EgirlsNationDev/SwissKnife?style=for-the-badge" alt="GitHub last commit"/>
     <img src="https://img.shields.io/github/commit-activity/w/EgirlsNationDev/SwissKnife?style=for-the-badge" alt="GitHub commit activity"/>
     <br>
+    <img src="https://img.shields.io/github/workflow/status/EgirlsNationDev/SwissKnife/Java%20CI%20with%20Maven?event=push&style=for-the-badge" alt="Github Actions CI"/>
     <img src="https://img.shields.io/tokei/lines/github/EgirlsNationDev/SwissKnife?style=for-the-badge" alt="GitHub lines of code"/>
     <img src="https://www.codefactor.io/repository/github/EgirlsNationDev/SwissKnife/badge?style=for-the-badge" alt="CodeFactor"/>
-    <img src="https://img.shields.io/github/workflow/status/EgirlsNationDev/SwissKnife/Java%20CI%20with%20Maven?event=push&style=for-the-badge" alt="Github Actions CI"/>
 </div>
 
-##What is SwissKnife
+## What is SwissKnife
 
 Unique Paper based plugin dedicated to patching illegal items, exploits, bugs  
 and basically plugin for everything that anarchy servers might need and more.
@@ -54,15 +58,4 @@ Maven is the recommended way to build the project.
 
 - Clone the project with `git clone https://github.com/EgirlsNationDev/SwissKnife.git`.  
 - Use `mvn clean package` in the main project directory to build the project.  
-- The jar will be located at `/target/SwissKnife-version-Full.jar` (The full jar has some dependencies, for example keeper, included).
-
-### Disclaimer
-
-Although I think the plugin releases are stable and safe to use I want to say this to prevent being blamed for things.
-
-If someone decides to use the plugin I or any of the contributors don't take responsibility for broken servers, dead SDD drives, thermonuclear war, or you loosing your sleep because it didn't work, and you had to fix it.
-
-Please do some research, if you have any concerns about features included in this plugin before using it!  
-YOU are choosing to make these modifications to your server, and if you point the finger at us for messing up your server, we will laugh at you.
-
-Thank you. 
+- The jar will be located at `/target/SwissKnife-version-Full.jar` (The full jar has dependencies included).
