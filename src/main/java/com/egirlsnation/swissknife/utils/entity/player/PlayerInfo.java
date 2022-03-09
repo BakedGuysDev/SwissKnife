@@ -28,8 +28,9 @@ public class PlayerInfo {
     private final int kills;
     private final int deaths;
     private final int mobkills;
-    private final long distanceair;
-    private final long distanceland;
+    private final int distanceair;
+    private final int distancewalked;
+    private final int distancesprinted;
     private final int timesincedeath;
     private final int obsidianMined;
 
@@ -44,7 +45,8 @@ public class PlayerInfo {
         this.deaths = player.getStatistic(Statistic.DEATHS);
         this.mobkills = player.getStatistic(Statistic.MOB_KILLS);
         this.distanceair = player.getStatistic(Statistic.AVIATE_ONE_CM);
-        this.distanceland = player.getStatistic(Statistic.WALK_ONE_CM) + player.getStatistic(Statistic.SPRINT_ONE_CM);
+        this.distancewalked = player.getStatistic(Statistic.WALK_ONE_CM);
+        this.distancesprinted = player.getStatistic(Statistic.SPRINT_ONE_CM);
         this.timesincedeath = player.getStatistic(Statistic.TIME_SINCE_DEATH);
         this.obsidianMined = player.getStatistic(Statistic.MINE_BLOCK, Material.OBSIDIAN);
     }
@@ -59,7 +61,8 @@ public class PlayerInfo {
         this.deaths = player.getStatistic(Statistic.DEATHS);
         this.mobkills = player.getStatistic(Statistic.MOB_KILLS);
         this.distanceair = player.getStatistic(Statistic.AVIATE_ONE_CM);
-        this.distanceland = player.getStatistic(Statistic.WALK_ONE_CM) + player.getStatistic(Statistic.SPRINT_ONE_CM);
+        this.distancewalked = player.getStatistic(Statistic.WALK_ONE_CM);
+        this.distancesprinted = player.getStatistic(Statistic.SPRINT_ONE_CM);
         this.timesincedeath = player.getStatistic(Statistic.TIME_SINCE_DEATH);
         this.obsidianMined = player.getStatistic(Statistic.MINE_BLOCK, Material.OBSIDIAN);
     }
@@ -74,7 +77,8 @@ public class PlayerInfo {
         this.deaths = offlinePlayer.getStatistic(Statistic.DEATHS);
         this.mobkills = offlinePlayer.getStatistic(Statistic.MOB_KILLS);
         this.distanceair = offlinePlayer.getStatistic(Statistic.AVIATE_ONE_CM);
-        this.distanceland = offlinePlayer.getStatistic(Statistic.WALK_ONE_CM) + offlinePlayer.getStatistic(Statistic.SPRINT_ONE_CM);
+        this.distancewalked = offlinePlayer.getStatistic(Statistic.WALK_ONE_CM);
+        this.distancesprinted = offlinePlayer.getStatistic(Statistic.SPRINT_ONE_CM);
         this.timesincedeath = offlinePlayer.getStatistic(Statistic.TIME_SINCE_DEATH);
         this.obsidianMined = offlinePlayer.getStatistic(Statistic.MINE_BLOCK, Material.OBSIDIAN);
     }
@@ -112,12 +116,16 @@ public class PlayerInfo {
         return timesincedeath;
     }
 
-    public long getDistanceair(){
+    public int getDistanceair(){
         return distanceair;
     }
 
-    public long getDistanceland(){
-        return distanceland;
+    public int getDistancewalked(){
+        return distancewalked;
+    }
+
+    public int getDistancesprinted(){
+        return distancesprinted;
     }
 
     public long getFirstplayed(){

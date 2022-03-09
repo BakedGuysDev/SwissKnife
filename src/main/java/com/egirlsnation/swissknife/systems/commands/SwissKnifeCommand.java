@@ -27,11 +27,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
-public class SwissKnifeCommand extends Command{
+public class SwissKnifeCommand extends Command {
 
     public SwissKnifeCommand(){
         super("swissknife");
@@ -75,6 +77,7 @@ public class SwissKnifeCommand extends Command{
                     sendMessage(sender, ChatColor.RED + "This command is console only!");
                 }
                 handleFillDb(sender);
+                break;
             }
             default:{
                 sendMessage(sender, ChatColor.RED + "Incorrect arguments. Valid arguments are: modules, info, reload");
@@ -84,9 +87,9 @@ public class SwissKnifeCommand extends Command{
     }
 
     private void displayInfo(CommandSender sender){
-        sender.sendMessage( ChatColor.GOLD + "-------------- [" + ChatColor.LIGHT_PURPLE + "SwissKnife" + ChatColor.GOLD + "] --------------");
-        sender.sendMessage( ChatColor.GOLD + "Authors:\n" + ChatColor.LIGHT_PURPLE + "Lerbiq, codingPotato and Killmlana");
-        sender.sendMessage( ChatColor.GOLD + "Source code:\n" + ChatColor.LIGHT_PURPLE + "https://github.com/EgirlsNationDev/SwissKnife");
+        sender.sendMessage(ChatColor.GOLD + "-------------- [" + ChatColor.LIGHT_PURPLE + "SwissKnife" + ChatColor.GOLD + "] --------------");
+        sender.sendMessage(ChatColor.GOLD + "Authors:\n" + ChatColor.LIGHT_PURPLE + "Lerbiq, codingPotato and Killmlana");
+        sender.sendMessage(ChatColor.GOLD + "Source code:\n" + ChatColor.LIGHT_PURPLE + "https://github.com/EgirlsNationDev/SwissKnife");
     }
 
     private void handleModules(CommandSender sender, String[] args){
@@ -112,7 +115,7 @@ public class SwissKnifeCommand extends Command{
                     }else{
                         sb.append(ChatColor.RED).append(module.name);
                     }
-                    if(modules.indexOf(module) != (modules.size() -1)){
+                    if(modules.indexOf(module) != (modules.size() - 1)){
                         sb.append(ChatColor.WHITE).append(", ");
                     }else{
                         sb.append("\n").append(" \n");
@@ -127,8 +130,8 @@ public class SwissKnifeCommand extends Command{
     private void handleFillDb(CommandSender sender){
         if(!fillDbDidCommand){
             if(fillDbTask == null){
-                sendMessage(sender, ChatColor.YELLOW + "This task is resource intensive, can't be cancelled and will generally take a long time, depending on how many players joined your server in the past.\n" +
-                        "You shouldn't be doing this without the server being in some form of a maintenance mode!\n" +
+                sendMessage(sender, ChatColor.YELLOW + "This task is resource intensive, can't be cancelled and will generally take some time, depending on how many players joined your server in the past and your hardware.\n" +
+                        "Even tho it runs asynchronously I recommend you don't do this without the server being in some form of a maintenance mode!\n" +
                         "If you're sure you want to run this task do the command again.");
                 fillDbDidCommand = true;
             }else{
@@ -140,19 +143,40 @@ public class SwissKnifeCommand extends Command{
             sendMessage(sender, ChatColor.YELLOW + "MySQL database isn't connected. Can't run the task.");
             return;
         }
-        fillDbTask = Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
-            OfflinePlayer[] offlinePlayers = Bukkit.getOfflinePlayers();
+
+        OfflinePlayer[] players = Bukkit.getOfflinePlayers();
+        int playerCount = players.length;
+        List<PlayerInfo> infos = new ArrayList<>();
+        fillDbTask = Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+            long started = System.currentTimeMillis();
+            sendMessage(sender, ChatColor.GREEN + "Starting task for getting PlayerInfo of " + playerCount + " players");
             int processedPlayersCount = 0;
-            long lastUpdate = System.currentTimeMillis();
-            sendMessage(sender, ChatColor.GREEN + "Starting fill database task for " + offlinePlayers.length + " players");
-            for(OfflinePlayer offlinePlayer : offlinePlayers){
-                PlayerInfo info = new PlayerInfo(offlinePlayer);
+            long lastUpdate = started;
+            for(OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()){
+                infos.add(new PlayerInfo(offlinePlayer));
+                processedPlayersCount++;
+                if((System.currentTimeMillis() - lastUpdate) >= 1000){
+                    sendMessage(sender, ChatColor.GREEN + "Processed " + processedPlayersCount + "/" + playerCount + " playerCount");
+                    lastUpdate = System.currentTimeMillis();
+                }
+            }
+            long firstTaskMs = System.currentTimeMillis() - started;
+            sendMessage(sender, ChatColor.GREEN + "Task for getting PlayerInfo of " + playerCount + " players finished in " + TimeUnit.MILLISECONDS.toSeconds(firstTaskMs) + " seconds");
+            sendMessage(sender, ChatColor.GREEN + "Starting fillDb task for " + playerCount + " players");
+            started = System.currentTimeMillis();
+            processedPlayersCount = 0;
+            for(PlayerInfo info : infos){
                 MySQL.get().getPlayerStatsDriver().updateValues(info);
                 processedPlayersCount++;
                 if((System.currentTimeMillis() - lastUpdate) >= 1000){
-                    sendMessage(sender, ChatColor.GREEN + "Processed " + processedPlayersCount + "/" + offlinePlayers.length + " players");
+                    sendMessage(sender, ChatColor.GREEN + "Processed " + processedPlayersCount + "/" + playerCount + " playerCount");
+                    lastUpdate = System.currentTimeMillis();
                 }
             }
+            long secondTaskMs = System.currentTimeMillis() - started;
+            sendMessage(sender, ChatColor.GREEN + "Fill database task for " + playerCount + " playerCount finished in " + TimeUnit.MILLISECONDS.toSeconds(secondTaskMs) + " seconds");
+            sendMessage(sender, ChatColor.GREEN + "Total execution time was: " + TimeUnit.MILLISECONDS.toSeconds(firstTaskMs + secondTaskMs) + "seconds");
+            fillDbTask = null;
         });
     }
 }

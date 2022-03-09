@@ -45,8 +45,9 @@ public class PlayerStatsDriver {
                     "shitlisted BIT(1) DEFAULT 0," +
                     "firstplayed BIGINT(19) DEFAULT 0," +
                     "obsidianmined INT(11) DEFAULT 0," +
-                    "distanceair BIGINT(19) DEFAULT 0," +
-                    "distanceland BIGINT(19) DEFAULT 0," +
+                    "distanceair INT(11) DEFAULT 0," +
+                    "distancewalked INT(11) DEFAULT 0," +
+                    "distancesprinted INT(11) DEFAULT 0," +
                     "timesincedeath INT(11) DEFAULT 0," +
                     "combatlogs INT(11) DEFAULT 0," +
                     " PRIMARY KEY (uuid))");
@@ -100,7 +101,7 @@ public class PlayerStatsDriver {
                         + " (username,uuid,playtime," +
                         "kills,deaths,mobkills" +
                         ",shitlisted,firstplayed,obsidianmined" +
-                        ",distanceair,distanceland" +
+                        ",distanceair,distancewalked,distancesprinted" +
                         ",timesincedeath,combatlogs)" +
                         " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps2.setString(1, playerName);
@@ -112,10 +113,11 @@ public class PlayerStatsDriver {
                 ps2.setBoolean(7, shitlisted);
                 ps2.setLong(8, firstPlayed);
                 ps2.setInt(9, 0);
-                ps2.setLong(10, 0);
-                ps2.setLong(11, 0);
+                ps2.setInt(10, 0);
+                ps2.setInt(11, 0);
                 ps2.setInt(12,0);
                 ps2.setInt(13, 0);
+                ps2.setInt(14, 0);
 
                 ps2.executeUpdate();
 
@@ -177,20 +179,21 @@ public class PlayerStatsDriver {
 
             PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET" +
                     " playtime=?,kills=?,deaths=?" +
-                    ",mobkills=?,obsidianmined=?,distanceland=?" +
-                    ",distanceair=?,timeSinceDeath=?" +
+                    ",mobkills=?,obsidianmined=?,distancewalked=?" +
+                    ",distancesprinted=?,distanceair=?,timeSinceDeath=?" +
                     " WHERE uuid=?");
 
 
             ps.setLong(1, playerInfo.getPlaytime());
             ps.setInt(2, playerInfo.getKills());
-            ps.setInt(3, playerInfo.getKills());
+            ps.setInt(3, playerInfo.getDeaths());
             ps.setInt(4, playerInfo.getMobkills());
             ps.setInt(5, playerInfo.getObsidianMined());
-            ps.setLong(6, playerInfo.getDistanceland());
-            ps.setLong(7, playerInfo.getDistanceair());
-            ps.setInt(8, playerInfo.getTimesincedeath());
-            ps.setString(9, playerInfo.getUuid().toString());
+            ps.setLong(6, playerInfo.getDistancewalked());
+            ps.setLong(7, playerInfo.getDistancesprinted());
+            ps.setLong(8, playerInfo.getDistanceair());
+            ps.setInt(9, playerInfo.getTimesincedeath());
+            ps.setString(10, playerInfo.getUuid().toString());
 
             ps.executeUpdate();
 

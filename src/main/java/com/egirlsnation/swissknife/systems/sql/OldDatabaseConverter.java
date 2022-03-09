@@ -104,8 +104,9 @@ public class OldDatabaseConverter {
             int kills = 0;
             int deaths = 0;
             int mobkills = 0;
-            long distanceland = 0;
-            long distanceair = 0;
+            int distancewalked = 0;
+            int distancesprinted = 0;
+            int distanceair = 0;
             int timesincedeath = 0;
             int obsidianMined = 0;
             int combatlogs = 0;
@@ -157,8 +158,12 @@ public class OldDatabaseConverter {
                 if(columnNames.contains("mobKills")){
                     mobkills = rs.getInt("mobKills");
                 }
-                if(columnNames.contains("distanceWalked") && columnNames.contains("distanceSprinted")){
-                    distanceland = rs.getInt("distanceWalked") + rs.getInt("distanceSprinted");
+
+                if(columnNames.contains("distanceWalked")){
+                    distancewalked = rs.getInt("distanceWalked");
+                }
+                if(columnNames.contains("distanceSprinted")){
+                    distancesprinted = rs.getInt("distanceSprinted");
                 }
                 if(columnNames.contains("distanceElytra")){
                     distanceair = rs.getInt("distanceElytra");
@@ -199,7 +204,7 @@ public class OldDatabaseConverter {
                             + " (username,uuid,playtime," +
                             "kills,deaths,mobkills" +
                             ",shitlisted,firstplayed,obsidianmined" +
-                            ",distanceair,distanceland" +
+                            ",distanceair,distancewalked,distancesprinted" +
                             ",timesincedeath,combatlogs)" +
                             " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
                     ps2.setString(1, name);
@@ -211,10 +216,11 @@ public class OldDatabaseConverter {
                     ps2.setBoolean(7, shitlisted);
                     ps2.setLong(8, firstplayed);
                     ps2.setInt(9, obsidianMined);
-                    ps2.setLong(10, distanceair);
-                    ps2.setLong(11, distanceland);
-                    ps2.setInt(12,timesincedeath);
-                    ps2.setInt(13, combatlogs);
+                    ps2.setInt(10, distanceair);
+                    ps2.setInt(11, distancewalked);
+                    ps2.setInt(12, distancesprinted);
+                    ps2.setInt(13,timesincedeath);
+                    ps2.setInt(14, combatlogs);
 
                     ps2.executeUpdate();
 

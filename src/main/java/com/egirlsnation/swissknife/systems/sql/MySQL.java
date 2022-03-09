@@ -95,7 +95,7 @@ public class MySQL extends System<MySQL> {
 
     @Override
     public void readFromConfig(){
-        ConfigurationSection section = getFile().getConfigurationSection("config.mysql");
+        ConfigurationSection section = getFile().getConfigurationSection("mysql");
         if(section == null){
             writeToConfig();
             return;
@@ -112,7 +112,7 @@ public class MySQL extends System<MySQL> {
     //TODO: Test and migrate database (possibly in code)
 
     public void initDatabase(){
-        if(useDatabase) return;
+        if(!useDatabase) return;
 
         SwissKnife.swissLogger.info("Initializing SQL driver.");
 
