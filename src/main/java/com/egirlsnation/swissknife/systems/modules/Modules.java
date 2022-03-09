@@ -145,6 +145,7 @@ public class Modules extends System<Modules> {
         add(new HighDamagePrevention());
         add(new IllegalAttributes());
         add(new IllegalArmorAttributes());
+        add(new IllegalStacks());
         add(new IllegalBlocks());
         add(new IllegalEnchants());
         add(new IllegalLores());

@@ -37,51 +37,14 @@ import static org.bukkit.attribute.Attribute.GENERIC_ATTACK_SPEED;
 
 public class ItemUtil {
 
-    private static final List<PotionEffectType> nonPotionList = ImmutableList.<PotionEffectType>builder().add(
-            PotionEffectType.ABSORPTION,
-            PotionEffectType.BAD_OMEN,
-            PotionEffectType.BLINDNESS,
-            PotionEffectType.CONDUIT_POWER,
-            PotionEffectType.CONFUSION,
-            PotionEffectType.DOLPHINS_GRACE,
-            PotionEffectType.FAST_DIGGING,
-            PotionEffectType.GLOWING,
-            PotionEffectType.HEALTH_BOOST,
-            PotionEffectType.HERO_OF_THE_VILLAGE,
-            PotionEffectType.HUNGER,
-            PotionEffectType.LEVITATION,
-            PotionEffectType.SATURATION,
-            PotionEffectType.SLOW_DIGGING,
-            PotionEffectType.UNLUCK,
-            PotionEffectType.WITHER
-    ).build();
+    private static final List<PotionEffectType> nonPotionList = ImmutableList.<PotionEffectType>builder().add(PotionEffectType.ABSORPTION, PotionEffectType.BAD_OMEN, PotionEffectType.BLINDNESS, PotionEffectType.CONDUIT_POWER, PotionEffectType.CONFUSION, PotionEffectType.DOLPHINS_GRACE, PotionEffectType.FAST_DIGGING, PotionEffectType.GLOWING, PotionEffectType.HEALTH_BOOST, PotionEffectType.HERO_OF_THE_VILLAGE, PotionEffectType.HUNGER, PotionEffectType.LEVITATION, PotionEffectType.SATURATION, PotionEffectType.SLOW_DIGGING, PotionEffectType.UNLUCK, PotionEffectType.WITHER).build();
 
-    private static final Map<PotionEffectType, Integer> potionMaxAmplifierMap = ImmutableMap.<PotionEffectType, Integer>builder()
-            .put(PotionEffectType.DAMAGE_RESISTANCE, 3)
-            .put(PotionEffectType.FIRE_RESISTANCE, 0)
-            .put(PotionEffectType.HARM, 1)
-            .put(PotionEffectType.HEAL, 1)
-            .put(PotionEffectType.INCREASE_DAMAGE, 1)
-            .put(PotionEffectType.INVISIBILITY, 0)
-            .put(PotionEffectType.JUMP, 1)
-            .put(PotionEffectType.LUCK, 0)
-            .put(PotionEffectType.NIGHT_VISION, 0)
-            .put(PotionEffectType.POISON, 1)
-            .put(PotionEffectType.REGENERATION, 1)
-            .put(PotionEffectType.SLOW, 5)
-            .put(PotionEffectType.SLOW_FALLING, 0)
-            .put(PotionEffectType.SPEED, 1)
-            .put(PotionEffectType.WATER_BREATHING, 0)
-            .put(PotionEffectType.WEAKNESS, 0)
-            .build();
+    private static final Map<PotionEffectType, Integer> potionMaxAmplifierMap = ImmutableMap.<PotionEffectType, Integer>builder().put(PotionEffectType.DAMAGE_RESISTANCE, 3).put(PotionEffectType.FIRE_RESISTANCE, 0).put(PotionEffectType.HARM, 1).put(PotionEffectType.HEAL, 1).put(PotionEffectType.INCREASE_DAMAGE, 1).put(PotionEffectType.INVISIBILITY, 0).put(PotionEffectType.JUMP, 1).put(PotionEffectType.LUCK, 0).put(PotionEffectType.NIGHT_VISION, 0).put(PotionEffectType.POISON, 1).put(PotionEffectType.REGENERATION, 1).put(PotionEffectType.SLOW, 5).put(PotionEffectType.SLOW_FALLING, 0).put(PotionEffectType.SPEED, 1).put(PotionEffectType.WATER_BREATHING, 0).put(PotionEffectType.WEAKNESS, 0).build();
 
     public static boolean isArmorPiece(@Nullable ItemStack item){
         if(item == null) return false;
         final String itemTypeString = item.getType().name();
-        return itemTypeString.endsWith("_HELMET")
-                || itemTypeString.endsWith("_CHESTPLATE")
-                || itemTypeString.endsWith("_LEGGINGS")
-                || itemTypeString.endsWith("_BOOTS");
+        return itemTypeString.endsWith("_HELMET") || itemTypeString.endsWith("_CHESTPLATE") || itemTypeString.endsWith("_LEGGINGS") || itemTypeString.endsWith("_BOOTS");
     }
 
     public static boolean isSpawnEgg(@Nullable ItemStack item){
@@ -132,7 +95,7 @@ public class ItemUtil {
         return !nonPotionList.contains(effectType);
     }
 
-    public static ItemStack getDraconiteCrystal(int health) {
+    public static ItemStack getDraconiteCrystal(int health){
         ItemStack item = new ItemStack(Material.END_CRYSTAL);
         ItemMeta meta = item.getItemMeta();
         meta.setLore(Arrays.asList("", "§cDraconite Crystal", "", "Legends say that it's one of those crystals from the top of the End towers"));
@@ -143,18 +106,18 @@ public class ItemUtil {
         return item;
     }
 
-    public static boolean isDraconiteCrystal(ItemStack item) {
-        if (item == null) return false;
-        if (!item.getType().equals(Material.END_CRYSTAL)) return false;
+    public static boolean isDraconiteCrystal(ItemStack item){
+        if(item == null) return false;
+        if(!item.getType().equals(Material.END_CRYSTAL)) return false;
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) return false;
-        if (!meta.hasLore()) return false;
-        if (meta.getLore() == null) return false;
+        if(meta == null) return false;
+        if(!meta.hasLore()) return false;
+        if(meta.getLore() == null) return false;
 
         return meta.getLore().contains("§cDraconite Crystal");
     }
 
-    public static ItemStack getPopbobTotem(int hp) {
+    public static ItemStack getPopbobTotem(int hp){
         ItemStack item = new ItemStack(Material.TOTEM_OF_UNDYING);
         ItemMeta meta = item.getItemMeta();
         meta.setLore(Arrays.asList("", "§cPopbob's Totem", "", "Legends say that Popbob himself shoved this totem up his ass"));
@@ -167,18 +130,18 @@ public class ItemUtil {
         return item;
     }
 
-    public static boolean isPopbobTotem(ItemStack item) {
-        if (item == null) return false;
-        if (!item.getType().equals(Material.TOTEM_OF_UNDYING)) return false;
+    public static boolean isPopbobTotem(ItemStack item){
+        if(item == null) return false;
+        if(!item.getType().equals(Material.TOTEM_OF_UNDYING)) return false;
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) return false;
-        if (!meta.hasLore()) return false;
-        if (meta.getLore() == null) return false;
+        if(meta == null) return false;
+        if(!meta.hasLore()) return false;
+        if(meta.getLore() == null) return false;
 
         return meta.getLore().contains("§cPopbob's Totem");
     }
 
-    public static ItemStack getDraconiteSword() {
+    public static ItemStack getDraconiteSword(){
         ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
         ItemMeta meta = item.getItemMeta();
         meta.setLore(Arrays.asList("", "§cDraconite Weapon", "", "Legends say that this exact sword was used to kill the first dragon"));
@@ -190,18 +153,18 @@ public class ItemUtil {
         return item;
     }
 
-    public static boolean isDraconiteSword(ItemStack item) {
-        if (item == null) return false;
-        if (!item.getType().equals(Material.NETHERITE_SWORD)) return false;
+    public static boolean isDraconiteSword(ItemStack item){
+        if(item == null) return false;
+        if(!item.getType().equals(Material.NETHERITE_SWORD)) return false;
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) return false;
-        if (!meta.hasLore()) return false;
-        if (meta.getLore() == null) return false;
+        if(meta == null) return false;
+        if(!meta.hasLore()) return false;
+        if(meta.getLore() == null) return false;
 
         return meta.getLore().contains("§cDraconite Weapon");
     }
 
-    public static ItemStack getDraconiteAxe() {
+    public static ItemStack getDraconiteAxe(){
         ItemStack item = new ItemStack(Material.NETHERITE_AXE);
         ItemMeta meta = item.getItemMeta();
         meta.setLore(Arrays.asList("", "§cDraconite Weapon", "", "Legends say that this exact axe was used to decapitate the first dragon"));
@@ -213,13 +176,13 @@ public class ItemUtil {
         return item;
     }
 
-    public static boolean isDraconiteAxe(ItemStack item) {
-        if (item == null) return false;
-        if (!item.getType().equals(Material.NETHERITE_AXE)) return false;
+    public static boolean isDraconiteAxe(ItemStack item){
+        if(item == null) return false;
+        if(!item.getType().equals(Material.NETHERITE_AXE)) return false;
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) return false;
-        if (!meta.hasLore()) return false;
-        if (meta.getLore() == null) return false;
+        if(meta == null) return false;
+        if(!meta.hasLore()) return false;
+        if(meta.getLore() == null) return false;
 
         return meta.getLore().contains("§cDraconite Weapon");
     }
@@ -235,13 +198,13 @@ public class ItemUtil {
         return item;
     }
 
-    public static boolean isDraconitePickaxe(ItemStack item) {
-        if (item == null) return false;
-        if (!item.getType().equals(Material.NETHERITE_PICKAXE)) return false;
+    public static boolean isDraconitePickaxe(ItemStack item){
+        if(item == null) return false;
+        if(!item.getType().equals(Material.NETHERITE_PICKAXE)) return false;
         ItemMeta meta = item.getItemMeta();
-        if (meta == null) return false;
-        if (!meta.hasLore()) return false;
-        if (meta.getLore() == null) return false;
+        if(meta == null) return false;
+        if(!meta.hasLore()) return false;
+        if(meta.getLore() == null) return false;
 
         return meta.getLore().contains("§cDraconite Tool");
     }
@@ -251,7 +214,7 @@ public class ItemUtil {
         if(!item.getType().equals(Material.PLAYER_HEAD)) return false;
         if(!item.hasItemMeta()) return false;
         if(!item.getItemMeta().hasLore()) return false;
-        if(item.getItemMeta().getLore().contains(ChatColor.DARK_PURPLE+"Draconite Gem")) return true;
+        if(item.getItemMeta().getLore().contains(ChatColor.DARK_PURPLE + "Draconite Gem")) return true;
         return false;
     }
 
@@ -281,7 +244,7 @@ public class ItemUtil {
         if(!meta.hasEnchants()) return false;
 
         Map<Enchantment, Integer> enchantMap = meta.getEnchants();
-        for(Map.Entry<Enchantment, Integer> enchant: enchantMap.entrySet()){
+        for(Map.Entry<Enchantment, Integer> enchant : enchantMap.entrySet()){
             if(enchant.getValue() > maxEnchantLevel) return true;
         }
         return false;
@@ -326,4 +289,126 @@ public class ItemUtil {
     public static boolean isDraconiteItem(ItemStack item){
         return isPopbobTotem(item) && isDraconiteCrystal(item) && isDraconiteAxe(item) && isDraconiteSword(item) && isDraconiteGem(item) && isDraconitePickaxe(item);
     }
+
+    private static boolean isAxe(Material mat){
+        boolean isAxe = false;
+
+        switch(mat){
+            case WOODEN_AXE:
+            case STONE_AXE:
+            case IRON_AXE:
+            case GOLDEN_AXE:
+            case DIAMOND_AXE:
+            case NETHERITE_AXE:
+                isAxe = true;
+                break;
+            default:
+                break;
+        }
+        return isAxe;
+    }
+
+    private static boolean isHoe(Material mat){
+        boolean isHoe = false;
+
+        switch(mat){
+            case WOODEN_HOE:
+            case STONE_HOE:
+            case IRON_HOE:
+            case GOLDEN_HOE:
+            case DIAMOND_HOE:
+            case NETHERITE_HOE:
+                isHoe = true;
+                break;
+            default:
+                break;
+        }
+        return isHoe;
+    }
+
+    private static boolean isPickaxe(Material mat){
+        boolean isPickaxe = false;
+
+        switch(mat){
+            case WOODEN_PICKAXE:
+            case STONE_PICKAXE:
+            case IRON_PICKAXE:
+            case GOLDEN_PICKAXE:
+            case DIAMOND_PICKAXE:
+            case NETHERITE_PICKAXE:
+                isPickaxe = true;
+                break;
+            default:
+                break;
+        }
+        return isPickaxe;
+    }
+
+    private static boolean isShovel(Material mat){
+        boolean isShovel = false;
+
+        switch(mat){
+            case WOODEN_SHOVEL:
+            case STONE_SHOVEL:
+            case IRON_SHOVEL:
+            case GOLDEN_SHOVEL:
+            case DIAMOND_SHOVEL:
+            case NETHERITE_SHOVEL:
+                isShovel = true;
+                break;
+            default:
+                break;
+        }
+        return isShovel;
+    }
+
+    public static boolean isSameItem(ItemStack one, ItemStack two){
+        return isSameItem(one, two, false);
+    }
+
+    public static boolean isSameItem(ItemStack one, ItemStack two, boolean negativeDurAllowed){
+        boolean same = false;
+
+        if(one != null && two != null){
+            boolean sameType = one.getType() == two.getType();
+            @SuppressWarnings("deprecation") boolean sameDur = one.getDurability() == two.getDurability();
+            @SuppressWarnings("deprecation") boolean negativeDur = (one.getDurability() == Short.MAX_VALUE) || (two.getDurability() == Short.MAX_VALUE);
+
+            boolean sameEnchant = false;
+            boolean noEnchant = one.getEnchantments().isEmpty() && two.getEnchantments().isEmpty();
+            if(!noEnchant){
+                sameEnchant = one.getEnchantments().equals(two.getEnchantments());
+            }
+
+            boolean sameMeta = false;
+            boolean noMeta = one.getItemMeta() == null && two.getItemMeta() == null;
+
+            if(!noMeta){
+                // Handles an empty slot being compared
+                if(one.getItemMeta() == null || two.getItemMeta() == null){
+                    sameMeta = false;
+                }else{
+                    sameMeta = one.getItemMeta().equals(two.getItemMeta());
+                }
+            }
+
+            if(sameType && (sameDur || (negativeDurAllowed && negativeDur)) && (sameEnchant || noEnchant) && (sameMeta || noMeta)){
+                same = true;
+            }
+        }
+        return same;
+    }
+
+    public static boolean isTool(Material mat){
+        boolean isTool = false;
+
+        if(isAxe(mat) || isHoe(mat) || isPickaxe(mat) || isShovel(mat)){
+            isTool = true;
+        }
+
+        return isTool;
+    }
+
+
+
 }
