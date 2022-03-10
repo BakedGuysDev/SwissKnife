@@ -219,44 +219,6 @@ public class PlayerStatsDriver {
         return 0;
     }
 
-
-    public String addToShitlist(PlayerInfo info){
-        try{
-            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE uuid=?");
-            ps.setBoolean(1, true);
-            ps.setString(2, info.getUuid().toString());
-            if (!exists(info.getUuid())) {
-                createPlayerAsync(info);
-                return "Player didn't have database record. Created one and shitlisted them";
-            }
-            ps.executeUpdate();
-            return "Successfully shitlisted player " + info.getName();
-        }catch (SQLException e){
-            e.printStackTrace();
-            return "Error occurred while shitlisting player " + info.getName();
-        }
-    }
-
-
-
-    public String removeFromShitlist(PlayerInfo info){
-        try{
-            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE uuid=?");
-            ps.setBoolean(1, false);
-            ps.setString(2, info.getUuid().toString());
-            if (!exists(info.getUuid())) {
-                createPlayerAsync(info);
-                return "Player" + info.getName() + " didn't have a database record. Created one and unshitlisted them";
-            }
-            ps.executeUpdate();
-            return "Successfully unshitlisted player " + info.getName();
-
-        }catch (SQLException e){
-            e.printStackTrace();
-            return "Error occurred while unshitlisting player " + info.getName();
-        }
-    }
-
     public void addToShitlistAsync(Player player){
         String name = player.getName();
         Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> addToShitlist(name));
@@ -279,6 +241,23 @@ public class PlayerStatsDriver {
         }
     }
 
+    public String addToShitlist(PlayerInfo info){
+        try{
+            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE uuid=?");
+            ps.setBoolean(1, true);
+            ps.setString(2, info.getUuid().toString());
+            if (!exists(info.getUuid())) {
+                createPlayerAsync(info);
+                return "Player didn't have database record. Created one and shitlisted them";
+            }
+            ps.executeUpdate();
+            return "Successfully shitlisted player " + info.getName();
+        }catch (SQLException e){
+            e.printStackTrace();
+            return "Error occurred while shitlisting player " + info.getName();
+        }
+    }
+
     public void removeFromShitlistAsync(Player player){
         String name = player.getName();
         Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> removeFromShitlist(name));
@@ -298,6 +277,24 @@ public class PlayerStatsDriver {
         }catch (SQLException e){
             e.printStackTrace();
             return "Error occurred while unshitlisting player " + name;
+        }
+    }
+
+    public String removeFromShitlist(PlayerInfo info){
+        try{
+            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE uuid=?");
+            ps.setBoolean(1, false);
+            ps.setString(2, info.getUuid().toString());
+            if (!exists(info.getUuid())) {
+                createPlayerAsync(info);
+                return "Player" + info.getName() + " didn't have a database record. Created one and unshitlisted them";
+            }
+            ps.executeUpdate();
+            return "Successfully unshitlisted player " + info.getName();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return "Error occurred while unshitlisting player " + info.getName();
         }
     }
 
