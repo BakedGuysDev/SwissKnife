@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.systems.modules.player;
 
 import com.egirlsnation.swissknife.settings.*;
+import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.OldConfig;
@@ -100,7 +101,7 @@ public class NetherRoofDisabler extends Module {
                 e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
             }
 
-            if(alertPlayers.get()){
+            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
                 sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
 
@@ -130,7 +131,7 @@ public class NetherRoofDisabler extends Module {
                 e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
             }
 
-            if(alertPlayers.get()){
+            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
                 sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
 
@@ -154,10 +155,8 @@ public class NetherRoofDisabler extends Module {
                 e.setCancelled(true);
                 e.getVehicle().remove();
 
-                if(alertPlayers.get()){
-                    if(e.getEntered() instanceof Player){
-                        sendMessage((Player) e.getEntered(), ChatColor.translateAlternateColorCodes('§', message.get()));
-                    }
+                if(alertPlayers.get() && (e.getEntered() instanceof Player) && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntered())){
+                    sendMessage((Player) e.getEntered(), ChatColor.translateAlternateColorCodes('§', message.get()));
                 }
 
                 if(log.get()) info("Player " + e.getEntered().getName() + " attempted to go above the nether roof");
@@ -184,10 +183,8 @@ public class NetherRoofDisabler extends Module {
                 e.setCancelled(true);
                 e.getVehicle().remove();
 
-                if(alertPlayers.get()){
-                    if(e.getExited() instanceof Player){
-                        sendMessage((Player) e.getExited(), ChatColor.translateAlternateColorCodes('§', message.get()));
-                    }
+                if(alertPlayers.get() && (e.getExited() instanceof Player) && SwissKnifeCommand.hasAlertsEnabled((Player) e.getExited())){
+                    sendMessage((Player) e.getExited(), ChatColor.translateAlternateColorCodes('§', message.get()));
                 }
 
                 if(log.get()) info("Player " + e.getExited().getName() + " attempted to go above the nether roof");

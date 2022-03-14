@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.settings.*;
+import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
@@ -102,7 +103,7 @@ public class IllegalEnchants extends Module {
 
         if(fixValues.get()){
             if(scanAndFixEnchants(e.getInventory())){
-                if(alertPlayers.get()){
+                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getPlayer())){
                     alertPlayer(e.getPlayer());
                 }
                 if(log.get()){
@@ -116,7 +117,7 @@ public class IllegalEnchants extends Module {
             }
         }else{
             if(scanAndRemoveFromInv(e.getInventory())){
-                if(alertPlayers.get()){
+                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getPlayer())){
                     alertPlayer(e.getPlayer());
                 }
                 if(log.get()){
@@ -144,7 +145,7 @@ public class IllegalEnchants extends Module {
         if(fixValues.get()){
             if(scanAndFixEnchants(e.getClickedInventory())){
                 e.setCancelled(true);
-                if(alertPlayers.get()){
+                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getWhoClicked())){
                     alertPlayer(e.getWhoClicked());
                 }
                 if(log.get()){
@@ -159,7 +160,7 @@ public class IllegalEnchants extends Module {
         }else{
             if(scanAndRemoveFromInv(e.getClickedInventory())){
                 e.setCancelled(true);
-                if(alertPlayers.get()){
+                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getWhoClicked())){
                     alertPlayer(e.getWhoClicked());
                 }
                 if(log.get()){
@@ -230,7 +231,7 @@ public class IllegalEnchants extends Module {
                 }
                 if(found){
                     e.getItem().getItemStack().addUnsafeEnchantments(enchantMap);
-                    if(alertPlayers.get()){
+                    if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntity())){
                         alertPlayer(e.getEntity());
                     }
                     if(log.get()){
@@ -243,7 +244,7 @@ public class IllegalEnchants extends Module {
                 e.getItem().remove();
                 e.setCancelled(true);
 
-                if(alertPlayers.get()){
+                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntity())){
                     alertPlayer(e.getEntity());
                 }
                 if(log.get()){

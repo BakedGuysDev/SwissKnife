@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.settings.*;
+import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
@@ -83,7 +84,7 @@ public class IllegalLores extends Module {
 
         if(scanAndRemoveFromInv(e.getInventory()) && e.getPlayer() instanceof Player){
             e.setCancelled(true);
-            if(alertPlayers.get()){
+            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getPlayer())){
                 sendMessage((Player) e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
@@ -107,7 +108,7 @@ public class IllegalLores extends Module {
         if(e.getClickedInventory() == null) return;
         if(scanAndRemoveFromInv(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
             e.setCancelled(true);
-            if(alertPlayers.get()){
+            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getWhoClicked())){
                 sendMessage((Player) e.getWhoClicked(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
@@ -146,7 +147,7 @@ public class IllegalLores extends Module {
             e.getItem().remove();
             e.setCancelled(true);
 
-            if(alertPlayers.get()){
+            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntity())){
                 sendMessage((Player) e.getEntity(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){

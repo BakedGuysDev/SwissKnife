@@ -14,6 +14,7 @@ package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.egirlsnation.swissknife.settings.*;
+import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
@@ -158,7 +159,7 @@ public class IllegalArmorAttributes extends Module {
         if(found){
             if(e.getWhoClicked() instanceof Player){
                 Player player = (Player) e.getWhoClicked();
-                if(alertPlayers.get()) sendMessage(player, message.get());
+                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(player)) sendMessage(player, message.get());
                 if(log.get())
                     info("Illegal armor attributes found in an inventory clicked by " + player.getName() + " at: " + LocationUtil.getLocationString(e.getWhoClicked().getLocation()));
             }
@@ -184,7 +185,7 @@ public class IllegalArmorAttributes extends Module {
             }
             if(e.getEntity() instanceof Player){
                 Player player = (Player) e.getEntity();
-                if(alertPlayers.get()) sendMessage(player, message.get());
+                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(player)) sendMessage(player, message.get());
                 if(log.get())
                     info("Illegal armor attributes found in an inventory clicked by " + player.getName() + " at: " + LocationUtil.getLocationString(e.getEntity().getLocation()));
             }
@@ -228,7 +229,7 @@ public class IllegalArmorAttributes extends Module {
 
             Player player = e.getPlayer();
             setNewArmor(player, item, e.getSlotType());
-            if(alertPlayers.get()) sendMessage(player, message.get());
+            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())) sendMessage(player, message.get());
             if(log.get())
                 info("Illegal armor attributes found in an inventory clicked by " + player.getName() + " at: " + LocationUtil.getLocationString(player.getLocation()));
             return;

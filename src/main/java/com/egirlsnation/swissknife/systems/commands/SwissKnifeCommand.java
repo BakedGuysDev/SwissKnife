@@ -20,17 +20,16 @@ import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.utils.entity.player.PlayerInfo;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class SwissKnifeCommand extends Command {
@@ -43,6 +42,8 @@ public class SwissKnifeCommand extends Command {
 
     private boolean fillDbDidCommand = false;
     private BukkitTask fillDbTask = null;
+
+    private static final List<UUID> disabledAlertsPlayers = new ArrayList<>(1);
 
     @Override
     public void handleCommand(CommandSender sender, String[] args){
@@ -77,6 +78,13 @@ public class SwissKnifeCommand extends Command {
                     sendMessage(sender, ChatColor.RED + "This command is console only!");
                 }
                 handleFillDb(sender);
+                break;
+            }
+            case "toggle":{
+                if(!(sender instanceof Player)){
+                    sendMessage(sender, ChatColor.RED + "You cannot do this command.");
+                }
+                handleToggle(sender, args);
                 break;
             }
             default:{
@@ -178,5 +186,50 @@ public class SwissKnifeCommand extends Command {
             sendMessage(sender, ChatColor.GREEN + "Total execution time was: " + TimeUnit.MILLISECONDS.toSeconds(firstTaskMs + secondTaskMs) + "seconds");
             fillDbTask = null;
         });
+    }
+
+    private void handleToggle(CommandSender sender, String[] args){
+        if(args.length == 1) sender.sendMessage(ChatColor.RED + "No arguments. Possible arguments are: <alerts | petTotems | draconite>");
+
+        Player player = (Player) sender;
+
+        switch(args[1].toLowerCase()){
+            case "alerts":{
+                if(disabledAlertsPlayers.contains(player.getUniqueId())){
+                    disabledAlertsPlayers.remove(player.getUniqueId());
+                    sendMessage(sender, ChatColor.GOLD + "Module alerts were " + ChatColor.RED + "disabled.");
+                }else{
+                    disabledAlertsPlayers.add(player.getUniqueId());
+                    sendMessage(sender, ChatColor.GOLD + "Module alerts were " + ChatColor.GREEN + "enabled.");
+                }
+                break;
+            }
+            case "pet-totems":{
+                if(SwissPlayer.getSwissPlayer(player).hasFeatureEnabled(SwissPlayer.SwissFeature.PET_TOTEMS)){
+                    SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.PET_TOTEMS);
+                    sendMessage(sender, ChatColor.GOLD + "Pet totems were " + ChatColor.RED + "disabled.");
+                }else{
+                    SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.PET_TOTEMS);
+                    sendMessage(sender, ChatColor.GOLD + "Pet totems were " + ChatColor.GREEN + "enabled.");
+                }
+            }
+            case "draconite":{
+                if(SwissPlayer.getSwissPlayer(player).hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES)){
+                    SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.PET_TOTEMS);
+                    sendMessage(sender, ChatColor.GOLD + "Draconite abilities were " + ChatColor.RED + "disabled.");
+                }else{
+                    SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.DRACONITE_ABILITIES);
+                    sendMessage(sender, ChatColor.GOLD + "Draconite abilities were " + ChatColor.GREEN + "enabled.");
+                }
+            }
+            default:{
+                sendMessage(sender, ChatColor.RED + "Incorrect arguments. Possible arguments are: <alerts | petTotems | draconite>");
+                break;
+            }
+        }
+    }
+
+    public static boolean hasAlertsEnabled(Player player){
+        return disabledAlertsPlayers.contains(player.getUniqueId());
     }
 }

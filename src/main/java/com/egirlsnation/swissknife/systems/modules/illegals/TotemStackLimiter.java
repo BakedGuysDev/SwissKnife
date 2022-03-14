@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.settings.*;
+import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
@@ -81,7 +82,7 @@ public class TotemStackLimiter extends Module {
         }
 
         if(scanAndTrimTotemStack(e.getInventory()) && e.getPlayer() instanceof Player){
-            if(alertPlayers.get()){
+            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getPlayer())){
                 alertPlayer(e.getPlayer());
             }
 
@@ -107,7 +108,7 @@ public class TotemStackLimiter extends Module {
         if(e.getClickedInventory() == null) return;
         if(scanAndTrimTotemStack(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
             e.setCancelled(true);
-            if(alertPlayers.get()){
+            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getWhoClicked())){
                 alertPlayer(e.getWhoClicked());
             }
 
@@ -139,7 +140,7 @@ public class TotemStackLimiter extends Module {
             is.setAmount(maxTotemStack.get());
             e.getItem().setItemStack(is);
 
-            if(alertPlayers.get()){
+            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntity())){
                 alertPlayer(e.getEntity());
             }
 
@@ -162,7 +163,7 @@ public class TotemStackLimiter extends Module {
                 if (e.getOffHandItem().getAmount() > maxTotemStack.get()) {
                     e.getOffHandItem().setAmount(maxTotemStack.get());
 
-                    if(alertPlayers.get()){
+                    if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
                         alertPlayer(e.getPlayer());
                     }
 
@@ -178,7 +179,7 @@ public class TotemStackLimiter extends Module {
                 if (e.getMainHandItem().getAmount() > maxTotemStack.get()) {
                     e.getMainHandItem().setAmount(maxTotemStack.get());
 
-                    if(alertPlayers.get()){
+                    if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
                         alertPlayer(e.getPlayer());
                     }
 
