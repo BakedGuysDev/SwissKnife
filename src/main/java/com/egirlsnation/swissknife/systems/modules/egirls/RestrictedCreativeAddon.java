@@ -13,7 +13,6 @@
 package com.egirlsnation.swissknife.systems.modules.egirls;
 
 import com.egirlsnation.swissknife.SwissKnife;
-import com.egirlsnation.swissknife.utils.handlers.CombatCheckHandler;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.modules.Modules;
@@ -59,7 +58,7 @@ public class RestrictedCreativeAddon extends Module {
 
         if(e.getNewGameMode().equals(GameMode.CREATIVE)){
             if(!player.hasPermission("swissknife.bypass.combat") && Modules.get().get(CombatCheck.class).isInCombat(player)){
-                player.sendMessage(ChatColor.RED + "You cannot do that command in combat. Time remaining: " + CombatCheckHandler.getRemainingTime(player) + " seconds");
+                player.sendMessage(ChatColor.RED + "You cannot do that command in combat. Time remaining: " + Modules.get().get(CombatCheck.class).getRemainingCombatTime(player) + " seconds");
                 e.setCancelled(true);
             }
         }else{

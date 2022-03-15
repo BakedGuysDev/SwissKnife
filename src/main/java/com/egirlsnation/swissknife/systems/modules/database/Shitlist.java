@@ -17,7 +17,6 @@ import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -168,7 +167,7 @@ public class Shitlist extends Module {
         if(onlineShitlist.contains(e.getPlayer().getUniqueId())){
             if((rng.nextInt(100) + 1) > replaceChance.get()) return;
             String[] words = e.getMessage().split(" ");
-            words[rng.nextInt(words.length)] = wordsList.get().get(rng.nextInt(OldConfig.instance.replacementWords.size()));
+            words[rng.nextInt(words.length)] = wordsList.get().get(rng.nextInt(wordsList.get().size()));
             StringBuilder sb = new StringBuilder();
             for(String word : words){
                 sb.append(word);

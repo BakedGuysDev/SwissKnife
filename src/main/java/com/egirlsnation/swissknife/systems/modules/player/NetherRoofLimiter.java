@@ -16,24 +16,32 @@ import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
-public class NetherRoofDisabler extends Module {
-    public NetherRoofDisabler(){
-        super(Categories.Player, "nether-roof-disabler", "Prevents players from going onto the nether roof");
+public class NetherRoofLimiter extends Module {
+    public NetherRoofLimiter(){
+        super(Categories.Player, "nether-roof-limiter", "Limits how players can use the nether roof");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
+            .name("bypass")
+            .description("Whenever players with swissknife.bypass.roof permission can bypass this module")
+            .defaultValue(true)
+            .build()
+    );
+
 
     private final Setting<Integer> roofHeight = sgGeneral.add(new IntSetting.Builder()
             .name("roof-height")
@@ -42,42 +50,58 @@ public class NetherRoofDisabler extends Module {
             .build()
     );
 
-    private final Setting<Boolean> teleportDown = sgGeneral.add(new BoolSetting.Builder()
+    private final Setting<Boolean> disableElytra = sgGeneral.add(new BoolSetting.Builder()
+            .name("disable-elytra")
+            .description("If using elytras should be disabled on the roof")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final SettingGroup sgDisabler = settings.createGroup("disabler");
+
+    private final Setting<Boolean> cancelMovement = sgDisabler.add(new BoolSetting.Builder()
+            .name("cancel-movement")
+            .description("If player's movements over the height limit should get cancelled")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Boolean> teleportDown = sgDisabler.add(new BoolSetting.Builder()
             .name("teleport-down")
             .description("If players should be teleported down")
             .defaultValue(true)
             .build()
     );
 
-    private final Setting<Boolean> damagePlayer = sgGeneral.add(new BoolSetting.Builder()
+    private final Setting<Boolean> damagePlayer = sgDisabler.add(new BoolSetting.Builder()
             .name("deal-damage")
             .description("If players should get damaged when they're on the roof")
             .defaultValue(true)
             .build()
     );
 
-    private final Setting<Integer> damage = sgGeneral.add(new IntSetting.Builder()
+    private final Setting<Integer> damage = sgDisabler.add(new IntSetting.Builder()
             .name("damage")
             .description("How much damage should the player get (ignores armor)")
             .defaultValue(1)
             .build()
     );
 
-    private final Setting<Boolean> alertPlayers = sgGeneral.add(new BoolSetting.Builder()
+    private final Setting<Boolean> alertPlayers = sgDisabler.add(new BoolSetting.Builder()
             .name("alert-players")
             .description("If the plugin should tell the player he can't go on the nether roof")
             .defaultValue(true)
             .build()
     );
 
-    private final Setting<String> message = sgGeneral.add(new StringSetting.Builder()
+    private final Setting<String> message = sgDisabler.add(new StringSetting.Builder()
             .name("message")
             .description("The message to send (supports color codes)")
             .defaultValue(ChatColor.RED + "You cannot go on the nether roof")
             .build()
     );
 
-    private final Setting<Boolean> log = sgGeneral.add(new BoolSetting.Builder()
+    private final Setting<Boolean> log = sgDisabler.add(new BoolSetting.Builder()
             .name("log")
             .description("If the plugin should log when player attempts to go on the nether roof")
             .defaultValue(true)
@@ -86,20 +110,24 @@ public class NetherRoofDisabler extends Module {
 
 
     @EventHandler
-    public void PlayerMove(PlayerMoveEvent e){
+    private void PlayerMove(PlayerMoveEvent e){
         if(!isEnabled()) return;
+        if(bypass.get() && e.getPlayer().hasPermission("swissknife.bypass.roof")) return;
 
         Location l = e.getTo();
         if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
 
         if(l.getY() >= roofHeight.get()){
-            e.setCancelled(true);
+
+            if(cancelMovement.get()) e.setCancelled(true);
 
             if(log.get()) info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
 
             if(teleportDown.get()){
                 e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
             }
+
+            if(disableElytra.get()) e.getPlayer().setGliding(false);
 
             if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
                 sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
@@ -115,21 +143,24 @@ public class NetherRoofDisabler extends Module {
     }
 
     @EventHandler
-    public void PlayerTeleport(PlayerTeleportEvent e){
+    private void PlayerTeleport(PlayerTeleportEvent e){
         if(!isEnabled()) return;
-
+        if(bypass.get() && e.getPlayer().hasPermission("swissknife.bypass.roof")) return;
 
         Location l = e.getTo();
         if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
 
         if(l.getBlockY() >= roofHeight.get()){
-            e.setCancelled(true);
+
+            if(cancelMovement.get()) e.setCancelled(true);
 
             if(log.get()) info("Player " + e.getPlayer().getName() + " attempted to go above the nether roof");
 
             if(teleportDown.get()){
                 e.getPlayer().teleport(e.getPlayer().getLocation().subtract(0, 3, 0));
             }
+
+            if(disableElytra.get()) e.getPlayer().setGliding(false);
 
             if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
                 sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
@@ -144,20 +175,25 @@ public class NetherRoofDisabler extends Module {
     }
 
     @EventHandler
-    public void VehicleEnter(VehicleEnterEvent e){
+    private void VehicleEnter(VehicleEnterEvent e){
         if(!isEnabled()) return;
+        if(bypass.get() && e.getEntered().hasPermission("swissknife.bypass.roof")) return;
 
         if(e.getEntered() instanceof Player){
             Location l = e.getVehicle().getLocation();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
 
             if(l.getBlockY() >= roofHeight.get()){
-                e.setCancelled(true);
-                e.getVehicle().remove();
+                if(cancelMovement.get()){
+                    e.setCancelled(true);
+                    e.getVehicle().remove();
+                }
 
                 if(alertPlayers.get() && (e.getEntered() instanceof Player) && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntered())){
                     sendMessage((Player) e.getEntered(), ChatColor.translateAlternateColorCodes('§', message.get()));
                 }
+
+                if((e.getEntered() instanceof Player) && disableElytra.get()) ((Player) e.getEntered()).setGliding(false);
 
                 if(log.get()) info("Player " + e.getEntered().getName() + " attempted to go above the nether roof");
 
@@ -172,20 +208,23 @@ public class NetherRoofDisabler extends Module {
     }
 
     @EventHandler
-    public void VehicleExit(VehicleExitEvent e){
+    private void VehicleExit(VehicleExitEvent e){
         if(!isEnabled()) return;
+        if(bypass.get() && e.getExited().hasPermission("swissknife.bypass.roof")) return;
 
         if(e.getExited() instanceof Player){
             Location l = e.getVehicle().getLocation();
             if(!l.getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
 
-            if(l.getBlockY() >= OldConfig.instance.netherRoofHeight){
+            if(l.getBlockY() >= roofHeight.get()){
                 e.setCancelled(true);
                 e.getVehicle().remove();
 
                 if(alertPlayers.get() && (e.getExited() instanceof Player) && SwissKnifeCommand.hasAlertsEnabled((Player) e.getExited())){
                     sendMessage((Player) e.getExited(), ChatColor.translateAlternateColorCodes('§', message.get()));
                 }
+
+                if(disableElytra.get()) e.getExited().setGliding(false);
 
                 if(log.get()) info("Player " + e.getExited().getName() + " attempted to go above the nether roof");
 
@@ -195,6 +234,18 @@ public class NetherRoofDisabler extends Module {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    private void playerStartGliding(EntityToggleGlideEvent e){
+        if(!isEnabled()) return;
+        if(!disableElytra.get()) return;
+        if(!(e.getEntity() instanceof Player)) return;
+        if(bypass.get() && e.getEntity().hasPermission("swissknife.bypass.roof")) return;
+
+        if(e.isGliding()){
+            e.setCancelled(true);
         }
     }
 }

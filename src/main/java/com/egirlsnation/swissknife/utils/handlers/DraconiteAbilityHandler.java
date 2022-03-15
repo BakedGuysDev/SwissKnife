@@ -10,7 +10,7 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.utils.handlers.customItems;
+package com.egirlsnation.swissknife.utils.handlers;
 
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.utils.entity.player.ExpUtil;

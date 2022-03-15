@@ -10,7 +10,7 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.utils.handlers.customItems;
+package com.egirlsnation.swissknife.utils.handlers;
 
 import org.bukkit.entity.Player;
 

@@ -158,7 +158,7 @@ public class Modules extends System<Modules> {
         add(new BedrockFloorDisabler());
         add(new CombatCheck());
         add(new CrystalKillTracker());
-        add(new NetherRoofDisabler());
+        add(new NetherRoofLimiter());
         add(new PlayerHeads());
     }
 

@@ -62,6 +62,9 @@ permissions:
   swissknife.bypass.illegals:
     description: Allows user to bypass all illegal checks
     default: op
+  swissknife.bypass.roof:
+    description: Allows user to bypass the nether roof checks
+    default: op
   swissknife.chat.greentext:
     description: Allows user to prefix message with > to change color of the message to green
     default: op

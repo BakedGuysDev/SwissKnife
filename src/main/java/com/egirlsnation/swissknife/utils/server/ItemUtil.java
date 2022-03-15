@@ -12,7 +12,6 @@
 
 package com.egirlsnation.swissknife.utils.server;
 
-import com.egirlsnation.swissknife.utils.OldConfig;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.ChatColor;
@@ -25,7 +24,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -58,20 +56,6 @@ public class ItemUtil {
         return itemTypeString.endsWith("SHULKER_BOX");
     }
 
-    public boolean hasTooLongName(@Nullable ItemStack item){
-        if(item == null) return false;
-        if(item.getItemMeta() == null) return false;
-        ItemMeta meta = item.getItemMeta();
-        if(!meta.hasDisplayName()) return false;
-        return meta.getDisplayName().length() > OldConfig.instance.maxItemNameLength;
-    }
-
-    public ItemMeta trimName(@NotNull ItemStack item){
-        if(item.getItemMeta() == null) return null;
-        ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(meta.getDisplayName().substring(0, Math.min(meta.getDisplayName().length(), OldConfig.instance.maxItemNameLength)));
-        return meta;
-    }
 
     public static boolean isAncientOrDraconiteWeapon(@Nullable ItemStack item){
         if(item == null) return false;

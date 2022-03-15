@@ -16,7 +16,6 @@ import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
-import com.egirlsnation.swissknife.utils.OldConfig;
 import com.egirlsnation.swissknife.utils.discord.DiscordWebhook;
 import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
 import com.egirlsnation.swissknife.utils.server.ServerUtil;
@@ -181,7 +180,7 @@ public class DiscordLagNotifier extends Module {
         }
 
         if(!webhookAvatarUrl.get().isBlank()){
-            webhook.setAvatarUrl(OldConfig.instance.webhookAvatarURL);
+            webhook.setAvatarUrl(webhookAvatarUrl.get());
         }
         if(!roleIds.get().isEmpty()){
             String pings = "";

@@ -53,6 +53,12 @@ public class CombatCheck extends Module {
     private static final Map<UUID, Long> combatMap = new HashMap<>();
     private static final Map<UUID, Long> elytraMap = new HashMap<>();
 
+    @Override
+    public void onDisable(){
+        combatMap.clear();
+        elytraMap.clear();
+    }
+
 
     //TODO: Config options, custom events for better checks
 
