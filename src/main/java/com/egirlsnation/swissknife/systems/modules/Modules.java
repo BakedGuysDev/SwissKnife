@@ -173,6 +173,7 @@ public class Modules extends System<Modules> {
     private void initMisc() {
         add(new ChatTweaks());
         add(new CommandLimiter());
+        add(new ControlledDupes());
         add(new DiscordLagNotifier());
         add(new ItemNameLimiter());
         add(new KickMessageMasking());
