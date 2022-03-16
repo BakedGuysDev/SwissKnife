@@ -24,6 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
@@ -63,6 +64,20 @@ public class ControlledDupes extends Module {
             .build()
     );
 
+    private final Setting<Boolean> needsResult = sgCraftingDupe.add(new BoolSetting.Builder()
+            .name("needs-result")
+            .description("If it should dupe only when the crafting has a result")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Boolean> removeCrafingItems = sgCraftingDupe.add(new BoolSetting.Builder()
+            .name("remove-crafting-items")
+            .description("Removes the items in the crafting slots after the person duped")
+            .defaultValue(true)
+            .build()
+    );
+
     List<UUID> startedCrafting = new ArrayList<>(1);
 
     @EventHandler
@@ -89,9 +104,29 @@ public class ControlledDupes extends Module {
                 if(e.getItem().getItemStack().getType().toString().matches(material)) return;
             }
 
+
+            if(!startedCrafting.contains(player.getUniqueId())) return;
             Bukkit.getScheduler().runTaskLater(SwissKnife.INSTANCE, () -> {
                 if(player.getInventory().getItemInMainHand().isSimilar(e.getItem().getItemStack())){
-                    player.getInventory().getItemInMainHand().setAmount(craftingMaxStack.get());
+                    if(needsResult.get()){
+                        ItemStack craftingResult = player.getInventory().getItem(0);
+                        if(craftingResult == null || craftingResult.getType().equals(Material.AIR)) return;
+                    }
+
+                    if(removeCrafingItems.get()){
+                        int i = 0;
+                        while(i != 5){
+                            ItemStack item = player.getInventory().getItem(0);
+                            if(item != null) item.setAmount(0);
+                            i++;
+                        }
+                    }
+
+                    if(craftingStacking.get()){
+                        player.getInventory().getItemInMainHand().setAmount(craftingMaxStack.get());
+                    }else{
+                        e.getItem().getWorld().dropItem(e.getItem().getLocation(), e.getItem().getItemStack());
+                    }
                     startedCrafting.remove(player.getUniqueId());
                 }
             }, 5);
