@@ -43,8 +43,6 @@ public class SwissKnifeCommand extends Command {
     private boolean fillDbDidCommand = false;
     private BukkitTask fillDbTask = null;
 
-    private static final List<UUID> disabledAlertsPlayers = new ArrayList<>(1);
-
     @Override
     public void handleCommand(CommandSender sender, String[] args){
         if(args.length == 0){
@@ -195,41 +193,34 @@ public class SwissKnifeCommand extends Command {
 
         switch(args[1].toLowerCase()){
             case "alerts":{
-                if(disabledAlertsPlayers.contains(player.getUniqueId())){
-                    disabledAlertsPlayers.remove(player.getUniqueId());
+                if(SwissPlayer.getSwissPlayer(player).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                     sendMessage(sender, ChatColor.GOLD + "Module alerts were " + ChatColor.RED + "disabled.");
                 }else{
-                    disabledAlertsPlayers.add(player.getUniqueId());
                     sendMessage(sender, ChatColor.GOLD + "Module alerts were " + ChatColor.GREEN + "enabled.");
                 }
+                SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.MODULE_ALERTS);
                 break;
             }
             case "pet-totems":{
                 if(SwissPlayer.getSwissPlayer(player).hasFeatureEnabled(SwissPlayer.SwissFeature.PET_TOTEMS)){
-                    SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.PET_TOTEMS);
                     sendMessage(sender, ChatColor.GOLD + "Pet totems were " + ChatColor.RED + "disabled.");
                 }else{
-                    SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.PET_TOTEMS);
                     sendMessage(sender, ChatColor.GOLD + "Pet totems were " + ChatColor.GREEN + "enabled.");
                 }
+                SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.PET_TOTEMS);
             }
             case "draconite":{
                 if(SwissPlayer.getSwissPlayer(player).hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES)){
-                    SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.PET_TOTEMS);
                     sendMessage(sender, ChatColor.GOLD + "Draconite abilities were " + ChatColor.RED + "disabled.");
                 }else{
-                    SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.DRACONITE_ABILITIES);
                     sendMessage(sender, ChatColor.GOLD + "Draconite abilities were " + ChatColor.GREEN + "enabled.");
                 }
+                SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.DRACONITE_ABILITIES);
             }
             default:{
                 sendMessage(sender, ChatColor.RED + "Incorrect arguments. Possible arguments are: <alerts | petTotems | draconite>");
                 break;
             }
         }
-    }
-
-    public static boolean hasAlertsEnabled(Player player){
-        return disabledAlertsPlayers.contains(player.getUniqueId());
     }
 }

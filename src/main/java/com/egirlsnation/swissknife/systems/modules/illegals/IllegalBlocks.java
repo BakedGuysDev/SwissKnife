@@ -13,9 +13,9 @@
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.settings.*;
-import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -82,7 +82,7 @@ public class IllegalBlocks extends Module {
                 if(e.getItemInHand().getType().equals(Material.getMaterial(string))){
                     e.setCancelled(true);
                     e.getItemInHand().setAmount(0);
-                    if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
+                    if(alertPlayers.get() && SwissPlayer.getSwissPlayer(e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                         sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
                     }
                     if(log.get()){

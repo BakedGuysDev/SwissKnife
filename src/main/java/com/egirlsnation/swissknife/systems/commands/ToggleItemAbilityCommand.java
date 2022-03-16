@@ -12,11 +12,9 @@
 
 package com.egirlsnation.swissknife.systems.commands;
 
-import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Player;
 
 public class ToggleItemAbilityCommand extends Command {
 
@@ -31,13 +29,6 @@ public class ToggleItemAbilityCommand extends Command {
             return;
         }
 
-        SwissPlayer swissPlayer = SwissPlayer.getSwissPlayer((Player) sender);
-        boolean hadEnabled = swissPlayer.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES);
-        swissPlayer.toggleFeature(SwissPlayer.SwissFeature.DRACONITE_ABILITIES);
-        if(hadEnabled){
-            sendMessage(sender, ChatColor.RED + "Disabled your draconite abilities");
-        }else{
-            sendMessage(sender, ChatColor.GREEN + "Enabled your draconite abilities");
-        }
+        Commands.get().get(SwissKnifeCommand.class).handleCommand(sender, new String[]{"toggle", "draconite"});
     }
 }

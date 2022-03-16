@@ -32,8 +32,6 @@ public abstract class Command implements CommandExecutor {
     private int cooldown = 0;
     private boolean enabled = false;
 
-    //TODO: Unify command for disabling abilities and add petTotems
-
     private final Map<UUID, Long> cooldownMap = new HashMap<>(1);
 
     public Command(String name){

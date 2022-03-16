@@ -13,9 +13,9 @@
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.settings.*;
-import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
@@ -92,7 +92,7 @@ public class AntiIllegalPotion extends Module {
                         if(remove.get()){
                             e.setCancelled(true);
                             e.getItem().setAmount(0);
-                            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
+                            if(alertPlayers.get() && SwissPlayer.getSwissPlayer(e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                                 sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
                             }
                             if(log.get()){
@@ -113,7 +113,7 @@ public class AntiIllegalPotion extends Module {
                         if(remove.get()){
                             e.setCancelled(true);
                             e.getItem().setAmount(0);
-                            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
+                            if(alertPlayers.get() && SwissPlayer.getSwissPlayer(e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                                 sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
                             }
                             if(log.get()){
@@ -130,7 +130,7 @@ public class AntiIllegalPotion extends Module {
                         if(remove.get()){
                             e.setCancelled(true);
                             e.getItem().setAmount(0);
-                            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
+                            if(alertPlayers.get() && SwissPlayer.getSwissPlayer(e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                                 sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
                             }
                             if(log.get()){
@@ -148,7 +148,7 @@ public class AntiIllegalPotion extends Module {
                     }
                 }
                 if(!meta.equals(e.getItem().getItemMeta())){
-                    if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
+                    if(alertPlayers.get() && SwissPlayer.getSwissPlayer(e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                         sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
                     }
                     if(log.get()){

@@ -13,9 +13,9 @@
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.settings.*;
-import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -82,7 +82,7 @@ public class TotemStackLimiter extends Module {
         }
 
         if(scanAndTrimTotemStack(e.getInventory()) && e.getPlayer() instanceof Player){
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getPlayer())){
+            if(alertPlayers.get() && (e.getPlayer() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 alertPlayer(e.getPlayer());
             }
 
@@ -108,7 +108,7 @@ public class TotemStackLimiter extends Module {
         if(e.getClickedInventory() == null) return;
         if(scanAndTrimTotemStack(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
             e.setCancelled(true);
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getWhoClicked())){
+            if(alertPlayers.get() && (e.getWhoClicked() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getWhoClicked()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 alertPlayer(e.getWhoClicked());
             }
 
@@ -140,7 +140,7 @@ public class TotemStackLimiter extends Module {
             is.setAmount(maxTotemStack.get());
             e.getItem().setItemStack(is);
 
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntity())){
+            if(alertPlayers.get() && (e.getEntity() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getEntity()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 alertPlayer(e.getEntity());
             }
 
@@ -163,7 +163,7 @@ public class TotemStackLimiter extends Module {
                 if (e.getOffHandItem().getAmount() > maxTotemStack.get()) {
                     e.getOffHandItem().setAmount(maxTotemStack.get());
 
-                    if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
+                    if(alertPlayers.get() && SwissPlayer.getSwissPlayer(e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                         alertPlayer(e.getPlayer());
                     }
 
@@ -179,7 +179,7 @@ public class TotemStackLimiter extends Module {
                 if (e.getMainHandItem().getAmount() > maxTotemStack.get()) {
                     e.getMainHandItem().setAmount(maxTotemStack.get());
 
-                    if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
+                    if(alertPlayers.get() && SwissPlayer.getSwissPlayer(e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                         alertPlayer(e.getPlayer());
                     }
 

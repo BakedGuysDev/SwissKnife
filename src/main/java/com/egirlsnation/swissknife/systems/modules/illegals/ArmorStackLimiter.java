@@ -13,9 +13,9 @@
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.settings.*;
-import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.ChatColor;
@@ -77,8 +77,8 @@ public class ArmorStackLimiter extends Module {
         if(e.getPlayer().hasPermission("swissknife.bypass.illegals") && bypass.get()){
             return;
         }
-        if(scanAndTrimArmorStacks(e.getInventory()) && e.getPlayer() instanceof Player){
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getPlayer())){
+        if(scanAndTrimArmorStacks(e.getInventory()) && (e.getPlayer() instanceof Player)){
+            if(alertPlayers.get() && SwissPlayer.getSwissPlayer((Player) e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 sendMessage((Player) e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
@@ -101,7 +101,7 @@ public class ArmorStackLimiter extends Module {
         }
         if(scanAndTrimArmorStacks(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
             e.setCancelled(true);
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getWhoClicked())){
+            if(alertPlayers.get() && (e.getWhoClicked() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getWhoClicked()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 sendMessage((Player) e.getWhoClicked(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
@@ -130,7 +130,7 @@ public class ArmorStackLimiter extends Module {
             e.getItem().setItemStack(is);
 
             if(e.getEntity() instanceof Player){
-                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntity())){
+                if(alertPlayers.get() && (e.getEntity() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getEntity()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                     sendMessage((Player) e.getEntity(), ChatColor.translateAlternateColorCodes('§', message.get()));
                 }
                 if(log.get()){

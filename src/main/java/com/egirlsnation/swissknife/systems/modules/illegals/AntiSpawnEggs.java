@@ -16,9 +16,9 @@ import com.egirlsnation.swissknife.settings.BoolSetting;
 import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
 import com.egirlsnation.swissknife.settings.StringSetting;
-import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -77,7 +77,7 @@ public class AntiSpawnEggs extends Module {
             }
             e.getItem().setAmount(0);
             e.setCancelled(true);
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
+            if(alertPlayers.get() && SwissPlayer.getSwissPlayer(e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){

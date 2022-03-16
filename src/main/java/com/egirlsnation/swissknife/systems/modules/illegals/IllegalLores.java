@@ -13,9 +13,9 @@
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.settings.*;
-import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
@@ -84,7 +84,7 @@ public class IllegalLores extends Module {
 
         if(scanAndRemoveFromInv(e.getInventory()) && e.getPlayer() instanceof Player){
             e.setCancelled(true);
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getPlayer())){
+            if(alertPlayers.get() && SwissPlayer.getSwissPlayer((Player) e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 sendMessage((Player) e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
@@ -108,7 +108,7 @@ public class IllegalLores extends Module {
         if(e.getClickedInventory() == null) return;
         if(scanAndRemoveFromInv(e.getClickedInventory()) && e.getWhoClicked() instanceof Player){
             e.setCancelled(true);
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getWhoClicked())){
+            if(alertPlayers.get() && (e.getWhoClicked() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getWhoClicked()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 sendMessage((Player) e.getWhoClicked(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){
@@ -147,7 +147,7 @@ public class IllegalLores extends Module {
             e.getItem().remove();
             e.setCancelled(true);
 
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntity())){
+            if(alertPlayers.get() && (e.getEntity() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getEntity()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 sendMessage((Player) e.getEntity(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
             if(log.get()){

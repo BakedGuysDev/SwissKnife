@@ -13,9 +13,9 @@
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
 import com.egirlsnation.swissknife.settings.*;
-import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import org.bukkit.ChatColor;
@@ -103,7 +103,7 @@ public class IllegalEnchants extends Module {
 
         if(fixValues.get()){
             if(scanAndFixEnchants(e.getInventory())){
-                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getPlayer())){
+                if(alertPlayers.get() && (e.getPlayer() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                     alertPlayer(e.getPlayer());
                 }
                 if(log.get()){
@@ -117,7 +117,7 @@ public class IllegalEnchants extends Module {
             }
         }else{
             if(scanAndRemoveFromInv(e.getInventory())){
-                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getPlayer())){
+                if(alertPlayers.get() && (e.getPlayer() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                     alertPlayer(e.getPlayer());
                 }
                 if(log.get()){
@@ -145,7 +145,7 @@ public class IllegalEnchants extends Module {
         if(fixValues.get()){
             if(scanAndFixEnchants(e.getClickedInventory())){
                 e.setCancelled(true);
-                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getWhoClicked())){
+                if(alertPlayers.get() && (e.getWhoClicked() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getWhoClicked()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                     alertPlayer(e.getWhoClicked());
                 }
                 if(log.get()){
@@ -160,7 +160,7 @@ public class IllegalEnchants extends Module {
         }else{
             if(scanAndRemoveFromInv(e.getClickedInventory())){
                 e.setCancelled(true);
-                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getWhoClicked())){
+                if(alertPlayers.get() && (e.getWhoClicked() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getWhoClicked()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                     alertPlayer(e.getWhoClicked());
                 }
                 if(log.get()){
@@ -231,7 +231,7 @@ public class IllegalEnchants extends Module {
                 }
                 if(found){
                     e.getItem().getItemStack().addUnsafeEnchantments(enchantMap);
-                    if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntity())){
+                    if(alertPlayers.get() && (e.getEntity() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getEntity()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                         alertPlayer(e.getEntity());
                     }
                     if(log.get()){
@@ -244,7 +244,7 @@ public class IllegalEnchants extends Module {
                 e.getItem().remove();
                 e.setCancelled(true);
 
-                if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntity())){
+                if(alertPlayers.get() && (e.getEntity() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getEntity()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                     alertPlayer(e.getEntity());
                 }
                 if(log.get()){

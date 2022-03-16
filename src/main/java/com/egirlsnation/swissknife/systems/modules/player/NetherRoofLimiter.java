@@ -13,9 +13,9 @@
 package com.egirlsnation.swissknife.systems.modules.player;
 
 import com.egirlsnation.swissknife.settings.*;
-import com.egirlsnation.swissknife.systems.commands.SwissKnifeCommand;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.utils.entity.player.SwissPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -129,7 +129,7 @@ public class NetherRoofLimiter extends Module {
 
             if(disableElytra.get()) e.getPlayer().setGliding(false);
 
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
+            if(alertPlayers.get() && SwissPlayer.getSwissPlayer(e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
 
@@ -162,7 +162,7 @@ public class NetherRoofLimiter extends Module {
 
             if(disableElytra.get()) e.getPlayer().setGliding(false);
 
-            if(alertPlayers.get() && SwissKnifeCommand.hasAlertsEnabled(e.getPlayer())){
+            if(alertPlayers.get() && SwissPlayer.getSwissPlayer(e.getPlayer()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                 sendMessage(e.getPlayer(), ChatColor.translateAlternateColorCodes('§', message.get()));
             }
 
@@ -189,7 +189,7 @@ public class NetherRoofLimiter extends Module {
                     e.getVehicle().remove();
                 }
 
-                if(alertPlayers.get() && (e.getEntered() instanceof Player) && SwissKnifeCommand.hasAlertsEnabled((Player) e.getEntered())){
+                if(alertPlayers.get() && (e.getEntered() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getEntered()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                     sendMessage((Player) e.getEntered(), ChatColor.translateAlternateColorCodes('§', message.get()));
                 }
 
@@ -220,7 +220,7 @@ public class NetherRoofLimiter extends Module {
                 e.setCancelled(true);
                 e.getVehicle().remove();
 
-                if(alertPlayers.get() && (e.getExited() instanceof Player) && SwissKnifeCommand.hasAlertsEnabled((Player) e.getExited())){
+                if(alertPlayers.get() && (e.getExited() instanceof Player) && SwissPlayer.getSwissPlayer((Player) e.getExited()).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
                     sendMessage((Player) e.getExited(), ChatColor.translateAlternateColorCodes('§', message.get()));
                 }
 

@@ -111,6 +111,7 @@ public class SwissPlayer {
 
     public enum SwissFeature{
         PET_TOTEMS,
-        DRACONITE_ABILITIES
+        DRACONITE_ABILITIES,
+        MODULE_ALERTS
     }
 }
