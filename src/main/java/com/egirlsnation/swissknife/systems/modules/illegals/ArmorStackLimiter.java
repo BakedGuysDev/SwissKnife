@@ -35,7 +35,7 @@ public class ArmorStackLimiter extends Module {
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
-    private final Setting<Integer> maxArmorStack = sgGeneral.add(new IntSetting.Builder()
+    public final Setting<Integer> maxArmorStack = sgGeneral.add(new IntSetting.Builder()
             .name("max-stack")
             .description("Max stack of armor stacks")
             .defaultValue(3)

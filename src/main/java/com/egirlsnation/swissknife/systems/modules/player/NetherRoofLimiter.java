@@ -108,6 +108,7 @@ public class NetherRoofLimiter extends Module {
             .build()
     );
 
+    //TODO: Elytra compat in ov??
 
     @EventHandler
     private void PlayerMove(PlayerMoveEvent e){
@@ -243,6 +244,8 @@ public class NetherRoofLimiter extends Module {
         if(!disableElytra.get()) return;
         if(!(e.getEntity() instanceof Player)) return;
         if(bypass.get() && e.getEntity().hasPermission("swissknife.bypass.roof")) return;
+        if(!e.getEntity().getWorld().getEnvironment().equals(World.Environment.NETHER)) return;
+        if(e.getEntity().getLocation().getY() < roofHeight.get()) return;
 
         if(e.isGliding()){
             e.setCancelled(true);

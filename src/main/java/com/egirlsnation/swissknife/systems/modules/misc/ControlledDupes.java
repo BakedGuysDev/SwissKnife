@@ -16,6 +16,10 @@ import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
+import com.egirlsnation.swissknife.systems.modules.Modules;
+import com.egirlsnation.swissknife.systems.modules.illegals.ArmorStackLimiter;
+import com.egirlsnation.swissknife.systems.modules.illegals.TotemStackLimiter;
+import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -26,7 +30,10 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 public class ControlledDupes extends Module {
     public ControlledDupes(){
@@ -109,23 +116,35 @@ public class ControlledDupes extends Module {
             Bukkit.getScheduler().runTaskLater(SwissKnife.INSTANCE, () -> {
                 if(player.getInventory().getItemInMainHand().isSimilar(e.getItem().getItemStack())){
                     if(needsResult.get()){
-                        ItemStack craftingResult = player.getInventory().getItem(0);
-                        if(craftingResult == null || craftingResult.getType().equals(Material.AIR)) return;
-                    }
-
-                    if(removeCrafingItems.get()){
-                        int i = 0;
-                        while(i != 5){
-                            ItemStack item = player.getInventory().getItem(0);
-                            if(item != null) item.setAmount(0);
-                            i++;
+                        ItemStack craftingResult = player.getOpenInventory().getTopInventory().getItem(0);
+                        if(craftingResult == null || craftingResult.getType().equals(Material.AIR)){
+                            startedCrafting.remove(player.getUniqueId());
+                            return;
                         }
                     }
 
                     if(craftingStacking.get()){
-                        player.getInventory().getItemInMainHand().setAmount(craftingMaxStack.get());
+                        if(Modules.get().isActive(TotemStackLimiter.class) && e.getItem().getItemStack().getType().equals(Material.TOTEM_OF_UNDYING)){
+                            player.getInventory().getItemInMainHand().setAmount(Modules.get().get(TotemStackLimiter.class).maxTotemStack.get());
+                            if(removeCrafingItems.get()){
+                                player.getOpenInventory().getTopInventory().clear();
+                            }
+                        }else if(Modules.get().isActive(ArmorStackLimiter.class) && ItemUtil.isArmorPiece(e.getItem().getItemStack())){
+                            player.getInventory().getItemInMainHand().setAmount(Modules.get().get(ArmorStackLimiter.class).maxArmorStack.get());
+                            if(removeCrafingItems.get()){
+                                player.getOpenInventory().getTopInventory().clear();
+                            }
+                        }else{
+                            player.getInventory().getItemInMainHand().setAmount(craftingMaxStack.get());
+                            if(removeCrafingItems.get()){
+                                player.getOpenInventory().getTopInventory().clear();
+                            }
+                        }
                     }else{
                         e.getItem().getWorld().dropItem(e.getItem().getLocation(), e.getItem().getItemStack());
+                        if(removeCrafingItems.get()){
+                            player.getOpenInventory().getTopInventory().clear();
+                        }
                     }
                     startedCrafting.remove(player.getUniqueId());
                 }

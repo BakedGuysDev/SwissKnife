@@ -37,7 +37,7 @@ public class TotemStackLimiter extends Module {
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
-    private final Setting<Integer> maxTotemStack = sgGeneral.add(new IntSetting.Builder()
+    public final Setting<Integer> maxTotemStack = sgGeneral.add(new IntSetting.Builder()
             .name("max-stack")
             .description("Max stack of totem stacks")
             .defaultValue(3)
