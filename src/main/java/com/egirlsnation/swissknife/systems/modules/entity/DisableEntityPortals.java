@@ -33,7 +33,7 @@ public class DisableEntityPortals extends Module {
     private final Setting<List<String>> entities = sgGeneral.add(new StringListSetting.Builder()
             .name("entities")
             .description("Entities to not allow to teleport with portals")
-            .defaultValue(Arrays.asList("bee","end_crystal"))
+            .defaultValue(Arrays.asList("bee","end_crystal","firework_rocket"))
             .build()
     );
 
