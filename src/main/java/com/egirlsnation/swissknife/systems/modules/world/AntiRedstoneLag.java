@@ -66,9 +66,11 @@ public class AntiRedstoneLag extends Module {
             }else{
                 e.setNewCurrent(e.getOldCurrent());
             }
-            if(System.currentTimeMillis() - lastLog >= logDelay.get() ){
-                info("Disabled all redstone because tps is under " + tpsThreshold.get());
-                lastLog = System.currentTimeMillis();
+            if(log.get()){
+                if(System.currentTimeMillis() - lastLog >= logDelay.get() ){
+                    info("Disabled all redstone because tps is under " + tpsThreshold.get());
+                    lastLog = System.currentTimeMillis();
+                }
             }
         }else{
             e.setNewCurrent(e.getNewCurrent());
