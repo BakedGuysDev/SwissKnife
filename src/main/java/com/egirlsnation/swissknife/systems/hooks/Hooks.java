@@ -39,6 +39,9 @@ public class Hooks extends System<Hook> {
 
     @Override
     public void init(){
+        add(new EssentialsHook());
+        add(new LuckPermsHook());
+        add(new ProtocolLibHook());
         add(new VotingPluginHook());
     }
 

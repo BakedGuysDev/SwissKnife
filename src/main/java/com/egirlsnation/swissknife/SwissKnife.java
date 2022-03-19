@@ -41,7 +41,7 @@ public class SwissKnife extends JavaPlugin {
 
         swissLogger.info("Initializing SwissKnife");
 
-        Metrics metrics = new Metrics(this, 14670);
+        new Metrics(this, 14670);
 
         Systems.addPreLoadTask(() -> {
             Bukkit.getPluginManager().registerEvents(new SwissPlayerRegistry(), this);
