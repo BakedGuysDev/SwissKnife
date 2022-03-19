@@ -103,7 +103,7 @@ public class PlayerStatsDriver {
                         ",shitlisted,firstplayed,obsidianmined" +
                         ",distanceair,distancewalked,distancesprinted" +
                         ",timesincedeath,combatlogs)" +
-                        " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                        " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps2.setString(1, playerName);
                 ps2.setString(2, playerUUID.toString());
                 ps2.setLong(3, playtime);
