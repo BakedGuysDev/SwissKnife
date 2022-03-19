@@ -137,8 +137,8 @@ public class SwissKnifeCommand extends Command {
         if(!fillDbDidCommand){
             if(fillDbTask == null){
                 sendMessage(sender, ChatColor.YELLOW + "This task is resource intensive, can't be cancelled and will generally take some time, depending on how many players joined your server in the past and your hardware.\n" +
-                        "Even tho it runs asynchronously I recommend you don't do this without the server being in some form of a maintenance mode!\n" +
-                        "If you're sure you want to run this task do the command again.");
+                        ChatColor.YELLOW + "Even tho it runs asynchronously I recommend you don't do this without the server being in some form of a maintenance mode!\n" +
+                        ChatColor.YELLOW + "If you're sure you want to run this task do the command again.");
                 fillDbDidCommand = true;
             }else{
                 sendMessage(sender, ChatColor.RED + "You already have a task for filling the database running!");
@@ -162,7 +162,7 @@ public class SwissKnifeCommand extends Command {
                 infos.add(new PlayerInfo(offlinePlayer));
                 processedPlayersCount++;
                 if((System.currentTimeMillis() - lastUpdate) >= 1000){
-                    sendMessage(sender, ChatColor.GREEN + "Processed " + processedPlayersCount + "/" + playerCount + " playerCount");
+                    sendMessage(sender, ChatColor.GREEN + "Processed " + processedPlayersCount + "/" + playerCount + " players");
                     lastUpdate = System.currentTimeMillis();
                 }
             }
@@ -175,13 +175,13 @@ public class SwissKnifeCommand extends Command {
                 MySQL.get().getPlayerStatsDriver().updateValues(info);
                 processedPlayersCount++;
                 if((System.currentTimeMillis() - lastUpdate) >= 1000){
-                    sendMessage(sender, ChatColor.GREEN + "Processed " + processedPlayersCount + "/" + playerCount + " playerCount");
+                    sendMessage(sender, ChatColor.GREEN + "Processed " + processedPlayersCount + "/" + playerCount + " players");
                     lastUpdate = System.currentTimeMillis();
                 }
             }
             long secondTaskMs = System.currentTimeMillis() - started;
             sendMessage(sender, ChatColor.GREEN + "Fill database task for " + playerCount + " playerCount finished in " + TimeUnit.MILLISECONDS.toSeconds(secondTaskMs) + " seconds");
-            sendMessage(sender, ChatColor.GREEN + "Total execution time was: " + TimeUnit.MILLISECONDS.toSeconds(firstTaskMs + secondTaskMs) + "seconds");
+            sendMessage(sender, ChatColor.GREEN + "Total execution time was: " + TimeUnit.MILLISECONDS.toSeconds(firstTaskMs + secondTaskMs) + " seconds");
             fillDbTask = null;
         });
     }
