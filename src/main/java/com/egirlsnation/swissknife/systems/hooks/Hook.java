@@ -15,7 +15,11 @@ package com.egirlsnation.swissknife.systems.hooks;
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.utils.StringUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.event.server.PluginEnableEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -107,4 +111,26 @@ public abstract class Hook implements Listener, Comparable<Hook> {
     protected abstract void initHook();
 
     protected abstract void removeHook();
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    private void onEnable(PluginEnableEvent e){
+        if(!isEnabled()) return;
+
+        if(e.getPlugin().getName().equals(pluginName)){
+            if(isActive()) return;
+            SwissKnife.swissLogger.info("Activating " + pluginName + " hook.");
+            toggleActive();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    private void onDisable(PluginDisableEvent e){
+        if(!isEnabled()) return;
+
+        if(e.getPlugin().getName().equals(pluginName)){
+            if(!isActive()) return;
+            SwissKnife.swissLogger.info("Deactivating " + pluginName + " hook.");
+            toggleActive();
+        }
+    }
 }

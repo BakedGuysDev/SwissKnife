@@ -17,13 +17,19 @@ import com.egirlsnation.swissknife.settings.BoolSetting;
 import com.egirlsnation.swissknife.settings.IntSetting;
 import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
+import com.egirlsnation.swissknife.systems.hooks.EssentialsHook;
+import com.egirlsnation.swissknife.systems.hooks.Hooks;
+import com.egirlsnation.swissknife.systems.hooks.LuckPermsHook;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import java.util.concurrent.TimeUnit;
 
 public class Ranks extends Module {
     public Ranks() {
@@ -108,5 +114,11 @@ public class Ranks extends Module {
         if(!isEnabled()) return;
         if(!e.getPlayer().hasPlayedBefore()) return;
         RankUtil.promoteIfEligible(e.getPlayer());
+        if((System.currentTimeMillis() - e.getPlayer().getLastLogin()) > TimeUnit.DAYS.toMillis(1) && Hooks.get().isActive(LuckPermsHook.class) && Hooks.get().isActive(EssentialsHook.class)){
+            if(Hooks.get().get(LuckPermsHook.class).isElderFag(e.getPlayer())){
+                Hooks.get().get(EssentialsHook.class).addTpaTokens(e.getPlayer(), 2);
+                sendMessage(e.getPlayer(), ChatColor.GREEN + "2 TPA tokens were added to your account :)");
+            }
+        }
     }
 }

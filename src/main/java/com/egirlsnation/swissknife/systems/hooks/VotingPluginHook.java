@@ -10,25 +10,33 @@
  * <https://opensource.org/licenses/GPL-3.0>.
  */
 
-package com.egirlsnation.swissknife.systems.hooks.votingPlugin;
+package com.egirlsnation.swissknife.systems.hooks;
 
 import com.bencodez.votingplugin.user.UserManager;
-import com.egirlsnation.swissknife.systems.hooks.Hooks;
 import org.bukkit.entity.Player;
 
-public class VpUserManager {
+public class VotingPluginHook extends Hook {
+
+    public VotingPluginHook() {
+        super("voting-plugin-hook", "VotingPlugin");
+    }
+
     private static UserManager userManager = null;
 
-    public static void initUserManager(){
+    public int getVotes(Player player){
+        if(!isActive()) return 0;
+        return userManager.getVotingPluginUser(player).getPoints();
+    }
+
+    @Override
+    protected void initHook(){
         userManager = UserManager.getInstance();
     }
 
-    public static void removeUserManager(){
+    @Override
+    protected void removeHook(){
         userManager = null;
     }
 
-    public static double getVotes(Player player){
-        if(!Hooks.get().isActive(VotingPluginHook.class)) return 0;
-        return userManager.getVotingPluginUser(player).getPoints();
-    }
+
 }

@@ -15,7 +15,6 @@ package com.egirlsnation.swissknife.systems.hooks;
 import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.systems.System;
 import com.egirlsnation.swissknife.systems.Systems;
-import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
 import org.bukkit.Bukkit;
 import org.simpleyaml.configuration.ConfigurationSection;
 

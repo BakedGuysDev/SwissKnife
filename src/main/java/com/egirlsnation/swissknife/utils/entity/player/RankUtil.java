@@ -13,8 +13,7 @@
 package com.egirlsnation.swissknife.utils.entity.player;
 
 import com.egirlsnation.swissknife.systems.hooks.Hooks;
-import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VotingPluginHook;
-import com.egirlsnation.swissknife.systems.hooks.votingPlugin.VpUserManager;
+import com.egirlsnation.swissknife.systems.hooks.VotingPluginHook;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.systems.modules.egirls.Ranks;
 import org.bukkit.*;
@@ -57,7 +56,7 @@ public class RankUtil {
         }
 
         if(!Hooks.get().isActive(VotingPluginHook.class)) return promoted;
-        if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).elderfagHours.get()) && VpUserManager.getVotes(player) >= Modules.get().get(Ranks.class).elderfagVotes.get() && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).elderfagHours.get()) && Hooks.get().get(VotingPluginHook.class).getVotes(player) >= Modules.get().get(Ranks.class).elderfagVotes.get() && !player.hasPermission("egirls.rank.legend")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add legend";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.DARK_AQUA + "ElderFag" + ChatColor.GOLD + "!");
@@ -67,7 +66,7 @@ public class RankUtil {
             promoted = true;
         }
 
-        if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).boomerfagHours.get()) && VpUserManager.getVotes(player) >= Modules.get().get(Ranks.class).boomerfagHours.get() && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
+        if(pt >= getTicksFromHours(Modules.get().get(Ranks.class).boomerfagHours.get()) && Hooks.get().get(VotingPluginHook.class).getVotes(player) >= Modules.get().get(Ranks.class).boomerfagVotes.get() && !player.hasPermission("egirls.rank.boomerfag")){ //Hours to ticks
             String command = "lp user " + player.getName() + " parent add boomerfag";
             Bukkit.dispatchCommand(console, command);
             Bukkit.getServer().broadcastMessage(player.getDisplayName() + ChatColor.GOLD + " reached " + ChatColor.AQUA + "BoomerFag" + ChatColor.GOLD + "!");

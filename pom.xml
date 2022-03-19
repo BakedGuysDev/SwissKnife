@@ -59,11 +59,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.haq.keeper</groupId>
-            <artifactId>spigot</artifactId>
-            <version>2.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.bencodez</groupId>
             <artifactId>votingplugin</artifactId>
             <version>LATEST</version>
@@ -79,6 +74,12 @@
             <groupId>me.carleslc.Simple-YAML</groupId>
             <artifactId>Simple-Yaml</artifactId>
             <version>1.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>net.luckperms</groupId>
+            <artifactId>api</artifactId>
+            <version>5.4</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
