@@ -65,7 +65,6 @@ public class Config extends System<Config> {
         }
     }
 
-    //TODO: Missing config options writing
     @Override
     public void readFromConfig(){
         YamlFile file = getFile();
@@ -75,11 +74,46 @@ public class Config extends System<Config> {
             return;
         }
 
-        prefix = section.getString("prefix");
-        useModulePrefix = section.getBoolean("use-module-prefix");
-        modulePrefix = section.getString("module-prefix");
-        useCommandPrefix = section.getBoolean("use-command-prefix");
-        commandPrefix = section.getString("command-prefix");
-        disableMetrics = section.getBoolean("disable-metrics");
+        if(section.get("prefix") == null){
+            section.set("prefix", prefix);
+        }else{
+            prefix = section.getString("prefix");
+        }
+
+        if(section.get("use-module-prefix") == null){
+            section.set("use-module-prefix", useModulePrefix);
+        }else{
+            useModulePrefix = section.getBoolean("use-module-prefix");
+        }
+
+        if(section.get("module-prefix") == null){
+            section.set("module-prefix", modulePrefix);
+        }else{
+            modulePrefix = section.getString("module-prefix");
+        }
+
+        if(section.get("use-command-prefix") == null){
+            section.set("use-command-prefix", useCommandPrefix);
+        }else{
+            useCommandPrefix = section.getBoolean("use-command-prefix");
+        }
+
+        if(section.get("command-prefix") == null){
+            section.set("command-prefix", commandPrefix);
+        }else{
+            commandPrefix = section.getString("command-prefix");
+        }
+
+        if(section.get("use-module-prefix") == null){
+            section.set("use-module-prefix", useModulePrefix);
+        }else{
+            useModulePrefix = section.getBoolean("use-module-prefix");
+        }
+
+        if(section.get("disable-metrics") == null){
+            section.set("disable-metrics", disableMetrics);
+        }else{
+            disableMetrics = section.getBoolean("disable-metrics");
+        }
     }
 }
