@@ -22,21 +22,21 @@ import com.egirlsnation.swissknife.systems.modules.illegals.TotemStackLimiter;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ControlledDupes extends Module {
     public ControlledDupes(){
@@ -120,6 +120,24 @@ public class ControlledDupes extends Module {
             .build()
     );
 
+    private final SettingGroup sgDebug = settings.createGroup("debug-stick-dupe");
+
+    private final Setting<Boolean> enableDebug = sgDebug.add(new BoolSetting.Builder()
+            .name("enabled")
+            .description("If the debug stick dupe should be enabled")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Integer> debugCooldown = sgDebug.add(new IntSetting.Builder()
+            .name("cooldown")
+            .description("Cooldown in milliseconds")
+            .defaultValue(8500)
+            .build()
+    );
+
+    private final Map<UUID, Long> debugStickCooldowns = new HashMap<>();
+
     //Crafting dupe start
 
     @EventHandler
@@ -191,9 +209,10 @@ public class ControlledDupes extends Module {
     @EventHandler
     private void PlayerQuit(PlayerQuitEvent e){
         startedCrafting.remove(e.getPlayer().getUniqueId());
+        debugStickCooldowns.remove(e.getPlayer().getUniqueId());
     }
 
-    //Crafting dupe end
+    //Crafting dupe end and donkey dupe start
 
     @EventHandler(ignoreCancelled = true)
     public void entityInteract(PlayerInteractAtEntityEvent e){
@@ -226,5 +245,32 @@ public class ControlledDupes extends Module {
         Bukkit.getScheduler().runTaskLater(SwissKnife.INSTANCE, () -> {
             mount.setCarryingChest(false);
         }, 2);
+    }
+
+    //Donkey dupe end and debug stick dupe start
+
+    @EventHandler
+    private void blockBreak(BlockBreakEvent e){
+        if(!isEnabled()) return;
+        if(e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) return;
+
+        if(e.getBlock().getState() instanceof ShulkerBox){
+            if(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.DEBUG_STICK)){
+                Long cooldown = debugStickCooldowns.get(e.getPlayer().getUniqueId());
+                if(cooldown != null){
+                    if((cooldown + debugCooldown.get()) > System.currentTimeMillis()){
+                        e.setCancelled(true);
+                        return;
+                    }
+                }
+
+                debugStickCooldowns.remove(e.getPlayer().getUniqueId());
+                for(ItemStack item : e.getBlock().getDrops()){
+                    e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), item);
+                }
+                e.getBlock().breakNaturally();
+                debugStickCooldowns.put(e.getPlayer().getUniqueId(), System.currentTimeMillis());
+            }
+        }
     }
 }

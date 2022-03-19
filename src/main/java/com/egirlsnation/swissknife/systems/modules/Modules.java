@@ -186,7 +186,6 @@ public class Modules extends System<Modules> {
     }
 
     private void initEgirls() {
-        add(new DebugStickDupe());
         add(new DraconiteItems());
         add(new DragonSlayerAddon());
         add(new EgirlsAttributeCorrector());
