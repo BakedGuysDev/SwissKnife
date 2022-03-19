@@ -21,12 +21,15 @@ import com.egirlsnation.swissknife.systems.modules.illegals.ArmorStackLimiter;
 import com.egirlsnation.swissknife.systems.modules.illegals.TotemStackLimiter;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -86,6 +89,38 @@ public class ControlledDupes extends Module {
     );
 
     List<UUID> startedCrafting = new ArrayList<>(1);
+
+    private final SettingGroup sgDonkey = settings.createGroup("donkey-dupe");
+
+    private final Setting<Boolean> enableDonkey = sgDonkey.add(new BoolSetting.Builder()
+            .name("enabled")
+            .description("If the donkey dupe should be enabled")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<List<String>> enabledMounts = sgDonkey.add(new StringListSetting.Builder()
+            .name("enabled-mounts")
+            .description("Entity types player is allowed to use for the donkey dupe")
+            .defaultValue(Arrays.asList("donkey", "mule", "llama", "trader_llama"))
+            .build()
+    );
+
+    private final Setting<Boolean> alertPlayer = sgDonkey.add(new BoolSetting.Builder()
+            .name("send-msg")
+            .description("If the plugin should send message when removing chests from mounts")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<String> removedChestMsg = sgDonkey.add(new StringSetting.Builder()
+            .name("removed-chest-msg")
+            .description("The message to send when the plugin prevents player from putting chest on mounts")
+            .defaultValue(ChatColor.RED + "You cannot put chest on this entity")
+            .build()
+    );
+
+    //Crafting dupe start
 
     @EventHandler
     private void PrepareCraftItem(PrepareItemCraftEvent e){
@@ -158,5 +193,38 @@ public class ControlledDupes extends Module {
         startedCrafting.remove(e.getPlayer().getUniqueId());
     }
 
+    //Crafting dupe end
 
+    @EventHandler(ignoreCancelled = true)
+    public void entityInteract(PlayerInteractAtEntityEvent e){
+        if(!isEnabled()) return;
+        if(!enableDonkey.get()) return;
+        if(!enabledMounts.get().contains(e.getRightClicked().getType().toString().toLowerCase())) return;
+
+        ItemStack itemOff = e.getPlayer().getInventory().getItemInOffHand();
+        ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+        if(itemOff.getType().equals(Material.CHEST)){
+            item = itemOff;
+        }
+        if(!item.getType().equals(Material.CHEST)) return;
+        if(!(e.getRightClicked() instanceof ChestedHorse)) return;
+
+        ChestedHorse mount = (ChestedHorse) e.getRightClicked();
+
+        for(ItemStack is : mount.getInventory().getContents()){
+            if(is == null) continue;
+            if(is.getType() == Material.SADDLE) continue;
+            mount.getWorld().dropItemNaturally(mount.getLocation(), is);
+            mount.getWorld().dropItemNaturally(mount.getLocation(), is);
+        }
+        mount.setCarryingChest(false);
+        e.setCancelled(true);
+        if(alertPlayer.get()){
+            sendMessage(e.getPlayer(), removedChestMsg.get(), true);
+        }
+
+        Bukkit.getScheduler().runTaskLater(SwissKnife.INSTANCE, () -> {
+            mount.setCarryingChest(false);
+        }, 2);
+    }
 }

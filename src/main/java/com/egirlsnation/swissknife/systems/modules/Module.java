@@ -86,6 +86,18 @@ public abstract class Module implements Listener, Comparable<Module> {
         }
     }
 
+    public void sendMessage(Player player, String message, boolean mask){
+        if(Config.get().useModulePrefix){
+            if(mask){
+                player.sendMessage(Config.get().modulePrefix.replaceAll("%module%", "Modules") + " " + message);
+            }else{
+                player.sendMessage(Config.get().modulePrefix.replaceAll("%module%", name) + " " + message);
+            }
+        }else{
+            player.sendMessage(message);
+        }
+    }
+
     public void writeToConfig(YamlFile file){
         ConfigurationSection section = file.createSection(category.name + "." + name);
 
