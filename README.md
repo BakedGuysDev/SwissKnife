@@ -58,4 +58,4 @@ Maven is the recommended way to build the project.
 
 - Clone the project with `git clone https://github.com/EgirlsNationDev/SwissKnife.git`.  
 - Use `mvn clean package` in the main project directory to build the project.  
-- The jar will be located at `/target/SwissKnife-version-Full.jar` (The full jar has dependencies included).
+- The jar will be located at `/target/SwissKnife-version.jar`.

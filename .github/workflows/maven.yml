@@ -26,4 +26,4 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: SwissKnife-Dev
-        path: ./target/SwissKnife-?.?.?-Full.jar
+        path: ./target/SwissKnife-?.?.?.jar

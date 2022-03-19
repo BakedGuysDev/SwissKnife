@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife;
 
 import com.egirlsnation.swissknife.systems.Systems;
+import com.egirlsnation.swissknife.systems.config.Config;
 import com.egirlsnation.swissknife.systems.internal.SwissPlayerRegistry;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Modules;
@@ -41,8 +42,6 @@ public class SwissKnife extends JavaPlugin {
 
         swissLogger.info("Initializing SwissKnife");
 
-        new Metrics(this, 14670);
-
         Systems.addPreLoadTask(() -> {
             Bukkit.getPluginManager().registerEvents(new SwissPlayerRegistry(), this);
         });
@@ -50,6 +49,10 @@ public class SwissKnife extends JavaPlugin {
         Systems.addPostLoadTask(() -> {
             MySQL.get().initDatabase();
             Modules.get().get(DraconiteItems.class).registerRecipes();
+            if(!Config.get().disableMetrics){
+                new Metrics(this, 14670);
+                swissLogger.info("Metrics loaded. Thank you :)");
+            }
         });
 
         ServerUtil.init();

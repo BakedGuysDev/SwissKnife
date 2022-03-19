@@ -30,6 +30,8 @@ public class Config extends System<Config> {
     public boolean useCommandPrefix = true;
     public String commandPrefix = ChatColor.GOLD + "[" + ChatColor.LIGHT_PURPLE + "SwissKnife | %command%" + ChatColor.GOLD + "]" + ChatColor.RESET;
 
+    public boolean disableMetrics = false;
+
     public Config(){
         super("config");
     }
@@ -53,6 +55,9 @@ public class Config extends System<Config> {
         file.setComment("config.use-prefix", "If plugin should use command prefix when sending messages to players from commands");
         section.set("command-prefix", commandPrefix);
 
+        section.set("disable-metrics", disableMetrics);
+        file.setComment("config.disable-metrics", "SwissKnife uses bStats to collect basic anonymous stats about the servers running the plugin. Use this option to opt-out.");
+
         try {
             getFile().save();
         } catch (IOException e) {
@@ -75,5 +80,6 @@ public class Config extends System<Config> {
         modulePrefix = section.getString("module-prefix");
         useCommandPrefix = section.getBoolean("use-command-prefix");
         commandPrefix = section.getString("command-prefix");
+        disableMetrics = section.getBoolean("disable-metrics");
     }
 }
