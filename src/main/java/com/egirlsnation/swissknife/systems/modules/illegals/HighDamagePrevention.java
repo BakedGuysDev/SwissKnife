@@ -12,7 +12,6 @@
 
 package com.egirlsnation.swissknife.systems.modules.illegals;
 
-import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.*;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
@@ -85,7 +84,6 @@ public class HighDamagePrevention extends Module {
 
         if(e.getDamager() instanceof Player){
             if(e.getDamager().hasPermission("swissknife.bypass.illegals") && bypass.get()){
-                SwissKnife.swissLogger.debug("Bypassed");
                 return;
             }
 
