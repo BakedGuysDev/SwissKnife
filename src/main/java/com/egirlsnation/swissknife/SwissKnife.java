@@ -20,6 +20,7 @@ import com.egirlsnation.swissknife.systems.modules.egirls.DraconiteItems;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.utils.SwissLogger;
 import com.egirlsnation.swissknife.utils.server.ServerUtil;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -39,6 +40,8 @@ public class SwissKnife extends JavaPlugin {
         }
 
         swissLogger.info("Initializing SwissKnife");
+
+        Metrics metrics = new Metrics(this, 14670);
 
         Systems.addPreLoadTask(() -> {
             Bukkit.getPluginManager().registerEvents(new SwissPlayerRegistry(), this);
