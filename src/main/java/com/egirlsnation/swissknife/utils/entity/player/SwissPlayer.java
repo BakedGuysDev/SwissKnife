@@ -43,7 +43,9 @@ public class SwissPlayer {
         if(MySQL.get().isConnected()){
             Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
                 Map<SwissFeature, Boolean> sqlFeatureMap = MySQL.get().getPlayerDataDriver().getFeatureMap(uuid);
-                featureStates.putAll(sqlFeatureMap);
+                if(sqlFeatureMap != null){
+                    featureStates.putAll(sqlFeatureMap);
+                }
                 loadedFeatureData = true;
             });
         }
@@ -107,6 +109,7 @@ public class SwissPlayer {
         if(MySQL.get().isConnected()){
             MySQL.get().getPlayerDataDriver().updatePlayerData(this);
         }
+        swissPlayers.remove(uuid);
     }
 
     public enum SwissFeature{
