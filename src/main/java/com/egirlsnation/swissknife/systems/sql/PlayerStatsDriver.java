@@ -143,7 +143,7 @@ public class PlayerStatsDriver {
 
     public boolean exists(String playerName){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerStats WHERE Name =?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerStats WHERE username =?");
             ps.setString(1, playerName);
 
             ResultSet resultSet = ps.executeQuery();
@@ -205,7 +205,7 @@ public class PlayerStatsDriver {
 
     public long getPlaytime(String playerName){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT playtime FROM swissPlayerStats WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT playtime FROM swissPlayerStats WHERE username=?");
             ps.setString(1, playerName);
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
@@ -226,7 +226,7 @@ public class PlayerStatsDriver {
 
     public String addToShitlist(String name){
         try{
-            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE username=?");
             ps.setBoolean(1, true);
             ps.setString(2, name);
             if (!exists(name)) {
@@ -265,7 +265,7 @@ public class PlayerStatsDriver {
 
     public String removeFromShitlist(String name){
         try{
-            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerStats SET shitlisted=? WHERE username=?");
             ps.setBoolean(1, false);
             ps.setString(2, name);
             if (!exists(name)) {
@@ -300,7 +300,7 @@ public class PlayerStatsDriver {
 
     public boolean isShitlisted(String name){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM swissPlayerStats WHERE name=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT shitlisted FROM swissPlayerStats WHERE username=?");
             ps.setString(1, name);
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){

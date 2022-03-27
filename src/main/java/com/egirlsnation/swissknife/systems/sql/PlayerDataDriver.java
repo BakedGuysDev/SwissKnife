@@ -37,6 +37,7 @@ public class PlayerDataDriver {
                     + "(uuid CHAR(36) NOT NULL," +
                     "petTotems BIT(1) DEFAULT 0," +
                     "draconiteAbilities BIT(1) DEFAULT 0," +
+                    "moduleAlerts BIT(1) DEFAULT 1," +
                     " PRIMARY KEY (uuid))");
             ps.executeUpdate();
         }catch (SQLException e){
@@ -52,11 +53,12 @@ public class PlayerDataDriver {
             if(!resultSet.next()){
 
                 PreparedStatement ps2 = connection.prepareStatement("INSERT IGNORE INTO swissPlayerData"
-                        + " (uuid,petTotems,draconiteAbilities)" +
-                        " VALUES (?,?,?)");
+                        + " (uuid,petTotems,draconiteAbilities,moduleAlerts)" +
+                        " VALUES (?,?,?,?)");
                 ps2.setString(1, player.getUuid().toString());
                 ps2.setBoolean(2, player.hasFeatureEnabled(SwissPlayer.SwissFeature.PET_TOTEMS));
                 ps2.setBoolean(3, player.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES));
+                ps2.setBoolean(3, true);
 
                 ps2.executeUpdate();
             }
@@ -72,11 +74,13 @@ public class PlayerDataDriver {
             }
 
             PreparedStatement ps = connection.prepareStatement("UPDATE swissPlayerData SET" +
-                    " petTotems=?,draconiteAbilities=?" +
+                    " petTotems=?,draconiteAbilities=?,moduleAlerts=?" +
                     " WHERE uuid=?");
 
             ps.setBoolean(1, player.hasFeatureEnabled(SwissPlayer.SwissFeature.PET_TOTEMS));
             ps.setBoolean(2, player.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES));
+            ps.setBoolean(3, player.hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS));
+            ps.setString(4, player.getUuid().toString());
 
             ps.executeUpdate();
         }catch (SQLException e){
@@ -101,11 +105,16 @@ public class PlayerDataDriver {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerData WHERE UUID=?");
             ps.setString(1, uuid.toString());
             ResultSet resultSet = ps.executeQuery();
-            Map<SwissPlayer.SwissFeature, Boolean> featureMap = new HashMap<>(2);
-            featureMap.put(SwissPlayer.SwissFeature.PET_TOTEMS, resultSet.getBoolean("petTotems"));
-            featureMap.put(SwissPlayer.SwissFeature.DRACONITE_ABILITIES, resultSet.getBoolean("draconiteAbilities"));
+            if(resultSet.next()){
+                Map<SwissPlayer.SwissFeature, Boolean> featureMap = new HashMap<>(2);
+                featureMap.put(SwissPlayer.SwissFeature.PET_TOTEMS, resultSet.getBoolean("petTotems"));
+                featureMap.put(SwissPlayer.SwissFeature.DRACONITE_ABILITIES, resultSet.getBoolean("draconiteAbilities"));
+                featureMap.put(SwissPlayer.SwissFeature.MODULE_ALERTS, resultSet.getBoolean("moduleAlerts"));
 
-            return featureMap;
+                return featureMap;
+            }else{
+                return null;
+            }
         }catch(SQLException e){
             e.printStackTrace();
             return null;
