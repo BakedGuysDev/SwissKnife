@@ -187,7 +187,7 @@ public class SwissKnifeCommand extends Command {
     }
 
     private void handleToggle(CommandSender sender, String[] args){
-        if(args.length == 1) sender.sendMessage(ChatColor.RED + "No arguments. Possible arguments are: <alerts | petTotems | draconite>");
+        if(args.length == 1) sender.sendMessage(ChatColor.RED + "No arguments. Possible arguments are: <alerts | pet-totems | draconite>");
 
         Player player = (Player) sender;
 
@@ -208,6 +208,7 @@ public class SwissKnifeCommand extends Command {
                     sendMessage(sender, ChatColor.GOLD + "Pet totems were " + ChatColor.GREEN + "enabled.");
                 }
                 SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.PET_TOTEMS);
+                break;
             }
             case "draconite":{
                 if(SwissPlayer.getSwissPlayer(player).hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES)){
@@ -216,6 +217,7 @@ public class SwissKnifeCommand extends Command {
                     sendMessage(sender, ChatColor.GOLD + "Draconite abilities were " + ChatColor.GREEN + "enabled.");
                 }
                 SwissPlayer.getSwissPlayer(player).toggleFeature(SwissPlayer.SwissFeature.DRACONITE_ABILITIES);
+                break;
             }
             default:{
                 sendMessage(sender, ChatColor.RED + "Incorrect arguments. Possible arguments are: <alerts | petTotems | draconite>");
