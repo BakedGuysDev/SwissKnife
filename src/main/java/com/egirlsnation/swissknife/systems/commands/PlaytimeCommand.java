@@ -46,19 +46,19 @@ public class PlaytimeCommand extends Command {
         Player target = Bukkit.getPlayer(targetName);
         if(target != null){
             long ptTicks = target.getStatistic(Statistic.PLAY_ONE_MINUTE);
-            sendMessage(sender, ChatColor.AQUA + "Playtime of" + targetName + " is " + formatPlayTime(ptTicks));
+            sendMessage(sender, ChatColor.AQUA + "Playtime of " + targetName + " is " + formatPlayTime(ptTicks));
             return;
         }
 
         if(!MySQL.get().isConnected()){
-            sendMessage(sender, ChatColor.RED + "Couldn't get playtime of " + targetName + ".\nThis can mean that the player isn't in the database or isn't online.");
+            sendMessage(sender, ChatColor.RED + "Couldn't get playtime of " + targetName + ".\n" + ChatColor.RED + "This can mean that the player isn't in the database or isn't online.");
             return;
         }
 
         Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
             if(!MySQL.get().getPlayerStatsDriver().exists(targetName)){
                 Bukkit.getScheduler().runTask(SwissKnife.INSTANCE, () -> {
-                    sendMessage(sender, ChatColor.RED + "Couldn't get playtime of " + targetName + ".\nThis can mean that the player isn't in the database or isn't online.");
+                    sendMessage(sender, ChatColor.RED + "Couldn't get playtime of " + targetName + ".\n" + ChatColor.RED + "This can mean that the player isn't in the database or isn't online.");
                 });
                 return;
             }
