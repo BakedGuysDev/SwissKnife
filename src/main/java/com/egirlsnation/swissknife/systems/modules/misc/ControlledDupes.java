@@ -25,11 +25,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.ShulkerBox;
-import org.bukkit.entity.ChestedHorse;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -137,6 +136,35 @@ public class ControlledDupes extends Module {
     );
 
     private final Map<UUID, Long> debugStickCooldowns = new HashMap<>();
+
+    private final SettingGroup sgItemFrame = settings.createGroup("item-frame-dupe");
+
+    private final Setting<Boolean> enableItemFrame = sgItemFrame.add(new BoolSetting.Builder()
+            .name("enabled")
+            .description("If the item frame dupe should be enabled")
+            .defaultValue(true)
+            .build()
+    );
+
+    private final Setting<Integer> itemFrameChance = sgItemFrame.add(new IntSetting.Builder()
+            .name("dupe-chance")
+            .description("Chance of duping in %")
+            .defaultValue(20)
+            .min(1)
+            .max(100)
+            .build()
+    );
+
+    private final Setting<Integer> iFrameStack = sgItemFrame.add(new IntSetting.Builder()
+            .name("stack-chance")
+            .description("Chance of stacking when duping in %")
+            .defaultValue(5)
+            .min(1)
+            .max(100)
+            .build()
+    );
+
+    private final Random random = new Random();
 
     //Crafting dupe start
 
@@ -252,6 +280,7 @@ public class ControlledDupes extends Module {
     @EventHandler
     private void blockBreak(BlockBreakEvent e){
         if(!isEnabled()) return;
+        if(!enableDebug.get()) return;
         if(e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) return;
 
         if(e.getBlock().getState() instanceof ShulkerBox){
@@ -270,6 +299,26 @@ public class ControlledDupes extends Module {
                 }
                 e.getBlock().breakNaturally();
                 debugStickCooldowns.put(e.getPlayer().getUniqueId(), System.currentTimeMillis());
+            }
+        }
+    }
+
+    //Item frame dupe start
+
+    @EventHandler
+    private void entityDamage(EntityDamageEvent e){
+        if(!isEnabled()) return;
+        if(!enableItemFrame.get()) return;
+        if(!e.getEntity().getType().equals(EntityType.ITEM_FRAME)) return;
+
+        ItemFrame iFrame = (ItemFrame) e.getEntity();
+        if((random.nextInt(100) + 1) <= itemFrameChance.get()){
+            if((random.nextInt(100) + 1) <= iFrameStack.get()){
+                ItemStack isClone = iFrame.getItem();
+                isClone.setAmount(64);
+                iFrame.getWorld().dropItemNaturally(e.getEntity().getLocation(), isClone);
+            }else{
+                iFrame.getWorld().dropItemNaturally(e.getEntity().getLocation(), iFrame.getItem());
             }
         }
     }

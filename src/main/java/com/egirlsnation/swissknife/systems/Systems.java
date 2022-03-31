@@ -67,11 +67,16 @@ public class Systems {
         long start = java.lang.System.currentTimeMillis();
         SwissKnife.swissLogger.info("Loading configurations...");
 
+        SwissKnife.swissLogger.info("Executing pre-load tasks...");
         for(Runnable task : preLoadTasks) task.run();
-        for(System<?> system : systems.values()) system.load();
+        for(System<?> system : systems.values()){
+            SwissKnife.swissLogger.info("Loading "+ system.getName() +"...");
+            system.load();
+        }
+        SwissKnife.swissLogger.info("Executing post-load tasks...");
         for(Runnable task : postLoadTasks) task.run();
         long end = java.lang.System.currentTimeMillis() - start;
-        SwissKnife.swissLogger.info("Loaded in " +  end + " milliseconds.");
+        SwissKnife.swissLogger.info("SwissKnife loaded in " +  end + " milliseconds.");
     }
 
     public static void reload(){

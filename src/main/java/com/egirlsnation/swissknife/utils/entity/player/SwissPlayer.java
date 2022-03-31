@@ -110,6 +110,7 @@ public class SwissPlayer {
             MySQL.get().getPlayerDataDriver().updatePlayerData(this);
         }
         swissPlayers.remove(uuid);
+        SwissKnife.swissLogger.info("Saved " + playerName);
     }
 
     public enum SwissFeature{

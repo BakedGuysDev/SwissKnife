@@ -108,8 +108,6 @@ public class NetherRoofLimiter extends Module {
             .build()
     );
 
-    //TODO: Elytra compat in ov??
-
     @EventHandler
     private void PlayerMove(PlayerMoveEvent e){
         if(!isEnabled()) return;

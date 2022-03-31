@@ -107,9 +107,11 @@ public class MySQL extends System<MySQL> {
         databaseName = section.getString("db-name");
         databaseUsername = section.getString("db-username");
         databasePassword = section.getString("db-password");
-    }
 
-    //TODO: Test and migrate database (possibly in code)
+        if(!isConnected()){
+            initDatabase();
+        }
+    }
 
     public void initDatabase(){
         if(!useDatabase) return;

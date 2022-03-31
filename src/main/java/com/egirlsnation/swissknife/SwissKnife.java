@@ -18,7 +18,6 @@ import com.egirlsnation.swissknife.systems.internal.SwissPlayerRegistry;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.systems.modules.egirls.DraconiteItems;
-import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.utils.SwissLogger;
 import com.egirlsnation.swissknife.utils.server.ServerUtil;
 import org.bstats.bukkit.Metrics;
@@ -47,7 +46,7 @@ public class SwissKnife extends JavaPlugin {
         });
 
         Systems.addPostLoadTask(() -> {
-            MySQL.get().initDatabase();
+            //MySQL.get().initDatabase();
             Modules.get().get(DraconiteItems.class).registerRecipes();
             if(!Config.get().disableMetrics){
                 new Metrics(this, 14670);

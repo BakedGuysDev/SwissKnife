@@ -68,7 +68,7 @@ public class IllegalAttributes extends Module {
 
 
 
-    //TODO: logging, player alerts, testing
+    //TODO: logging, player alerts
 
     @EventHandler
     private void inventoryClick(InventoryClickEvent e){

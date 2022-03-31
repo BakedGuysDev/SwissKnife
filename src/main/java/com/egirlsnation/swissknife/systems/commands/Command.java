@@ -47,7 +47,6 @@ public abstract class Command implements CommandExecutor {
             enabled = true;
             Commands.get().addEnabled(this);
             onEnable();
-
         }else{
             enabled = false;
             Commands.get().removeEnabled(this);

@@ -187,7 +187,7 @@ public class SwissKnifeCommand extends Command {
     }
 
     private void handleToggle(CommandSender sender, String[] args){
-        if(args.length == 1) sender.sendMessage(ChatColor.RED + "No arguments. Possible arguments are: <alerts | pet-totems | draconite>");
+        if(args.length == 0) sender.sendMessage(ChatColor.RED + "No arguments. Possible arguments are: <alerts | pet-totems | draconite>");
 
         Player player = (Player) sender;
 

@@ -18,6 +18,7 @@ import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.sql.MySQL;
 import com.egirlsnation.swissknife.utils.StringUtil;
+import com.egirlsnation.swissknife.utils.entity.player.PlayerInfo;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -84,7 +85,7 @@ public class Shitlist extends Module {
     private final Setting<List<String>> wordsList = sgSwapWords.add(new StringListSetting.Builder()
             .name("words-list")
             .description("Words to replace in the words in message with")
-            .defaultValue(Arrays.asList("tpa", "tpahere", "tpayes", "tpaccept", "tpaaccept", "tpno", "tpano", "tpdeny", "tpadeny", "tpyes"))
+            .defaultValue(Arrays.asList("badger", ". Anyway I love dicks.", "titty", "pickle", "canoodle", "mitten", "doodlesack"))
             .build()
     );
 
@@ -179,14 +180,15 @@ public class Shitlist extends Module {
 
     public void addToShitlist(Player player){
         onlineShitlist.add(player.getUniqueId());
-        final boolean[] playerExists = {false};
-        MySQL.get().getPlayerStatsDriver().existsAsync(player.getName(), exists -> playerExists[0] = exists);
-        if(!playerExists[0]){
-            MySQL.get().getPlayerStatsDriver().createPlayerAsync(player, true);
-        }else{
-            MySQL.get().getPlayerStatsDriver().addToShitlistAsync(player);
-        }
-        //SwissKnife.swissLogger.debug("addToShitlist: Shitlisted player");
+        PlayerInfo info = new PlayerInfo(player, true);
+
+        Bukkit.getScheduler().runTaskAsynchronously(SwissKnife.INSTANCE, () -> {
+           if(MySQL.get().getPlayerStatsDriver().exists(player.getName())){
+               MySQL.get().getPlayerStatsDriver().addToShitlist(info);
+           }else{
+               MySQL.get().getPlayerStatsDriver().createPlayer(info);
+           }
+        });
     }
 
     public boolean removeFromShitlist(Player player){
