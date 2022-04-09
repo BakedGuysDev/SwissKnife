@@ -24,6 +24,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -187,6 +188,31 @@ public class TotemStackLimiter extends Module {
                         info("Found over-stacked totems on " + e.getPlayer().getName());
                     }
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    private void onResurrect(EntityResurrectEvent e){
+        if(!isEnabled()) return;
+        if(e.isCancelled()) return;
+        if(!(e.getEntity() instanceof Player)) return;
+        Player player = (Player) e.getEntity();
+        ItemStack item;
+        if(player.getInventory().getItemInMainHand().getType().equals(Material.TOTEM_OF_UNDYING)){
+            item = player.getInventory().getItemInMainHand();
+        }else if(player.getInventory().getItemInOffHand().getType().equals(Material.TOTEM_OF_UNDYING)){
+            item = player.getInventory().getItemInOffHand();
+        }else{
+            return;
+        }
+        if(item.getAmount() >= 4){
+            item.setAmount(maxTotemStack.get());
+            if(log.get()){
+                info("Trimmed totem stack in inventory of " + player.getName() + " at: " + LocationUtil.getLocationString(player.getLocation()));
+            }
+            if(alertPlayers.get() && SwissPlayer.getSwissPlayer(player).hasFeatureEnabled(SwissPlayer.SwissFeature.MODULE_ALERTS)){
+                alertPlayer(player);
             }
         }
     }
