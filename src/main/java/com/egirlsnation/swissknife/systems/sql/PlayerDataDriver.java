@@ -47,7 +47,7 @@ public class PlayerDataDriver {
 
     public void createPlayerData(SwissPlayer player){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerData WHERE UUID=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerData WHERE uuid=?");
             ps.setString(1, player.getUuid().toString());
             ResultSet resultSet = ps.executeQuery();
             if(!resultSet.next()){
@@ -58,7 +58,7 @@ public class PlayerDataDriver {
                 ps2.setString(1, player.getUuid().toString());
                 ps2.setBoolean(2, player.hasFeatureEnabled(SwissPlayer.SwissFeature.PET_TOTEMS));
                 ps2.setBoolean(3, player.hasFeatureEnabled(SwissPlayer.SwissFeature.DRACONITE_ABILITIES));
-                ps2.setBoolean(3, true);
+                ps2.setBoolean(4, true);
 
                 ps2.executeUpdate();
             }
@@ -90,7 +90,7 @@ public class PlayerDataDriver {
 
     public boolean hasPlayerDataEntry(UUID uuid){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerData WHERE UUID=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerData WHERE uuid=?");
             ps.setString(1, uuid.toString());
 
             return ps.executeQuery().next();
@@ -102,7 +102,7 @@ public class PlayerDataDriver {
 
     public Map<SwissPlayer.SwissFeature, Boolean> getFeatureMap(UUID uuid){
         try{
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerData WHERE UUID=?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM swissPlayerData WHERE uuid=?");
             ps.setString(1, uuid.toString());
             ResultSet resultSet = ps.executeQuery();
             if(resultSet.next()){
