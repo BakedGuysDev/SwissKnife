@@ -9,12 +9,12 @@
 <div align="center">
     <a href="https://discord.gg/2Z4YT2qKQ2"><img src="https://img.shields.io/discord/825773898796630016?style=for-the-badge&logo=discord" alt="Discord"/></a>
     <br><br>
-    <img src="https://img.shields.io/github/last-commit/EgirlsNationDev/SwissKnife?style=for-the-badge" alt="GitHub last commit"/>
-    <img src="https://img.shields.io/github/commit-activity/w/EgirlsNationDev/SwissKnife?style=for-the-badge" alt="GitHub commit activity"/>
+    <img src="https://img.shields.io/github/last-commit/BakedGuysDev/SwissKnife?style=for-the-badge" alt="GitHub last commit"/>
+    <img src="https://img.shields.io/github/commit-activity/w/BakedGuysDev/SwissKnife?style=for-the-badge" alt="GitHub commit activity"/>
     <br>
-    <img src="https://img.shields.io/github/workflow/status/EgirlsNationDev/SwissKnife/Java%20CI%20with%20Maven?event=push&style=for-the-badge" alt="Github Actions CI"/>
-    <img src="https://img.shields.io/tokei/lines/github/EgirlsNationDev/SwissKnife?style=for-the-badge" alt="GitHub lines of code"/>
-    <img src="https://www.codefactor.io/repository/github/EgirlsNationDev/SwissKnife/badge?style=for-the-badge" alt="CodeFactor"/>
+    <img src="https://img.shields.io/github/workflow/status/BakedGuysDev/SwissKnife/Java%20CI%20with%20Maven?event=push&style=for-the-badge" alt="Github Actions CI"/>
+    <img src="https://img.shields.io/tokei/lines/github/BakedGuysDev/SwissKnife?style=for-the-badge" alt="GitHub lines of code"/>
+    <img src="https://www.codefactor.io/repository/github/BakedGuysDev/SwissKnife/badge?style=for-the-badge" alt="CodeFactor"/>
 </div>
 
 ## What is SwissKnife
