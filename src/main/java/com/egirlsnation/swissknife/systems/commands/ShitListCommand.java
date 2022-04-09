@@ -20,6 +20,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ShitListCommand extends Command {
 
@@ -90,6 +96,20 @@ public class ShitListCommand extends Command {
                 });
             }
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, String[] args){
+        if(args == null) return null;
+        final List<String> completions = new ArrayList<>(1);
+        if(args.length == 1){
+            StringUtil.copyPartialMatches(args[0], Arrays.asList("add, remove"), completions);
+            return completions;
+        }
+        if(args.length == 2){
+            return Commands.get().playerNamesTabComplete(sender, args, 2);
+        }
+        return null;
     }
 
 

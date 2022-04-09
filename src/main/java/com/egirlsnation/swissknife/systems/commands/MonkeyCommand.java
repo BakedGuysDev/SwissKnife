@@ -13,11 +13,19 @@
 package com.egirlsnation.swissknife.systems.commands;
 
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class MonkeyCommand extends Command {
 
     public MonkeyCommand(){
         super("monkey");
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, String[] args){
+        return null;
     }
 
     @Override

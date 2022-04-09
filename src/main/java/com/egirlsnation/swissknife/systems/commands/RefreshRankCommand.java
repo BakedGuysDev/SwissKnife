@@ -16,6 +16,9 @@ import com.egirlsnation.swissknife.utils.entity.player.RankUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class RefreshRankCommand extends Command {
 
@@ -36,5 +39,10 @@ public class RefreshRankCommand extends Command {
         }else{
             sendMessage(sender, ChatColor.GOLD + "Didn't find any rank you could be promoted to.");
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, String[] args){
+        return null;
     }
 }

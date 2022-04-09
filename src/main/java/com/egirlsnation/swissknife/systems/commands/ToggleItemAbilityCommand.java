@@ -15,11 +15,19 @@ package com.egirlsnation.swissknife.systems.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class ToggleItemAbilityCommand extends Command {
 
     public ToggleItemAbilityCommand(){
         super("toggle-item-ability");
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, String[] args){
+        return null;
     }
 
     @Override
@@ -29,6 +37,7 @@ public class ToggleItemAbilityCommand extends Command {
             return;
         }
 
-        Commands.get().get(SwissKnifeCommand.class).handleCommand(sender, new String[]{"toggle", "draconite"});
+        Commands.get().get(SwissKnifeCommand.class).handleCommand(sender, args);
+        sendMessage(sender, ChatColor.RED + "This command is gonna be removed soon. Switch over to using /swissknife toggle instead");
     }
 }

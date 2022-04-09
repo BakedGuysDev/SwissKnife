@@ -18,6 +18,9 @@ import com.egirlsnation.swissknife.utils.server.ServerUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class TpsAlertTestCommand extends Command {
 
@@ -26,6 +29,11 @@ public class TpsAlertTestCommand extends Command {
     }
 
     //TODO: Improve
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, String[] args){
+        return null;
+    }
 
     @Override
     public void handleCommand(CommandSender sender, String[] args){

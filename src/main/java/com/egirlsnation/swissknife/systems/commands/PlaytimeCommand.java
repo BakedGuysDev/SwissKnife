@@ -19,7 +19,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Statistic;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class PlaytimeCommand extends Command {
@@ -67,6 +69,11 @@ public class PlaytimeCommand extends Command {
                 sendMessage(sender, ChatColor.RED + "Playtime of " + targetName + " is " + playtime);
             });
         });
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, String[] args){
+        return Commands.get().playerNamesTabComplete(sender, args, 1);
     }
 
     private String formatPlayTime(long ticks){

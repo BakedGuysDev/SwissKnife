@@ -18,19 +18,22 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
-public abstract class Command implements CommandExecutor {
+public abstract class Command implements CommandExecutor, TabCompleter {
     public String name;
     private int cooldown = 0;
     private boolean enabled = false;
+
 
     private final Map<UUID, Long> cooldownMap = new HashMap<>(1);
 
@@ -58,6 +61,7 @@ public abstract class Command implements CommandExecutor {
         PluginCommand command = SwissKnife.INSTANCE.getCommand(name.replaceAll("-", ""));
         if(command != null){
             command.setExecutor(this);
+            command.setTabCompleter(this);
             onRegister();
         }else{
             error("Couldn't find command named " + name + " while enabling a command. This could mean that command is not defined in plugin.yml");
@@ -139,6 +143,13 @@ public abstract class Command implements CommandExecutor {
         }
         return true;
     }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, org.bukkit.command.@NotNull Command command, @NotNull String alias, String[] args){
+        return onTabComplete(sender, args);
+    }
+
+    public abstract List<String> onTabComplete(@NotNull CommandSender sender, String[] args);
 
     public abstract void handleCommand(CommandSender sender, String[] args);
 

@@ -28,6 +28,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -92,6 +94,35 @@ public class SwissKnifeCommand extends Command {
         }
     }
 
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, String[] args){
+        if(args == null) return null;
+        final List<String> completions = new ArrayList<>(1);
+        if(args.length == 1){
+            StringUtil.copyPartialMatches(args[0], Arrays.asList("reload", "info", "modules", "toggle"), completions);
+            Collections.sort(completions);
+            return completions;
+        }
+        if(args.length == 2){
+            switch(args[0].toLowerCase()){
+                case "modules":{
+                    StringUtil.copyPartialMatches(args[1], List.of("list"), completions);
+                    break;
+                }
+                case "toggle":{
+                    StringUtil.copyPartialMatches(args[1], Arrays.asList("alerts", "pet-totems", "draconite"), completions);
+                    break;
+                }
+                default:{
+                    return null;
+                }
+            }
+            Collections.sort(completions);
+            return completions;
+        }
+        return null;
+    }
+
     private void displayInfo(CommandSender sender){
         sender.sendMessage(ChatColor.GOLD + "-------------- [" + ChatColor.LIGHT_PURPLE + "SwissKnife" + ChatColor.GOLD + "] --------------");
         sender.sendMessage(ChatColor.GOLD + "Authors:\n" + ChatColor.LIGHT_PURPLE + "Lerbiq, codingPotato and Killmlana");
@@ -129,7 +160,6 @@ public class SwissKnifeCommand extends Command {
                 }
             }
             sender.sendMessage(sb.toString());
-
         }
     }
 

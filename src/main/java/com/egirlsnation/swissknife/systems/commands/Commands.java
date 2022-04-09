@@ -14,6 +14,11 @@ package com.egirlsnation.swissknife.systems.commands;
 
 import com.egirlsnation.swissknife.systems.System;
 import com.egirlsnation.swissknife.systems.Systems;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.ConfigurationSection;
 
 import java.io.IOException;
@@ -123,5 +128,17 @@ public class Commands extends System<Commands> {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    public List<String> playerNamesTabComplete(@NotNull CommandSender sender, String[] args, int position){
+        if(args == null) return null;
+        if(args.length > position) return null;
+        final List<String> completions = new ArrayList<>(1);
+        final List<String> playerNames = new ArrayList<>(1);
+        for(Player p : Bukkit.getOnlinePlayers()){
+            playerNames.add(p.getName());
+        }
+        StringUtil.copyPartialMatches(args[position - 1], playerNames, completions);
+        return completions;
     }
 }

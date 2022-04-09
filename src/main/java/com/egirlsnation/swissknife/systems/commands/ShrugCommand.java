@@ -15,6 +15,9 @@ package com.egirlsnation.swissknife.systems.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class ShrugCommand extends Command {
 
@@ -37,5 +40,10 @@ public class ShrugCommand extends Command {
 
             p.chat(arg + " ¯\\_(ツ)_/¯");
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, String[] args){
+        return List.of("your message here");
     }
 }

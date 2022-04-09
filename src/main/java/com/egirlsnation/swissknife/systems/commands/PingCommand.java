@@ -16,6 +16,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import static com.egirlsnation.swissknife.utils.StringUtil.formatPing;
 
@@ -54,5 +57,10 @@ public class PingCommand extends Command {
         } else {
             sendMessage(sender, ChatColor.AQUA + "Ping of " + target.getDisplayName() + " is " + formatPing(ping) + ChatColor.AQUA + " ms");
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, String[] args){
+        return Commands.get().playerNamesTabComplete(sender, args, 1);
     }
 }

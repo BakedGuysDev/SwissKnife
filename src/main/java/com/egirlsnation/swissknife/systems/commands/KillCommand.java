@@ -17,6 +17,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class KillCommand extends Command {
 
@@ -65,5 +68,10 @@ public class KillCommand extends Command {
             return;
         }
         sender.sendMessage(ChatColor.RED + "You do not have enough permissions.");
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, String[] args){
+        return Commands.get().playerNamesTabComplete(sender, args, 1);
     }
 }
