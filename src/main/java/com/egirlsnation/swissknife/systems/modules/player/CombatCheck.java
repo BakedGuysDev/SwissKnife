@@ -12,7 +12,6 @@
 
 package com.egirlsnation.swissknife.systems.modules.player;
 
-import com.egirlsnation.swissknife.SwissKnife;
 import com.egirlsnation.swissknife.settings.IntSetting;
 import com.egirlsnation.swissknife.settings.Setting;
 import com.egirlsnation.swissknife.settings.SettingGroup;
@@ -71,7 +70,6 @@ public class CombatCheck extends Module {
         EntityDamageEvent.DamageCause cause = e.getCause();
 
         if(e.getDamager() == null){
-            SwissKnife.swissLogger.debug("Damager null");
             return;
         }
 
