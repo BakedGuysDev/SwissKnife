@@ -35,7 +35,7 @@ public class IllegalBlocks extends Module {
     private final Setting<List<String>> illegalBlocks = sgGeneral.add(new StringListSetting.Builder()
             .name("illegal-block")
             .description("List of blocks to blacklist")
-            .defaultValue(Arrays.asList("BEDROCK", "END_PORTAL_FRAME", "BARRIER", "STRUCTURE_BLOCK", "STRUCTURE_VOID"))
+            .defaultValue(Arrays.asList("BEDROCK", "END_PORTAL_FRAME", "BARRIER", "STRUCTURE_BLOCK", "STRUCTURE_VOID", "JIGSAW_BLOCK"))
             .build()
     );
 
