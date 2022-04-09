@@ -43,6 +43,16 @@ public class ControlledDupes extends Module {
         super(Categories.Misc, "controlled-dupes", "Adds back some dupes but you can control them this time");
     }
 
+    //TODO: More config options
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<List<String>> stackBlacklist = sgGeneral.add(new StringListSetting.Builder()
+            .name("stacking-blacklist")
+            .description("Items that should be blacklisted from stacking (supports regex)")
+            .defaultValue(Arrays.asList(Material.PLAYER_HEAD.toString()))
+            .build()
+    );
+
     private final SettingGroup sgCraftingDupe = settings.createGroup("crafting-dupe");
 
     private final Setting<Boolean> craftingEnabled = sgCraftingDupe.add(new BoolSetting.Builder()
@@ -213,6 +223,9 @@ public class ControlledDupes extends Module {
                 }
 
                 if(craftingStacking.get()){
+                    if(stackBlacklist.get().contains(player.getInventory().getItemInMainHand().getType().toString())){
+                        return;
+                    }
                     if(Modules.get().isActive(TotemStackLimiter.class) && e.getItem().getItemStack().getType().equals(Material.TOTEM_OF_UNDYING)){
                         player.getInventory().getItemInMainHand().setAmount(Modules.get().get(TotemStackLimiter.class).maxTotemStack.get());
                         if(removeCrafingItems.get()){
@@ -320,6 +333,17 @@ public class ControlledDupes extends Module {
         ItemFrame iFrame = (ItemFrame) e.getEntity();
         if((random.nextInt(100) + 1) <= itemFrameChance.get()){
             if((random.nextInt(100) + 1) <= iFrameStack.get()){
+                if(stackBlacklist.get().contains(iFrame.getItem().getType().toString())){
+                    iFrame.getWorld().dropItemNaturally(e.getEntity().getLocation(), iFrame.getItem());
+                    return;
+                }
+                int amount = 64;
+                if(Modules.get().isActive(TotemStackLimiter.class) && iFrame.getItem().getType().equals(Material.TOTEM_OF_UNDYING)){
+                    amount  = Modules.get().get(TotemStackLimiter.class).maxTotemStack.get();
+                }else if(Modules.get().isActive(ArmorStackLimiter.class) && ItemUtil.isArmorPiece(iFrame.getItem())){
+                    amount = Modules.get().get(ArmorStackLimiter.class).maxArmorStack.get();
+
+                }
                 ItemStack isClone = iFrame.getItem();
                 isClone.setAmount(64);
                 iFrame.getWorld().dropItemNaturally(e.getEntity().getLocation(), isClone);
