@@ -277,6 +277,7 @@ public class EgirlsAttributeCorrector extends Module {
         for(Attribute attribute : modifierMap.keys()){
             meta.removeAttributeModifier(attribute);
         }
+        meta.setAttributeModifiers(ItemUtil.getDraconiteCrystal(Modules.get().get(DraconiteItems.class).additionalCrystalHp.get()).getItemMeta().getAttributeModifiers());
         return meta;
     }
 }

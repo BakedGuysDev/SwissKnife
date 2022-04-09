@@ -81,6 +81,13 @@ public class IllegalArmorAttributes extends Module {
             .build()
     );
 
+    private final Setting<Boolean> log = sgGeneral.add(new BoolSetting.Builder()
+            .name("logging")
+            .description("If the plugin should log when player tries to place an illegal block")
+            .defaultValue(false)
+            .build()
+    );
+
     // Armor attribute settings
 
     private final SettingGroup sgArmorAttributes = settings.createGroup("custom-attributes");
@@ -117,13 +124,6 @@ public class IllegalArmorAttributes extends Module {
             .name("max-health")
             .description("Defines max-health added to player with armor.")
             .defaultValue(8)
-            .build()
-    );
-
-    private final Setting<Boolean> log = sgGeneral.add(new BoolSetting.Builder()
-            .name("logging")
-            .description("If the plugin should log when player tries to place an illegal block")
-            .defaultValue(false)
             .build()
     );
 
