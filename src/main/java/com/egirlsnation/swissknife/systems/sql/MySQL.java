@@ -60,7 +60,7 @@ public class MySQL extends System<MySQL> {
     //TODO: Better way of auto-reconnecting when connection times out
     private void connect() throws ClassNotFoundException, SQLException{
         if(!isConnected()){
-            connection = DriverManager.getConnection("jdbc:mysql://" + databaseHost + ":" + databasePort + "/" + databaseName + "?useSSL=false?autoReconnect=true", databaseUsername, databasePassword);
+            connection = DriverManager.getConnection("jdbc:mysql://" + databaseHost + ":" + databasePort + "/" + databaseName + "?useSSL=false&autoReconnect=true", databaseUsername, databasePassword);
         }
     }
 
