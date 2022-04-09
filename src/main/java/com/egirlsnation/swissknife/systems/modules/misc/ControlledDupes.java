@@ -30,6 +30,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -183,55 +184,60 @@ public class ControlledDupes extends Module {
     @EventHandler
     private void PickUpEvent(EntityPickupItemEvent e){
         if(!isEnabled()) return;
+        if(!craftingEnabled.get()) return;
 
-        if(craftingEnabled.get()){
-            if(!(e.getEntity() instanceof Player)) return;
-            if(!startedCrafting.contains(e.getEntity().getUniqueId())) return;
-            Player player = (Player) e.getEntity();
-            for(String material : craftingBlacklist.get()){
-                if(e.getItem().getItemStack().getType().toString().matches(material)) return;
+        if(!(e.getEntity() instanceof Player)) return;
+        if(!startedCrafting.contains(e.getEntity().getUniqueId())) return;
+        Player player = (Player) e.getEntity();
+        for(String material : craftingBlacklist.get()){
+            if(e.getItem().getItemStack().getType().toString().matches(material)){
+                startedCrafting.remove(player.getUniqueId());
+                return;
             }
+        }
 
 
-            if(!startedCrafting.contains(player.getUniqueId())) return;
-            Bukkit.getScheduler().runTaskLater(SwissKnife.INSTANCE, () -> {
-                if(player.getInventory().getItemInMainHand().isSimilar(e.getItem().getItemStack())){
-                    if(needsResult.get()){
-                        ItemStack craftingResult = player.getOpenInventory().getTopInventory().getItem(0);
-                        if(craftingResult == null || craftingResult.getType().equals(Material.AIR)){
-                            startedCrafting.remove(player.getUniqueId());
-                            return;
-                        }
+        if(!startedCrafting.contains(player.getUniqueId())) return;
+        Bukkit.getScheduler().runTaskLater(SwissKnife.INSTANCE, () -> {
+            if(player.getInventory().getItemInMainHand().isSimilar(e.getItem().getItemStack())){
+                if(needsResult.get()){
+                    if(!player.getOpenInventory().getTopInventory().getType().equals(InventoryType.CRAFTING)){
+                        startedCrafting.remove(player.getUniqueId());
+                        return;
                     }
+                    ItemStack craftingResult = player.getOpenInventory().getTopInventory().getItem(0);
+                    if(craftingResult == null || craftingResult.getType().equals(Material.AIR)){
+                        startedCrafting.remove(player.getUniqueId());
+                        return;
+                    }
+                }
 
-                    if(craftingStacking.get()){
-                        if(Modules.get().isActive(TotemStackLimiter.class) && e.getItem().getItemStack().getType().equals(Material.TOTEM_OF_UNDYING)){
-                            player.getInventory().getItemInMainHand().setAmount(Modules.get().get(TotemStackLimiter.class).maxTotemStack.get());
-                            if(removeCrafingItems.get()){
-                                player.getOpenInventory().getTopInventory().clear();
-                            }
-                        }else if(Modules.get().isActive(ArmorStackLimiter.class) && ItemUtil.isArmorPiece(e.getItem().getItemStack())){
-                            player.getInventory().getItemInMainHand().setAmount(Modules.get().get(ArmorStackLimiter.class).maxArmorStack.get());
-                            if(removeCrafingItems.get()){
-                                player.getOpenInventory().getTopInventory().clear();
-                            }
-                        }else{
-                            player.getInventory().getItemInMainHand().setAmount(craftingMaxStack.get());
-                            if(removeCrafingItems.get()){
-                                player.getOpenInventory().getTopInventory().clear();
-                            }
+                if(craftingStacking.get()){
+                    if(Modules.get().isActive(TotemStackLimiter.class) && e.getItem().getItemStack().getType().equals(Material.TOTEM_OF_UNDYING)){
+                        player.getInventory().getItemInMainHand().setAmount(Modules.get().get(TotemStackLimiter.class).maxTotemStack.get());
+                        if(removeCrafingItems.get()){
+                            player.getOpenInventory().getTopInventory().clear();
+                        }
+                    }else if(Modules.get().isActive(ArmorStackLimiter.class) && ItemUtil.isArmorPiece(e.getItem().getItemStack())){
+                        player.getInventory().getItemInMainHand().setAmount(Modules.get().get(ArmorStackLimiter.class).maxArmorStack.get());
+                        if(removeCrafingItems.get()){
+                            player.getOpenInventory().getTopInventory().clear();
                         }
                     }else{
-                        e.getItem().getWorld().dropItem(e.getItem().getLocation(), e.getItem().getItemStack());
+                        player.getInventory().getItemInMainHand().setAmount(craftingMaxStack.get());
                         if(removeCrafingItems.get()){
                             player.getOpenInventory().getTopInventory().clear();
                         }
                     }
-                    startedCrafting.remove(player.getUniqueId());
+                }else{
+                    e.getItem().getWorld().dropItem(e.getItem().getLocation(), e.getItem().getItemStack());
+                    if(removeCrafingItems.get()){
+                        player.getOpenInventory().getTopInventory().clear();
+                    }
                 }
-            }, 5);
-
-        }
+                startedCrafting.remove(player.getUniqueId());
+            }
+        }, 5);
     }
 
     @EventHandler
