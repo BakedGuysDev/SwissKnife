@@ -23,8 +23,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class AntiIllegalPotion extends Module {
     public AntiIllegalPotion(){
@@ -45,6 +47,13 @@ public class AntiIllegalPotion extends Module {
             .description("Maximum duration of potions")
             .min(1)
             .defaultValue(10)
+            .build()
+    );
+
+    private final Setting<Boolean> checkEffectsAtJoin = sgGeneral.add(new BoolSetting.Builder()
+            .name("check-at-join")
+            .description("If the plugin should check effects when player joins")
+            .defaultValue(false)
             .build()
     );
 
@@ -121,9 +130,23 @@ public class AntiIllegalPotion extends Module {
                             }
                             return;
                         }
-                        meta.removeCustomEffect(effect.getType());
-                        amplifier = ItemUtil.getMaxPotionAmplifier(effect.getType());
-                        changed = true;
+                        if(effect.getType().equals(PotionEffectType.DAMAGE_RESISTANCE)){
+                            boolean hasSlowness = false;
+                            for(PotionEffect potionEffect : meta.getCustomEffects()){
+                                if(potionEffect.getType().equals(PotionEffectType.SLOW)){
+                                    hasSlowness = true;
+                                }
+                            }
+                            meta.removeCustomEffect(effect.getType());
+                            if(hasSlowness){
+                                amplifier = ItemUtil.getMaxPotionAmplifier(effect.getType());
+                                changed = true;
+                            }
+                        }else{
+                            meta.removeCustomEffect(effect.getType());
+                            amplifier = ItemUtil.getMaxPotionAmplifier(effect.getType());
+                            changed = true;
+                        }
                     }
 
                     if(duration > maxDuration.get() * 60 * 20){
@@ -229,6 +252,13 @@ public class AntiIllegalPotion extends Module {
             }
 
         }
+    }
+
+
+    //TODO
+    @EventHandler
+    private void onJoin(PlayerJoinEvent e){
+
     }
 
 }
