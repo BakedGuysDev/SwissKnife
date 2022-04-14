@@ -13,6 +13,7 @@
 package com.egirlsnation.swissknife;
 
 import com.egirlsnation.swissknife.systems.Systems;
+import com.egirlsnation.swissknife.systems.commands.Commands;
 import com.egirlsnation.swissknife.systems.config.Config;
 import com.egirlsnation.swissknife.systems.internal.SwissPlayerRegistry;
 import com.egirlsnation.swissknife.systems.modules.Categories;
@@ -63,6 +64,9 @@ public class SwissKnife extends JavaPlugin {
         Modules.get().sortModules();
 
         Systems.load();
+
+        Modules.get().loadDbDependant();
+        Commands.get().loadDbDependant();
     }
 
     @Override
