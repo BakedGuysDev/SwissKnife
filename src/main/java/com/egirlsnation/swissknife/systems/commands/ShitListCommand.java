@@ -30,7 +30,7 @@ import java.util.List;
 public class ShitListCommand extends Command {
 
     public ShitListCommand(){
-        super("shitlist");
+        super("shitlist", true);
     }
 
     @Override

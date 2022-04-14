@@ -43,6 +43,8 @@ public class Modules extends System<Modules> {
 
     private final List<Module> enabled = new ArrayList<>();
 
+    private final List<Module> dbDependant = new ArrayList<>(1);
+
 
     public Modules() {
         super("modules");
@@ -218,6 +220,52 @@ public class Modules extends System<Modules> {
     @Override
     public void readFromConfig() {
         for (Module module : modules) {
+            if(module.category.equals(Categories.Database)){
+                dbDependant.add(module);
+                continue;
+            }
+
+            ConfigurationSection section = getFile().getConfigurationSection(module.category.name + "." + module.name);
+            if(section == null){
+                module.writeToConfig(getFile());
+                continue;
+            }
+            boolean enabled = section.getBoolean("enabled");
+
+            for (SettingGroup sg : module.settings) {
+                section = getFile().getConfigurationSection(module.category.name + "." + module.name + "." + sg.name);
+                if (section != null) {
+                    for (Setting<Object> setting : sg) {
+                        Object settingVal = section.get(setting.name);
+                        if(settingVal == null){
+                            setting.writeToConfig(getFile(), module, sg, section);
+                        }else{
+                            setting.set(section.get(setting.name));
+                        }
+                    }
+                }else{
+                    sg.writeToConfig(getFile(), module);
+                }
+            }
+
+            if (enabled && !module.isEnabled()) {
+                module.toggle();
+            }
+            if (!enabled && module.isEnabled()) {
+                module.toggle();
+            }
+
+        }
+        try {
+            getFile().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //TODO: Better handling dbDependant modules
+    public void loadDbDependant() {
+        for (Module module : dbDependant) {
             ConfigurationSection section = getFile().getConfigurationSection(module.category.name + "." + module.name);
             if(section == null){
                 module.writeToConfig(getFile());

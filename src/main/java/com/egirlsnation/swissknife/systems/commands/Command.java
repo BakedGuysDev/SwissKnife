@@ -33,12 +33,17 @@ public abstract class Command implements CommandExecutor, TabCompleter {
     public String name;
     private int cooldown = 0;
     private boolean enabled = false;
+    private boolean dbDependant = false;
 
 
     private final Map<UUID, Long> cooldownMap = new HashMap<>(1);
 
     public Command(String name){
         this.name = name;
+    }
+    public Command(String name, boolean dbDependant){
+        this.name = name;
+        this.dbDependant = dbDependant;
     }
 
     public void setCooldown(int cooldown){
@@ -155,5 +160,9 @@ public abstract class Command implements CommandExecutor, TabCompleter {
 
     public boolean isEnabled(){
         return enabled;
+    }
+
+    public boolean isDbDependant(){
+        return dbDependant;
     }
 }

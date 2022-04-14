@@ -31,6 +31,8 @@ public class Commands extends System<Commands> {
 
     private final List<Command> enabled = new ArrayList<>();
 
+    private final List<Command> dbDependant = new ArrayList<>(1);
+
 
     public Commands(){
         super("commands");
@@ -105,6 +107,10 @@ public class Commands extends System<Commands> {
     @Override
     public void readFromConfig(){
         for(Command command : commands){
+            if(command.isDbDependant()){
+                dbDependant.add(command);
+                continue;
+            }
             ConfigurationSection section = getFile().getConfigurationSection(command.name);
             if(section == null){
                 section = getFile().createSection(command.name);
@@ -140,5 +146,32 @@ public class Commands extends System<Commands> {
         }
         StringUtil.copyPartialMatches(args[position - 1], playerNames, completions);
         return completions;
+    }
+
+    public void loadDbDependant(){
+        for(Command command : dbDependant){
+            ConfigurationSection section = getFile().getConfigurationSection(command.name);
+            if(section == null){
+                section = getFile().createSection(command.name);
+                section.set("enabled", false);
+                section.set("cooldown", 0);
+                continue;
+            }
+            boolean enabled = section.getBoolean("enabled");
+            command.setCooldown(section.getInt("cooldown"));
+
+            if(enabled && !command.isEnabled()){
+                command.toggle();
+            }
+            if(!enabled && command.isEnabled()){
+                command.toggle();
+            }
+            command.register();
+        }
+        try{
+            getFile().save();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
