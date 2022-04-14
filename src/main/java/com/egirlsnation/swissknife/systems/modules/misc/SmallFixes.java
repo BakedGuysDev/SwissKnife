@@ -58,13 +58,15 @@ public class SmallFixes extends Module {
             .build()
     );
 
+
     @EventHandler
-    private void entityDeath(EntityDamageEvent e){
+    private void entityDamage(EntityDamageEvent e){
         if(!isEnabled()) return;
         if(!disableShulkerSpill.get()) return;
         if(e.getEntity() instanceof Item){
             Item item = (Item) e.getEntity();
             if(ItemUtil.isShulkerBox(item.getItemStack())){
+                e.setCancelled(true);
                 item.remove();
             }
         }
