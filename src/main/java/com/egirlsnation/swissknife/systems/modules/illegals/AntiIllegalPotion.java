@@ -23,7 +23,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -50,12 +49,14 @@ public class AntiIllegalPotion extends Module {
             .build()
     );
 
+    /* //TODO
     private final Setting<Boolean> checkEffectsAtJoin = sgGeneral.add(new BoolSetting.Builder()
             .name("check-at-join")
             .description("If the plugin should check effects when player joins")
             .defaultValue(false)
             .build()
     );
+     */
 
     private final Setting<Boolean> bypass = sgGeneral.add(new BoolSetting.Builder()
             .name("bypass")
@@ -252,13 +253,6 @@ public class AntiIllegalPotion extends Module {
             }
 
         }
-    }
-
-
-    //TODO
-    @EventHandler
-    private void onJoin(PlayerJoinEvent e){
-
     }
 
 }

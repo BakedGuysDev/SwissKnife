@@ -271,7 +271,7 @@ public class ItemUtil {
     }
 
     public static boolean isDraconiteItem(ItemStack item){
-        return isPopbobTotem(item) && isDraconiteCrystal(item) && isDraconiteAxe(item) && isDraconiteSword(item) && isDraconiteGem(item) && isDraconitePickaxe(item);
+        return isPopbobTotem(item) || isDraconiteCrystal(item) || isDraconiteAxe(item) || isDraconiteSword(item) || isDraconiteGem(item) || isDraconitePickaxe(item);
     }
 
     private static boolean isAxe(Material mat){

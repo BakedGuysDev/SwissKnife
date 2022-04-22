@@ -19,6 +19,7 @@ import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.modules.Modules;
 import com.egirlsnation.swissknife.utils.server.ItemUtil;
+import com.egirlsnation.swissknife.utils.server.LocationUtil;
 import com.google.common.collect.Multimap;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -54,8 +55,16 @@ public class EgirlsAttributeCorrector extends Module {
 
     private final SettingGroup sgDraconite = settings.createGroup("draconite-items");
 
-    private final Setting<Boolean> correctDraconite = sgDraconite.add(new BoolSetting.Builder()
+    public final Setting<Boolean> correctDraconite = sgDraconite.add(new BoolSetting.Builder()
             .name("correct-draconite-attributes")
+            .defaultValue(true)
+            .build()
+    );
+
+    private SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    public final Setting<Boolean> log = sgGeneral.add(new BoolSetting.Builder()
+            .name("log")
             .defaultValue(true)
             .build()
     );
@@ -77,48 +86,73 @@ public class EgirlsAttributeCorrector extends Module {
     }
 
     private boolean scanAndCorrectMetasInInv(Inventory inv){
-        boolean found = false;
+        boolean foundAncient = false;
+        boolean foundDraconite = false;
         for(ItemStack item : inv.getContents()){
             if(removeAncient.get()){
                 if(ItemUtil.isAncientToolOrWeapon(item)){
                     ItemMeta newMeta = getReducedAncientMeta(item.getItemMeta());
                     if(newMeta != null){
                         item.setItemMeta(newMeta);
-                        found = true;
+                        foundAncient = true;
                     }
-                    break;
+                    continue;
                 }
             }
 
             if(correctDraconite.get()){
                 if(ItemUtil.isDraconiteAxe(item)){
                     ItemMeta newMeta = getReducedDraconiteAxeMeta(item.getItemMeta());
-                    item.setItemMeta(newMeta);
-                    found = true;
-                    break;
+                    if(newMeta != null){
+                        item.setItemMeta(newMeta);
+                        foundDraconite = true;
+                    }
+                    continue;
                 }
 
                 if(ItemUtil.isDraconiteSword(item)){
                     ItemMeta newMeta = getReducedDraconiteSwordMeta(item.getItemMeta());
-                    item.setItemMeta(newMeta);
-                    found = true;
-                    break;
+                    if(newMeta != null){
+                        item.setItemMeta(newMeta);
+                        foundDraconite = true;
+                    }
+                    continue;
                 }
                 if(ItemUtil.isDraconiteCrystal(item)){
                     ItemMeta newMeta = getReducedDraconiteCrystalMeta(item.getItemMeta());
-                    item.setItemMeta(newMeta);
-                    found = true;
-                    break;
+                    if(newMeta != null){
+                        item.setItemMeta(newMeta);
+                        foundDraconite = true;
+                    }
+                    continue;
                 }
                 if(ItemUtil.isPopbobTotem(item)){
                     ItemMeta newMeta = getReducedDraconiteTotemMeta(item.getItemMeta());
-                    item.setItemMeta(newMeta);
-                    found = true;
-                    break;
+                    if(newMeta != null){
+                        item.setItemMeta(newMeta);
+                        foundDraconite = true;
+                    }
+                    continue;
                 }
             }
         }
-        return found;
+        if(log.get()){
+            if(foundAncient){
+                if(inv.getLocation() != null){
+                    info("Removed ancient attributes from item/s in inventory at " + LocationUtil.getLocationString(inv.getLocation()));
+                }else{
+                    info("Removed ancient attributes from item/s in inventory.");
+                }
+            }
+            if(foundDraconite){
+                if(inv.getLocation() != null){
+                    info("Removed draconite attributes from item/s in inventory at " + LocationUtil.getLocationString(inv.getLocation()));
+                }else{
+                    info("Removed draconite attributes from item/s in inventory.");
+                }
+            }
+        }
+        return foundDraconite || foundAncient;
     }
 
     @EventHandler
@@ -128,7 +162,7 @@ public class EgirlsAttributeCorrector extends Module {
         if(removeAncient.get()){
             if(ItemUtil.isAncientToolOrWeapon(e.getItem().getItemStack())){
                 ItemMeta newMeta = getReducedAncientMeta(e.getItem().getItemStack().getItemMeta());
-                setNewMeta(e.getItem(), newMeta);
+                if(newMeta != null) setNewMeta(e.getItem(), newMeta);
                 return;
             }
         }
@@ -136,18 +170,18 @@ public class EgirlsAttributeCorrector extends Module {
         if(correctDraconite.get()){
             if(ItemUtil.isDraconiteAxe(e.getItem().getItemStack())){
                 ItemMeta newMeta = getReducedDraconiteAxeMeta(e.getItem().getItemStack().getItemMeta());
-                setNewMeta(e.getItem(), newMeta);
+                if(newMeta != null) setNewMeta(e.getItem(), newMeta);
                 return;
             }
 
             if(ItemUtil.isDraconiteSword(e.getItem().getItemStack())){
                 ItemMeta newMeta = getReducedDraconiteSwordMeta(e.getItem().getItemStack().getItemMeta());
-                setNewMeta(e.getItem(), newMeta);
+                if(newMeta != null) setNewMeta(e.getItem(), newMeta);
             }
         }
     }
 
-    public void setNewMeta(Item entityItem, ItemMeta newMeta){
+    private void setNewMeta(Item entityItem, ItemMeta newMeta){
         if(newMeta != null){
             ItemStack item = entityItem.getItemStack();
             item.setItemMeta(newMeta);
@@ -155,7 +189,7 @@ public class EgirlsAttributeCorrector extends Module {
         }
     }
 
-    public ItemMeta getReducedAncientMeta(ItemMeta meta){
+    private ItemMeta getReducedAncientMeta(ItemMeta meta){
         if(meta.getAttributeModifiers() == null) return null;
         if(meta.getAttributeModifiers().isEmpty()) return null;
 
@@ -166,7 +200,7 @@ public class EgirlsAttributeCorrector extends Module {
         return meta;
     }
 
-    public ItemMeta getReducedDraconiteAxeMeta(ItemMeta meta){
+    private ItemMeta getReducedDraconiteAxeMeta(ItemMeta meta){
 
         Multimap<Attribute, AttributeModifier> modifierMap = meta.getAttributeModifiers();
         // In case something weird happens and the draconite weapon has just lore and no modifiers
@@ -201,7 +235,7 @@ public class EgirlsAttributeCorrector extends Module {
         return meta;
     }
 
-    public ItemMeta getReducedDraconiteSwordMeta(ItemMeta meta){
+    private ItemMeta getReducedDraconiteSwordMeta(ItemMeta meta){
         Multimap<Attribute, AttributeModifier> modifierMap = meta.getAttributeModifiers();
         // In case something weird happens and the draconite weapon has just lore and no modifiers
         if(modifierMap == null) return null;
@@ -257,7 +291,7 @@ public class EgirlsAttributeCorrector extends Module {
                 return meta;
             }
         }else{
-            return getCleanDraconiteSwordMeta(meta, modifierMap);
+            return getCleanDraconiteTotemMeta(meta, modifierMap);
         }
     }
 

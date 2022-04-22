@@ -119,7 +119,7 @@ public class IllegalAttributes extends Module {
         boolean changed = false;
 
         for(ItemStack item : e.getClickedInventory()){
-            if(item == null) continue;
+            if(shouldBypass(item)) continue;
             List<String> changes = new ArrayList<>(0);
             if(removeItemFlags.get()){
                 for(ItemFlag flag : ItemFlag.values()){
@@ -177,7 +177,7 @@ public class IllegalAttributes extends Module {
         boolean changed = false;
 
         for(ItemStack item : e.getInventory()){
-            if(item == null) continue;
+            if(shouldBypass(item)) continue;
             List<String> changes = new ArrayList<>(0);
             if(removeItemFlags.get()){
                 for(ItemFlag flag : ItemFlag.values()){
@@ -237,6 +237,7 @@ public class IllegalAttributes extends Module {
 
         ItemStack item = e.getItem().getItemStack();
 
+        if(shouldBypass(item)) return;
         List<String> changes = new ArrayList<>(0);
         if(removeItemFlags.get()){
             for(ItemFlag flag : ItemFlag.values()){
@@ -278,6 +279,12 @@ public class IllegalAttributes extends Module {
         }
     }
 
+    public boolean shouldBypass(ItemStack item){
+        if(item == null) return true;
+        if(!Modules.get().isActive(EgirlsAttributeCorrector.class) || !Modules.get().get(EgirlsAttributeCorrector.class).correctDraconite.get()) return false;
+        return ItemUtil.isDraconiteItem(item);
+    }
+
     public List<Attribute> getSlotAttributes(ItemStack item){
         List<Attribute> attributes = new ArrayList<>(1);
         Multimap<Attribute, AttributeModifier> attributeMultiMap = ArrayListMultimap.create();
@@ -317,8 +324,6 @@ public class IllegalAttributes extends Module {
 
     private boolean hasIllegalAttributes(ItemStack item){
         ItemStack clone = item.clone();
-
-        if(Modules.get().get(EgirlsAttributeCorrector.class).isEnabled() && ItemUtil.isDraconiteItem(item)) return false;
 
         if(clone.hasItemMeta() && item.hasItemMeta()){
             return item.getItemMeta().hasAttributeModifiers() && !clone.getItemMeta().hasAttributeModifiers();
