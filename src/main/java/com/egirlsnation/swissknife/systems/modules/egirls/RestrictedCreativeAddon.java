@@ -13,6 +13,9 @@
 package com.egirlsnation.swissknife.systems.modules.egirls;
 
 import com.egirlsnation.swissknife.SwissKnife;
+import com.egirlsnation.swissknife.settings.Setting;
+import com.egirlsnation.swissknife.settings.SettingGroup;
+import com.egirlsnation.swissknife.settings.StringListSetting;
 import com.egirlsnation.swissknife.systems.modules.Categories;
 import com.egirlsnation.swissknife.systems.modules.Module;
 import com.egirlsnation.swissknife.systems.modules.Modules;
@@ -29,10 +32,20 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.List;
+
 public class RestrictedCreativeAddon extends Module {
     public RestrictedCreativeAddon() {
         super(Categories.EgirlsNation, "restricted-creative-addon", "Additional checks for RestrictedCreative to make it safe-ish");
     }
+
+    private final SettingGroup sgGeneral = settings.getDefaultGroup();
+
+    private final Setting<List<String>> disabledMaterials = sgGeneral.add(new StringListSetting.Builder()
+            .name("disabled-materials")
+            .defaultValue(Material.TNT_MINECART.toString(), Material.ARMOR_STAND.toString())
+            .build()
+    );
 
     @EventHandler
     private void onJoin(PlayerJoinEvent e){
@@ -46,8 +59,9 @@ public class RestrictedCreativeAddon extends Module {
     private void onPlayerInteract(PlayerInteractEvent e){
         if(!isEnabled()) return;
         if(!Action.RIGHT_CLICK_BLOCK.equals(e.getAction())) return;
-        if(e.getMaterial().equals(Material.TNT_MINECART) && e.getPlayer().getGameMode().equals(GameMode.CREATIVE) && !e.getPlayer().hasPermission("swissknife.bypass.creative")){
+        if(disabledMaterials.get().contains(e.getMaterial().toString()) && e.getPlayer().getGameMode().equals(GameMode.CREATIVE) && !e.getPlayer().hasPermission("swissknife.bypass.creative")){
             e.setCancelled(true);
+            sendMessage(e.getPlayer(),ChatColor.RED + "You cannot interact with this item in creative");
         }
     }
 
